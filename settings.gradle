@@ -1,0 +1,22 @@
+// must override project name to 'droiddriver'. otherwise the root folder name will
+// be used in jcenter and that could be named anything.
+// see http://gradle.org/docs/current/userguide/maven_plugin.html
+rootProject.name = 'appium-uiautomator2-driver'
+include ':android-driver-app'
+include ':selendroid-server'
+include ':selendroid-grid-plugin'
+include ':selendroid-test-app'
+include ':selendroid-client'
+include ':selendroid-server-common'
+include ':selendroid-standalone'
+include ':selendroid-common'
+
+project(':android-driver-app').projectDir = "$rootDir/android-driver" as File
+project(':selendroid-server').projectDir = "$rootDir/selendroid-server" as File
+project(':selendroid-grid-plugin').projectDir = "$rootDir/selendroid-grid-plugin" as File
+project(':selendroid-test-app').projectDir = "$rootDir/selendroid-test-app" as File
+project(':selendroid-client').projectDir = "$rootDir/selendroid-client" as File
+project(':selendroid-server-common').projectDir = "$rootDir/selendroid-server-common" as File
+project(':selendroid-standalone').projectDir = "$rootDir/selendroid-standalone" as File
+project(':selendroid-common').projectDir = "$rootDir/selendroid-common" as File
+

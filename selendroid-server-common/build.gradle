@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+dependencies {
+    compile "org.json:json:20090211"
+    compile "io.netty:netty-all:4.0.21.Final"
+    testCompile 'junit:junit:4.8.2'
+}

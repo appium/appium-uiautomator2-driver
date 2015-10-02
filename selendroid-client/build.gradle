@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+dependencies {
+    compile "org.seleniumhq.selenium:selenium-java:2.47.2"
+    compile project (':selendroid-common')
+    compile project (':selendroid-server-common')
+}

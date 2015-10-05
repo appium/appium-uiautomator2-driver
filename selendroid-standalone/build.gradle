@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.4.0-beta4'
     }
 }
 
@@ -38,7 +38,9 @@ mainClassName = "io.selendroid.standalone.SelendroidLauncher"
 jar {
     //TODO: This needs to be changed, the jar contains duplicate files for some reason.
 
-    baseName = 'selendroid-standalone-0.17.0-SNAPSHOT-with-dependencies'
+    archiveName = 'selendroid-standalone-'
+    archiveName+= version
+    archiveName+='-with-dependencies.jar'
     manifest {
         attributes "Main-Class": "$mainClassName"
     }
@@ -50,19 +52,9 @@ jar {
         }
     }
 
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    /*from{
-        ["./AndroidManifestTemplate.xml",
-        "../README.md"]
-    }*/
 }
 
-distributions {
-    main {
-        contents {
-            from { 'src/main/assembly';'AndroidManifestTemplate.xml'; }
-        }
-    }
-}

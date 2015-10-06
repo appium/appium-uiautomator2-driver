@@ -72,7 +72,7 @@ public class AbstractDeviceTest {
         "1 zygote\n" +
         "23 /system/bin/mediaserver";
     when(
-        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)? shell ps$"))))
+        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)?, shell, ps]$"))))
             .thenReturn(psOutput);
     String expected =
         "PID NAME\n" +

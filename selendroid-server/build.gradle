@@ -27,11 +27,17 @@ android {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
+
     buildTypes{
-        release{
+        debug{
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     output.outputFile = new File(

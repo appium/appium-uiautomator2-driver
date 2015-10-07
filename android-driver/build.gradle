@@ -31,7 +31,7 @@ android {
     }
 
     buildTypes{
-        release{
+        debug{
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     output.outputFile = new File(

@@ -31,12 +31,12 @@ android {
     }
 
     buildTypes{
-        release{
+        debug{
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     output.outputFile = new File(
                             output.outputFile.parent,
-                            output.outputFile.name.replace("-release-unsigned.apk", "-${variant.versionName}.apk"))
+                            output.outputFile.name.replace("-debug.apk", "-${variant.versionName}.apk"))
                 }
             }
         }

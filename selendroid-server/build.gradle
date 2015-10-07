@@ -29,6 +29,19 @@ android {
             res.srcDirs = ['res']
         }
     }
+
+    buildTypes{
+        release{
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    output.outputFile = new File(
+                            output.outputFile.parent,
+                            output.outputFile.name.replace("-release-unsigned.apk", "-${variant.versionName}.apk"))
+                }
+            }
+        }
+    }
+
 }
 
 configurations {
@@ -55,5 +68,5 @@ dependencies {
     provided files('../third-party/cordova-3.7.0/classes.jar')
     provided files('../third-party/cordova-4.0.0/classes.jar')
     provided files('../third-party/support-v4/classes.jar')
-
 }
+

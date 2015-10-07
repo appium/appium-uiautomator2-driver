@@ -41,14 +41,16 @@ jar {
     archiveName = 'selendroid-standalone-'
     archiveName+= version
     archiveName+='-with-dependencies.jar'
+
+    //version from manifest attributes will be retrieved while building selendroid-server apk
     manifest {
-        attributes "Main-Class": "$mainClassName"
+        attributes ("Main-Class": "$mainClassName", "version": "0.17.0-SNAPSHOT")
     }
 
     into('prebuild') {
         from {
-            ["../selendroid-server/build/outputs/apk/selendroid-server-release-unsigned.apk",
-             "../android-driver/build/outputs/apk/android-driver-app-release-unsigned.apk"]
+            ["../selendroid-server/build/outputs/apk/selendroid-server-0.17.0-SNAPSHOT.apk",
+             "../android-driver/build/outputs/apk/android-driver-app-0.17.0-SNAPSHOT.apk"]
         }
     }
 

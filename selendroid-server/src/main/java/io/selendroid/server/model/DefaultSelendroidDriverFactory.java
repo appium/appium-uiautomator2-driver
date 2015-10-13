@@ -16,9 +16,8 @@ public class DefaultSelendroidDriverFactory implements SelendroidDriverFactory {
         if(selendroidDriver == null) {
             if (automationName.equals(AN_SELENDROID)) {
                 return new DefaultSelendroidDriver(androidInstrumentation);
-            } else if (automationName.equals(AN_UIAUTOMATOR)) {
-                // Create and return UIAutomatorDriver here
-                return new DefaultSelendroidDriver(androidInstrumentation);
+            } else if (automationName.equals(AN_UIAUTOMATOR)) { //custom appium Uiautomator driver
+                return new DefaultAppiumUiAutomatorDriver(androidInstrumentation);
             }
         }
         return selendroidDriver;

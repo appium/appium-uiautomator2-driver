@@ -7,7 +7,7 @@ public class DefaultSelendroidDriverFactory implements SelendroidDriverFactory {
     private static SelendroidDriver selendroidDriver = null;
 
     //How about having an enum?
-    private static final String AN_SELENDROID = "Selendroid";
+    private static final String AN_SELENDROID = "selendroid";
     private static final String AN_UIAUTOMATOR = "UiAutomator";
 
     @Override

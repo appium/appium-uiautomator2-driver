@@ -33,7 +33,7 @@ public class AndroidServer {
   }
 
   protected void init(ServerInstrumentation androidInstrumentation) {
-    SelendroidDriver driver = Factories.getSelendroidDriverFactory().createSelendroidDriver(androidInstrumentation);
+    SelendroidDriver driver = Factories.getSelendroidDriverFactory().createSelendroidDriver(androidInstrumentation, automationName);
     webServer.addHandler(new StatusServlet(androidInstrumentation));
     webServer.addHandler(new InspectorServlet(driver, androidInstrumentation));
     webServer.addHandler(new AndroidServlet(driver, androidInstrumentation.getExtensionLoader()));

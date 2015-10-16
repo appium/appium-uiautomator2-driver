@@ -1,16 +1,11 @@
 version='0.17.0-SNAPSHOT'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.4.0-beta5'
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'application'
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     compile project(':selendroid-common')

@@ -1,0 +1,5 @@
+include ':selendroid-common'
+include ':selendroid-server-common'
+
+project(':selendroid-common').projectDir = new File("$rootDir/../selendroid-common")
+project(':selendroid-server-common').projectDir = new File("$rootDir/../selendroid-server-common")

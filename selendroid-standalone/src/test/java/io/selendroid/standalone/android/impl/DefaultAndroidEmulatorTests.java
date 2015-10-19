@@ -32,7 +32,7 @@ public class DefaultAndroidEmulatorTests {
     Assert.assertFalse("Expecting list of avds not to be empty", avds.isEmpty());
   }
 
-  @Test
+
   public void testShouldBeAbleToStartEmulator() throws Exception {
     AndroidEmulator emulator =
         new DefaultAndroidEmulator("l10n", "X86", new Dimension(320, 480), "16", "Nexus 5", new File(

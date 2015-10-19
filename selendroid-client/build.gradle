@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile "org.seleniumhq.selenium:selenium-java:2.47.2"
     compile project (':selendroid-common')

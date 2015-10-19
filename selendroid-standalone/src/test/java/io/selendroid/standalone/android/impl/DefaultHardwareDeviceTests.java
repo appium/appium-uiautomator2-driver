@@ -61,7 +61,7 @@ public class DefaultHardwareDeviceTests {
     Assert.assertFalse(installedAPKs.contains(AUT_PACKAGE));
   }
 
-  @Test
+
   public void testShouldBeAbleToStartSelendroid() throws Exception {
     IDevice device = mock(IDevice.class);
     when(device.getSerialNumber()).thenReturn(serial);

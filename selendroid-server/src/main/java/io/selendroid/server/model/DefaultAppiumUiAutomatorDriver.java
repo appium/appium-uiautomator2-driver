@@ -120,7 +120,7 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     @Override
     public String initializeSession(JSONObject desiredCapabilities) {
-        //Temporary solution for session creation and this needs to be modified
+        //Temporary solution for session creation and this needs to be modified.
         SecureRandom random = new SecureRandom();
         return new BigInteger(130, random).toString(32);
     }

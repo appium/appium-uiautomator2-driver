@@ -5,18 +5,16 @@ import io.selendroid.server.ServerInstrumentation;
 public class DefaultSelendroidDriverFactory implements SelendroidDriverFactory {
 
     private static SelendroidDriver selendroidDriver = null;
-
-    //How about having an enum?
-    private static final String AN_SELENDROID = "selendroid";
-    private static final String AN_UIAUTOMATOR = "UiAutomator";
+    private static final String SELENDROID = "selendroid";
+    private static final String UIAUTOMATOR = "uiautomator";
 
     @Override
-    public SelendroidDriver createSelendroidDriver( ServerInstrumentation androidInstrumentation, String automationName ) {
-
-        if(selendroidDriver == null) {
-            if (automationName.equals(AN_SELENDROID)) {
+    public SelendroidDriver createSelendroidDriver(ServerInstrumentation androidInstrumentation, String automationName) {
+        if (selendroidDriver == null) {
+            if (automationName.equals(SELENDROID)) {
                 return new DefaultSelendroidDriver(androidInstrumentation);
-            } else if (automationName.equals(AN_UIAUTOMATOR)) { //custom appium Uiautomator driver
+            } else if (automationName.equals(UIAUTOMATOR)) {
+                //custom appium Uiautomatorv2 driver
                 return new DefaultAppiumUiAutomatorDriver(androidInstrumentation);
             }
         }

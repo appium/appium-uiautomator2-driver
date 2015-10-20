@@ -13,19 +13,13 @@
  */
 package io.selendroid.server.model;
 
-
-import android.support.test.uiautomator.UiDevice;
-import android.test.InstrumentationTestCase;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Set;
-
 import io.selendroid.server.ServerInstrumentation;
 import io.selendroid.server.android.InstrumentedKeySender;
 import io.selendroid.server.android.KeySender;
@@ -33,7 +27,6 @@ import io.selendroid.server.android.internal.Dimension;
 import io.selendroid.server.common.exceptions.SelendroidException;
 import io.selendroid.server.util.SelendroidLogger;
 
-//import android.support.test.uiautomator.UiDevice;
 
 public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
@@ -41,19 +34,17 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
     public static final String PLATFORM = "platform";
     public static final String SUPPORTS_JAVASCRIPT = "javascriptEnabled";
     public static final String TAKES_SCREENSHOT = "takesScreenshot";
-    public static final String VERSION = "version";
     public static final String SUPPORTS_ALERTS = "handlesAlerts";
     public static final String ROTATABLE = "rotatable";
     public static final String ACCEPT_SSL_CERTS = "acceptSslCerts";
     public static final String SUPPORTS_NETWORK_CONNECTION = "networkConnectionEnabled";
-    private static UiDevice device;
+    public static final String AUTOMATION_NAME = "automationName";
     private ServerInstrumentation serverInstrumentation = null;
     private KeySender keySender = null;
     private Session session = null;
 
     public DefaultAppiumUiAutomatorDriver(ServerInstrumentation serverInstrumentation) {
         this.keySender = new InstrumentedKeySender(serverInstrumentation);
-        ;
         this.serverInstrumentation = serverInstrumentation;
     }
 
@@ -91,7 +82,7 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
             }
             copy.put(TAKES_SCREENSHOT, true);
             copy.put(BROWSER_NAME, "selendroid");
-            copy.put("automationName", "UiAutomator");
+            copy.put(AUTOMATION_NAME, "uiautomator");
             copy.put("platformName", "android");
             copy.put("platformVersion", serverInstrumentation.getOsVersion());
             copy.put(ROTATABLE, true);
@@ -280,6 +271,7 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
     public boolean isAirplaneMode() {
         return false;
     }
+
 
     @Override
     public void roll(int dimensionX, int dimensionY) {

@@ -30,6 +30,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.http.HttpResponse;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import java.io.File;
 
@@ -61,7 +62,8 @@ public class DefaultHardwareDeviceTests {
     Assert.assertFalse(installedAPKs.contains(AUT_PACKAGE));
   }
 
-
+  @Ignore("Build failure: Ignored till the fix is available.")
+  @Test
   public void testShouldBeAbleToStartSelendroid() throws Exception {
     IDevice device = mock(IDevice.class);
     when(device.getSerialNumber()).thenReturn(serial);

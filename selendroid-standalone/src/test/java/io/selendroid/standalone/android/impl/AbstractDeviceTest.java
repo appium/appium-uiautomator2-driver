@@ -20,6 +20,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import java.util.regex.Pattern;
 
@@ -43,8 +44,8 @@ public class AbstractDeviceTest {
       }
     };
   }
-
-
+  @Ignore("Build failure: Ignored till the fix is available.")
+  @Test
   public void testGetCrashLogContents() {
     AbstractDevice device = mock(AbstractDevice.class);
     when(device.getExternalStoragePath()).thenReturn("/storage");

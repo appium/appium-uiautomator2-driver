@@ -23,6 +23,7 @@ import java.util.Locale;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.openqa.selenium.Dimension;
 
 public class DefaultAndroidEmulatorTests {
@@ -32,7 +33,8 @@ public class DefaultAndroidEmulatorTests {
     Assert.assertFalse("Expecting list of avds not to be empty", avds.isEmpty());
   }
 
-
+  @Ignore("Build failure: Ignored till the fix is available.")
+  @Test
   public void testShouldBeAbleToStartEmulator() throws Exception {
     AndroidEmulator emulator =
         new DefaultAndroidEmulator("l10n", "X86", new Dimension(320, 480), "16", "Nexus 5", new File(

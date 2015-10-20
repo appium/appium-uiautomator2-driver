@@ -19,14 +19,12 @@ import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 import io.selendroid.server.ServerInstrumentation;
 import io.selendroid.server.android.InstrumentedKeySender;
 import io.selendroid.server.android.KeySender;
 import io.selendroid.server.android.internal.Dimension;
-import io.selendroid.server.common.exceptions.NoMethodImplementationException;
+import io.selendroid.server.common.exceptions.NoSuchMethodImplementationException;
 import io.selendroid.server.common.exceptions.SelendroidException;
 import io.selendroid.server.util.SelendroidLogger;
 
@@ -53,17 +51,17 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     @Override
     public AndroidElement findElement(By by) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public List<AndroidElement> findElements(By by) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public String getCurrentUrl() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
@@ -104,12 +102,12 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     @Override
     public JSONObject getFullWindowTree() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public String getWindowSource() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
@@ -121,161 +119,161 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     @Override
     public void stopSession() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void switchContext(String type) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public byte[] takeScreenshot() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Keyboard getKeyboard() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public String getTitle() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void get(String url) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public TouchScreen getTouch() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void addCookie(String url, Cookie cookie) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void deleteCookie(String url) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void deleteNamedCookie(String url, String name) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Set<Cookie> getCookies(String url) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Object executeScript(String script, JSONArray args) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Object executeScript(String script, Object... args) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Object executeAsyncScript(String script, JSONArray args) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public String getContext() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Set<String> getContexts() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public Dimension getWindowSize() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void setFrameContext(Object index) throws JSONException {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void back() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void forward() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void refresh() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public boolean isAlertPresent() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public String getAlertText() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void setAlertText(CharSequence... keysToSend) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void acceptAlert() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void dismissAlert() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public ScreenOrientation getOrientation() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void rotate(ScreenOrientation orientation) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void setAsyncTimeout(long timeout) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void setPageLoadTimeout(long timeout) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public boolean isAirplaneMode() {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 
     @Override
     public void roll(int dimensionX, int dimensionY) {
-        throw new NoMethodImplementationException("Method not implemented");
+        throw new NoSuchMethodImplementationException("Method not implemented");
     }
 }

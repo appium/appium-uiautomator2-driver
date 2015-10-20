@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile "org.json:json:20090211"   
     compile "junit:junit:4.8.2"

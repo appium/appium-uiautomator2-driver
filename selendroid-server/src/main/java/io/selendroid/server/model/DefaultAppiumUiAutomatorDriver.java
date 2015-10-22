@@ -224,7 +224,7 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     @Override
     public boolean isAlertPresent() {
-        throw new NoSuchMethodImplementationException("Method not implemented");
+        return false;
     }
 
     @Override

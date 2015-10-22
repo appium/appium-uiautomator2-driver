@@ -15,7 +15,7 @@ android {
     buildToolsVersion "23.0.1" // https://developer.android.com/tools/revisions/build-tools.html
 
     defaultConfig {
-        minSdkVersion 18
+        minSdkVersion 10
         targetSdkVersion 16
     }
 

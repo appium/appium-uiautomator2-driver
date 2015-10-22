@@ -12,14 +12,13 @@ public class DefaultSelendroidDriverFactory implements SelendroidDriverFactory {
     public SelendroidDriver createSelendroidDriver(ServerInstrumentation androidInstrumentation, String automationName) {
         if (selendroidDriver == null) {
             if (automationName.equals(SELENDROID)) {
-                return new DefaultSelendroidDriver(androidInstrumentation);
+                selendroidDriver = new DefaultSelendroidDriver(androidInstrumentation);
             } else if (automationName.equals(UIAUTOMATOR)) {
-                //custom appium Uiautomatorv2 driver
-                return new DefaultAppiumUiAutomatorDriver(androidInstrumentation);
+                // custom appium Uiautomatorv2 driver
+                selendroidDriver = new DefaultAppiumUiAutomatorDriver(androidInstrumentation);
             }
         }
         return selendroidDriver;
     }
-
 }
 

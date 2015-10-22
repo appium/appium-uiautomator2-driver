@@ -137,8 +137,7 @@ public class ServerInstrumentation extends Instrumentation implements ServerDeta
       extensionLoader = new ExtensionLoader(context);
     }
 
-    //set AutomationName
-    if(args.getAutomationName() != null){
+    if (args.getAutomationName() != null) {
       automationName = args.getAutomationName();
     }
 

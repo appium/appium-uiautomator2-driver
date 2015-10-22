@@ -115,12 +115,7 @@ public class SelfRegisteringRemote {
   }
 
   private JSONObject getDeviceConfig(final JSONObject device, final JSONObject supportedApp) throws JSONException {
-    JSONObject capa = new JSONObject();
-    capa.put(SelendroidCapabilities.SCREEN_SIZE,
-            device.getString(SelendroidCapabilities.SCREEN_SIZE));
-    String version = device.getString(SelendroidCapabilities.PLATFORM_VERSION);
-    capa.put(SelendroidCapabilities.PLATFORM_VERSION, version);
-    capa.put(SelendroidCapabilities.EMULATOR, device.getString(SelendroidCapabilities.EMULATOR));
+    JSONObject capa = new JSONObject(device, JSONObject.getNames(device));
     // For each device, register as "android" for WebView tests and also selendroid if an aut is specified
     if (ANDROIDDRIVER_APP.equals(supportedApp.get(APP_BASE_PACKAGE))) {
       //it's possible the user does not want to register the device as capable to recieve webview tests
@@ -133,7 +128,7 @@ public class SelfRegisteringRemote {
     }
     capa.put(CapabilityType.PLATFORM, "ANDROID");
     capa.put(SelendroidCapabilities.PLATFORM_NAME, "android");
-    capa.put(CapabilityType.VERSION, version);
+    capa.put(CapabilityType.VERSION, device.getString(SelendroidCapabilities.PLATFORM_VERSION));
     capa.put("maxInstances", config.getMaxInstances());
     return capa;
   }
@@ -157,7 +152,18 @@ public class SelfRegisteringRemote {
     }
     configuration.put("role", "node");
     configuration.put("registerCycle", config.getRegisterCycle());
-    configuration.put("maxSession", config.getMaxSession());
+    if (config.getMaxSession() == 0) {
+      configuration.put("maxSession", driver.getSupportedDevices().length());
+    } else {
+      configuration.put("maxSession", config.getMaxSession());
+    }
+    configuration.put("browserTimeout", config.getSessionTimeoutMillis() / 1000);
+    configuration.put("cleanupCycle", config.getCleanupCycle());
+    configuration.put("timeout", config.getTimeout());
+    configuration.put("nodePolling", config.getNodePolling());
+    configuration.put("unregisterIfStillDownAfter", config.getUnregisterIfStillDownAfter());
+    configuration.put("downPollingLimit", config.getDownPollingLimit());
+    configuration.put("nodeStatusCheckTimeout", config.getNodeStatusCheckTimeout());
 
     // adding hub details
     configuration.put("hubHost", hub.getHost());

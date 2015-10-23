@@ -44,17 +44,17 @@ public class AbstractDeviceTest {
       }
     };
   }
-  @Ignore("Build failure: Ignored till the fix is available.")
+
   @Test
   public void testGetCrashLogContents() {
     AbstractDevice device = mock(AbstractDevice.class);
     when(device.getExternalStoragePath()).thenReturn("/storage");
     when(device.getCrashLog()).thenCallRealMethod();
     when(
-        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)? shell ls /storage/$"))))  // The trailing '/' is key
+        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)?, shell, ls, /storage/]$"))))  // The trailing '/' is key
         .thenReturn("some_file\nappcrash.log\nanother_file");
     when(
-        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)? shell cat /storage/appcrash\\.log$"))))
+        device.executeCommandQuietly(argThat(matchesCmdLine(".*adb(\\.exe)?, shell, cat, /storage/appcrash\\.log]$"))))
         .thenReturn("crash log contents");
 
     assertEquals("crash log contents", device.getCrashLog());

@@ -62,7 +62,7 @@ public class DefaultHardwareDeviceTests {
     Assert.assertFalse(installedAPKs.contains(AUT_PACKAGE));
   }
 
-  @Ignore("Build failure: Ignored till the fix is available.")
+  @Ignore("Fail. Requires an active emulator to install the selendroid apk.")
   @Test
   public void testShouldBeAbleToStartSelendroid() throws Exception {
     IDevice device = mock(IDevice.class);

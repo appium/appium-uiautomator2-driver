@@ -33,7 +33,7 @@ public class DefaultAndroidEmulatorTests {
     Assert.assertFalse("Expecting list of avds not to be empty", avds.isEmpty());
   }
 
-  @Ignore("Build failure: Ignored till the fix is available.")
+  @Ignore("Fail. Requires emulator to exist on the system running the test.")
   @Test
   public void testShouldBeAbleToStartEmulator() throws Exception {
     AndroidEmulator emulator =

@@ -34,19 +34,19 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class SessionCreationE2ETests {
   public static final String TEST_APP_ID = "io.selendroid.testapp:0.5.0-SNAPSHOT";
 
-  @Ignore
-  @Test()
+  @Ignore("Fail. Requires an active android emulator")
+  @Test
   public void assertThatSessionCanBeExecutedOnAndroid10Emulator() throws Exception {
     testMethod(SelendroidCapabilities.emulator(DeviceTargetPlatform.ANDROID10, TEST_APP_ID));
   }
 
-  @Ignore
+  @Ignore("Fail. Requires an active android emulator")
   @Test
   public void assertThatSessionCanBeExecutedOnAndroid16Emulator() throws Exception {
     testMethod(SelendroidCapabilities.emulator(DeviceTargetPlatform.ANDROID16, TEST_APP_ID));
   }
 
-  @Ignore
+  @Ignore("Fail. Requires an active android emulator")
   @Test
   public void assertThatSessionCanBeExecutedOnAndroid17Device() throws Exception {
     SelendroidCapabilities capa =

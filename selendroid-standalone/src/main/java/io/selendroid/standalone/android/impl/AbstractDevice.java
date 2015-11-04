@@ -20,6 +20,32 @@ import com.android.ddmlib.TimeoutException;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
+
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.logging.LogEntry;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
+
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.server.common.exceptions.SelendroidException;
 import io.selendroid.server.common.model.ExternalStorageFile;
@@ -30,25 +56,6 @@ import io.selendroid.standalone.exceptions.AndroidDeviceException;
 import io.selendroid.standalone.exceptions.AndroidSdkException;
 import io.selendroid.standalone.exceptions.ShellCommandException;
 import io.selendroid.standalone.io.ShellCommand;
-import org.apache.commons.exec.*;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.logging.LogEntry;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class AbstractDevice implements AndroidDevice {
   private static final Logger log = Logger.getLogger(AbstractDevice.class.getName());
@@ -236,6 +243,11 @@ public abstract class AbstractDevice implements AndroidDevice {
         argList.addAll(Lists.newArrayList("-e", "bootstrap", capabilities.getBootstrapClassNames()));
       }
     }
+
+    if (capabilities.getAutomationName() != null) {
+      argList.addAll(Lists.newArrayList("-e", "automationName", capabilities.getAutomationName()));
+    }
+
     argList.add("io.selendroid." + aut.getBasePackage() + "/io.selendroid.server.ServerInstrumentation");
 
     String[] args = argList.toArray(new String[argList.size()]);

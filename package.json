@@ -1,0 +1,59 @@
+{
+  "name": "appium-uiautomator2-driver",
+  "description": "UiAutomator2 integration for Appium",
+  "keywords": [
+    "appium",
+    "uiautomator2",
+    "automated testing",
+    "android"
+  ],
+  "version": "1.2.2",
+  "author": "appium",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appium/appium-uiautomator2-driver.git"
+  },
+  "bugs": {
+    "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
+  },
+  "engines": [
+    "node"
+  ],
+  "main": "./build/index.js",
+  "bin": {},
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "appium-adb": "^2.4.2",
+    "appium-android-driver": "^1.6.11",
+    "appium-base-driver": "^1.3.0",
+    "appium-express": "^1.2.0",
+    "appium-jsonwp-proxy": "^1.5.0",
+    "appium-logger": "^2.1.0",
+    "appium-uiautomator2-server-test-1": "0.0.8",
+    "appium-support": "^2.0.9",
+    "asyncbox": "^2.3.1",
+    "babel-runtime": "=5.8.24",
+    "lodash": "^3.10.1",
+    "mobile-json-wire-protocol": "^1.3.1",
+    "source-map-support": "^0.3.2",
+    "utf7": "^1.0.0",
+    "yargs": "^3.29.0"
+  },
+  "scripts": {
+    "prepublish": "./node_modules/.bin/gulp prepublish",
+    "test": "./node_modules/.bin/gulp once",
+    "watch": "./node_modules/.bin/gulp"
+  },
+  "devDependencies": {
+    "appium-gulp-plugins": "^1.3.12",
+    "appium-test-support": "0.0.5",
+    "chai": "^3.4.0",
+    "chai-as-promised": "^5.1.0",
+    "gulp": "^3.9.0",
+    "sinon": "^1.17.2",
+    "wd": "^0.3.12"
+  }
+}

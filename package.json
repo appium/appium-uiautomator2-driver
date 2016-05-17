@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "1.2.49",
+  "version": "1.2.50",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -26,7 +26,7 @@
     "lib": "lib"
   },
   "dependencies": {
-	"adbkit": "^2.4.1",
+    "adbkit": "^2.4.1",
     "appium-adb": "^2.4.2",
     "appium-android-driver": "^1.6.11",
     "appium-base-driver": "^2.0.1",

@@ -15,19 +15,19 @@ describe('UiAutomator2 Driver  Helpers', () => {
     const app = '/path/to/app.apk';
     it('should do nothing if app has internet perm', async () => {
       mocks.adb.expects('hasInternetPermissionFromManifest')
-               .once()
-               .withExactArgs(app)
-               .returns(true);
+          .once()
+          .withExactArgs(app)
+          .returns(true);
       await helpers.ensureInternetPermissionForApp(adb, app);
       mocks.adb.verify();
     });
     it('should throw an error if app doesnt have internet perms', async () => {
       mocks.adb.expects('hasInternetPermissionFromManifest')
-               .once()
-               .withExactArgs(app)
-               .returns(false);
+          .once()
+          .withExactArgs(app)
+          .returns(false);
       await helpers.ensureInternetPermissionForApp(adb, app)
-                   .should.be.rejectedWith(/INTERNET/);
+          .should.be.rejectedWith(/INTERNET/);
       mocks.adb.verify();
     });
   }));

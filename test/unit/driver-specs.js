@@ -97,7 +97,9 @@ describe('driver.js', () => {
         driver.proxyActive('abc').should.be.true;
       });
       it('should throw an error if session id is wrong', () => {
-        (() => { driver.proxyActive('aaa'); }).should.throw;
+        (() => {
+          driver.proxyActive('aaa');
+        }).should.throw;
       });
     });
 
@@ -111,7 +113,9 @@ describe('driver.js', () => {
         avoidList.should.eql(driver.jwpProxyAvoid);
       });
       it('should throw an error if session id is wrong', () => {
-        (() => { driver.getProxyAvoidList('aaa'); }).should.throw;
+        (() => {
+          driver.getProxyAvoidList('aaa');
+        }).should.throw;
       });
     });
 
@@ -123,7 +127,9 @@ describe('driver.js', () => {
         driver.canProxy('abc').should.be.true;
       });
       it('should throw an error if session id is wrong', () => {
-        (() => { driver.canProxy('aaa'); }).should.throw;
+        (() => {
+          driver.canProxy('aaa');
+        }).should.throw;
       });
     });
   });

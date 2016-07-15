@@ -24,5 +24,8 @@ describe('apidemo - touch - swipe-action', function () {
   });
   it('should swipe', async () => {
   await driver.swipe(100,650,100,330,1000);
+  let els = await driver.findElOrEls('xpath', "//*[@name='Abertam']", true);
+  els.should.be.an.instanceof(Array);
+  els.should.have.length(1);
   });
 });

@@ -41,6 +41,7 @@
     "yargs": "^3.29.0"
   },
   "scripts": {
+    "install": "node ./bin/install.js",
     "prepublish": "./node_modules/.bin/gulp prepublish",
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp"

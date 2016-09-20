@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../../..';
 import sampleApps from 'sample-apps';
+import B from 'bluebird';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -59,6 +60,7 @@ describe('apidemo - attributes', function () {
   });
   it('should be able to find name attribute, falling back to text', async () => {
     await driver.click(animationEl);
+    await B.delay(3000);
     let textView = await driver.findElOrEls('class name', 'android.widget.TextView', true);
     let textViewEl = textView[1].ELEMENT;
     await driver.getAttribute('name', textViewEl).should.eventually.become('Bouncing Balls');

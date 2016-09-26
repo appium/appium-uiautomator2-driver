@@ -31,7 +31,7 @@
     "appium-android-driver": "^1.10.26",
     "appium-base-driver": "^2.0.12",
     "appium-logger": "^2.1.0",
-    "appium-uiautomator2-server-test-1": "0.0.52",
+    "appium-uiautomator2-server-test-1": "0.0.53",
     "appium-support": "^2.0.9",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
@@ -53,6 +53,8 @@
     "chai-as-promised": "^5.1.0",
     "gulp": "^3.9.0",
     "sinon": "^1.17.2",
-    "wd": "^0.3.12"
+    "wd": "^0.3.12",
+    "xpath": "0.0.22",
+    "unzip": "^0.1.11"
   }
 }

@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "1.2.66",
+  "version": "1.2.68",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -28,8 +28,8 @@
   "dependencies": {
     "adbkit": "^2.4.1",
     "appium-adb": "^2.4.2",
-    "appium-android-driver": "^1.10.26",
-    "appium-base-driver": "^2.0.12",
+    "appium-android-driver": "^1.10.27",
+    "appium-base-driver": "^2.0.17",
     "appium-logger": "^2.1.0",
     "appium-uiautomator2-server-test-1": "0.0.53",
     "appium-support": "^2.0.9",

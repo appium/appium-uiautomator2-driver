@@ -2,8 +2,8 @@ language: node_js
 node_js:
   - "5"
   - "4"
-  - "0.12"
 script:
+  - gulp eslint
   - gulp once
 after_success:
   - gulp coveralls

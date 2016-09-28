@@ -83,7 +83,7 @@ describe('keyboard', () => {
       // sometimes the default ime is not what we are using
       let engines = await driver.availableIMEEngines();
       let selectedEngine = _.first(engines);
-      for(let engine of engines) {
+      for (let engine of engines) {
         // it seems that the latin ime has `android.inputmethod` in its package name
         if (engine.indexOf('android.inputmethod') !== -1) {
           selectedEngine = engine;

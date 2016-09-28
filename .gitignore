@@ -2,3 +2,4 @@ node_modules
 build
 .idea/
 uiautomator2/
+*.log

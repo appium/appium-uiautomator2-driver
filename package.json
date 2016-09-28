@@ -38,7 +38,10 @@
     "lodash": "^3.10.1",
     "source-map-support": "^0.3.2",
     "utf7": "^1.0.0",
-    "yargs": "^3.29.0"
+    "yargs": "^3.29.0",
+    "teen_process": "^1.3.1",
+    "request-promise": "^4.1.1",
+    "bluebird": "^2.10.2"
   },
   "scripts": {
     "install": "node ./bin/install.js",
@@ -55,6 +58,8 @@
     "sinon": "^1.17.2",
     "wd": "^0.3.12",
     "xpath": "0.0.22",
-    "unzip": "^0.1.11"
+    "unzip": "^0.1.11",
+    "sample-apps": "2.0.4",
+    "xmldom": "^0.1.19"
   }
 }

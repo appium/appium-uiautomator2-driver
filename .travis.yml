@@ -4,6 +4,7 @@ node_js:
   - "4"
   - "0.12"
 script:
+  - gulp eslint
   - gulp once
 after_success:
   - gulp coveralls

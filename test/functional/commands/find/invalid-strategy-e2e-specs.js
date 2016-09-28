@@ -10,11 +10,10 @@ let driver;
 let defaultCaps = {
   app: sampleApps('ApiDemos-debug'),
   deviceName: 'Android',
-  platformName: 'Android',
-  appActivity: '.view.SplitTouchView'
+  platformName: 'Android'
 };
 
-describe('apidemo - touch - swipe-action', function () {
+describe('Find - invalid strategy', function () {
   before(async () => {
     driver = new AndroidUiautomator2Driver();
     await driver.createSession(defaultCaps);
@@ -22,10 +21,8 @@ describe('apidemo - touch - swipe-action', function () {
   after(async () => {
     await driver.deleteSession();
   });
-  it('should swipe', async () => {
-  await driver.swipe(100,650,100,330,1);
-  let els = await driver.findElOrEls('xpath', "//*[@text='Abertam']", true);
-  els.should.be.an.instanceof(Array);
-  els.should.have.length(1);
+  it('should not accept -ios uiautomation locator strategy', async () => {
+    await driver.findElOrEls('-ios uiautomation', '.elements()', false)
+      .should.eventually.be.rejectedWith(/not supported/);
   });
 });

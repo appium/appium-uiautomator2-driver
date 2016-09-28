@@ -48,9 +48,11 @@
     "prepublish": "./node_modules/.bin/gulp prepublish",
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp",
-    "lint": "gulp eslint"
+    "lint": "gulp eslint",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "pre-commit": [
+    "precommit-msg",
     "lint",
     "test"
   ],

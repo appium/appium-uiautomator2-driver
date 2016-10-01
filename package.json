@@ -1,5 +1,5 @@
 {
-  "name": "appium-uiautomator2-driver-test-1",
+  "name": "appium-uiautomator2-driver",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "appium",
@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "1.2.70",
+  "version": "0.0.1-beta1",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -31,7 +31,7 @@
     "appium-android-driver": "^1.10.27",
     "appium-base-driver": "^2.0.18",
     "appium-logger": "^2.1.0",
-    "appium-uiautomator2-server-test-1": "0.0.54",
+    "appium-uiautomator2-server": "^0.0.1-beta1",
     "appium-support": "^2.0.9",
     "asyncbox": "^2.3.1",
     "bluebird": "^2.10.2",

@@ -40,6 +40,9 @@ describe('apidemo - attributes', function () {
   it('should be able to find displayed attribute', async () => {
     await driver.getAttribute('displayed', animationEl).should.eventually.become(true);
   });
+  it('should be able to find enabled attribute', async () => {
+    await driver.getAttribute('enabled', animationEl).should.eventually.become(true);
+  });
   it('should be able to find displayed attribute through normal func', async () => {
     await driver.elementDisplayed(animationEl).should.eventually.become(true);
   });

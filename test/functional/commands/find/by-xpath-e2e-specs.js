@@ -31,6 +31,10 @@ describe('Find - xpath', function () {
     let el = await driver.findElOrEls('xpath', `//${atv}[@text='Accessibility']`, false);
     await driver.getText(el.ELEMENT).should.eventually.equal('Accessibility');
   });
+  it('should find element by attribute', async () => {
+    await driver.findElOrEls('xpath', `//*[@enabled='true' and @scrollable='true']`, true)
+        .should.eventually.have.length(1);
+  });
   it('should find exactly one element via elementsByXPath', async () => {
     let el = await driver.findElOrEls('xpath', `//${atv}[@text='Accessibility']`, true);
     el.length.should.equal(1);

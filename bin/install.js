@@ -4,7 +4,7 @@
 var exec = require("child_process").exec;
 var path = require("path");
 
-var MAX_ATTEMPTS = 50;
+var MAX_ATTEMPTS = 5;
 var INTERVAL = 1500;
 var attempts = 1;
 var attemptedToBuild = false;

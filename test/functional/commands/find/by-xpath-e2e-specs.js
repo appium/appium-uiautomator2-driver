@@ -68,4 +68,33 @@ describe('Find - xpath', function () {
     let elementsWithCompression = await driver.findElOrEls('xpath', `//*`, true);
     elementsWithoutCompression.length.should.be.greaterThan(elementsWithCompression.length);
   });
+  it('should find toast message element by text', async () => {
+    await driver.startActivity(`io.appium.android.apis`, `.view.PopupMenu1`);
+    await driver.implicitWait(2000);
+    let popUp = await driver.findElOrEls('accessibility id', 'Make a Popup!', false);
+    let  popUpEl = popUp.ELEMENT;
+
+    await driver.click(popUpEl);
+    let search = await driver.findElOrEls('xpath', `.//*[@text='Search']`, false);
+    await driver.click(search.ELEMENT);
+    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Search']`, false)
+        .should.eventually.exist;
+
+    await driver.click(popUpEl);
+    let add =await driver.findElOrEls('xpath', `.//*[@text='Add']`, false);
+    await driver.click(add.ELEMENT);
+    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Add']`, false)
+        .should.eventually.exist;
+
+    await driver.click(popUpEl);
+    let edit = await driver.findElOrEls('xpath', `.//*[@text='Edit']`, false);
+    await driver.click(edit.ELEMENT);
+    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Edit']`, false)
+        .should.eventually.exist;
+
+    let share = await driver.findElOrEls('xpath', `.//*[@text='Share']`, false);
+    await driver.click(share.ELEMENT);
+    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Share']`, false)
+        .should.eventually.exist;
+  });
 });

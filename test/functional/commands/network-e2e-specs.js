@@ -22,12 +22,9 @@ describe.skip('wifi', function () {
   after(async () => {
     await driver.deleteSession();
   });
-  it('should disable and enable WIFI @skip-ci', async () => {
-    let ON = 1;
-    let OFF = 0;
-    await driver.setWifiState(OFF);
-    await driver.isWifiOn().should.eventually.equal(OFF);
-    await driver.setWifiState(ON);
-    await driver.isWifiOn().should.eventually.equal(ON);
+  it('should enable WIFI @skip-ci', async () => {
+    let WIFI = 2;
+    await driver.setNetworkConnection(WIFI);
+    await driver.isWifiOn().should.eventually.equal(true);
   });
 });

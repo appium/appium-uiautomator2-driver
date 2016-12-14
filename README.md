@@ -36,6 +36,26 @@ If none of these capabilities are given, the driver will connect to the first de
 
 If more than one of these capabilities are given, the driver will only use first the capability in the order above. That is, `avd` takes priority over `udid`, which takes priority over `platformVersion`.
 
+### Custom binaries url
+
+To use a mirror of the UIAutomator 2 driver binaries use npm config property `uiautomator2_driver_cdnurl`.
+Default is `https://github.com/appium/appium-uiautomator2-server/releases/download`.
+
+```bash
+npm install appium-uiautomator2-driver --uiautomator2_driver_cdnurl=https://github.com/appium/appium-uiautomator2-server/releases/download
+```
+
+Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+uiautomator2_driver_cdnurl=https://github.com/appium/appium-uiautomator2-server/releases/download
+```
+
+Another option is to use PATH variable `UIAUTOMATOR2_DRIVER_CDNURL`.
+
+```bash
+UIAUTOMATOR2_DRIVER_CDNURL=https://github.com/appium/appium-uiautomator2-server/releases/download npm install appium-uiautomator2-driver
+```
 
 ## API Notes
 

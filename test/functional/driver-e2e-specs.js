@@ -49,6 +49,17 @@ describe('createSession', function () {
     caps.appActivity = '.view.SplitTouchView';
     await driver.createSession(caps).should.eventually.be.rejectedWith(/Could not find/);
   });
+  it('should get device model, manufacturer and screen size in session details', async () => {
+    let caps = Object.assign({}, defaultCaps);
+    caps.appPackage = 'io.appium.android.apis';
+    caps.appActivity = '.view.SplitTouchView';
+    await driver.createSession(caps);
+
+    let serverCaps = await driver.getSession();
+    serverCaps.deviceScreenSize.should.exist;
+    serverCaps.deviceModel.should.exist;
+    serverCaps.deviceManufacturer.should.exist;
+  });
 });
 
 describe('close', function () {

@@ -34,6 +34,14 @@ describe('apidemo - attributes', function () {
   it('should be able to find name attribute', async () => {
     await driver.getAttribute('name', animationEl).should.eventually.become('Animation');
   });
+  it('should be able to find name attribute, falling back to text', async () => {
+    await driver.click(animationEl);
+    await B.delay(3000);
+    let textView = await driver.findElOrEls('class name', 'android.widget.TextView', true);
+    let textViewEl = textView[1].ELEMENT;
+    await driver.getAttribute('name', textViewEl).should.eventually.become('Bouncing Balls');
+    await driver.back();
+  });
   it('should be able to find content description attribute', async () => {
     await driver.getAttribute('contentDescription', animationEl).should.eventually.become("Animation");
   });
@@ -60,13 +68,5 @@ describe('apidemo - attributes', function () {
     let size = await driver.getSize(animationEl);
     size.width.should.be.at.least(0);
     size.height.should.be.at.least(0);
-  });
-  it('should be able to find name attribute, falling back to text', async () => {
-    await driver.click(animationEl);
-    await B.delay(3000);
-    let textView = await driver.findElOrEls('class name', 'android.widget.TextView', true);
-    let textViewEl = textView[1].ELEMENT;
-    await driver.getAttribute('name', textViewEl).should.eventually.become('Bouncing Balls');
-    await driver.back();
   });
 });

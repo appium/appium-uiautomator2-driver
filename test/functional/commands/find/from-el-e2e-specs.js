@@ -1,24 +1,20 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../../../..';
-import sampleApps from 'sample-apps';
+import { APIDEMOS_CAPS } from '../../desired';
+
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let defaultCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-let atv = 'android.widget.TextView';
-let alv = 'android.widget.ListView';
+const atv = 'android.widget.TextView';
+const alv = 'android.widget.ListView';
 
 describe('Find - from element', function () {
+  let driver;
   before(async () => {
     driver = new AndroidUiautomator2Driver();
-    await driver.createSession(defaultCaps);
+    await driver.createSession(APIDEMOS_CAPS);
   });
   after(async () => {
     await driver.deleteSession();

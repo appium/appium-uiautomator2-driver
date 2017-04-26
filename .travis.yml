@@ -1,10 +1,44 @@
-language: node_js
-node_js:
-  - "7"
-  - "6"
-  - "4"
+language: android
+android:
+  components:
+    # use the latest revision of Android SDK Tools
+    - platform-tools
+    - tools
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-19
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-17
+env:
+  - _FORCE_LOGS=1 TEST=unit
+  - _FORCE_LOGS=1 TEST=unit/commands
+  - _FORCE_LOGS=1 TEST=functional
+  - _FORCE_LOGS=1 TEST=functional/commands
+  - _FORCE_LOGS=1 TEST=functional/commands/find
+  - _FORCE_LOGS=1 TEST=functional/commands/touch
+before_script:
+  # node stuff
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+  - nvm install 4
+  - node --version
+  - npm --version
+  - npm install -g gulp
+  - npm install -g mocha
+  - SERVER_INSTALL_ATTEMPTS=50 npm install
+
+  # android stuff
+  - android list targets
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 script:
-  - gulp eslint
-  - gulp once
+  - gulp eslint && DEVICE=android mocha -t 900000 -R spec build/test/$TEST
 after_success:
   - gulp coveralls

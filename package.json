@@ -30,13 +30,14 @@
     "appium-adb": "^2.23.6",
     "appium-android-driver": "^1.12.0",
     "appium-base-driver": "^2.0.18",
-    "appium-uiautomator2-server": "0.x",
     "appium-support": "^2.5.0",
+    "appium-uiautomator2-server": "0.x",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
     "bluebird": "^2.10.2",
     "lodash": "^3.10.1",
     "portscanner": "2.1.1",
+    "request": "^2.81.0",
     "request-promise": "^4.1.1",
     "source-map-support": "^0.3.2",
     "teen_process": "^1.3.1",
@@ -44,8 +45,7 @@
     "yargs": "^3.29.0"
   },
   "scripts": {
-    "install": "node ./bin/install.js",
-    "prepublish": "./node_modules/.bin/gulp prepublish",
+    "prepublish": "./node_modules/.bin/gulp prepublish && node ./bin/install.js",
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp",
     "lint": "gulp eslint",
@@ -57,6 +57,7 @@
     "test"
   ],
   "devDependencies": {
+    "android-apidemos": "^2.0.0",
     "appium-gulp-plugins": "^1.3.12",
     "appium-test-support": "0.0.5",
     "babel-eslint": "^6.1.2",
@@ -67,6 +68,7 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-mocha": "^3.0.0",
+    "gps-demo-app": "^1.0.0",
     "gulp": "^3.9.0",
     "pre-commit": "^1.2.2",
     "sample-apps": "2.0.4",

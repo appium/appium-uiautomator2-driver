@@ -1,8 +1,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import sampleApps from 'sample-apps';
+import { retryInterval } from 'asyncbox';
 import AndroidUiautomator2Driver from '../../..';
+import { APIDEMOS_CAPS } from '../desired';
+
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -12,19 +14,16 @@ const EDITTEXT_CLASS = 'android.widget.EditText';
 const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
 
-let defaultAsciiCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android',
+let defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
   appPackage: PACKAGE,
   appActivity: TEXTFIELD_ACTIVITY
-};
+});
 
-let defaultUnicodeCaps = _.defaults({
+let defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
   unicodeKeyboard: true,
   resetKeyboard: true
-}, defaultAsciiCaps);
+});
 
 function deSamsungify (text) {
   // For samsung S5 text is appended with ". Editing."
@@ -42,8 +41,10 @@ async function runTextEditTest (driver, testText, keys = false) {
     await driver.setValue(testText, el);
   }
 
-  let text = await driver.getText(el);
-  deSamsungify(text).should.be.equal(testText);
+  await retryInterval(10, 1000, async () => {
+    let text = await driver.getText(el);
+    deSamsungify(text).should.be.equal(testText);
+  });
 
   return el;
 }

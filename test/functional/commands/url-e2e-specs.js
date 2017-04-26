@@ -1,22 +1,16 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../../..';
+import { BROWSER_CAPS } from '../desired';
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let defaultCaps = {
-  appPackage: 'com.android.browser',
-  appActivity: '.BrowserActivity',
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-
 describe('setUrl', function (){
+  let driver;
   before(async () => {
     driver = new AndroidUiautomator2Driver();
-    await driver.createSession(defaultCaps);
+    await driver.createSession(BROWSER_CAPS);
   });
   after(async () => {
     await driver.deleteSession();

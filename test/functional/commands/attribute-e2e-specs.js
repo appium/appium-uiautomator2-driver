@@ -15,6 +15,23 @@ let caps = {
   platformName: 'Android'
 };
 
+async function waitForElement (strategy, selector) {
+  var i = 0;
+  while (i < 10) {
+    try {
+      await driver.findElOrEls(strategy, selector);
+      break;
+    } catch (ign) {
+      await B.delay(3000);
+      i++;
+    }
+  }
+
+  if (i === 10) {
+    throw `Could not find element: ${strategy} ${selector}`;
+  }
+}
+
 describe('apidemo - attributes', function () {
   before(async () => {
     driver = new AndroidUiautomator2Driver();
@@ -36,11 +53,11 @@ describe('apidemo - attributes', function () {
   });
   it('should be able to find name attribute, falling back to text', async () => {
     await driver.click(animationEl);
-    await B.delay(3000);
-    let textView = await driver.findElOrEls('class name', 'android.widget.TextView', true);
-    let textViewEl = textView[1].ELEMENT;
-    await driver.getAttribute('name', textViewEl).should.eventually.become('Bouncing Balls');
+    await waitForElement('accessibility id', 'Bouncing Balls');
+    let textViewEl = await driver.findElOrEls('accessibility id', 'Bouncing Balls', false);
+    await driver.getAttribute('name', textViewEl.ELEMENT);
     await driver.back();
+    await waitForElement('accessibility id', 'Animation');
   });
   it('should be able to find content description attribute', async () => {
     await driver.getAttribute('contentDescription', animationEl).should.eventually.become("Animation");

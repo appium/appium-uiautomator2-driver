@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../../..';
 import sampleApps from 'sample-apps';
-import B from 'bluebird';
+import { retryInterval } from 'asyncbox';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -16,23 +16,11 @@ let caps = {
 };
 
 async function waitForElement (strategy, selector) {
-  var i = 0;
-  while (i < 10) {
-    try {
-      await driver.findElOrEls(strategy, selector);
-      break;
-    } catch (ign) {
-      await B.delay(3000);
-      i++;
-    }
-  }
-
-  if (i === 10) {
-    throw `Could not find element: ${strategy} ${selector}`;
-  }
+  return await retryInterval(10, 3000, driver.findElOrEls.bind(driver), strategy, selector);
 }
 
 describe('apidemo - attributes', function () {
+  this.timeout(300000);
   before(async () => {
     driver = new AndroidUiautomator2Driver();
     await driver.createSession(caps);

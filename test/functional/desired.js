@@ -20,8 +20,7 @@ const GPS_DEMO_CAPS = _.defaults({
 }, GENERIC_CAPS);
 
 const BROWSER_CAPS = _.defaults({
-  appPackage: 'com.android.browser',
-  appActivity: '.BrowserActivity',
+  browserName: 'Browser'
 }, GENERIC_CAPS);
 
 export { APIDEMOS_CAPS, CONTACT_MANAGER_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS };

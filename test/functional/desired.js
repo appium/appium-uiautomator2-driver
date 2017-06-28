@@ -2,9 +2,12 @@ import _ from 'lodash';
 import sampleApps from 'sample-apps';
 
 
+const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
+
 const GENERIC_CAPS = {
   deviceName: 'Android',
   platformName: 'Android',
+  uiautomator2ServerLaunchTimeout,
 };
 
 const APIDEMOS_CAPS = _.defaults({

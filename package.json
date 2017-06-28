@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "adbkit": "^2.4.1",
-    "appium-adb": "^ 2.11.1",
+    "appium-adb": "^2.23.6",
     "appium-android-driver": "^1.12.0",
     "appium-base-driver": "^2.0.18",
     "appium-uiautomator2-server": "0.x",
@@ -68,11 +68,12 @@
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-mocha": "^3.0.0",
     "gulp": "^3.9.0",
-    "sinon": "^1.17.2",
-    "wd": "^0.3.12",
-    "xpath": "0.0.22",
-    "unzip": "^0.1.11",
+    "pre-commit": "^1.2.2",
     "sample-apps": "2.0.4",
-    "xmldom": "^0.1.19"
+    "sinon": "^1.17.2",
+    "unzip": "^0.1.11",
+    "wd": "^0.3.12",
+    "xmldom": "^0.1.19",
+    "xpath": "0.0.22"
   }
 }

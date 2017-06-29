@@ -47,7 +47,7 @@ describe('Find - uiautomator', function () {
     await driver.findElOrEls('-android uiautomator', 'new UiSelector().clickable(true);', true)
       .should.eventually.have.length.at.least(10);
   });
-  it('should find an element with an int argument', async () => {
+  it.skip('should find an element with an int argument', async () => {
     let el = await driver.findElOrEls('-android uiautomator', 'new UiSelector().index(0)', false);
     await driver.getName(el.ELEMENT).should.eventually.equal('android.widget.FrameLayout');
   });

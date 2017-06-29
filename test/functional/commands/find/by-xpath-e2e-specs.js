@@ -66,7 +66,7 @@ describe('Find - xpath', function () {
   });
   it('should find toast message element by text', async () => {
     await driver.startActivity(`io.appium.android.apis`, `.view.PopupMenu1`);
-    await driver.implicitWait(2000);
+    await driver.implicitWait(20000);
     let popUp = await driver.findElOrEls('accessibility id', 'Make a Popup!', false);
     let  popUpEl = popUp.ELEMENT;
 

@@ -12,6 +12,7 @@ describe('Find - uiautomator', function () {
   before(async () => {
     driver = new AndroidUiautomator2Driver();
     await driver.createSession(APIDEMOS_CAPS);
+    await driver.implicitWait(20000);
   });
   after(async () => {
     await driver.deleteSession();

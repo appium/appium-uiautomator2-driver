@@ -1,10 +1,54 @@
-language: node_js
-node_js:
-  - "7"
-  - "6"
-  - "4"
+language: android
+android:
+  components:
+    # use the latest revision of Android SDK Tools
+    - platform-tools
+    - tools
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-19
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-armeabi-v7a-android-22
+env:
+  global:
+    - _FORCE_LOGS=1
+    - DEVICE=android
+    - MOCHA_TIMEOUT=360000
+    - START_EMU=1
+    - ANDROID_EMU_NAME=test
+    - ANDROID_EMU_TARGET=android-21
+    - ANDROID_EMU_ABI=armeabi-v7a
+  matrix:
+    - START_EMU=0 TEST=unit
+    - TEST=unit/commands
+    - TEST=functional
+    - TEST=functional/commands
+    - TEST=functional/commands/find
+    - TEST=functional/commands/touch
+before_script:
+  # node stuff
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+  - nvm install 4
+  - node --version
+  - npm --version
+  - npm install appium-test-support # get the travis emu scripts
+
+  # android stuff
+  - android list targets
+  - $(npm bin)/android-emu-travis-pre
+
+  - npm install -g gulp
+  - npm install -g mocha
+  - SERVER_INSTALL_ATTEMPTS=50 npm install
+
+  # make sure emulator started
+  - $(npm bin)/android-emu-travis-post
 script:
-  - gulp eslint
-  - gulp once
+  - gulp eslint && mocha -t $MOCHA_TIMEOUT -R spec build/test/$TEST
 after_success:
   - gulp coveralls

@@ -1,23 +1,18 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../../..';
-import sampleApps from 'sample-apps';
+import { APIDEMOS_CAPS, CONTACT_MANAGER_CAPS } from '../desired';
+
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let defaultCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-
 describe('general', function () {
   describe('startActivity', function () {
+    let driver;
     before(async () => {
       driver = new AndroidUiautomator2Driver();
-      await driver.createSession(defaultCaps);
+      await driver.createSession(APIDEMOS_CAPS);
     });
     after(async () => {
       await driver.deleteSession();
@@ -73,10 +68,10 @@ describe('general', function () {
     });
   });
   describe('getStrings', function () {
+    let driver;
     before(async () => {
       driver = new AndroidUiautomator2Driver();
-      let contactCaps = Object.assign({}, defaultCaps, {app: sampleApps('ContactManager')});
-      await driver.createSession(contactCaps);
+      await driver.createSession(CONTACT_MANAGER_CAPS);
     });
     after(async () => {
       await driver.deleteSession();

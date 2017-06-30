@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import { BROWSER_CAPS } from '../desired';
 import ADB from 'appium-adb';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -11,11 +11,9 @@ chai.use(chaiAsPromised);
 let driver;
 let caps = Object.assign({}, BROWSER_CAPS);
 
-describe('setUrl', function () {
+describe('setUrl @skip-ci', function () {
   let urlId = 'com.android.browser:id/url';
   before(async function () {
-    if (process.env.TRAVIS) return this.skip(); // eslint-disable-line curly
-
     let adb = new ADB();
     if (!await adb.isAppInstalled('com.android.browser')) {
       if (!await adb.isAppInstalled('com.android.chrome')) {
@@ -26,8 +24,7 @@ describe('setUrl', function () {
       urlId = 'com.android.chrome:id/url_bar';
     }
 
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(caps);
+    driver = await initDriver(caps);
   });
   after(async () => {
     if (driver) {

@@ -3,15 +3,19 @@ import sampleApps from 'sample-apps';
 
 
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
+const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 30000 : 20000;
 
 const GENERIC_CAPS = {
   deviceName: 'Android',
   platformName: 'Android',
   uiautomator2ServerLaunchTimeout,
+  uiautomator2ServerInstallTimeout,
 };
 
 const APIDEMOS_CAPS = _.defaults({
   app: require.resolve('android-apidemos'),
+  appPackage: 'io.appium.android.apis',
+  appActivity: 'io.appium.android.apis.ApiDemos',
 }, GENERIC_CAPS);
 
 const CONTACT_MANAGER_CAPS = _.defaults({

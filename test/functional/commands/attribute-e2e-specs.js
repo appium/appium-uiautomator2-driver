@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -12,15 +12,14 @@ let driver;
 let animationEl;
 
 async function waitForElement (strategy, selector) {
-  return await retryInterval(10, 3000, driver.findElOrEls.bind(driver), strategy, selector);
+  return await retryInterval(10, 3000, driver.findElOrEls.bind(driver), strategy, selector, false);
 }
 
 describe('apidemo - attributes', function () {
-  this.timeout(300000);
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(APIDEMOS_CAPS);
-    let animation = await driver.findElOrEls('accessibility id', 'Animation', false);
+    driver = await initDriver(APIDEMOS_CAPS);
+
+    let animation = await waitForElement('accessibility id', 'Animation');
     animationEl = animation.ELEMENT;
   });
   after(async () => {

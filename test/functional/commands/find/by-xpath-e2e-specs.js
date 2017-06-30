@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../../..';
 import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 
 chai.should();
@@ -13,8 +13,7 @@ const f = "android.widget.FrameLayout";
 describe('Find - xpath', function () {
   let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(APIDEMOS_CAPS);
+    driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
     await driver.deleteSession();
@@ -28,8 +27,8 @@ describe('Find - xpath', function () {
     await driver.getText(el.ELEMENT).should.eventually.equal('Accessibility');
   });
   it('should find element by attribute', async () => {
-    await driver.findElOrEls('xpath', `//*[@enabled='true' and @scrollable='true']`, true)
-        .should.eventually.have.length(1);
+    await driver.findElOrEls('xpath', `//*[@enabled='true' and @focused='true']`, true)
+      .should.eventually.have.length(1);
   });
   it('should find exactly one element via elementsByXPath', async () => {
     let el = await driver.findElOrEls('xpath', `//${atv}[@text='Accessibility']`, true);
@@ -64,7 +63,10 @@ describe('Find - xpath', function () {
     let elementsWithCompression = await driver.findElOrEls('xpath', `//*`, true);
     elementsWithoutCompression.length.should.be.greaterThan(elementsWithCompression.length);
   });
-  it('should find toast message element by text', async () => {
+  it('should find toast message element by text @skip-ci', async function () {
+    // skip on travis, as it is too slow and the message is removed before
+    // we can find it
+
     await driver.startActivity(`io.appium.android.apis`, `.view.PopupMenu1`);
     await driver.implicitWait(20000);
     let popUp = await driver.findElOrEls('accessibility id', 'Make a Popup!', false);
@@ -80,17 +82,6 @@ describe('Find - xpath', function () {
     let add =await driver.findElOrEls('xpath', `.//*[@text='Add']`, false);
     await driver.click(add.ELEMENT);
     await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Add']`, false)
-        .should.eventually.exist;
-
-    await driver.click(popUpEl);
-    let edit = await driver.findElOrEls('xpath', `.//*[@text='Edit']`, false);
-    await driver.click(edit.ELEMENT);
-    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Edit']`, false)
-        .should.eventually.exist;
-
-    let share = await driver.findElOrEls('xpath', `.//*[@text='Share']`, false);
-    await driver.click(share.ELEMENT);
-    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Share']`, false)
         .should.eventually.exist;
   });
 });

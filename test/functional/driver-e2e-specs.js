@@ -10,9 +10,15 @@ chai.use(chaiAsPromised);
 
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 
+async function killServer (adbPort) {
+  let adb = await ADB.createADB({adbPort});
+  await adb.killServer();
+}
+
 describe('createSession', function () {
   let driver;
-  before(function () {
+  before(async function () {
+    await killServer(5037);
     driver = new AndroidUiautomator2Driver();
   });
 
@@ -69,12 +75,6 @@ describe('createSession', function () {
 
   describe('custom adb port', function () {
     let adbPort = 5042;
-
-    async function killServer (adbPort) {
-      let adb = await ADB.createADB({adbPort});
-      // await exec(adb.executable.path, adb.executable.defaultArgs.concat('kill-server'));
-      await adb.killServer();
-    }
 
     before(async function () {
       await killServer(5037);

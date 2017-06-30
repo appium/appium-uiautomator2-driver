@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import { APIDEMOS_CAPS, CONTACT_MANAGER_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -11,8 +11,7 @@ describe('general', function () {
   describe('startActivity', function () {
     let driver;
     before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      await driver.createSession(APIDEMOS_CAPS);
+      driver = await initDriver(APIDEMOS_CAPS);
     });
     after(async () => {
       await driver.deleteSession();
@@ -50,6 +49,7 @@ describe('general', function () {
                                  undefined, undefined,
                                  undefined, undefined,
                                  true);
+
       let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
@@ -62,6 +62,7 @@ describe('general', function () {
                                  undefined, undefined,
                                  undefined, undefined,
                                  false);
+
       let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
@@ -70,8 +71,7 @@ describe('general', function () {
   describe('getStrings', function () {
     let driver;
     before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      await driver.createSession(CONTACT_MANAGER_CAPS);
+      driver = await initDriver(CONTACT_MANAGER_CAPS);
     });
     after(async () => {
       await driver.deleteSession();

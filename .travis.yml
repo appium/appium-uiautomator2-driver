@@ -1,4 +1,5 @@
 language: android
+sudo: false
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -18,22 +19,22 @@ env:
   global:
     - _FORCE_LOGS=1
     - DEVICE=android
-    - MOCHA_TIMEOUT=360000
+    - MOCHA_TIMEOUT=640000
+    - RECURSIVE=
     - START_EMU=1
     - ANDROID_EMU_NAME=test
     - ANDROID_EMU_TARGET=android-21
     - ANDROID_EMU_ABI=armeabi-v7a
   matrix:
-    - START_EMU=0 TEST=unit
-    - TEST=unit/commands
+    - START_EMU=0 RECURSIVE=--recursive TEST=unit
     - TEST=functional
     - TEST=functional/commands
     - TEST=functional/commands/find
-    - TEST=functional/commands/touch
+    - TEST=functional/commands/keyboard
 before_script:
   # node stuff
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-  - nvm install 4
+  - nvm install 6
   - node --version
   - npm --version
   - npm install appium-test-support # get the travis emu scripts
@@ -49,6 +50,6 @@ before_script:
   # make sure emulator started
   - $(npm bin)/android-emu-travis-post
 script:
-  - gulp eslint && mocha -t $MOCHA_TIMEOUT -R spec build/test/$TEST
+  - gulp eslint && mocha -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
 after_success:
   - gulp coveralls

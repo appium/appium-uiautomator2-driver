@@ -1,11 +1,11 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import _ from 'lodash';
 import B from 'bluebird';
 import stream from 'stream';
 import Unzip from 'unzip';
 import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -14,8 +14,7 @@ chai.use(chaiAsPromised);
 describe('file movement', function () {
   let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(Object.assign({}, APIDEMOS_CAPS, {autoLaunch: false}));
+    driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
     await driver.deleteSession();

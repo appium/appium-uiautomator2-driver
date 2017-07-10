@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../../..';
 import ADB from 'appium-adb';
 import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 
 chai.should();
@@ -12,8 +12,7 @@ describe('Find - basic', function () {
   let driver;
   let singleResourceId;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(APIDEMOS_CAPS);
+    driver = await initDriver(APIDEMOS_CAPS);
     let adb = new ADB({});
     // the app behaves differently on different api levels when it comes to
     // which resource ids are available for testing, so we switch here to make

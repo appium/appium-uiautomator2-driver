@@ -2,8 +2,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { retryInterval } from 'asyncbox';
-import AndroidUiautomator2Driver from '../../..';
-import { APIDEMOS_CAPS } from '../desired';
+import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 
 chai.should();
@@ -78,8 +78,7 @@ describe('keyboard', () => {
   describe('ascii', () => {
     let driver;
     before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      await driver.createSession(defaultAsciiCaps);
+      driver = await initDriver(defaultAsciiCaps);
 
       // sometimes the default ime is not what we are using
       let engines = await driver.availableIMEEngines();
@@ -98,9 +97,9 @@ describe('keyboard', () => {
 
 
     describe('editing a text field', () => {
-      before(async () => {
-        await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
-      });
+      // before(async () => {
+      //   await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
+      // });
 
       for (let test of tests) {
         describe(test.label, () => {
@@ -128,17 +127,16 @@ describe('keyboard', () => {
     describe('unicode', () => {
       let driver;
       before(async () => {
-        driver = new AndroidUiautomator2Driver();
-        await driver.createSession(defaultUnicodeCaps);
+        driver = await initDriver(defaultUnicodeCaps);
       });
       after(async () => {
         await driver.deleteSession();
       });
 
       describe('editing a text field', () => {
-        before(async () => {
-          await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
-        });
+        // before(async () => {
+        //   await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
+        // });
 
         for (let testSet of [tests, unicodeTests, languageTests]) {
           for (let test of testSet) {

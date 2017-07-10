@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -12,8 +12,7 @@ const unicodeImeId = 'io.appium.android.ime/.UnicodeIME';
 describe('apidemo - IME', function () {
   let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
+    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
   });
   beforeEach(async () => {
     await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.ApiDemos');

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../../..';
 import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 
 chai.should();
@@ -10,8 +10,7 @@ chai.use(chaiAsPromised);
 describe('Find - uiautomator', function () {
   let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(APIDEMOS_CAPS);
+    driver = await initDriver(APIDEMOS_CAPS);
     await driver.implicitWait(20000);
   });
   after(async () => {
@@ -69,12 +68,14 @@ describe('Find - uiautomator', function () {
     await driver.getText(el.ELEMENT).should.eventually.equal('Accessibility');
   });
   it('should find an element with recursive UiSelectors', async () => {
-    await driver.findElOrEls('-android uiautomator', 'new UiSelector().childSelector(new UiSelector().clickable(true)).clickable(true)', true)
+    await driver.findElOrEls('-android uiautomator', 'new UiSelector().childSelector(new UiSelector().clickable(true)).focused(true)', true)
       .should.eventually.have.length(1);
   });
   it('should not find an element which does not exist', async () => {
+    await driver.implicitWait(1000); // expect this to fail, so no need to wait too long
     await driver.findElOrEls('-android uiautomator', 'new UiSelector().description("chuckwudi")', true)
       .should.eventually.have.length(0);
+    await driver.implicitWait(20000); // restore implicit wait
   });
   it('should allow multiple selector statements and return the Union of the two sets', async () => {
     let clickable = await driver.findElOrEls('-android uiautomator', 'new UiSelector().clickable(true)', true);

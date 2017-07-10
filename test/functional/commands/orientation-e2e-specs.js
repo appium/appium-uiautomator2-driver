@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
 import B from 'bluebird';
 import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
@@ -11,8 +11,7 @@ chai.use(chaiAsPromised);
 describe('apidemo - orientation', function () {
   let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
+    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
   });
   after(async () => {
     await driver.deleteSession();

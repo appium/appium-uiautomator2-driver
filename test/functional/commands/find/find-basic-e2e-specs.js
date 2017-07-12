@@ -20,52 +20,52 @@ describe('Find - basic', function () {
     singleResourceId = await adb.getApiLevel() >= 21 ? 'decor_content_parent' : 'home';
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find a single element by content-description', async () => {
-    let el = await driver.findElOrEls('accessibility id', 'Animation', false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('Animation');
+    let el = await driver.elementByAccessibilityId('Animation');
+    await el.text().should.eventually.equal('Animation');
   });
   it('should find an element by class name', async () => {
-    let el = await driver.findElOrEls('class name', 'android.widget.TextView', false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('API Demos');
+    let el = await driver.elementByClassName('android.widget.TextView');
+    await el.text().should.eventually.equal('API Demos');
   });
   it('should find multiple elements by class name', async () => {
-    await driver.findElOrEls('class name', 'android.widget.TextView', true)
+    await driver.elementsByClassName('android.widget.TextView')
       .should.eventually.have.length.at.least(10);
   });
   it('should not find multiple elements that doesnt exist', async () => {
-    await driver.findElOrEls('class name', 'blargimarg', true)
+    await driver.elementsByClassName('blargimarg')
       .should.eventually.have.length(0);
   });
   it('should fail on empty locator', async () => {
-    await driver.findElOrEls('class name', '', true).should.be.rejectedWith(/selector/);
+    await driver.elementsByClassName('').should.be.rejectedWith(/selector/);
   });
   it('should find a single element by resource-id', async () => {
-    await driver.findElOrEls('id', `android:id/${singleResourceId}`, false)
+    await driver.elementsById(`android:id/${singleResourceId}`)
       .should.eventually.exist;
   });
   it('should find multiple elements by resource-id', async () => {
-    await driver.findElOrEls('id', 'android:id/text1', true)
+    await driver.elementsById('android:id/text1')
       .should.eventually.have.length.at.least(10);
   });
   it('should find multiple elements by resource-id even when theres just one', async () => {
-    await driver.findElOrEls('id', `android:id/${singleResourceId}`, true)
+    await driver.elementsById(`android:id/${singleResourceId}`)
       .should.eventually.have.length(1);
   });
 
   describe('implicit wait', () => {
-    let implicitWait = 5000;
+    let implicitWaitTimeout = 5000;
     before(async () => {
-      await driver.implicitWait(implicitWait);
+      await driver.setImplicitWaitTimeout(implicitWaitTimeout);
     });
     it('should respect implicit wait with multiple elements', async () => {
       let beforeMs = Date.now();
-      await driver.findElOrEls('id', 'there_is_nothing_called_this', true)
+      await driver.elementsById('there_is_nothing_called_this')
         .should.eventually.have.length(0);
       let afterMs = Date.now();
-      (afterMs - beforeMs).should.be.below(implicitWait + 5000);
-      (afterMs - beforeMs).should.be.above(implicitWait);
+      (afterMs - beforeMs).should.be.below(implicitWaitTimeout + 5000);
+      (afterMs - beforeMs).should.be.above(implicitWaitTimeout);
     });
   });
 });

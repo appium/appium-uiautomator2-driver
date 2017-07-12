@@ -1,9 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
-
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,56 +9,56 @@ chai.use(chaiAsPromised);
 let driver;
 let animationEl;
 
-async function waitForElement (strategy, selector) {
-  return await retryInterval(10, 3000, driver.findElOrEls.bind(driver), strategy, selector, false);
-}
-
 describe('apidemo - attributes', function () {
-  before(async () => {
+  before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
-
-    let animation = await waitForElement('accessibility id', 'Animation');
-    animationEl = animation.ELEMENT;
+    animationEl = await driver.elementByAccessibilityId('Animation');
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should be able to find resourceId attribute', async () => {
-    await driver.getAttribute('resourceId', animationEl).should.eventually.become('android:id/text1');
+    await driver.getAttribute(animationEl, 'resourceId').should.eventually.become('android:id/text1');
   });
   it('should be able to find text attribute', async () => {
-    await driver.getAttribute('text', animationEl).should.eventually.become('Animation');
+    await driver.getAttribute(animationEl, 'text').should.eventually.become('Animation');
   });
   it('should be able to find name attribute', async () => {
-    await driver.getAttribute('name', animationEl).should.eventually.become('Animation');
+    await driver.getAttribute(animationEl, 'name').should.eventually.become('Animation');
   });
   it('should be able to find name attribute, falling back to text', async () => {
-    await driver.click(animationEl);
-    await waitForElement('accessibility id', 'Bouncing Balls');
-    let textViewEl = await driver.findElOrEls('accessibility id', 'Bouncing Balls', false);
-    await driver.getAttribute('name', textViewEl.ELEMENT);
+    await animationEl.click();
+    await driver.waitForElementByAccessibilityId('Bouncing Balls');
+    let textViewEl = await driver.elementByAccessibilityId('Bouncing Balls');
+    await driver.getAttribute(textViewEl, 'name');
     await driver.back();
-    await waitForElement('accessibility id', 'Animation');
+    await driver.waitForElementByAccessibilityId('Animation');
   });
   it('should be able to find content description attribute', async () => {
-    await driver.getAttribute('contentDescription', animationEl).should.eventually.become("Animation");
+    await driver.getAttribute(animationEl, 'contentDescription').should.eventually.become("Animation");
   });
   it('should be able to find displayed attribute', async () => {
-    await driver.getAttribute('displayed', animationEl).should.eventually.become('true');
+    await driver.getAttribute(animationEl, 'displayed').should.eventually.become('true');
   });
   it('should be able to find enabled attribute', async () => {
-    await driver.getAttribute('enabled', animationEl).should.eventually.become('true');
+    await driver.getAttribute(animationEl, 'enabled').should.eventually.become('true');
+    const displayed = await driver.getAttribute(animationEl, 'displayed');
+
+    // Cast displayed as string because sometimes it returns a boolean
+    (displayed + '').should.equal('true');
   });
   it('should be able to find displayed attribute through normal func', async () => {
-    await driver.elementDisplayed(animationEl).should.eventually.become(true);
+    const displayed = await animationEl.isDisplayed();
+    (displayed + '').should.equal('true');
   });
   it('should be able to get element location using getLocation', async () => {
-    let location = await driver.getLocation(animationEl);
+    let location = await animationEl.getLocation();
     location.x.should.be.at.least(0);
     location.y.should.be.at.least(0);
   });
   it('should be able to get element location using getLocationInView', async () => {
-    let location = await driver.getLocationInView(animationEl);
+    // TODO: 'getLocationInView' is returning a 404 not found error
+    let location = await animationEl.getLocationInView();
     location.x.should.be.at.least(0);
     location.y.should.be.at.least(0);
   });

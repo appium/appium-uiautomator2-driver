@@ -23,7 +23,7 @@ const GPS_DEMO_CAPS = _.defaults({
 }, GENERIC_CAPS);
 
 const BROWSER_CAPS = _.defaults({
-  browserName: 'Browser'
+  browserName: 'Chrome'
 }, GENERIC_CAPS);
 
 export { GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS };

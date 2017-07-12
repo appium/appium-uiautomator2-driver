@@ -40,7 +40,7 @@ before_script:
   - npm install appium-test-support # get the travis emu scripts
 
   # android stuff
-  - android list targets
+  - android list target
   - $(npm bin)/android-emu-travis-pre
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install

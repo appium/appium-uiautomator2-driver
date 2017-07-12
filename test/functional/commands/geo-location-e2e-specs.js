@@ -8,19 +8,19 @@ import { initDriver } from '../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
-describe.skip("geo-location", function () {
+describe("geo-location", function () {
   let driver;
   before(async () => {
     driver = await initDriver(GPS_DEMO_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
 
   it('should set geo location', async () => {
     let getText = async () => {
-      let els = await driver.findElOrEls('class name', 'android.widget.TextView', true);
-      return await driver.getText(els[1].ELEMENT);
+      const textViews = await driver.elementsByClassName('android.widget.TextView');
+      return await textViews[1].text();
     };
 
     let latitude = '27.17';
@@ -30,7 +30,7 @@ describe.skip("geo-location", function () {
     text.should.not.include(`Latitude: ${latitude}`);
     text.should.not.include(`Longitude: ${longitude}`);
 
-    await driver.setGeoLocation({latitude, longitude});
+    await driver.setGeoLocation(latitude, longitude);
 
     // wait for the text to change
     await retryInterval(6, 1000, async () => {

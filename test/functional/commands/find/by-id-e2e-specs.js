@@ -13,14 +13,14 @@ describe('Find - ID', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find an element by id', async () => {
-    await driver.findElOrEls('id', 'android:id/text1', false).should.eventually.exist;
+    await driver.elementsById('android:id/text1').should.eventually.exist;
   });
   it('should return an array of one element if the `multi` param is true', async () => {
     // TODO: this returns an object instead of an array. Investigate.
-    let els = await driver.findElOrEls('id', 'android:id/text1', true);
+    let els = await driver.elementsById('android:id/text1');
     els.should.be.an.instanceof(Array);
     els.should.have.length.above(1);
   });

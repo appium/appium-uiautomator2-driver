@@ -16,72 +16,73 @@ describe('Find - xpath', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find element by type', async () => {
-    let el = await driver.findElOrEls('xpath', `//${atv}`, false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('API Demos');
+    let el = await driver.elementByXPath(`//${atv}`);
+    await el.text().should.eventually.equal('API Demos');
   });
   it('should find element by text', async () => {
-    let el = await driver.findElOrEls('xpath', `//${atv}[@text='Accessibility']`, false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('Accessibility');
+    let el = await driver.elementByXPath(`//${atv}[@text='Accessibility']`);
+    await el.text().should.eventually.equal('Accessibility');
   });
   it('should find element by attribute', async () => {
-    await driver.findElOrEls('xpath', `//*[@enabled='true' and @focused='true']`, true)
+    await driver.elementsByXPath(`//*[@enabled='true' and @focused='true']`)
       .should.eventually.have.length(1);
   });
   it('should find exactly one element via elementsByXPath', async () => {
-    let el = await driver.findElOrEls('xpath', `//${atv}[@text='Accessibility']`, true);
-    el.length.should.equal(1);
-    await driver.getText(el[0].ELEMENT).should.eventually.equal('Accessibility');
+    let els = await driver.elementsByXPath(`//${atv}[@text='Accessibility']`);
+    els.length.should.equal(1);
+    await els[0].text().should.eventually.equal('Accessibility');
   });
   it('should find element by partial text', async () => {
-    let el = await driver.findElOrEls('xpath', `//${atv}[contains(@text, 'Accessibility')]`, false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('Accessibility');
+    let el = await driver.elementByXPath(`//${atv}[contains(@text, 'Accessibility')]`);
+    await el.text().should.eventually.equal('Accessibility');
   });
   it('should find the last element', async () => {
-    let el = await driver.findElOrEls('xpath', `(//${atv})[last()]`, false);
-    let text = await driver.getText(el.ELEMENT);
+    let el = await driver.elementByXPath(`(//${atv})[last()]`);
+    let text = await el.text();
     ["OS", "Text", "Views", "Preference"].should.include(text);
   });
   it('should find element by index and embedded desc', async () => {
-    let el = await driver.findElOrEls('xpath', `//${f}//${atv}[5]`, false);
-    await driver.getText(el.ELEMENT).should.eventually.equal('Content');
+    let el = await driver.elementByXPath(`//${f}//${atv}[5]`);
+    await el.text().should.eventually.equal('Content');
   });
   it('should find all elements', async () => {
-    let el = await driver.findElOrEls('xpath', `//*`, true);
-    el.length.should.be.above(2);
+    let els = await driver.elementsByXPath(`//*`);
+    els.length.should.be.above(2);
   });
   it('should find the first element when searching for all elements', async () => {
-    let el = await driver.findElOrEls('xpath', `//*`, true);
-    el[0].should.exist;
+    let el = await driver.elementByXPath(`//*`);
+    el.should.exist;
   });
   it('should find less elements with compression turned on', async () => {
     await driver.updateSettings({"ignoreUnimportantViews": false});
-    let elementsWithoutCompression = await driver.findElOrEls('xpath', `//*`, true);
+    let elementsWithoutCompression = await driver.elementsByXPath(`//*`);
     await driver.updateSettings({"ignoreUnimportantViews": true});
-    let elementsWithCompression = await driver.findElOrEls('xpath', `//*`, true);
+    let elementsWithCompression = await driver.elementsByXPath(`//*`);
     elementsWithoutCompression.length.should.be.greaterThan(elementsWithCompression.length);
   });
   it('should find toast message element by text @skip-ci', async function () {
     // skip on travis, as it is too slow and the message is removed before
     // we can find it
 
-    await driver.startActivity(`io.appium.android.apis`, `.view.PopupMenu1`);
-    await driver.implicitWait(20000);
-    let popUp = await driver.findElOrEls('accessibility id', 'Make a Popup!', false);
-    let  popUpEl = popUp.ELEMENT;
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.PopupMenu1'});
+    await driver.waitForElementByAccessibilityId('Make a Popup!');
+    let popUpEl = await driver.elementByAccessibilityId('Make a Popup!');
 
-    await driver.click(popUpEl);
-    let search = await driver.findElOrEls('xpath', `.//*[@text='Search']`, false);
-    await driver.click(search.ELEMENT);
-    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Search']`, false)
+    await popUpEl.click();
+    await driver.waitForElementByXPath(`.//*[@text='Search']`);
+    let searchEl = await driver.elementByXPath(`.//*[@text='Search']`);
+    await searchEl.click();
+    await driver.elementByXPath(`//*[@text='Clicked popup menu item Search']`)
         .should.eventually.exist;
 
-    await driver.click(popUpEl);
-    let add =await driver.findElOrEls('xpath', `.//*[@text='Add']`, false);
-    await driver.click(add.ELEMENT);
-    await driver.findElOrEls('xpath', `//*[@text='Clicked popup menu item Add']`, false)
+    await popUpEl.click();
+    await driver.waitForElementByXPath(`.//*[@text='Add']`);
+    let addEl =await driver.elementByXPath(`.//*[@text='Add']`);
+    await addEl.click();
+    await driver.elementByXPath(`//*[@text='Clicked popup menu item Add']`)
         .should.eventually.exist;
   });
 });

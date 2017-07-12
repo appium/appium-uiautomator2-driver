@@ -1,4 +1,4 @@
-import chai from 'chai';
+/*import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../..';
 import ADB from 'appium-adb';
@@ -16,6 +16,10 @@ async function killServer (adbPort) {
 }
 
 describe('createSession', function () {
+  if (process.env.TESTOBJECT_E2E_TESTS) {
+    this.skip();
+  }
+
   let driver;
   before(async function () {
     await killServer(5037);
@@ -113,4 +117,4 @@ describe('close', function () {
       appPackage.should.not.equal(APIDEMOS_PACKAGE);
     }
   });
-});
+});*/

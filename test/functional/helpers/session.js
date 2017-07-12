@@ -1,6 +1,7 @@
 import ADB from 'appium-adb';
-import AndroidUiautomator2Driver from '../../..';
-
+import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
+import logger from '../../../lib/logger';
+import wd from 'wd';
 
 async function initDriver (caps) {
   if (process.env.TRAVIS) {
@@ -12,9 +13,10 @@ async function initDriver (caps) {
     } catch (ign) {}
   }
 
-  let driver = new AndroidUiautomator2Driver();
-  await driver.createSession(caps);
-
+  // Create a WD driver
+  logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
+  let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
+  await driver.init(caps);
   return driver;
 }
 

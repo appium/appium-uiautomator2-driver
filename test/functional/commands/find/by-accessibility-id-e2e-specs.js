@@ -13,17 +13,17 @@ describe('Find - accessibility ID', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find an element by name', async () => {
-    await driver.findElOrEls('accessibility id', 'Animation', false).should.eventually.exist;
+    await driver.elementsByAccessibilityId('Animation').should.eventually.exist;
   });
   it('should return an array of one element if the `multi` param is true', async () => {
-    let els = await driver.findElOrEls('accessibility id', 'Animation', true);
+    let els = await driver.elementsByAccessibilityId('Animation');
     els.should.be.an.instanceof(Array);
     els.should.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async () => {
-    await driver.findElOrEls('accessibility id', "Access'ibility", false).should.eventually.exist;
+    await driver.elementsByAccessibilityId("Access'ibility").should.eventually.exist;
   });
 });

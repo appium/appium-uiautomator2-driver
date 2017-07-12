@@ -16,16 +16,16 @@ describe('Find - from element', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find a single element by tag name', async () => {
-    let el = await driver.findElOrEls('class name', alv, false);
-    let innerEl = await driver.findElOrEls('class name', atv, false, el.ELEMENT);
-    await driver.getText(innerEl.ELEMENT).should.eventually.equal("Access'ibility");
+    let el = await driver.elementByClassName(alv);
+    let innerEl = await el.elementByClassName(atv);
+    await innerEl.text().should.eventually.equal("Access'ibility");
   });
   it('should find multiple elements by tag name', async () => {
-    let el = await driver.findElOrEls('class name', alv, false);
-    let innerEl = await driver.findElOrEls('class name', atv, true, el.ELEMENT);
-    await driver.getText(innerEl[0].ELEMENT).should.eventually.have.length.above(10);
+    let el = await driver.elementByClassName(alv);
+    let innerEls = await el.elementsByClassName(atv);
+    await innerEls.should.have.length.above(9);
   });
 });

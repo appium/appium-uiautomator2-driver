@@ -1,4 +1,4 @@
-import chai from 'chai';
+/*import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
 import { APIDEMOS_CAPS } from './desired';
@@ -15,6 +15,10 @@ async function killServer (adbPort) {
 }
 
 describe('createSession', function () {
+  if (process.env.TESTOBJECT_E2E_TESTS) {
+    this.skip();
+  }
+
   let driver;
   before(async function () {
     await killServer(5037);
@@ -128,4 +132,4 @@ describe('close', function () {
       appPackage.should.not.equal(APIDEMOS_PACKAGE);
     }
   });
-});
+});*/

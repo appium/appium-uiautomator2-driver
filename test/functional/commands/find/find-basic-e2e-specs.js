@@ -65,7 +65,6 @@ describe('Find - basic', function () {
         .should.eventually.have.length(0);
       let afterMs = Date.now();
       (afterMs - beforeMs).should.be.below(implicitWaitTimeout * 2);
-      (afterMs - beforeMs).should.be.above(implicitWaitTimeout);
     });
   });
 });

@@ -120,6 +120,12 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
+        if (parseInt(await driver.adb.getApiLevel(), 10) < 24) {
+          // below Android 7.0 (API level 24) typing too many characters in a
+          // length-limited field will either throw a NullPointerException or
+          // crash the app
+          return this.skip();
+        }
         let els = await driver.findElOrEls('class name', EDITTEXT_CLASS, true);
         let el = els[3].ELEMENT;
         await driver.setValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', el);

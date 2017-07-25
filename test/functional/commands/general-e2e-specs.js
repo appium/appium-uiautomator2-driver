@@ -1,28 +1,22 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
-import sampleApps from 'sample-apps';
+import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
+
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let defaultCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-
 describe('general', function () {
-  describe('startActivity', function () {
-    before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      await driver.createSession(defaultCaps);
-    });
-    after(async () => {
-      await driver.deleteSession();
-    });
+  let driver;
+  before(async () => {
+    driver = await initDriver(APIDEMOS_CAPS);
+  });
+  after(async () => {
+    await driver.deleteSession();
+  });
 
+  describe('startActivity', function () {
     it('should launch a new package and activity', async () => {
       let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
       appPackage.should.equal('io.appium.android.apis');
@@ -55,6 +49,7 @@ describe('general', function () {
                                  undefined, undefined,
                                  undefined, undefined,
                                  true);
+
       let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
@@ -67,28 +62,20 @@ describe('general', function () {
                                  undefined, undefined,
                                  undefined, undefined,
                                  false);
+
       let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
     });
   });
   describe('getStrings', function () {
-    before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      let contactCaps = Object.assign({}, defaultCaps, {app: sampleApps('ContactManager')});
-      await driver.createSession(contactCaps);
-    });
-    after(async () => {
-      await driver.deleteSession();
-    });
-
     it('should return app strings', async () => {
       let strings = await driver.getStrings('en');
-      strings.save.should.equal('Save');
+      strings.activity_sample_code.should.equal('API Demos');
     });
     it('should return app strings for the device language', async () => {
       let strings = await driver.getStrings();
-      strings.save.should.equal('Save');
+      strings.activity_sample_code.should.equal('API Demos');
     });
   });
 });

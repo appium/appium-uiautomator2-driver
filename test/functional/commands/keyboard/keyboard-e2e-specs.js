@@ -1,8 +1,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import sampleApps from 'sample-apps';
-import AndroidUiautomator2Driver from '../../..';
+import { retryInterval } from 'asyncbox';
+import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
+
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -12,19 +14,16 @@ const EDITTEXT_CLASS = 'android.widget.EditText';
 const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
 
-let defaultAsciiCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android',
+let defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
   appPackage: PACKAGE,
   appActivity: TEXTFIELD_ACTIVITY
-};
+});
 
-let defaultUnicodeCaps = _.defaults({
+let defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
   unicodeKeyboard: true,
   resetKeyboard: true
-}, defaultAsciiCaps);
+});
 
 function deSamsungify (text) {
   // For samsung S5 text is appended with ". Editing."
@@ -42,8 +41,10 @@ async function runTextEditTest (driver, testText, keys = false) {
     await driver.setValue(testText, el);
   }
 
-  let text = await driver.getText(el);
-  deSamsungify(text).should.be.equal(testText);
+  await retryInterval(10, 1000, async () => {
+    let text = await driver.getText(el);
+    deSamsungify(text).should.be.equal(testText);
+  });
 
   return el;
 }
@@ -73,12 +74,11 @@ let languageTests = [
   { label: 'should be able to send Hebrew', text: 'בדיקות' },
 ];
 
-describe('keyboard', () => {
-  describe('ascii', () => {
+describe('keyboard', function () {
+  describe('ascii', function () {
     let driver;
-    before(async () => {
-      driver = new AndroidUiautomator2Driver();
-      await driver.createSession(defaultAsciiCaps);
+    before(async function () {
+      driver = await initDriver(defaultAsciiCaps);
 
       // sometimes the default ime is not what we are using
       let engines = await driver.availableIMEEngines();
@@ -91,28 +91,24 @@ describe('keyboard', () => {
       }
       await driver.activateIMEEngine(selectedEngine);
     });
-    after(async () => {
+    after(async function () {
       await driver.deleteSession();
     });
 
 
-    describe('editing a text field', () => {
-      before(async () => {
-        await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
-      });
-
+    describe('editing a text field', function () {
       for (let test of tests) {
         describe(test.label, () => {
-          it('should work with setValue', async () => {
+          it('should work with setValue', async function () {
             await runTextEditTest(driver, test.text);
           });
-          it('should work with keys', async () => {
+          it('should work with keys', async function () {
             await runTextEditTest(driver, test.text, true);
           });
         });
       }
 
-      it('should be able to clear a password field', async () => {
+      it('should be able to clear a password field', async function () {
         // there is currently no way to assert anything about the contents
         // of a password field, since there is no way to access the contents
         // but this should, at the very least, not fail
@@ -122,36 +118,47 @@ describe('keyboard', () => {
         await driver.setValue('super-duper password', el);
         await driver.clear(el);
       });
+
+      it('should be able to type in length-limited field', async function () {
+        if (parseInt(await driver.adb.getApiLevel(), 10) < 24) {
+          // below Android 7.0 (API level 24) typing too many characters in a
+          // length-limited field will either throw a NullPointerException or
+          // crash the app
+          return this.skip();
+        }
+        let els = await driver.findElOrEls('class name', EDITTEXT_CLASS, true);
+        let el = els[3].ELEMENT;
+        await driver.setValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', el);
+
+        // expect first 11 characters (limit of the field) to be in the field
+        let text = await driver.getText(el);
+        text.should.eql('0123456789a');
+      });
+    });
+  });
+
+  describe('unicode', function () {
+    let driver;
+    before(async function () {
+      driver = await initDriver(defaultUnicodeCaps);
+    });
+    after(async function () {
+      await driver.deleteSession();
     });
 
-    describe('unicode', () => {
-      let driver;
-      before(async () => {
-        driver = new AndroidUiautomator2Driver();
-        await driver.createSession(defaultUnicodeCaps);
-      });
-      after(async () => {
-        await driver.deleteSession();
-      });
-
-      describe('editing a text field', () => {
-        before(async () => {
-          await driver.startActivity(PACKAGE, TEXTFIELD_ACTIVITY);
-        });
-
-        for (let testSet of [tests, unicodeTests, languageTests]) {
-          for (let test of testSet) {
-            describe(test.label, () => {
-              it('should work with setValue', async () => {
-                await runTextEditTest(driver, test.text);
-              });
-              it('should work with keys', async () => {
-                await runTextEditTest(driver, test.text, true);
-              });
+    describe('editing a text field', function () {
+      for (let testSet of [tests, unicodeTests, languageTests]) {
+        for (let test of testSet) {
+          describe(test.label, () => {
+            it('should work with setValue', async function () {
+              await runTextEditTest(driver, test.text);
             });
-          }
+            it('should work with keys', async function () {
+              await runTextEditTest(driver, test.text, true);
+            });
+          });
         }
-      });
+      }
     });
   });
 });

@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "0.2.8",
+  "version": "0.4.4",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -27,17 +27,17 @@
   },
   "dependencies": {
     "adbkit": "^2.4.1",
-    "appium-adb": "^ 2.10.0",
-    "appium-android-driver": "^1.10.27",
+    "appium-adb": "^2.23.6",
+    "appium-android-driver": "^1.12.0",
     "appium-base-driver": "^2.0.18",
-    "appium-logger": "^2.1.0",
+    "appium-support": "^2.5.0",
     "appium-uiautomator2-server": "0.x",
-    "appium-support": "^2.0.9",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
     "bluebird": "^2.10.2",
     "lodash": "^3.10.1",
     "portscanner": "2.1.1",
+    "request": "^2.81.0",
     "request-promise": "^4.1.1",
     "source-map-support": "^0.3.2",
     "teen_process": "^1.3.1",
@@ -45,8 +45,8 @@
     "yargs": "^3.29.0"
   },
   "scripts": {
-    "install": "node ./bin/install.js",
     "prepublish": "./node_modules/.bin/gulp prepublish",
+    "install": "gulp prepublish && node ./bin/install.js",
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp",
     "lint": "gulp eslint",
@@ -58,8 +58,9 @@
     "test"
   ],
   "devDependencies": {
+    "android-apidemos": "^2.1.0",
     "appium-gulp-plugins": "^1.3.12",
-    "appium-test-support": "0.0.5",
+    "appium-test-support": "0.2.0",
     "babel-eslint": "^6.1.2",
     "chai": "^3.4.0",
     "chai-as-promised": "^5.1.0",
@@ -68,12 +69,13 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-mocha": "^3.0.0",
+    "gps-demo-app": "^1.0.0",
     "gulp": "^3.9.0",
+    "pre-commit": "^1.2.2",
     "sinon": "^1.17.2",
-    "wd": "^0.3.12",
-    "xpath": "0.0.22",
     "unzip": "^0.1.11",
-    "sample-apps": "2.0.4",
-    "xmldom": "^0.1.19"
+    "wd": "^0.3.12",
+    "xmldom": "^0.1.19",
+    "xpath": "0.0.22"
   }
 }

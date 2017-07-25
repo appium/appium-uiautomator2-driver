@@ -1,22 +1,16 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../../..';
-import sampleApps from 'sample-apps';
+import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
+
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let defaultCaps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-
-describe('Find - ID', function (){
+describe('Find - ID', function () {
+  let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(defaultCaps);
+    driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
     await driver.deleteSession();

@@ -1,26 +1,19 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../..';
-import sampleApps from 'sample-apps';
 import _ from 'lodash';
+import { APIDEMOS_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let caps = {
-  app: sampleApps('ApiDemos-debug'),
-  deviceName: 'Android',
-  platformName: 'Android',
-  appActivity: '.view.TextFields'
-};
-
 describe('element', function () {
+  let driver;
   let el;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(caps);
+    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
+
     el = _.last(await driver.findElOrEls('class name', 'android.widget.EditText', true));
     el.should.exist;
   });

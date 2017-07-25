@@ -1,30 +1,23 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { retryInterval } from 'asyncbox';
-import AndroidUiautomator2Driver from '../../..';
-import sampleApps from 'sample-apps';
+import { GPS_DEMO_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let caps = {
-  app: sampleApps('gpsDemo-debug'),
-  deviceName: 'Android',
-  platformName: 'Android'
-};
-
 describe.skip("geo-location", function () {
+  let driver;
   before(async () => {
-    driver = new AndroidUiautomator2Driver();
-    await driver.createSession(caps);
+    driver = await initDriver(GPS_DEMO_CAPS);
   });
   after(async () => {
     await driver.deleteSession();
   });
 
-  it('should set geo location @skip-ci', async () => {
+  it('should set geo location', async () => {
     let getText = async () => {
       let els = await driver.findElOrEls('class name', 'android.widget.TextView', true);
       return await driver.getText(els[1].ELEMENT);

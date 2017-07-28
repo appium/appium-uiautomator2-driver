@@ -117,6 +117,26 @@ describe('driver.js', () => {
           driver.getProxyAvoidList('aaa');
         }).should.throw;
       });
+      describe('nativeWebScreenshot', function () {
+        beforeEach(function () {
+          driver = new AndroidUiautomator2Driver({}, false);
+          sinon.mock(driver).expects('checkAppPresent')
+              .once()
+              .returns(Promise.resolve());
+          sinon.mock(driver).expects('startUiAutomator2Session')
+              .once()
+              .returns(Promise.resolve());
+        });
+
+        it('should proxy screenshot if nativeWebScreenshot is off', async function () {
+          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
+          driver.getProxyAvoidList().should.have.length(42);
+        });
+        it('should not proxy screenshot if nativeWebScreenshot is on', async function () {
+          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
+          driver.getProxyAvoidList().should.have.length(43);
+        });
+      });
     });
 
     describe('#canProxy', () => {

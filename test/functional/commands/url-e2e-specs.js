@@ -25,6 +25,7 @@ describe('setUrl @skip-ci', function () {
     }
 
     driver = await initDriver(caps);
+    await driver.implicitWait(5000);
   });
   after(async () => {
     if (driver) {
@@ -32,7 +33,7 @@ describe('setUrl @skip-ci', function () {
     }
   });
 
-  it('should be able to start a data uri via setUrl', async () => {
+  it('should be able to start a data uri via setUrl', async function () {
     if (caps.browserName === 'Chrome') {
       try {
         // on some chrome systems, we always get the terms and conditions page

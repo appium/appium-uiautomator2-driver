@@ -47,6 +47,7 @@
   "scripts": {
     "prepublish": "rimraf build && gulp prepublish",
     "install": "node ./bin/install.js",
+    "transpile": "gulp transpile",
     "test": "gulp once",
     "watch": "gulp",
     "lint": "gulp eslint",

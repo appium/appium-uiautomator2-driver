@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
+import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initDriver } from '../../helpers/session';
@@ -9,10 +10,13 @@ import { initDriver } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
+const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
+const TEXTVIEW_CLASS = 'android.widget.TextView';
 
 const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
+const KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
 let defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
@@ -28,6 +32,13 @@ let defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
 function deSamsungify (text) {
   // For samsung S5 text is appended with ". Editing."
   return text.replace(". Editing.", "");
+}
+
+async function getElement (driver, className) {
+  return await retryInterval(10, 1000, async () => {
+    let el = _.last(await driver.findElOrEls('class name', className, true));
+    return el.ELEMENT;
+  });
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
@@ -47,6 +58,55 @@ async function runTextEditTest (driver, testText, keys = false) {
   });
 
   return el;
+}
+
+/*
+ * The key event page needs to be cleared between runs, or else we get false
+ * positives from previously run tests. The page has a single button that
+ * removes all text from within the main TextView.
+ */
+async function clearKeyEvents (driver) {
+  let el = await getElement(driver, BUTTON_CLASS);
+  driver.click(el);
+
+  // wait a moment for the clearing to occur, lest we too quickly try to enter more text
+  await B.delay(500);
+}
+
+async function runCombinationKeyEventTest (driver) {
+  let runTest = async function () {
+    await driver.pressKeyCode(29, 193);
+    let el = await getElement(driver, TEXTVIEW_CLASS);
+    return await driver.getText(el);
+  };
+
+  await clearKeyEvents(driver);
+
+  let text = await runTest();
+  if (text === '') {
+    // the test is flakey... try again
+    text = await runTest();
+  }
+  text.should.include('keyCode=KEYCODE_A');
+  text.should.include('metaState=META_SHIFT_ON');
+}
+
+async function runKeyEventTest (driver) {
+  let runTest = async function () {
+    await driver.pressKeyCode(82);
+    let el = await getElement(driver, TEXTVIEW_CLASS);
+    return await driver.getText(el);
+  };
+
+  await clearKeyEvents(driver);
+
+  let text = await runTest();
+  if (text === '') {
+    // the test is flakey... try again
+    text = await runTest();
+  }
+  text.should.include('[keycode=82]');
+  text.should.include('keyCode=KEYCODE_MENU');
 }
 
 let tests = [
@@ -135,6 +195,20 @@ describe('keyboard', function () {
         text.should.eql('0123456789a');
       });
     });
+
+    describe('sending a key event', () => {
+      before(async () => {
+        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+        await B.delay(500);
+      });
+
+      it('should be able to send combination keyevents', async () => {
+        await runCombinationKeyEventTest(driver);
+      });
+      it('should be able to send keyevents', async () => {
+        await runKeyEventTest(driver);
+      });
+    });
   });
 
   describe('unicode', function () {
@@ -159,6 +233,19 @@ describe('keyboard', function () {
           });
         }
       }
+    });
+
+    describe('sending a key event', () => {
+      before(async () => {
+        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+      });
+
+      it('should be able to send combination keyevents', async () => {
+        await runCombinationKeyEventTest(driver);
+      });
+      it('should be able to send keyevents', async () => {
+        await runKeyEventTest(driver);
+      });
     });
   });
 });

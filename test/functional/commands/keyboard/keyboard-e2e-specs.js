@@ -73,9 +73,9 @@ async function clearKeyEvents (driver) {
   await B.delay(500);
 }
 
-async function runCombinationKeyEventTest (driver) {
+async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
   let runTest = async function () {
-    await driver.pressKeyCode(29, 193);
+    await driver.pressKeyCode(keyCode, metaState);
     let el = await getElement(driver, TEXTVIEW_CLASS);
     return await driver.getText(el);
   };
@@ -83,30 +83,21 @@ async function runCombinationKeyEventTest (driver) {
   await clearKeyEvents(driver);
 
   let text = await runTest();
-  if (text === '') {
+  if (!text) {
     // the test is flakey... try again
     text = await runTest();
   }
-  text.should.include('keyCode=KEYCODE_A');
-  text.should.include('metaState=META_SHIFT_ON');
+  for (let expectedText of expectedTextArray) {
+    text.should.include(expectedText);
+  }
+}
+
+async function runCombinationKeyEventTest (driver) {
+  await keyEventTest(driver, 29, 193, ['keyCode=KEYCODE_A', 'metaState=META_SHIFT_ON']);
 }
 
 async function runKeyEventTest (driver) {
-  let runTest = async function () {
-    await driver.pressKeyCode(82);
-    let el = await getElement(driver, TEXTVIEW_CLASS);
-    return await driver.getText(el);
-  };
-
-  await clearKeyEvents(driver);
-
-  let text = await runTest();
-  if (text === '') {
-    // the test is flakey... try again
-    text = await runTest();
-  }
-  text.should.include('[keycode=82]');
-  text.should.include('keyCode=KEYCODE_MENU');
+  await keyEventTest(driver, 82, undefined, ['[keycode=82]', 'keyCode=KEYCODE_MENU']);
 }
 
 let tests = [

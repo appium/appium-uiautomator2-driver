@@ -48,8 +48,11 @@
     "prepublish": "rimraf build && gulp prepublish",
     "install": "node ./bin/install.js",
     "transpile": "gulp transpile",
+    "build": "gulp transpile",
     "test": "gulp once",
-    "watch": "gulp",
+    "watch": "gulp watch",
+    "e2e-test": "gulp e2e-test",
+    "mocha": "mocha",
     "lint": "gulp eslint",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },

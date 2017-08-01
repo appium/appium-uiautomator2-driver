@@ -43,13 +43,11 @@ before_script:
   - android list targets
   - $(npm bin)/android-emu-travis-pre
 
-  - npm install -g gulp
-  - npm install -g mocha
   - SERVER_INSTALL_ATTEMPTS=50 npm install
 
   # make sure emulator started
   - $(npm bin)/android-emu-travis-post
 script:
-  - gulp eslint && mocha -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
+  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
 after_success:
   - gulp coveralls

@@ -11,7 +11,9 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('appium-uiautomator2-installer', () => {
-  describe('setupUiAutomator2', withMocks({log}, (mocks) => {
+  describe.skip('setupUiAutomator2', withMocks({log}, (mocks) => {
+    // TODO: this is NOT a UNIT TEST. Figure out if we need it, and if so,
+    // how to fix it so it doesn't actually download the apks
     it('should download the server APKs', async () => {
       mocks.log.expects("error").never();
       await setupUiAutomator2();

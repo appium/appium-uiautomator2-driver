@@ -118,6 +118,7 @@ describe('driver.js', () => {
         }).should.throw;
       });
       describe('nativeWebScreenshot', function () {
+        let listLength;
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
           sinon.mock(driver).expects('checkAppPresent')
@@ -130,11 +131,12 @@ describe('driver.js', () => {
 
         it('should proxy screenshot if nativeWebScreenshot is off', async function () {
           await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
-          driver.getProxyAvoidList().should.have.length(42);
+          driver.getProxyAvoidList().should.have.length.above(40);
+          listLength = driver.getProxyAvoidList().length;
         });
         it('should not proxy screenshot if nativeWebScreenshot is on', async function () {
           await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
-          driver.getProxyAvoidList().should.have.length(43);
+          driver.getProxyAvoidList().should.have.length(listLength + 1);
         });
       });
     });

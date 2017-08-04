@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+/* eslint-disable promise/prefer-await-to-then */
+/* eslint-disable promise/prefer-await-to-callbacks */
 "use strict";
 
 const exec = require("child_process").exec;
@@ -12,7 +14,7 @@ let attemptedToBuild = false;
 function doInstall () {
   // UiAutomator2 needs Java. Fail early if it doesn't exist
   let androidHelpers = require('appium-android-driver').androidHelpers;
-  androidHelpers.getJavaVersion().then(function () { // eslint-disable-line promise/prefer-await-to-then
+  androidHelpers.getJavaVersion().then(function () {
     let tries = 0;
     function onErr (err) {
       console.log(err.message);
@@ -28,7 +30,7 @@ function doInstall () {
       if (codeNotBuilt && !attemptedToBuild) {
         attemptedToBuild = true;
         console.log("Attempting to transpile setup code...");
-        exec("npm run transpile", {cwd: path.resolve(__dirname, "..")}, function (err) { // eslint-disable-line promise/prefer-await-to-callbacks
+        exec("npm run transpile", {cwd: path.resolve(__dirname, "..")}, function (err) {
           if (err) {
             console.warn("Setup code could not be transpiled: " + err.message);
           } else {

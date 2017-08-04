@@ -1,10 +1,10 @@
-//import _ from 'lodash';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { fs } from 'appium-support';
 import { withMocks } from 'appium-test-support';
 import { serverExists, UI2_SERVER_APK_PATH, UI2_TEST_APK_PATH, setupUiAutomator2 } from '../../lib/installer';
 import log from '../../lib/logger';
+import B from 'bluebird';
 
 
 chai.should();
@@ -25,17 +25,17 @@ describe('appium-uiautomator2-installer', () => {
     it('should return true if both server apk and test apk exist', async () => {
       mocks.fs.expects("exists").once()
         .withExactArgs(UI2_SERVER_APK_PATH)
-        .returns(Promise.resolve(true));
+        .returns(B.resolve(true));
       mocks.fs.expects("exists").once()
         .withExactArgs(UI2_TEST_APK_PATH)
-        .returns(Promise.resolve(true));
+        .returns(B.resolve(true));
       (await serverExists()).should.be.true;
       mocks.fs.verify();
     });
     it('should return false if apk does not exist', async () => {
       mocks.fs.expects("exists").once()
         .withExactArgs(UI2_SERVER_APK_PATH)
-        .returns(Promise.resolve(false));
+        .returns(B.resolve(false));
       (await serverExists()).should.be.false;
       mocks.fs.verify();
     });

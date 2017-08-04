@@ -1,22 +1,24 @@
 /* eslint-disable no-console */
+/* eslint-disable promise/prefer-await-to-then */
+/* eslint-disable promise/prefer-await-to-callbacks */
 "use strict";
 
-var exec = require("child_process").exec;
-var path = require("path");
+const exec = require("child_process").exec;
+const path = require("path");
 
 
-var MAX_ATTEMPTS = process.env.SERVER_INSTALL_ATTEMPTS || 5;
-var INTERVAL = 1500;
-var attemptedToBuild = false;
+const MAX_ATTEMPTS = process.env.SERVER_INSTALL_ATTEMPTS || 5;
+const INTERVAL = 1500;
+let attemptedToBuild = false;
 
 function doInstall () {
   // UiAutomator2 needs Java. Fail early if it doesn't exist
-  var androidHelpers = require('appium-android-driver').androidHelpers;
+  let androidHelpers = require('appium-android-driver').androidHelpers;
   androidHelpers.getJavaVersion().then(function () {
-    var tries = 0;
+    let tries = 0;
     function onErr (err) {
       console.log(err.message);
-      var codeNotBuilt = err.message.indexOf('Cannot find module') !== -1;
+      let codeNotBuilt = err.message.indexOf('Cannot find module') !== -1;
       if (tries >= MAX_ATTEMPTS) {
         console.log("Tried too many times to install UiAutomator2, failing");
         console.log("Original error: " + err.message);
@@ -44,7 +46,7 @@ function doInstall () {
 
     function runInstall () {
       try {
-        var setupUiAutomator2 = require('../build/lib/installer').setupUiAutomator2;
+        const setupUiAutomator2 = require('../build/lib/installer').setupUiAutomator2;
         setupUiAutomator2().catch(onErr);
       } catch (err) {
         onErr(err);

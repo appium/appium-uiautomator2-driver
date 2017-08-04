@@ -3,6 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import AndroidUiautomator2Driver from '../..';
 import sinon from 'sinon';
 import path from 'path';
+import B from 'bluebird';
 
 
 chai.should();
@@ -27,10 +28,10 @@ describe('driver.js', () => {
       let driver = new AndroidUiautomator2Driver({}, false);
       sinon.mock(driver).expects('checkAppPresent')
           .once()
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
           .once()
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       await driver.createSession({cap: 'foo'});
 
       driver.sessionId.should.exist;
@@ -40,9 +41,9 @@ describe('driver.js', () => {
     it('should set the default context', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
       sinon.mock(driver).expects('checkAppPresent')
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       await driver.createSession({});
       driver.curContext.should.equal('NATIVE_APP');
     });
@@ -53,7 +54,7 @@ describe('driver.js', () => {
       let driver = new AndroidUiautomator2Driver({}, false);
       let app = path.resolve('.');
       sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
@@ -70,9 +71,9 @@ describe('driver.js', () => {
       let driver = new AndroidUiautomator2Driver({}, false);
       let app = path.resolve('asdfasdf');
       sinon.mock(driver).expects('checkAppPresent')
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(Promise.resolve());
+          .returns(B.resolve());
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
@@ -123,10 +124,10 @@ describe('driver.js', () => {
           driver = new AndroidUiautomator2Driver({}, false);
           sinon.mock(driver).expects('checkAppPresent')
               .once()
-              .returns(Promise.resolve());
+              .returns(B.resolve());
           sinon.mock(driver).expects('startUiAutomator2Session')
               .once()
-              .returns(Promise.resolve());
+              .returns(B.resolve());
         });
 
         it('should proxy screenshot if nativeWebScreenshot is off', async function () {

@@ -50,4 +50,4 @@ before_script:
 script:
   - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
 after_success:
-  - if [ -n "$COVERALLS=1" ]; then npm run coverage; fi
+  - if [ -n "$COVERALLS" ]; then npm run coverage; fi

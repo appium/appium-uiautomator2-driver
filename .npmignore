@@ -1,3 +1,4 @@
 node_modules
 uiautomator2
 *.log
+coverage

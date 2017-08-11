@@ -26,7 +26,7 @@ env:
     - ANDROID_EMU_TARGET=android-21
     - ANDROID_EMU_ABI=armeabi-v7a
   matrix:
-    - START_EMU=0 RECURSIVE=--recursive TEST=unit
+    - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
     - TEST=functional/commands
     - TEST=functional/commands/find
@@ -50,4 +50,4 @@ before_script:
 script:
   - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
 after_success:
-  - gulp coveralls
+  - if [ -n "$COVERALLS" ]; then npm run coverage; fi

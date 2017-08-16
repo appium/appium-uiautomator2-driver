@@ -5,6 +5,7 @@ import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initDriver } from '../../helpers/session';
+import ADB from 'appium-adb';
 
 
 chai.should();
@@ -203,12 +204,23 @@ describe('keyboard', function () {
   });
 
   describe('unicode', function () {
+    let adb = new ADB();
+    let initialIME;
     let driver;
     before(async function () {
+      // save the initial ime so we can make sure it is restored
+      initialIME = await adb.defaultIME();
+      initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+
       driver = await initDriver(defaultUnicodeCaps);
     });
     after(async function () {
       await driver.deleteSession();
+
+      // make sure the IME has been restored
+      let ime = await adb.defaultIME();
+      ime.should.eql(initialIME);
+      ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
     });
 
     describe('editing a text field', function () {

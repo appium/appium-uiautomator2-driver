@@ -25,4 +25,4 @@ const BROWSER_CAPS = _.defaults({
   browserName: 'Browser'
 }, GENERIC_CAPS);
 
-export { APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS };
+export { GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS };

@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../desired';
-import ADB from 'appium-adb';
-import { initDriver } from '../helpers/session';
+import { startServer, DEFAULT_PORT } from '../../..';
+import wd from 'wd';
 
 
 chai.should();
@@ -12,42 +12,29 @@ let driver;
 let caps = Object.assign({}, BROWSER_CAPS);
 
 describe('setUrl @skip-ci', function () {
-  let urlId = 'com.android.browser:id/url';
   before(async function () {
-    let adb = new ADB();
-    if (!await adb.isAppInstalled('com.android.browser')) {
-      if (!await adb.isAppInstalled('com.android.chrome')) {
-        throw new Error('Neither default browser nor chrome available');
-      }
-      // `browser` is not available, so use `Chrome`
-      caps.browserName = 'Chrome';
-      urlId = 'com.android.chrome:id/url_bar';
-    }
-
-    driver = await initDriver(caps);
-    await driver.implicitWait(5000);
-  });
-  after(async () => {
-    if (driver) {
-      await driver.deleteSession();
-    }
+    await startServer();
+    driver = await wd.promiseChainRemote('localhost', 4884);
+    caps.browserName = 'Chrome';
+    await driver.init(caps);
   });
 
   it('should be able to start a data uri via setUrl', async function () {
     if (caps.browserName === 'Chrome') {
       try {
         // on some chrome systems, we always get the terms and conditions page
-        let btn = await driver.findElOrEls('id', 'com.android.chrome:id/terms_accept', false);
-        await driver.click(btn.ELEMENT);
+        let btn = await driver.elementById('id', 'com.android.chrome:id/terms_accept');
+        await btn.click();
 
-        btn = await driver.findElOrEls('id', 'com.android.chrome:id/negative_button', false);
-        await driver.click(btn.ELEMENT);
+        btn = await driver.elementById('id', 'com.android.chrome:id/negative_button');
+        await btn.click();
       } catch (ign) {}
     }
 
-    await driver.setUrl('http://saucelabs.com');
+    await driver.get('http://saucelabs.com');
 
-    let el = await driver.findElOrEls('id', urlId, false);
-    await driver.getText(el.ELEMENT).should.eventually.include('saucelabs.com');
+    await driver.waitForElementByTagName("title");
+    let el = await driver.elementByTagName("title");
+    await el.getAttribute("innerHTML").should.eventually.include('Sauce Labs');
   });
 });

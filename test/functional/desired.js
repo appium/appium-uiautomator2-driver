@@ -15,6 +15,7 @@ const APIDEMOS_CAPS = _.defaults({
   app: require.resolve('android-apidemos'),
   appPackage: 'io.appium.android.apis',
   appActivity: 'io.appium.android.apis.ApiDemos',
+  disableWindowAnimation: true,
 }, GENERIC_CAPS);
 
 const GPS_DEMO_CAPS = _.defaults({

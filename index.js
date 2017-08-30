@@ -11,7 +11,7 @@ const DEFAULT_PORT = 4884;
 
 async function main () {
   let port = yargs.argv.port || DEFAULT_PORT;
-  let host = yargs.argv.host || DEFAULT_HOST;
+  let host = yargs.argv.host || yargs.argv.address || DEFAULT_HOST;
   return await startServer(port, host);
 }
 

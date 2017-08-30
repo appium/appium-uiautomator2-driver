@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../desired';
-import { startServer, DEFAULT_PORT } from '../../..';
+import { startServer } from '../../..';
 import wd from 'wd';
 
 

@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
-const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 30000 : 20000;
+const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 120000 : 20000;
 
 const GENERIC_CAPS = {
   deviceName: 'Android',

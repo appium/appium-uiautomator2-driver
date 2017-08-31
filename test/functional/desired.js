@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
-const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 30000 : 20000;
+const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 120000 : 20000;
 
 const GENERIC_CAPS = {
   deviceName: 'Android',
@@ -15,6 +15,7 @@ const APIDEMOS_CAPS = _.defaults({
   app: require.resolve('android-apidemos'),
   appPackage: 'io.appium.android.apis',
   appActivity: 'io.appium.android.apis.ApiDemos',
+  disableWindowAnimation: true,
 }, GENERIC_CAPS);
 
 const GPS_DEMO_CAPS = _.defaults({

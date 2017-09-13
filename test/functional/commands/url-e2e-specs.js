@@ -16,6 +16,7 @@ describe('setUrl @skip-ci', function () {
     await startServer();
     driver = await wd.promiseChainRemote('localhost', 4884);
     caps.browserName = 'Chrome';
+
     await driver.init(caps);
   });
 

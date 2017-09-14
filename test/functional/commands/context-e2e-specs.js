@@ -14,7 +14,7 @@ const caps = _.defaults({
   showChromedriverLog: true,
 }, APIDEMOS_CAPS);
 
-describe.only('apidemo - context', function () { // eslint-disable-line
+describe('apidemo - context', function () {
   let driver;
   before(async () => {
     driver = await initDriver(caps);

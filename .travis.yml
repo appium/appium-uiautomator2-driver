@@ -45,6 +45,11 @@ before_script:
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
 
+  # for chromedriver
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
+  - sudo apt-get update
+  - sudo apt-get install libstdc++6-4.7-dev  
+
   # make sure emulator started
   - $(npm bin)/android-emu-travis-post
 script:

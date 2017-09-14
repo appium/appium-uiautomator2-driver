@@ -11,9 +11,10 @@ chai.use(chaiAsPromised);
 const caps = _.defaults({
   appPackage: 'io.appium.android.apis',
   appActivity: '.view.WebView1',
+  showChromedriverLog: true,
 }, APIDEMOS_CAPS);
 
-describe('apidemo - context', function () {
+describe.only('apidemo - context', function () { // eslint-disable-line
   let driver;
   before(async () => {
     driver = await initDriver(caps);

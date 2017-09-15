@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 let driver;
 let caps = Object.assign({}, BROWSER_CAPS);
 
-describe('setUrl', function () {
+describe('setUrl @skip-ci', function () {
   before(async function () {
     await startServer();
     driver = await wd.promiseChainRemote('localhost', 4884);

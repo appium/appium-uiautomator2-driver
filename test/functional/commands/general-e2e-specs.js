@@ -68,14 +68,4 @@ describe('general', function () {
       appActivity.should.equal(startAppActivity);
     });
   });
-  describe('getStrings', function () {
-    it('should return app strings', async () => {
-      let strings = await driver.getStrings('en');
-      strings.activity_sample_code.should.equal('API Demos');
-    });
-    it('should return app strings for the device language', async () => {
-      let strings = await driver.getStrings();
-      strings.activity_sample_code.should.equal('API Demos');
-    });
-  });
 });

@@ -56,7 +56,7 @@ describe('strings', function () {
       let strings = await driver.getStrings();
       strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
     });
-    it('should return app strings when language/locale set', async function () {
+    it('should return app strings when language/locale set @skip-ci', async function () {
       driver = await initDriver(_.defaults({
         language: 'fr',
         locale: 'CA',

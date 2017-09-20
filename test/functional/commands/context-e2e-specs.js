@@ -28,6 +28,7 @@ describe('apidemo - context', function () {
 
     // make sure the process was found, otherwise it comes out as "undefined"
     contexts.join('').should.not.include('undefined');
+    contexts.join('').should.include('WEBVIEW_io.appium.android.apis');
   });
   it('should go into the webview', async () => {
     let contexts = await driver.getContexts();

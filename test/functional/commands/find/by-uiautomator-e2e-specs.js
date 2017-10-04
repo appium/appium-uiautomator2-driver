@@ -11,6 +11,7 @@ describe('Find - uiautomator', function () {
   let driver;
   before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
+    await driver.updateSettings({'enableNotificationListener': false})
     await driver.setImplicitWaitTimeout(20000);
   });
   after(async function () {
@@ -93,7 +94,7 @@ describe('Find - uiautomator', function () {
     const els = await driver.elementsByAndroidUIAutomator(selector);
     els.length.should.be.above(0);
   });
-  it.skip('should find an element in the second selector if the first finds no elements (when finding a single element)', async () => {
+  it.skip('should find an element in the second selector if the first finds no elements (when finding a single element)', async function () {
     // TODO: This test is broken.
     //  * The test above this one works and it proxies to 'POST /elements'.
     //  * This test doesn't work and the only difference is that it proxies to 'POST /element'
@@ -102,19 +103,22 @@ describe('Find - uiautomator', function () {
     await driver.elementByAndroidUIAutomator(selector).should.eventually.exist;
   });
   it('should scroll to, and return elements using UiScrollable', async function () {
-    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Views").instance(0))';
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
+    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     let el = await driver.elementByAndroidUIAutomator(selector);
-    await el.text().should.eventually.equal('Views');
+    await el.text().should.eventually.equal('Beer Cheese');
   });
   it('should allow chaining UiScrollable methods', async function () {
-    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(10).scrollIntoView(new UiSelector().text("Views").instance(0))';
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
+    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(10).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     let el = await driver.elementByAndroidUIAutomator(selector);
-    await el.text().should.eventually.equal('Views');
+    await el.text().should.eventually.equal('Beer Cheese');
   });
   it('should allow UiScrollable scrollIntoView', async function () {
-    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Views").instance(0));';
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
+    let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0));';
     let el = await driver.elementByAndroidUIAutomator(selector);
-    await el.text().should.eventually.equal('Views');
+    await el.text().should.eventually.equal('Beer Cheese');
   });
   it('should allow UiScrollable with unicode string', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.text.Unicode'});

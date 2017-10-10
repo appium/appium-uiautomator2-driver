@@ -17,6 +17,12 @@ const APIDEMOS_CAPS = _.defaults({
   appActivity: 'io.appium.android.apis.ApiDemos',
 }, GENERIC_CAPS);
 
+const SCROLL_CAPS = _.defaults({
+  app: require.resolve('android-apidemos'),
+  appPackage: 'io.appium.android.apis',
+  appActivity: 'io.appium.android.apis.view.ScrollView2',
+}, GENERIC_CAPS);
+
 const GPS_DEMO_CAPS = _.defaults({
   app: require.resolve('gps-demo-app'),
 }, GENERIC_CAPS);
@@ -25,4 +31,4 @@ const BROWSER_CAPS = _.defaults({
   browserName: 'Browser'
 }, GENERIC_CAPS);
 
-export { APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS };
+export { APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS, SCROLL_CAPS };

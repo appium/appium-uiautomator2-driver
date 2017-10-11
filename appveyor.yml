@@ -3,6 +3,11 @@ environment:
   GH_TOKEN:
     secure: fyB6CRcrHbroxaBvzN6aPHUEhHGc3ljbbTPtEqruaDVe/iO8/dZn4LOVNS/fAlSX
   TESTOBJECT_E2E_TESTS: true
+  TESTOBJECT_USERNAME: danielgraham
+  TESTOBJECT_PASSWORD:
+    secure: sDfSEFlypcQz3AFLn4eB4Q==
+  TESTOBJECT_API_KEY:
+    secure: 1jh7yPe54Ue8XV6KeLAPcQgFHEL1tyjnWJIoA5z4LzN0O6+o7Jx638nBmcpYs6z6
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install

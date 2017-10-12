@@ -1,9 +1,8 @@
-/*import chai from 'chai';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../..';
 import ADB from 'appium-adb';
 import { APIDEMOS_CAPS } from './desired';
-
+import { initDriver } from './helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -16,24 +15,23 @@ async function killServer (adbPort) {
 }
 
 describe('createSession', function () {
-  if (process.env.TESTOBJECT_E2E_TESTS) {
-    this.skip();
-  }
-
   let driver;
   before(async function () {
     await killServer(5037);
-    driver = new AndroidUiautomator2Driver();
   });
 
   describe('default adb port', function () {
     afterEach(async function () {
-      await driver.deleteSession();
+      if (driver) {
+        await driver.quit();
+      }
+      driver = null;
     });
 
     it('should start android session focusing on default pkg and act', async () => {
-      await driver.createSession(APIDEMOS_CAPS);
-      let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
+      driver = await initDriver(APIDEMOS_CAPS);
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
     });
@@ -42,8 +40,9 @@ describe('createSession', function () {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
       });
-      await driver.createSession(caps);
-      let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
+      driver = await initDriver(caps);
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(caps.appPackage);
       appActivity.should.equal(caps.appActivity);
     });
@@ -53,24 +52,33 @@ describe('createSession', function () {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
       });
-      await driver.createSession(caps).should.eventually.be.rejectedWith(/New app path foo did not have extension \.apk/);
+      try {
+        await initDriver(caps);
+        throw new Error(`Call to 'initDriver' should not have succeeded`);
+      } catch (e) {
+        e.data.should.match(/New app path foo did not have extension \.apk/);
+      }
     });
     it('should error out for invalid app path', async () => {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo.apk',
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
-      });
-      await driver.createSession(caps).should.eventually.be.rejectedWith(/Could not find/);
+      });try {
+        await initDriver(caps);
+        throw new Error(`Call to 'initDriver' should not have succeeded`);
+      } catch (e) {
+        e.data.should.match(/Could not find/);
+      }
     });
     it('should get device model, manufacturer and screen size in session details', async () => {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
       });
-      await driver.createSession(caps);
+      driver = await initDriver(caps);
 
-      let serverCaps = await driver.getSession();
+      let serverCaps = await driver.sessionCapabilities();
       serverCaps.deviceScreenSize.should.exist;
       serverCaps.deviceModel.should.exist;
       serverCaps.deviceManufacturer.should.exist;
@@ -78,13 +86,19 @@ describe('createSession', function () {
   });
 
   describe('custom adb port', function () {
+    // Don't do these tests on TestObject. Cannot use TestObject's ADB.
+    if (process.env.TESTOBJECT_E2E_TESTS) {
+      this.skip();
+    }
+
     let adbPort = 5042;
+    let driver;
 
     before(async function () {
       await killServer(5037);
     });
     afterEach(async function () {
-      await driver.deleteSession();
+      await driver.quit();
 
       await killServer(adbPort);
     });
@@ -93,8 +107,9 @@ describe('createSession', function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
       });
-      await driver.createSession(caps);
-      let {appPackage, appActivity} = await driver.adb.getFocusedPackageAndActivity();
+      driver = await initDriver(caps);
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
     });
@@ -102,19 +117,12 @@ describe('createSession', function () {
 });
 
 describe('close', function () {
-  let driver;
-  before(() => {
-    driver = new AndroidUiautomator2Driver();
-  });
-  afterEach(async () => {
-    await driver.deleteSession();
-  });
   it('should close application', async () => {
-    await driver.createSession(APIDEMOS_CAPS);
+    let driver = await initDriver(APIDEMOS_CAPS);
     await driver.closeApp();
-    let {appPackage} = await driver.adb.getFocusedPackageAndActivity();
+    let appPackage = await driver.getCurrentPackage();
     if (appPackage) {
       appPackage.should.not.equal(APIDEMOS_PACKAGE);
     }
   });
-});*/
+});

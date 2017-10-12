@@ -88,7 +88,7 @@ describe('createSession', function () {
   describe('custom adb port', function () {
     // Don't do these tests on TestObject. Cannot use TestObject's ADB.
     if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
+      return;
     }
 
     let adbPort = 5042;

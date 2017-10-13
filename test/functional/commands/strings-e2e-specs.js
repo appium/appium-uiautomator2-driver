@@ -19,16 +19,16 @@ describe('strings', function () {
       driver = await initDriver(APIDEMOS_CAPS);
     });
     after(async function () {
-      await driver.deleteSession();
+      await driver.quit();
     });
 
     it('should return app strings', async function () {
-      let strings = await driver.getStrings('en');
+      let strings = await driver.getAppStrings('en');
       strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
     });
 
     it('should return app strings for different language', async function () {
-      let strings = await driver.getStrings('fr');
+      let strings = await driver.getAppStrings('fr');
       strings.hello_world.should.equal('<b>Bonjour, <i>Monde!</i></b>');
     });
   });
@@ -46,14 +46,14 @@ describe('strings', function () {
       if (driver) {
         await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);
 
-        await driver.deleteSession();
+        await driver.quit();
       }
     });
 
     it('should return app strings with default locale/language', async function () {
       driver = await initDriver(APIDEMOS_CAPS);
 
-      let strings = await driver.getStrings();
+      let strings = await driver.getAppStrings();
       strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
     });
     it('should return app strings when language/locale set @skip-ci', async function () {
@@ -62,7 +62,7 @@ describe('strings', function () {
         locale: 'CA',
       }, APIDEMOS_CAPS));
 
-      let strings = await driver.getStrings();
+      let strings = await driver.getAppStrings();
       strings.hello_world.should.equal('<b>Bonjour, <i>Monde!</i></b>');
     });
   });

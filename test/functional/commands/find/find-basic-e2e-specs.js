@@ -64,7 +64,7 @@ describe('Find - basic', function () {
       await driver.elementsById('there_is_nothing_called_this')
         .should.eventually.have.length(0);
       let afterMs = Date.now();
-      (afterMs - beforeMs).should.be.below(implicitWaitTimeout + 5000);
+      (afterMs - beforeMs).should.be.below(implicitWaitTimeout * 2);
       (afterMs - beforeMs).should.be.above(implicitWaitTimeout);
     });
   });

@@ -12,9 +12,7 @@ let caps = Object.assign({}, BROWSER_CAPS);
 
 describe('setUrl @skip-ci', function () {
   before(async function () {
-
     driver = await initDriver(caps);
-    await B.delay(5000);
   });
   after(async () => {
     if (driver) {

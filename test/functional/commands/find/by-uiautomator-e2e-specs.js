@@ -12,7 +12,7 @@ describe('Find - uiautomator', function () {
   let driver;
   before(async () => {
     driver = await initDriver(APIDEMOS_CAPS);
-    await B.delay(20000);
+    await driver.setImplicitWaitTimeout(20000);
   });
   after(async () => {
     await driver.quit();
@@ -26,10 +26,6 @@ describe('Find - uiautomator', function () {
       .elementsByAndroidUIAutomator('new UiSelector().className("android.widget.TextView")');
     els.length.should.be.above(8);
     els.length.should.be.below(14);
-  });
-  it('should find elements without prepending "new UiSelector()"', async () => {
-    await driver.elementsByAndroidUIAutomator('.clickable(true)')
-      .should.eventually.have.length.at.least(10);
   });
   it('should find elements without prepending "new UiSelector()"', async () => {
     await driver.elementsByAndroidUIAutomator('.clickable(true)')

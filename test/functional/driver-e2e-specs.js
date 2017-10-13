@@ -64,7 +64,9 @@ describe('createSession', function () {
         app: 'foo.apk',
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
-      });try {
+      });
+
+      try {
         await initDriver(caps);
         throw new Error(`Call to 'initDriver' should not have succeeded`);
       } catch (e) {

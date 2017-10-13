@@ -34,6 +34,6 @@ describe('Find - android ui elements @skip-ci', function () {
   });
   it('should find statusBarBackground element via xpath', async () => {
     await driver.updateSettings({"allowInvisibleElements": true});
-    await driver.elementsByXPath(`//*[@resource-id='android:id/statusBarBackground']`).should.eventually.exist;
+    await driver.elementByXPath(`//*[@resource-id='android:id/statusBarBackground']`).should.eventually.exist;
   });
 });

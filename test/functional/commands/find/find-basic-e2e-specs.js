@@ -42,7 +42,7 @@ describe('Find - basic', function () {
     await driver.elementsByClassName('').should.be.rejectedWith(/selector/);
   });
   it('should find a single element by resource-id', async () => {
-    await driver.elementsById(`android:id/${singleResourceId}`)
+    await driver.elementById(`android:id/${singleResourceId}`)
       .should.eventually.exist;
   });
   it('should find multiple elements by resource-id', async () => {

@@ -16,7 +16,7 @@ describe('Find - ID', function () {
     await driver.quit();
   });
   it('should find an element by id', async () => {
-    await driver.elementsById('android:id/text1').should.eventually.exist;
+    await driver.elementById('android:id/text1').should.eventually.exist;
   });
   it('should return an array of one element if the `multi` param is true', async () => {
     // TODO: this returns an object instead of an array. Investigate.

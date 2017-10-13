@@ -16,7 +16,7 @@ describe('Find - accessibility ID', function () {
     await driver.quit();
   });
   it('should find an element by name', async () => {
-    await driver.elementsByAccessibilityId('Animation').should.eventually.exist;
+    await driver.elementByAccessibilityId('Animation').should.eventually.exist;
   });
   it('should return an array of one element if the `multi` param is true', async () => {
     let els = await driver.elementsByAccessibilityId('Animation');
@@ -24,6 +24,6 @@ describe('Find - accessibility ID', function () {
     els.should.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async () => {
-    await driver.elementsByAccessibilityId("Access'ibility").should.eventually.exist;
+    await driver.elementByAccessibilityId("Access'ibility").should.eventually.exist;
   });
 });

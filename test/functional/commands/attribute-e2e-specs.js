@@ -42,10 +42,6 @@ describe('apidemo - attributes', function () {
   });
   it('should be able to find enabled attribute', async () => {
     await driver.getAttribute(animationEl, 'enabled').should.eventually.become('true');
-    const displayed = await driver.getAttribute(animationEl, 'displayed');
-
-    // Cast displayed as string because sometimes it returns a boolean
-    (displayed + '').should.equal('true');
   });
   it('should be able to find displayed attribute through normal func', async () => {
     const displayed = await animationEl.isDisplayed();

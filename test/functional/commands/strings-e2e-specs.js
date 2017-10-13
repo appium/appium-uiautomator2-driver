@@ -35,16 +35,17 @@ describe('strings', function () {
 
   describe('device language', function () {
     let initialLocale;
+    let adb;
     before(async function () {
       // restarting doesn't work on Android 7+
-      let adb = new ADB();
+      adb = new ADB();
       if (await adb.getApiLevel() > 23) return this.skip(); //eslint-disable-line curly
 
       initialLocale = await getLocale(adb);
     });
     afterEach(async function () {
       if (driver) {
-        await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);
+        await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
 
         await driver.quit();
       }

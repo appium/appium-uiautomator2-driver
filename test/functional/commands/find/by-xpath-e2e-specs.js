@@ -80,7 +80,7 @@ describe('Find - xpath', function () {
 
     await popUpEl.click();
     await driver.waitForElementByXPath(`.//*[@text='Add']`);
-    let addEl =await driver.elementByXPath(`.//*[@text='Add']`);
+    let addEl = await driver.elementByXPath(`.//*[@text='Add']`);
     await addEl.click();
     await driver.elementByXPath(`//*[@text='Clicked popup menu item Add']`)
         .should.eventually.exist;

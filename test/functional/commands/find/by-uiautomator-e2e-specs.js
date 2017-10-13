@@ -69,10 +69,10 @@ describe('Find - uiautomator', function () {
       .should.eventually.have.length(1);
   });
   it('should not find an element which does not exist', async () => {
-    await B.delay(1000); // expect this to fail, so no need to wait too long
+    await driver.setImplicitWaitTimeout(1000); // expect this to fail, so no need to wait too long
     await driver.elementsByAndroidUIAutomator('new UiSelector().description("chuckwudi")')
       .should.eventually.have.length(0);
-    await B.delay(20000); // restore implicit wait
+    await driver.setImplicitWaitTimeout(20000); // restore implicit wait
   });
   it('should allow multiple selector statements and return the Union of the two sets', async () => {
     let clickableEls = await driver.elementsByAndroidUIAutomator('new UiSelector().clickable(true)');

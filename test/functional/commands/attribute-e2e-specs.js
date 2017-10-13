@@ -18,30 +18,30 @@ describe('apidemo - attributes', function () {
     await driver.quit();
   });
   it('should be able to find resourceId attribute', async () => {
-    await driver.getAttribute(animationEl, 'resourceId').should.eventually.become('android:id/text1');
+    await animationEl.getAttribute('resourceId').should.eventually.become('android:id/text1');
   });
   it('should be able to find text attribute', async () => {
-    await driver.getAttribute(animationEl, 'text').should.eventually.become('Animation');
+    await animationEl.getAttribute('text').should.eventually.become('Animation');
   });
   it('should be able to find name attribute', async () => {
-    await driver.getAttribute(animationEl, 'name').should.eventually.become('Animation');
+    await animationEl.getAttribute('name').should.eventually.become('Animation');
   });
   it('should be able to find name attribute, falling back to text', async () => {
     await animationEl.click();
     await driver.waitForElementByAccessibilityId('Bouncing Balls');
     let textViewEl = await driver.elementByAccessibilityId('Bouncing Balls');
-    await driver.getAttribute(textViewEl, 'name');
+    await textViewEl.getAttribute('name');
     await driver.back();
     await driver.waitForElementByAccessibilityId('Animation');
   });
   it('should be able to find content description attribute', async () => {
-    await driver.getAttribute(animationEl, 'contentDescription').should.eventually.become("Animation");
+    await animationEl.getAttribute('contentDescription').should.eventually.become("Animation");
   });
   it('should be able to find displayed attribute', async () => {
-    await driver.getAttribute(animationEl, 'displayed').should.eventually.become('true');
+    await animationEl.getAttribute('displayed').should.eventually.become('true');
   });
   it('should be able to find enabled attribute', async () => {
-    await driver.getAttribute(animationEl, 'enabled').should.eventually.become('true');
+    await animationEl.getAttribute('enabled').should.eventually.become('true');
   });
   it('should be able to find displayed attribute through normal func', async () => {
     const displayed = await animationEl.isDisplayed();
@@ -59,7 +59,7 @@ describe('apidemo - attributes', function () {
     location.y.should.be.at.least(0);
   });
   it('should be able to get element size', async () => {
-    let size = await driver.getSize(animationEl);
+    let size = await animationEl.getSize();
     size.width.should.be.at.least(0);
     size.height.should.be.at.least(0);
   });

@@ -26,7 +26,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
     if (driver) {
       await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);
 
-      await driver.deleteSession();
+      await driver.quit();
     }
   });
 

@@ -15,13 +15,13 @@ describe('apidemo - IME', function () {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
   });
   beforeEach(async () => {
-    await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.ApiDemos');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: 'io.appium.android.apis.ApiDemos'});
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should get the default (enabled) input method', async () => {
-    await driver.getActiveIMEEngine().should.eventually.equal(unicodeImeId);
+    await driver.activeIMEEngine().should.eventually.equal(unicodeImeId);
   });
   it('should activate an installed input method', async () => {
     await driver.activateIMEEngine(unicodeImeId).should.not.be.rejected;
@@ -32,8 +32,8 @@ describe('apidemo - IME', function () {
   });
   it('should deactivate the current input method', async () => {
     await driver.activateIMEEngine(unicodeImeId);
-    await driver.getActiveIMEEngine().should.eventually.equal(unicodeImeId);
+    await driver.activeIMEEngine().should.eventually.equal(unicodeImeId);
     await driver.deactivateIMEEngine();
-    await driver.getActiveIMEEngine().should.eventually.not.equal(unicodeImeId);
+    await driver.activeIMEEngine().should.eventually.not.equal(unicodeImeId);
   });
 });

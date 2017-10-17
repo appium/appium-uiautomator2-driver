@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import wd from 'wd';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
 
@@ -17,29 +18,28 @@ describe('apidemo - touch', function () {
       }));
     });
     after(async () => {
-      await driver.deleteSession();
+      await driver.quit();
     });
 
     it('should scroll two different lists', async () => {
-      let lists = await driver.findElOrEls('class name', 'android.widget.ListView', true);
-      lists.length.should.be.at.least(2);
+      let [leftEl, rightEl] = await driver.elementsByClassName('android.widget.ListView');
 
-      let leftList = lists[0].ELEMENT;
-      let rightList = lists[1].ELEMENT;
+      const leftGesture = new wd.TouchAction()
+        .press({element: leftEl})
+        .moveTo({element: leftEl, x: 10, y: 0})
+        .moveTo({element: leftEl, x: 10, y: -75})
+        .moveTo({element: leftEl, x: 10, y: -150});
 
-      let leftGestures = [
-        {action: 'press', options: {element: leftList}},
-        {action: 'moveTo', options: {element: leftList, x: 10, y: 0}},
-        {action: 'moveTo', options: {element: leftList, x: 10, y: -75}},
-        {action: 'moveTo', options: {element: leftList, x: 10, y: -150}}
-      ];
-      let rightGestures = [
-        {action: 'press', options: {element: rightList}},
-        {action: 'moveTo', options: {element: rightList, x: 10, y: 0}},
-        {action: 'moveTo', options: {element: rightList, x: 10, y: -75}},
-        {action: 'moveTo', options: {element: rightList, x: 10, y: -150}}
-      ];
-      await driver.performMultiAction([leftGestures, rightGestures]);
+      const rightGesture = new wd.TouchAction()
+        .press({element: rightEl})
+        .moveTo({element: rightEl, x: 10, y: 0})
+        .moveTo({element: rightEl, x: 10, y: -75})
+        .moveTo({element: rightEl, x: 10, y: -150});
+
+      const multiAction = new wd.MultiAction();
+      multiAction.add(leftGesture, rightGesture);
+
+      await driver.performMultiAction(multiAction);
     });
   });
 
@@ -52,18 +52,23 @@ describe('apidemo - touch', function () {
       }));
     });
     after(async () => {
-      await driver.deleteSession();
+      await driver.quit();
     });
 
     async function assertElement (driver, present = true) {
-      let els = await driver.findElOrEls('xpath', "//*[@text='Abertam']", true);
+      let els = await driver.elementsByXPath("//*[@text='Abertam']");
       els.should.be.an.instanceof(Array);
       els.should.have.length(present ? 1 : 0);
     }
 
-    it('should swipe', async () => {
+    it('should swipe @skip-ci', async () => {
       await assertElement(driver, true);
-      await driver.swipe(100, 650, 100, 330, 1);
+      const action = new wd.TouchAction();
+      action.press({x: 100, y: 650})
+        .wait(3000)
+        .moveTo({x: 100, y: 50})
+        .release();
+      driver.performTouchAction(action);
       await assertElement(driver, false);
     });
   });

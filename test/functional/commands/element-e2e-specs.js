@@ -14,17 +14,16 @@ describe('element', function () {
   before(async () => {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
 
-    el = _.last(await driver.findElOrEls('class name', 'android.widget.EditText', true));
-    el.should.exist;
+    el = _.last(await driver.elementsByClassName('android.widget.EditText'));
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
 
   describe('setValue', () => {
     it('should set the text on the element', async () => {
-      await driver.setValue('original value', el.ELEMENT);
-      await driver.getText(el.ELEMENT).should.eventually.equal('original value');
+      await el.sendKeys('original value');
+      await el.text().should.eventually.equal('original value');
     });
   });
 });

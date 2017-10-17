@@ -59,7 +59,7 @@ describe('general', function () {
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
-      let appPackage =  await driver.getCurrentPackage();
+      let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);

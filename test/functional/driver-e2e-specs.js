@@ -109,7 +109,7 @@ describe('createSession', function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
       });
-      driver = await initDriver(caps);
+      driver = await initDriver(caps, adbPort);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');

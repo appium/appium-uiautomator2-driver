@@ -14,7 +14,7 @@ describe('apidemo - orientation -', function () {
   describe('initial -', function () {
     afterEach(async function () {
       await driver.setOrientation('PORTRAIT');
-      await driver.deleteSession();
+      await driver.quit();
     });
     it('should have portrait orientation if requested', async function () {
       driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
@@ -44,7 +44,7 @@ describe('apidemo - orientation -', function () {
       }));
     });
     after(async () => {
-      await driver.deleteSession();
+      await driver.quit();
     });
     it('should rotate screen to landscape', async function () {
       await driver.setOrientation('PORTRAIT');

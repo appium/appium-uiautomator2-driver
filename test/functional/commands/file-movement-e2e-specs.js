@@ -17,7 +17,7 @@ describe('file movement', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
 
   function getRandomDir () {
@@ -45,6 +45,8 @@ describe('file movement', function () {
     let remoteDir = getRandomDir();
     await driver.pushFile(`${remoteDir}/remote0.txt`, base64Data);
     await driver.pushFile(`${remoteDir}/remote1.txt`, base64Data);
+
+    // TODO: 'pullFolder' is returning 404 error
     let data = await driver.pullFolder(remoteDir);
 
     // go through the folder we pulled and make sure the

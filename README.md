@@ -68,6 +68,10 @@ UIAUTOMATOR2_DRIVER_CDNURL=https://github.com/appium/appium-uiautomator2-server/
 npm run watch
 ```
 
+## Running E2E Tests on TestObject
+
+To run E2E tests (/test/functional/) on TestObject, set the environment variable TESTOBJECT_E2E_TESTS to true
+
 ## Test
 
 ```

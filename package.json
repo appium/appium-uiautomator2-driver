@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "adbkit": "^2.4.1",
-    "appium-adb": "^3.0.0",
+    "appium-adb": "^4.0.0",
     "appium-android-driver": "^1.27.1",
     "appium-base-driver": "^2.0.18",
     "appium-support": "^2.5.0",
@@ -51,11 +51,12 @@
     "build": "gulp transpile",
     "test": "gulp once",
     "watch": "gulp watch",
-    "e2e-test": "gulp e2e-test",
     "mocha": "mocha",
     "coverage": "gulp coveralls",
     "lint": "gulp eslint",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "e2e": "gulp transpile && mocha -t 640000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
+    "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
   },
   "pre-commit": [
     "precommit-msg",
@@ -64,7 +65,7 @@
   "devDependencies": {
     "android-apidemos": "^2.1.2",
     "appium-gulp-plugins": "^2.1.4",
-    "appium-test-support": "0.4.0",
+    "appium-test-support": "^0.6.0",
     "babel-eslint": "^7.1.1",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",

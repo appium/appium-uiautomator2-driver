@@ -13,7 +13,6 @@ chai.use(chaiAsPromised);
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
-const TEXTVIEW_CLASS = 'android.widget.TextView';
 
 const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
@@ -37,24 +36,22 @@ function deSamsungify (text) {
 
 async function getElement (driver, className) {
   return await retryInterval(10, 1000, async () => {
-    let el = _.last(await driver.findElOrEls('class name', className, true));
-    return el.ELEMENT;
+    return await driver.elementByClassName(className);
   });
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  let el = _.last(await driver.findElOrEls('class name', EDITTEXT_CLASS, true));
-  el = el.ELEMENT;
-  await driver.clear(el);
+  let el = await driver.elementByClassName(EDITTEXT_CLASS);
+  await el.clear();
 
   if (keys) {
     await driver.keys([testText]);
   } else {
-    await driver.setValue(testText, el);
+    await el.sendKeys(testText);
   }
 
   await retryInterval(10, 1000, async () => {
-    let text = await driver.getText(el);
+    let text = await el.text();
     deSamsungify(text).should.be.equal(testText);
   });
 
@@ -68,7 +65,7 @@ async function runTextEditTest (driver, testText, keys = false) {
  */
 async function clearKeyEvents (driver) {
   let el = await getElement(driver, BUTTON_CLASS);
-  driver.click(el);
+  await el.click();
 
   // wait a moment for the clearing to occur, lest we too quickly try to enter more text
   await B.delay(500);
@@ -76,9 +73,9 @@ async function clearKeyEvents (driver) {
 
 async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
   let runTest = async function () {
-    await driver.pressKeyCode(keyCode, metaState);
-    let el = await getElement(driver, TEXTVIEW_CLASS);
-    return await driver.getText(el);
+    await driver.pressKeycode(keyCode, metaState);
+    let el = driver.elementById('io.appium.android.apis:id/text');
+    return await el.text();
   };
 
   await clearKeyEvents(driver);
@@ -143,8 +140,8 @@ describe('keyboard', function () {
       }
       await driver.activateIMEEngine(selectedEngine);
     });
-    after(async function () {
-      await driver.deleteSession();
+    after(async () => {
+      await driver.quit();
     });
 
 
@@ -164,33 +161,33 @@ describe('keyboard', function () {
         // there is currently no way to assert anything about the contents
         // of a password field, since there is no way to access the contents
         // but this should, at the very least, not fail
-        let els = await driver.findElOrEls('class name', EDITTEXT_CLASS, true);
-        let el = els[1].ELEMENT;
+        let el = await driver.elementByClassName(EDITTEXT_CLASS);
 
-        await driver.setValue('super-duper password', el);
-        await driver.clear(el);
+        await el.sendKeys('super-duper password');
+        await el.clear();
       });
 
       it('should be able to type in length-limited field', async function () {
-        if (parseInt(await driver.adb.getApiLevel(), 10) < 24) {
+        let adb = new ADB();
+        if (parseInt(await adb.getApiLevel(), 10) < 24) {
           // below Android 7.0 (API level 24) typing too many characters in a
           // length-limited field will either throw a NullPointerException or
           // crash the app
           return this.skip();
         }
-        let els = await driver.findElOrEls('class name', EDITTEXT_CLASS, true);
-        let el = els[3].ELEMENT;
-        await driver.setValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', el);
+        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
+        let el = els[3];
+        await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
         // expect first 11 characters (limit of the field) to be in the field
-        let text = await driver.getText(el);
+        let text = await el.text();
         text.should.eql('0123456789a');
       });
     });
 
     describe('sending a key event', () => {
       before(async () => {
-        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
         await B.delay(500);
       });
 
@@ -215,7 +212,7 @@ describe('keyboard', function () {
       driver = await initDriver(defaultUnicodeCaps);
     });
     after(async function () {
-      await driver.deleteSession();
+      await driver.quit();
 
       // make sure the IME has been restored
       let ime = await adb.defaultIME();
@@ -240,7 +237,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', () => {
       before(async () => {
-        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
       });
 
       it('should be able to send combination keyevents', async () => {

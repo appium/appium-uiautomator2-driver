@@ -22,20 +22,20 @@ describe('apidemo - source', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should return the page source', async () => {
-    let source = await driver.getPageSource();
+    let source = await driver.source();
     await assertSource(source);
   });
   it('should get less source when compression is enabled', async () => {
     let getSourceWithoutCompression = async () => {
       await driver.updateSettings({'ignoreUnimportantViews': false});
-      return await driver.getPageSource();
+      return await driver.source();
     };
     let getSourceWithCompression = async () => {
       await driver.updateSettings({"ignoreUnimportantViews": true});
-      return await driver.getPageSource();
+      return await driver.source();
     };
     let sourceWithoutCompression = await getSourceWithoutCompression();
     let sourceWithCompression = await getSourceWithCompression();

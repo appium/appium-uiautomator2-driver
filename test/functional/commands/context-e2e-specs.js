@@ -20,10 +20,10 @@ describe('apidemo - context', function () {
     driver = await initDriver(caps);
   });
   after(async () => {
-    await driver.deleteSession();
+    await driver.quit();
   });
   it('should find webview context', async () => {
-    let contexts = await driver.getContexts();
+    let contexts = await driver.contexts();
     contexts.length.should.be.at.least(2);
 
     // make sure the process was found, otherwise it comes out as "undefined"
@@ -31,7 +31,7 @@ describe('apidemo - context', function () {
     contexts.join('').should.include('WEBVIEW_io.appium.android.apis');
   });
   it('should go into the webview', async () => {
-    let contexts = await driver.getContexts();
-    await driver.setContext(contexts[1]);
+    let contexts = await driver.contexts();
+    await driver.context(contexts[1]);
   });
 });

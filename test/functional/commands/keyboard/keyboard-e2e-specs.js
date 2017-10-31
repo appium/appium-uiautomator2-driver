@@ -169,7 +169,7 @@ describe('keyboard', function () {
 
       it('should be able to type in length-limited field', async function () {
         let adb = new ADB();
-        if (parseInt(await adb.getApiLevel(), 10) < 24) {
+        if (await adb.getApiLevel() < 24) {
           // below Android 7.0 (API level 24) typing too many characters in a
           // length-limited field will either throw a NullPointerException or
           // crash the app

@@ -52,7 +52,7 @@ describe('testViewportCommands', function () {
   });
 
   it('should get content size from scrollable element', async () => {
-    let contentSize = await driver.getAttribute("content_size", scrollableElementId);
+    let contentSize = await driver.getAttribute("contentSize", scrollableElementId);
     contentSize.should.not.equal(null);
   });
 

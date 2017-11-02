@@ -62,9 +62,4 @@ describe('testViewportCommands', function () {
     firstElementId = element.ELEMENT;
     firstElementId.should.not.equal(null);
   });
-
-  it('should scroll to element by provided elementId', async () => {
-    let result = await driver.execute('mobile: scrollTo', [{element: firstElementId}]);
-    result.should.not.equal(null);
-  });
 });

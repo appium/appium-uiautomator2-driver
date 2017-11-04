@@ -158,16 +158,16 @@ describe('keyboard', function () {
       }
 
       it('should be able to clear a password field', async function () {
-        // there is currently no way to assert anything about the contents
+        // there is currently no directly way to assert anything about the contents
         // of a password field, since there is no way to access the contents
-        // but this should, at the very least, not fail
+        const password = 'super-duper password';
         let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let passwordTextField = els[1];
         let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
-        await passwordTextField.sendKeys('super-duper password');
-        await passwordOutput.text().should.eventually.equal('super-duper password');
+        await passwordTextField.sendKeys(password);
+        await passwordOutput.text().should.eventually.equal(password);
         await passwordTextField.clear();
-        await passwordOutput.text().should.eventually.empty;
+        await passwordOutput.text().should.eventually.be.empty;
       });
 
       it('should be able to type in length-limited field', async function () {

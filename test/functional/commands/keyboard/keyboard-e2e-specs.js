@@ -40,6 +40,15 @@ async function getElement (driver, className) {
   });
 }
 
+async function waitForText (element, expectedText) {
+  return await retryInterval(10, 1000, async () => {
+    const text = await element.text();
+    if (text !== expectedText) {
+      throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);
+    }
+  });
+}
+
 async function runTextEditTest (driver, testText, keys = false) {
   let el = await driver.elementByClassName(EDITTEXT_CLASS);
   await el.clear();
@@ -165,9 +174,9 @@ describe('keyboard', function () {
         let passwordTextField = els[1];
         let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
         await passwordTextField.sendKeys(password);
-        await passwordOutput.text().should.eventually.equal(password);
+        await waitForText(passwordOutput, password);
         await passwordTextField.clear();
-        await passwordOutput.text().should.eventually.be.empty;
+        await waitForText(passwordOutput, '');
       });
 
       it('should be able to type in length-limited field', async function () {

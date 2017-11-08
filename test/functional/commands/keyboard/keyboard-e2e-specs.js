@@ -50,7 +50,7 @@ async function waitForText (element, expectedText) {
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  let el = await getElement(EDITTEXT_CLASS);
+  let el = await getElement(driver, EDITTEXT_CLASS);
   await el.clear();
 
   if (keys) {
@@ -190,7 +190,7 @@ describe('keyboard', function () {
           // crash the app
           return this.skip();
         }
-        let els = await getElement(EDITTEXT_CLASS);
+        let els = await getElement(driver, EDITTEXT_CLASS);
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
@@ -216,7 +216,10 @@ describe('keyboard', function () {
   });
 
   describe('unicode', function () {
-    let adb = new ADB();
+    let adb;
+    if (!process.env.TESTOBJECT_E2E_TESTS) {
+      adb = new ADB();
+    }
     let initialIME;
     let driver;
     before(async function () {
@@ -230,9 +233,11 @@ describe('keyboard', function () {
       await driver.quit();
 
       // make sure the IME has been restored
-      let ime = await adb.defaultIME();
-      ime.should.eql(initialIME);
-      ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      if (adb) {
+        let ime = await adb.defaultIME();
+        ime.should.eql(initialIME);
+        ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      }
     });
 
     describe('editing a text field', function () {

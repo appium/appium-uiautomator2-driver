@@ -13,7 +13,6 @@ describe('element', function () {
   let el;
   before(async () => {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
-
     el = _.last(await driver.elementsByClassName('android.widget.EditText'));
   });
   after(async () => {

@@ -180,15 +180,14 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
-        if (process.env.TESTOBJECT_E2E_TESTS) {
-          this.skip();
-        }
-        let adb = new ADB();
-        if (await adb.getApiLevel() < 24) {
-          // below Android 7.0 (API level 24) typing too many characters in a
-          // length-limited field will either throw a NullPointerException or
-          // crash the app
-          return this.skip();
+        if (!process.env.TESTOBJECT_E2E_TESTS) {
+          let adb = new ADB();
+          if (parseInt(await adb.getApiLevel(), 10) < 24) {
+            // below Android 7.0 (API level 24) typing too many characters in a
+            // length-limited field will either throw a NullPointerException or
+            // crash the app
+            return this.skip();
+          }
         }
         let els = await getElement(driver, EDITTEXT_CLASS);
         let el = els[3];
@@ -224,8 +223,10 @@ describe('keyboard', function () {
     let driver;
     before(async function () {
       // save the initial ime so we can make sure it is restored
-      initialIME = await adb.defaultIME();
-      initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      if (adb) {
+        initialIME = await adb.defaultIME();
+        initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      }
 
       driver = await initDriver(defaultUnicodeCaps);
     });

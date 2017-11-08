@@ -4,10 +4,10 @@ environment:
     secure: fyB6CRcrHbroxaBvzN6aPHUEhHGc3ljbbTPtEqruaDVe/iO8/dZn4LOVNS/fAlSX
   TESTOBJECT_E2E_TESTS: true
   matrix:
-    - TESTOBJECT_DEVICE: Samsung_Galaxy_S8_*
+    #- TESTOBJECT_DEVICE: Samsung_Galaxy_S8_*
     - TESTOBJECT_DEVICE: HTC_One_M8_real
-    - TESTOBJECT_DEVICE: LG_Nexus_5X_real
-    - TESTOBJECT_DEVICE: Samsung_Galaxy_S5_real_3
+    #- TESTOBJECT_DEVICE: LG_Nexus_5X_real
+    #- TESTOBJECT_DEVICE: Samsung_Galaxy_S5_real_3
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install

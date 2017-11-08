@@ -10,14 +10,18 @@ chai.use(chaiAsPromised);
 
 describe('Find - basic', function () {
   let driver;
-  let singleResourceId;
+  let singleResourceId = 'decor_content_parent';
   before(async () => {
-    driver = await initDriver(APIDEMOS_CAPS);
-    let adb = new ADB({});
-    // the app behaves differently on different api levels when it comes to
-    // which resource ids are available for testing, so we switch here to make
-    // sure we're using the right resource id below
-    singleResourceId = await adb.getApiLevel() >= 21 ? 'decor_content_parent' : 'home';
+    if (process.env.TESTOBJECT_E2E_TESTS) {
+      driver = await initDriver(APIDEMOS_CAPS);
+      let adb = new ADB({});
+      // the app behaves differently on different api levels when it comes to
+      // which resource ids are available for testing, so we switch here to make
+      // sure we're using the right resource id below
+      if (await adb.getApiLevel() >= 21) {
+        singleResourceId = 'home';
+      }
+    }
   });
   after(async () => {
     await driver.quit();

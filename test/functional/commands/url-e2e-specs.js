@@ -11,6 +11,9 @@ let caps = Object.assign({}, BROWSER_CAPS);
 
 describe('setUrl @skip-ci', function () {
   before(async function () {
+    if (process.env.TESTOBJECT_E2E_TESTS) {
+      this.skip();
+    }
     driver = await initDriver(caps);
   });
   after(async () => {

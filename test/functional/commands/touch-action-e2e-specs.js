@@ -61,7 +61,7 @@ describe('apidemo - touch', function () {
       els.should.have.length(present ? 1 : 0);
     }
 
-    it('should swipe @skip-ci', async () => {
+    it('should swipe', async () => {
       await assertElement(driver, true);
       const action = new wd.TouchAction();
       action.press({x: 100, y: 650})

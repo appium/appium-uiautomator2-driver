@@ -37,6 +37,11 @@ describe('strings', function () {
     let initialLocale;
     let adb;
     before(async function () {
+      // Don't test ADB on test object
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        this.skip();
+      }
+      // restarting doesn't work on Android 7+
       adb = new ADB();
       initialLocale = await getLocale(adb);
     });
@@ -60,6 +65,9 @@ describe('strings', function () {
       strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
     });
     it('should return app strings when language/locale set @skip-ci', async function () {
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        this.skip();
+      }
       driver = await initDriver(_.defaults({
         language: 'fr',
         locale: 'CA',

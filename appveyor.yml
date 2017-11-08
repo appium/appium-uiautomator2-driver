@@ -4,7 +4,7 @@ environment:
     secure: fyB6CRcrHbroxaBvzN6aPHUEhHGc3ljbbTPtEqruaDVe/iO8/dZn4LOVNS/fAlSX
   TESTOBJECT_E2E_TESTS: true
   matrix:
-    - TESTOBJECT_DEVICE: Samsung_Galaxy_S8_Plus_real_2
+    - TESTOBJECT_DEVICE: Samsung_Galaxy_S8_*
     - TESTOBJECT_DEVICE: HTC_One_M8_real
     - TESTOBJECT_DEVICE: LG_Nexus_5X_real
     - TESTOBJECT_DEVICE: Samsung_Galaxy_S5_real_3

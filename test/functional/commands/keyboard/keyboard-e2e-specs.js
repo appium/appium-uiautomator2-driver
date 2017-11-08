@@ -50,7 +50,6 @@ async function waitForText (element, expectedText) {
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  await driver.waitForElementByClassName(EDITTEXT_CLASS);
   let el = await getElement(EDITTEXT_CLASS);
   await el.clear();
 

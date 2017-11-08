@@ -35,7 +35,7 @@ function deSamsungify (text) {
 }
 
 async function getElement (driver, className) {
-  return await retryInterval(10, 1000, async () => {
+  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     return await driver.elementByClassName(className);
   });
 }

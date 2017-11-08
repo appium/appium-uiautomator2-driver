@@ -10,8 +10,10 @@ chai.use(chaiAsPromised);
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 
 async function killServer (adbPort) {
-  let adb = await ADB.createADB({adbPort});
-  await adb.killServer();
+  if (!process.env.TESTOBJECT_E2E_TESTS) {
+    let adb = await ADB.createADB({adbPort});
+    await adb.killServer();
+  }
 }
 
 describe('createSession', function () {

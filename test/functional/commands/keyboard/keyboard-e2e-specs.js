@@ -50,7 +50,8 @@ async function waitForText (element, expectedText) {
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  let el = await driver.elementByClassName(EDITTEXT_CLASS);
+  await driver.waitForElementByClassName(EDITTEXT_CLASS);
+  let el = await getElement(EDITTEXT_CLASS);
   await el.clear();
 
   if (keys) {
@@ -180,6 +181,9 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
+        if (process.env.TESTOBJECT_E2E_TESTS) {
+          this.skip();
+        }
         let adb = new ADB();
         if (await adb.getApiLevel() < 24) {
           // below Android 7.0 (API level 24) typing too many characters in a
@@ -187,7 +191,7 @@ describe('keyboard', function () {
           // crash the app
           return this.skip();
         }
-        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
+        let els = await getElement(EDITTEXT_CLASS);
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 

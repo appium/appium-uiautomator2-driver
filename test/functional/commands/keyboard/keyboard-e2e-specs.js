@@ -217,9 +217,6 @@ describe('keyboard', function () {
     let initialIME;
     let driver;
     before(async function () {
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       // save the initial ime so we can make sure it is restored
       initialIME = await adb.defaultIME();
       initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');

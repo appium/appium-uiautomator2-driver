@@ -65,7 +65,7 @@
   "devDependencies": {
     "android-apidemos": "^2.1.2",
     "appium-gulp-plugins": "^2.1.4",
-    "appium-test-support": "^0.6.0",
+    "appium-test-support": "^0.7.0",
     "babel-eslint": "^7.1.1",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",

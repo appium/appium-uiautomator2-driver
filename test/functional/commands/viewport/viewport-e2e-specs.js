@@ -55,6 +55,24 @@ describe('testViewportCommands', function () {
     let contentSize = await driver.getAttribute("contentSize", scrollableElementId);
     contentSize.should.not.equal(null);
   });
+});
+
+describe('testFirstVisibleElement', function () {
+  before(async () => {
+    driver = await initDriver(SCROLL_CAPS);
+  });
+  after(async () => {
+    await driver.deleteSession();
+  });
+
+  let scrollableElementId;
+  it('should get scrollable element', async () => {
+    await waitForElement('-android uiautomator', 'new UiSelector().scrollable(true)');
+    let element = await driver.findElement('-android uiautomator', 'new UiSelector().scrollable(true)');
+    element.should.not.equal(null);
+    scrollableElementId = element.ELEMENT;
+    scrollableElementId.should.not.equal(null);
+  });
 
   let firstElementId;
   it('should get first element from scrollable element', async () => {

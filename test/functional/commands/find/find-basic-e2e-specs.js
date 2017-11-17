@@ -17,7 +17,7 @@ describe('Find - basic', function () {
     // the app behaves differently on different api levels when it comes to
     // which resource ids are available for testing, so we switch here to make
     // sure we're using the right resource id below
-    singleResourceId = await adb.getApiLevel() >= 21 ? 'decor_content_parent' : 'home';
+    singleResourceId = await adb.getApiLevel() >= 21 ? 'decor_content_parent' : 'home';   
   });
   after(async () => {
     await driver.quit();

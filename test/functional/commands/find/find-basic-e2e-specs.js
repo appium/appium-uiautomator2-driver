@@ -8,7 +8,6 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('Find - basic', function () {
-  
   let driver;
   let singleResourceId = 'decor_content_parent';
   before(async () => {

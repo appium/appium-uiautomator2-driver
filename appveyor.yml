@@ -6,8 +6,7 @@ environment:
   matrix:
     - FIRST_BUILD: true # The first build only builds and uploads the Appium staging zip
     - TESTOBJECT_PLATFORM_VERSION: 6
-    - TESTOBJECT_PLATFORM_VERSION: 7.0
-    - TESTOBJECT_PLATFORM_VERSION: 7.1
+    - TESTOBJECT_PLATFORM_VERSION: 7
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install

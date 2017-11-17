@@ -15,6 +15,6 @@ test_script:
   - node --version
   - npm --version
   - npm run build
-  - ps: "If ($env:FIRST_BUILD -Match \"true\") { npm run pre-script } Else { npm run e2e }"
+  - npm run e2e
 
 build: off

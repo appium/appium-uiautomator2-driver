@@ -15,6 +15,6 @@ test_script:
   - node --version
   - npm --version
   - npm run build
-  - ps: "If ($env:FIRST_BUILD -Match \"true\") { gulp transpile && mocha -t 640000 -R spec build/test/functional/helpers/mocha-scripts.js } Else { npm run e2e }"
+  - ps: "If ($env:FIRST_BUILD -Match \"true\") { npm run pre-script } Else { npm run e2e }"
 
 build: off

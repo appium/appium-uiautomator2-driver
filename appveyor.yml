@@ -15,5 +15,8 @@ test_script:
   - npm --version
   - npm run build
   - npm run e2e
+branches:
+  only:
+  - master
 
 build: off

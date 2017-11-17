@@ -18,6 +18,11 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
       throw new Error(`A commit must be provided in $COMMIT_HASH`);
     }
     wdObject = await enableTestObject(wd, 'appium-uiautomator2-driver', `https://github.com/appium/appium-uiautomator2-driver.git`, commit);
+
+    // Don't proceed with tests on first build (AppVeyor only runs for 1 hour)
+    if (process.env.FIRST_BUILD) {
+      process.exit();
+    }
   });
   after(async function () {
     await disableTestObject(wdObject);

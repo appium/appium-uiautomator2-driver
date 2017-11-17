@@ -4,6 +4,7 @@ environment:
     secure: fyB6CRcrHbroxaBvzN6aPHUEhHGc3ljbbTPtEqruaDVe/iO8/dZn4LOVNS/fAlSX
   TESTOBJECT_E2E_TESTS: true
   matrix:
+    - FIRST_BUILD: true # The first build only builds and uploads the Appium staging zip
     - TESTOBJECT_PLATFORM_VERSION: 6
     - TESTOBJECT_PLATFORM_VERSION: 7.0
     - TESTOBJECT_PLATFORM_VERSION: 7.1
@@ -14,6 +15,6 @@ test_script:
   - node --version
   - npm --version
   - npm run build
-  - npm run e2e
+  - ps: "If ($env:FIRST_BUILD -Match \"true\") { gulp transpile && mocha -t 640000 -R spec build/test/functional/helpers/mocha-scripts.js } Else { npm run e2e }"
 
 build: off

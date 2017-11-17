@@ -19,7 +19,8 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
     }
     wdObject = await enableTestObject(wd, 'appium-uiautomator2-driver', `https://github.com/appium/appium-uiautomator2-driver.git`, commit);
 
-    // Don't proceed with tests on first build (AppVeyor only runs for 1 hour)
+    // Don't proceed with tests on first build (AppVeyor only runs for 1 hour).
+    // The first build is solely for installing, zipping and uploading Appium to S3
     if (process.env.FIRST_BUILD) {
       process.exit();
     }

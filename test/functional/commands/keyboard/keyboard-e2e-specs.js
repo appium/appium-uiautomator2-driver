@@ -189,7 +189,7 @@ describe('keyboard', function () {
             return this.skip();
           }
         }
-        let els = await getElement(driver, EDITTEXT_CLASS);
+        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 

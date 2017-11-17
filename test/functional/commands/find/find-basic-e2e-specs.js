@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import ADB from 'appium-adb';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initDriver } from '../../helpers/session';
 

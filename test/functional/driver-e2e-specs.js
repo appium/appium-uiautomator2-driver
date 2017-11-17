@@ -49,6 +49,10 @@ describe('createSession', function () {
       appActivity.should.equal(caps.appActivity);
     });
     it('should error out for not apk extension', async () => {
+      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        return;
+      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo',
         appPackage: 'io.appium.android.apis',
@@ -62,6 +66,10 @@ describe('createSession', function () {
       }
     });
     it('should error out for invalid app path', async () => {
+      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        return;
+      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo.apk',
         appPackage: 'io.appium.android.apis',

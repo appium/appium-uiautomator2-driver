@@ -59,7 +59,7 @@ async function runTextEditTest (driver, testText, keys = false) {
     await el.sendKeys(testText);
   }
 
-  await retryInterval(10, 1000, async () => {
+  await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     let text = await el.text();
     deSamsungify(text).should.be.equal(testText);
   });

@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 describe('strings', function () {
   let driver;
 
-  describe('specific language', function () {
+  describe.only('specific language', function () {
     before(async () => {
       driver = await initDriver(APIDEMOS_CAPS);
     });

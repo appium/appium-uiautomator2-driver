@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import wd from 'wd';
+import B from 'bluebird';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
 
@@ -64,11 +65,12 @@ describe('apidemo - touch', function () {
     it('should swipe', async () => {
       await assertElement(driver, true);
       const action = new wd.TouchAction();
-      action.press({x: 100, y: 650})
-        .wait(3000)
-        .moveTo({x: 100, y: 50})
+      let el = await driver.elementByXPath("//*[@text='Abertam']");
+      action.press({el})
+        .wait(300)
+        .moveTo({x: 0, y: -1500})
         .release();
-      driver.performTouchAction(action);
+      await driver.performTouchAction(action);
       await assertElement(driver, false);
     });
   });

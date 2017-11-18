@@ -15,16 +15,18 @@ describe('strings', function () {
   let driver;
 
   describe('specific language', function () {
-    // Don't run these tests on TestObject. On TO, we don't have access to the .apk
-    // which is necessary for extracting the app strings
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
-    }
-    before(async () => {
+    before(async function () {
+      // Don't run these tests on TestObject. On TO, we don't have access to the .apk
+      // which is necessary for extracting the app strings
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        this.skip();
+      }
       driver = await initDriver(APIDEMOS_CAPS);
     });
     after(async function () {
-      await driver.quit();
+      if (!process.env.TESTOBJECT_E2E_TESTS) {
+        await driver.quit();
+      }
     });
 
     it('should return app strings', async function () {

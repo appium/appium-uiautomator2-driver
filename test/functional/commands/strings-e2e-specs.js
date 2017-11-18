@@ -20,7 +20,7 @@ describe('strings', function () {
     if (process.env.TESTOBJECT_E2E_TESTS) {
       this.skip();
     }
-    before(async () => {)
+    before(async () => {
       driver = await initDriver(APIDEMOS_CAPS);
     });
     after(async function () {

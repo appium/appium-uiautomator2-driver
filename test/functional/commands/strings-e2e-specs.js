@@ -14,8 +14,13 @@ chai.use(chaiAsPromised);
 describe('strings', function () {
   let driver;
 
-  describe.only('specific language', function () {
-    before(async () => {
+  describe('specific language', function () {
+    // Don't run these tests on TestObject. On TO, we don't have access to the .apk
+    // which is necessary for extracting the app strings
+    if (process.env.TESTOBJECT_E2E_TESTS) {
+      this.skip();
+    }
+    before(async () => {)
       driver = await initDriver(APIDEMOS_CAPS);
     });
     after(async function () {

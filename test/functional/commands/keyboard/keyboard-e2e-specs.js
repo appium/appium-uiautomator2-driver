@@ -41,7 +41,7 @@ async function getElement (driver, className) {
 }
 
 async function waitForText (element, expectedText) {
-  return await retryInterval(10, 1000, async () => {
+  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     const text = await element.text();
     if (text !== expectedText) {
       throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);

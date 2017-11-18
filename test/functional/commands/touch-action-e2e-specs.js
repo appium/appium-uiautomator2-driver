@@ -66,9 +66,9 @@ describe('apidemo - touch', function () {
       await assertElement(driver, true);
       const action = new wd.TouchAction();
       let el = await driver.elementByXPath("//*[@text='Abertam']");
-      action.press({el})
+      action.press({element: el})
         .wait(300)
-        .moveTo({x: 0, y: -1500})
+        .moveTo({element: el, x: 0, y: -1500})
         .release();
       await driver.performTouchAction(action);
       await assertElement(driver, false);

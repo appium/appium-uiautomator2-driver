@@ -2,24 +2,48 @@ environment:
   nodejs_version: "6"
   GH_TOKEN:
     secure: fyB6CRcrHbroxaBvzN6aPHUEhHGc3ljbbTPtEqruaDVe/iO8/dZn4LOVNS/fAlSX
+  
+  # Tells the NPM test script that we want to run the tests on TestObject, not locally
   TESTOBJECT_E2E_TESTS: true
+
   matrix:
-    - FIRST_BUILD: true # The first build only builds and uploads the Appium staging zip
+    # The first build only builds and uploads the Appium staging zip. This takes a long time and AppVeyor has a limit of 1h
+    - FIRST_BUILD: true 
+
+    # Break up tests to test different android versions and to run E2E tests in different groups to fit under the AppVeyor 1h limit
     - TESTOBJECT_PLATFORM_VERSION: 6
+      E2E_SCRIPT: commands
+    - TESTOBJECT_PLATFORM_VERSION: 6
+      E2E_SCRIPT: find
+    - TESTOBJECT_PLATFORM_VERSION: 6
+      E2E_SCRIPT: keyboard
     - TESTOBJECT_PLATFORM_VERSION: 7
+      E2E_SCRIPT: commands
+    - TESTOBJECT_PLATFORM_VERSION: 7
+      E2E_SCRIPT: find
+    - TESTOBJECT_PLATFORM_VERSION: 7
+      E2E_SCRIPT: keyboard
+
+# Install NodeJS on Windows and install UiAutomator2 dependencies
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
+
+# Build and run unit tests and a subgroup of the E2E tests
 test_script:
   - node --version
   - npm --version
   - npm run build
-  - npm run e2e
-branches:
+  - npm run e2e:%E2E_SCRIPT%
+
+# Only run on PR's and master branch to spare TO servers
+branches: 
   only:
   - master
 
-build: off
+# Don't run MSBUILD
+build: off 
 
+# Stop running test if one fails
 matrix:
   fast_finish: true

@@ -56,6 +56,9 @@
     "lint": "gulp eslint",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
+    "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/find/*-specs.js",
+    "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/keyboard/*-specs.js",
+    "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/*-specs.js",
     "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
   },
   "pre-commit": [

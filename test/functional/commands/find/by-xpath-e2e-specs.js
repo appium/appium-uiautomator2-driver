@@ -20,7 +20,8 @@ describe('Find - xpath', function () {
   });
   it('should find element by type', async () => {
     let el = await driver.elementByXPath(`//${atv}`);
-    await el.text().should.eventually.equal('API Demos');
+    const text = await el.text();
+    text.toLowerCase().should.equal('api demos');
   });
   it('should find element by text', async () => {
     let el = await driver.elementByXPath(`//${atv}[@text='Accessibility']`);

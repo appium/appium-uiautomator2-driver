@@ -22,7 +22,8 @@ describe('Find - basic', function () {
   });
   it('should find an element by class name', async () => {
     let el = await driver.elementByClassName('android.widget.TextView');
-    await el.text().should.eventually.equal('API Demos');
+    const text = await el.text();
+    text.toLowerCase().should.equal('api demos');
   });
   it('should find multiple elements by class name', async () => {
     await driver.elementsByClassName('android.widget.TextView')

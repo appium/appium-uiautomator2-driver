@@ -8,21 +8,22 @@ environment:
 
   matrix:
     # The first build only builds and uploads the Appium staging zip. This takes a long time and AppVeyor has a limit of 1h
-    - FIRST_BUILD: true 
+    - FIRST_BUILD: true
+      E2E_SCRIPT: e2e 
 
     # Break up tests to test different android versions and to run E2E tests in different groups to fit under the AppVeyor 1h limit
     - TESTOBJECT_PLATFORM_VERSION: 6
-      E2E_SCRIPT: commands
+      E2E_SCRIPT: e2e:commands
     - TESTOBJECT_PLATFORM_VERSION: 6
-      E2E_SCRIPT: find
+      E2E_SCRIPT: e2e:find
     - TESTOBJECT_PLATFORM_VERSION: 6
-      E2E_SCRIPT: keyboard
+      E2E_SCRIPT: e2e:keyboard
     - TESTOBJECT_PLATFORM_VERSION: 7
-      E2E_SCRIPT: commands
+      E2E_SCRIPT: e2e:commands
     - TESTOBJECT_PLATFORM_VERSION: 7
-      E2E_SCRIPT: find
+      E2E_SCRIPT: e2e:find
     - TESTOBJECT_PLATFORM_VERSION: 7
-      E2E_SCRIPT: keyboard
+      E2E_SCRIPT: e2e:keyboard
 
 # Install NodeJS on Windows and install UiAutomator2 dependencies
 install:
@@ -34,7 +35,7 @@ test_script:
   - node --version
   - npm --version
   - npm run build
-  - npm run e2e:%E2E_SCRIPT%
+  - npm run %E2E_SCRIPT%
 
 # Only run on PR's and master branch to spare TO servers
 branches: 

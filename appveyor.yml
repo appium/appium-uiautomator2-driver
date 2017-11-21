@@ -44,7 +44,3 @@ branches:
 
 # Don't run MSBUILD
 build: off 
-
-# Stop running test if one fails
-matrix:
-  fast_finish: true

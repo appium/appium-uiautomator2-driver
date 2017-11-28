@@ -37,15 +37,17 @@ describe('strings', function () {
     let initialLocale;
     let adb;
     before(async function () {
-      // restarting doesn't work on Android 7+
       adb = new ADB();
-      if (await adb.getApiLevel() > 23) return this.skip(); //eslint-disable-line curly
-
       initialLocale = await getLocale(adb);
     });
     afterEach(async function () {
       if (driver) {
-        await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
+        if (await adb.getApiLevel() > 23) {
+          let split_locale = initialLocale.split("-");
+          await androidHelpers.ensureDeviceLocale(adb, split_locale[0], split_locale[1]);
+        } else {
+          await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
+        }
 
         await driver.quit();
       }

@@ -9,6 +9,10 @@ import B from 'bluebird';
 chai.should();
 chai.use(chaiAsPromised);
 
+function defaultStub (driver) {
+  sinon.stub(driver, 'fillDeviceDetails');
+}
+
 describe('driver.js', () => {
   describe('constructor', () => {
     it('calls BaseDriver constructor with opts', () => {
@@ -21,18 +25,20 @@ describe('driver.js', () => {
   describe('createSession', () => {
     it('should throw an error if app can not be found', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
-      await driver.createSession({app: 'foo.apk', unitTests: true}).should.be.rejectedWith('app apk');
+      defaultStub(driver);
+      await driver.createSession({app: 'foo.apk'}).should.be.rejectedWith('app apk');
     });
 
     it('should set sessionId', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       sinon.mock(driver).expects('checkAppPresent')
           .once()
           .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
           .once()
           .returns(B.resolve());
-      await driver.createSession({cap: 'foo', unitTests: true});
+      await driver.createSession({cap: 'foo'});
 
       driver.sessionId.should.exist;
       driver.caps.cap.should.equal('foo');
@@ -40,11 +46,12 @@ describe('driver.js', () => {
 
     it('should set the default context', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       sinon.mock(driver).expects('checkAppPresent')
           .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
           .returns(B.resolve());
-      await driver.createSession({unitTests: true});
+      await driver.createSession({});
       driver.curContext.should.equal('NATIVE_APP');
     });
   });
@@ -52,13 +59,14 @@ describe('driver.js', () => {
   describe('checkAppPresent', async () => {
     it('should resolve if app present', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       let app = path.resolve('.');
       sinon.mock(driver).expects('startUiAutomator2Session')
           .returns(B.resolve());
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
-      await driver.createSession({app, unitTests: true});
+      await driver.createSession({app});
 
       await driver.checkAppPresent(); // should not error
 
@@ -69,6 +77,7 @@ describe('driver.js', () => {
 
     it('should reject if app not present', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       let app = path.resolve('asdfasdf');
       sinon.mock(driver).expects('checkAppPresent')
           .returns(B.resolve());
@@ -77,7 +86,7 @@ describe('driver.js', () => {
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
-      await driver.createSession({app, unitTests: true});
+      await driver.createSession({app});
 
       driver.checkAppPresent.restore();
       await driver.checkAppPresent().should.eventually.be.rejectedWith('Could not find');
@@ -88,6 +97,7 @@ describe('driver.js', () => {
     let driver;
     before(() => {
       driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       driver.sessionId = 'abc';
     });
     describe('#proxyActive', () => {
@@ -122,6 +132,7 @@ describe('driver.js', () => {
         let listLength;
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
+          defaultStub(driver);
           sinon.mock(driver).expects('checkAppPresent')
               .once()
               .returns(B.resolve());
@@ -131,12 +142,12 @@ describe('driver.js', () => {
         });
 
         it('should proxy screenshot if nativeWebScreenshot is off', async function () {
-          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false, unitTests: true});
+          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
           driver.getProxyAvoidList().should.have.length.above(40);
           listLength = driver.getProxyAvoidList().length;
         });
         it('should not proxy screenshot if nativeWebScreenshot is on', async function () {
-          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true, unitTests: true});
+          await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
           driver.getProxyAvoidList().should.have.length(listLength + 1);
         });
       });
@@ -154,6 +165,17 @@ describe('driver.js', () => {
           driver.canProxy('aaa');
         }).should.throw;
       });
+    });
+  });
+
+  describe('magic first visible child xpath', () => {
+    let driver = new AndroidUiautomator2Driver({}, false);
+    it('should trap and proxy to special uia2 server endpoint', async () => {
+      defaultStub(driver);
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      await driver.doFindElementOrEls({strategy: 'xpath', selector: '/*[@firstVisible="true"]', context: 'foo'});
+      proxySpy.firstCall.args.should.eql([`/appium/element/foo/first_visible`, 'GET', {}]);
     });
   });
 });

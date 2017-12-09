@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "adbkit": "^2.4.1",
-    "appium-adb": "^5.0.0",
-    "appium-android-driver": "^1.27.1",
+    "appium-adb": "^5.2.0",
+    "appium-android-driver": "^1.35.0",
     "appium-base-driver": "^2.0.18",
     "appium-support": "^2.5.0",
     "appium-uiautomator2-server": "0.x",

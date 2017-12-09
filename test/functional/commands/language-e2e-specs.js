@@ -10,7 +10,7 @@ import { getLocale } from '../helpers/helpers';
 chai.should();
 chai.use(chaiAsPromised);
 
-describe('Localization - locale @skip-ci @skip-real-device', function () {
+describe('Localization - locale @skip-real-device', function () {
   let initialLocale;
   let adb;
 

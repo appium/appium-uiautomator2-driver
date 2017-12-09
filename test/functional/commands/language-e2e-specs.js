@@ -10,7 +10,7 @@ import { getLocale } from '../helpers/helpers';
 chai.should();
 chai.use(chaiAsPromised);
 
-// Skip ci since the command restart emulator is the tartge API is 22-.
+// Skip ci since the command restart emulator when the test device's API is 22-.
 describe('Localization - locale @skip-ci @skip-real-device', function () {
   let initialLocale;
   let adb;

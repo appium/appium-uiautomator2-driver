@@ -43,8 +43,8 @@ describe('strings', function () {
     afterEach(async function () {
       if (driver) {
         if (await adb.getApiLevel() > 23) {
-          let split_locale = initialLocale.split("-");
-          await androidHelpers.ensureDeviceLocale(adb, split_locale[0], split_locale[1]);
+          let [language, country] = initialLocale.split("-");
+          await androidHelpers.ensureDeviceLocale(adb, language, country);
         } else {
           await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
         }

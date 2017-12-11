@@ -82,6 +82,7 @@ describe('createSession', function () {
 
       let serverCaps = await driver.sessionCapabilities();
       serverCaps.deviceScreenSize.should.exist;
+      serverCaps.deviceScreenDensity.should.exist;
       serverCaps.deviceModel.should.exist;
       serverCaps.deviceManufacturer.should.exist;
     });

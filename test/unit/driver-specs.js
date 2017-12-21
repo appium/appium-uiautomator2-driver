@@ -119,8 +119,8 @@ describe('driver.js', () => {
         }).should.throw;
       });
       describe('nativeWebScreenshot', function () {
-        let list;
-        let nativeWebScreenshotFilter = item => { return item[0] === "GET" && item[1].test('/session/xxx/screenshot/');};
+        let proxyAvoidList;
+        let nativeWebScreenshotFilter = item => item[0] === "GET" && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
           sinon.mock(driver).expects('checkAppPresent')
@@ -137,13 +137,13 @@ describe('driver.js', () => {
           });
           it('should proxy screenshot if nativeWebScreenshot is off on chromedriver mode', async function () {
             await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
-            list = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            list.should.be.empty;
+            proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
+            proxyAvoidList.should.be.empty;
           });
           it('should not proxy screenshot if nativeWebScreenshot is on on chromedriver mode', async function () {
             await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
-            list = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            list.should.not.be.empty;
+            proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
+            proxyAvoidList.should.not.be.empty;
           });
         });
 
@@ -154,15 +154,15 @@ describe('driver.js', () => {
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (on)', async function () {
             // nativeWebScreenshot on
             await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
-            list = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            list.should.not.empty;
+            proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
+            proxyAvoidList.should.not.be.empty;
           });
 
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (off)', async function () {
             // nativeWebScreenshot off
             await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
-            list = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            list.should.not.empty;
+            proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
+            proxyAvoidList.should.not.be.empty;
           });
         });
       });

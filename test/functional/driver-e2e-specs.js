@@ -1,6 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
+import request from 'request-promise';
+import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initDriver } from './helpers/session';
 
@@ -125,6 +127,19 @@ describe('createSession', function () {
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
+    });
+  });
+
+  describe('w3c compliance', function () {
+    it('should start a session with W3C caps', async function () {
+      const { value, sessionId } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
+        capabilities: {
+          alwaysMatch: APIDEMOS_CAPS,
+          firstMatch: [{}],
+        }
+      }});
+      value.should.exist;
+      sessionId.should.exist;
     });
   });
 });

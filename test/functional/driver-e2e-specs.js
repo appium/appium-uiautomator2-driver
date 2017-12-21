@@ -140,6 +140,7 @@ describe('createSession', function () {
       }});
       value.should.exist;
       sessionId.should.exist;
+      await request.delete({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${sessionId}`});
     });
   });
 });

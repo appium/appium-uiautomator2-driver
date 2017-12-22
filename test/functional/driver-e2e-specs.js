@@ -6,7 +6,7 @@ import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initDriver } from './helpers/session';
 
-chai.should();
+const should = chai.should();
 chai.use(chaiAsPromised);
 
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
@@ -132,15 +132,18 @@ describe('createSession', function () {
 
   describe('w3c compliance', function () {
     it('should start a session with W3C caps', async function () {
-      const { value, sessionId } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
+      const { value, sessionId, status } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
         capabilities: {
           alwaysMatch: APIDEMOS_CAPS,
           firstMatch: [{}],
         }
       }});
       value.should.exist;
-      sessionId.should.exist;
-      await request.delete({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${sessionId}`});
+      value.capabilities.should.exist;
+      value.sessionId.should.exist;
+      should.not.exist(sessionId);
+      should.not.exist(status);
+      await request.delete({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${value.sessionId}`});
     });
   });
 });

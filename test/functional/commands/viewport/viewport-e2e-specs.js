@@ -23,19 +23,19 @@ describe('testViewportCommands', function () {
 
   it('should get device pixel ratio', async () => {
     let devicePixelRatio = await driver.getDevicePixelRatio();
-    devicePixelRatio.should.not.equal(null);
+    devicePixelRatio.should.exist;
     devicePixelRatio.should.not.equal(0);
   });
 
   it('should get status bar height', async () => {
     let statusBarHeight = await driver.getStatusBarHeight();
-    statusBarHeight.should.not.equal(null);
+    statusBarHeight.should.exist;
     statusBarHeight.should.not.equal(0);
   });
 
   it('should get viewport rect', async () => {
     let viewportRect = await driver.getViewPortRect();
-    viewportRect.should.not.equal(null);
+    viewportRect.should.exist;
     viewportRect.left.should.exist;
     viewportRect.top.should.exist;
     viewportRect.width.should.exist;
@@ -46,14 +46,12 @@ describe('testViewportCommands', function () {
   it('should get scrollable element', async () => {
     await waitForElement('-android uiautomator', 'new UiSelector().scrollable(true)');
     let element = await driver.findElement('-android uiautomator', 'new UiSelector().scrollable(true)');
-    element.should.not.equal(null);
-    scrollableElementId = element.ELEMENT;
-    scrollableElementId.should.not.equal(null);
+    element.should.exist;
   });
 
   it('should get content size from scrollable element', async () => {
     let contentSize = await driver.getAttribute("contentSize", scrollableElementId);
-    contentSize.should.not.equal(null);
+    contentSize.should.exist;
   });
 });
 
@@ -69,15 +67,11 @@ describe('testFirstVisibleElement', function () {
   it('should get scrollable element', async () => {
     await waitForElement('-android uiautomator', 'new UiSelector().scrollable(true)');
     let element = await driver.findElement('-android uiautomator', 'new UiSelector().scrollable(true)');
-    element.should.not.equal(null);
-    scrollableElementId = element.ELEMENT;
-    scrollableElementId.should.not.equal(null);
+    element.should.exist;
   });
 
-  let firstElementId;
   it('should get first element from scrollable element', async () => {
-    let element = await driver.findElOrEls('xpath', '//*[@onScreen=true]', false, scrollableElementId);
-    firstElementId = element.ELEMENT;
-    firstElementId.should.not.equal(null);
+    let element = await driver.findElOrEls('xpath', '/*[@firstVisible="true"]', false, scrollableElementId);
+    element.should.exist;
   });
 });

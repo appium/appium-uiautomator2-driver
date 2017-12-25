@@ -148,9 +148,6 @@ describe('driver.js', () => {
         });
 
         describe('on native mode', function () {
-          beforeEach(function () {
-            driver.chromedriver = null;
-          });
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (on)', async function () {
             // nativeWebScreenshot on
             await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});

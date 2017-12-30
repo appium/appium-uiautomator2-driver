@@ -3,7 +3,6 @@ import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
 
-
 chai.should();
 chai.use(chaiAsPromised);
 
@@ -14,7 +13,9 @@ describe('general', function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
   after(async () => {
-    await driver.quit();
+    if (driver) {
+      await driver.quit();
+    }
   });
 
   describe('startActivity', function () {

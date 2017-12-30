@@ -189,7 +189,7 @@ describe('driver.js', () => {
       proxySpy.firstCall.args.should.eql(['/element', 'POST', {
         context: 'foo',
         strategy: '-android uiautomator',
-        selector: 'new UiSelector().scrollable(true)',
+        selector: 'new BySelector().scrollable(true)',
       }]);
     });
   });

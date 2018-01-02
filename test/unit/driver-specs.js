@@ -21,7 +21,7 @@ describe('driver.js', () => {
   describe('createSession', () => {
     it('should throw an error if app can not be found', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
-      await driver.createSession({app: 'foo.apk'}).should.be.rejectedWith('app apk');
+      await driver.createSession({app: 'foo.apk'}).should.be.rejectedWith('does not exist or is not accessible');
     });
 
     it('should set sessionId', async () => {

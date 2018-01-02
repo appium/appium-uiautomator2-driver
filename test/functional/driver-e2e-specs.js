@@ -64,7 +64,7 @@ describe('createSession', function () {
         await initDriver(caps);
         throw new Error(`Call to 'initDriver' should not have succeeded`);
       } catch (e) {
-        e.data.should.match(/New app path foo did not have extension \.apk/);
+        e.data.should.match(/does not exist or is not accessible/);
       }
     });
     it('should error out for invalid app path', async () => {

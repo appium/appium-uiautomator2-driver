@@ -178,4 +178,21 @@ describe('driver.js', () => {
       proxySpy.firstCall.args.should.eql([`/appium/element/foo/first_visible`, 'GET', {}]);
     });
   });
+
+  describe('magic scrollable view xpath', () => {
+    let driver = new AndroidUiautomator2Driver({}, false);
+    it('should trap and rewrite as uiautomator locator', async () => {
+      defaultStub(driver);
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      await driver.doFindElementOrEls({strategy: 'xpath', selector: '//*[@scrollable="true"]', context: 'foo'});
+      proxySpy.firstCall.args.should.eql(['/element', 'POST', {
+        context: 'foo',
+        strategy: '-android uiautomator',
+        selector: 'new BySelector().scrollable(true)',
+      }]);
+    });
+  });
+
+
 });

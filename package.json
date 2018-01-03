@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "0.7.3",
+  "version": "0.11.0",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -27,15 +27,15 @@
   },
   "dependencies": {
     "adbkit": "^2.4.1",
-    "appium-adb": "^4.1.0",
-    "appium-android-driver": "^1.27.1",
-    "appium-base-driver": "^2.0.18",
+    "appium-adb": "^5.3.1",
+    "appium-android-driver": "^1.35.0",
+    "appium-base-driver": "^2.18.4",
     "appium-support": "^2.12.0",
     "appium-uiautomator2-server": "0.x",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
     "bluebird": "^2.10.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.4",
     "portscanner": "2.1.1",
     "request": "^2.81.0",
     "request-promise": "^4.1.1",
@@ -55,7 +55,10 @@
     "coverage": "gulp coveralls",
     "lint": "gulp eslint",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "e2e": "gulp transpile && mocha -t 640000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
+    "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
+    "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/find/*-specs.js",
+    "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/keyboard/*-specs.js",
+    "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/*-specs.js",
     "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
   },
   "pre-commit": [
@@ -65,7 +68,7 @@
   "devDependencies": {
     "android-apidemos": "^2.1.2",
     "appium-gulp-plugins": "^2.1.4",
-    "appium-test-support": "^0.6.0",
+    "appium-test-support": "^0.7.0",
     "babel-eslint": "^7.1.1",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",

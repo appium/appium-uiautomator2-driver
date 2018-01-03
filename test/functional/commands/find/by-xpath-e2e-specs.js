@@ -20,7 +20,8 @@ describe('Find - xpath', function () {
   });
   it('should find element by type', async () => {
     let el = await driver.elementByXPath(`//${atv}`);
-    await el.text().should.eventually.equal('API Demos');
+    const text = await el.text();
+    text.toLowerCase().should.equal('api demos');
   });
   it('should find element by text', async () => {
     let el = await driver.elementByXPath(`//${atv}[@text='Accessibility']`);
@@ -66,6 +67,9 @@ describe('Find - xpath', function () {
   it('should find toast message element by text @skip-ci', async function () {
     // skip on travis, as it is too slow and the message is removed before
     // we can find it
+    if (process.env.TESTOBJECT_E2E_TESTS) {
+      this.skip();
+    }
 
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.PopupMenu1'});
     await driver.waitForElementByAccessibilityId('Make a Popup!');

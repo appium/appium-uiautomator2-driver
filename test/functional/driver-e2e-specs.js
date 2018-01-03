@@ -1,17 +1,21 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
+import request from 'request-promise';
+import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initDriver } from './helpers/session';
 
-chai.should();
+const should = chai.should();
 chai.use(chaiAsPromised);
 
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 
 async function killServer (adbPort) {
-  let adb = await ADB.createADB({adbPort});
-  await adb.killServer();
+  if (!process.env.TESTOBJECT_E2E_TESTS) {
+    let adb = await ADB.createADB({adbPort});
+    await adb.killServer();
+  }
 }
 
 describe('createSession', function () {
@@ -47,6 +51,10 @@ describe('createSession', function () {
       appActivity.should.equal(caps.appActivity);
     });
     it('should error out for not apk extension', async () => {
+      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        return;
+      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo',
         appPackage: 'io.appium.android.apis',
@@ -56,10 +64,14 @@ describe('createSession', function () {
         await initDriver(caps);
         throw new Error(`Call to 'initDriver' should not have succeeded`);
       } catch (e) {
-        e.data.should.match(/New app path foo did not have extension \.apk/);
+        e.data.should.match(/does not exist or is not accessible/);
       }
     });
     it('should error out for invalid app path', async () => {
+      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
+      if (process.env.TESTOBJECT_E2E_TESTS) {
+        return;
+      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo.apk',
         appPackage: 'io.appium.android.apis',
@@ -70,7 +82,7 @@ describe('createSession', function () {
         await initDriver(caps);
         throw new Error(`Call to 'initDriver' should not have succeeded`);
       } catch (e) {
-        e.data.should.match(/Could not find/);
+        e.data.should.match(/does not exist or is not accessible/);
       }
     });
     it('should get device model, manufacturer and screen size in session details', async () => {
@@ -82,6 +94,7 @@ describe('createSession', function () {
 
       let serverCaps = await driver.sessionCapabilities();
       serverCaps.deviceScreenSize.should.exist;
+      serverCaps.deviceScreenDensity.should.exist;
       serverCaps.deviceModel.should.exist;
       serverCaps.deviceManufacturer.should.exist;
     });
@@ -114,6 +127,23 @@ describe('createSession', function () {
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
+    });
+  });
+
+  describe('w3c compliance', function () {
+    it('should start a session with W3C caps', async function () {
+      const { value, sessionId, status } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
+        capabilities: {
+          alwaysMatch: APIDEMOS_CAPS,
+          firstMatch: [{}],
+        }
+      }});
+      value.should.exist;
+      value.capabilities.should.exist;
+      value.sessionId.should.exist;
+      should.not.exist(sessionId);
+      should.not.exist(status);
+      await request.delete({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${value.sessionId}`});
     });
   });
 });

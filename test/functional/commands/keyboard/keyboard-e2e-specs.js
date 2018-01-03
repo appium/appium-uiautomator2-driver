@@ -35,13 +35,13 @@ function deSamsungify (text) {
 }
 
 async function getElement (driver, className) {
-  return await retryInterval(10, 1000, async () => {
+  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     return await driver.elementByClassName(className);
   });
 }
 
 async function waitForText (element, expectedText) {
-  return await retryInterval(10, 1000, async () => {
+  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     const text = await element.text();
     if (text !== expectedText) {
       throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);
@@ -50,7 +50,7 @@ async function waitForText (element, expectedText) {
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  let el = await driver.elementByClassName(EDITTEXT_CLASS);
+  let el = await getElement(driver, EDITTEXT_CLASS);
   await el.clear();
 
   if (keys) {
@@ -59,7 +59,7 @@ async function runTextEditTest (driver, testText, keys = false) {
     await el.sendKeys(testText);
   }
 
-  await retryInterval(10, 1000, async () => {
+  await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
     let text = await el.text();
     deSamsungify(text).should.be.equal(testText);
   });
@@ -180,12 +180,14 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
-        let adb = new ADB();
-        if (await adb.getApiLevel() < 24) {
-          // below Android 7.0 (API level 24) typing too many characters in a
-          // length-limited field will either throw a NullPointerException or
-          // crash the app
-          return this.skip();
+        if (!process.env.TESTOBJECT_E2E_TESTS) {
+          let adb = new ADB();
+          if (parseInt(await adb.getApiLevel(), 10) < 24) {
+            // below Android 7.0 (API level 24) typing too many characters in a
+            // length-limited field will either throw a NullPointerException or
+            // crash the app
+            return this.skip();
+          }
         }
         let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let el = els[3];
@@ -213,13 +215,18 @@ describe('keyboard', function () {
   });
 
   describe('unicode', function () {
-    let adb = new ADB();
+    let adb;
+    if (!process.env.TESTOBJECT_E2E_TESTS) {
+      adb = new ADB();
+    }
     let initialIME;
     let driver;
     before(async function () {
       // save the initial ime so we can make sure it is restored
-      initialIME = await adb.defaultIME();
-      initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      if (adb) {
+        initialIME = await adb.defaultIME();
+        initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      }
 
       driver = await initDriver(defaultUnicodeCaps);
     });
@@ -227,9 +234,11 @@ describe('keyboard', function () {
       await driver.quit();
 
       // make sure the IME has been restored
-      let ime = await adb.defaultIME();
-      ime.should.eql(initialIME);
-      ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      if (adb) {
+        let ime = await adb.defaultIME();
+        ime.should.eql(initialIME);
+        ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+      }
     });
 
     describe('editing a text field', function () {

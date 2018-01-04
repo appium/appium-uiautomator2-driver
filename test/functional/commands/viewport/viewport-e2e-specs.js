@@ -52,25 +52,20 @@ describe('testViewportCommands', function () {
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async () => {
-    const {viewportRect, statBarHeight, pixelRatio} = await driver.sessionCapabilities();
+    const {viewportRect, statBarHeight} = await driver.sessionCapabilities();
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute("mobile: viewportScreenshot");
     const fullB64 = new Buffer(fullScreen, 'base64');
     const viewB64 = new Buffer(viewScreen, 'base64');
     const fullImg = new PNG({filterType: 4});
     await B.promisify(fullImg.parse).call(fullImg, fullB64);
+    require('fs').writeFileSync('/Users/jlipps/Desktop/fullImg.png', PNG.sync.write(fullImg, {}));
     const viewImg = new PNG({filterType: 4});
     await B.promisify(viewImg.parse).call(viewImg, viewB64);
+    require('fs').writeFileSync('/Users/jlipps/Desktop/viewImg.png', PNG.sync.write(viewImg, {}));
     viewportRect.top.should.eql(statBarHeight);
-    // viewport rect and status bar height are in downscaled pixels, whereas
-    // screenshot dimensions are in upscaled pixels. because the downscaled
-    // pixels are rounded up, we can't simply multiply them by the pixel ratio
-    // to verify the screenshot dimensions. instead we test for a range
-    const viewHeightLowBound = Math.floor(viewportRect.height) * 0.99 * pixelRatio;
-    const viewHeightHighBound = Math.ceil(viewportRect.height) * 1.01 * pixelRatio;
-    viewImg.height.should.be.above(viewHeightLowBound);
-    viewImg.height.should.be.below(viewHeightHighBound);
-    viewImg.height.should.be.below(fullImg.height);
+    viewImg.height.should.eql(viewportRect.height);
     viewImg.width.should.eql(fullImg.width);
+    fullImg.height.should.be.above(viewImg.height);
   });
 });

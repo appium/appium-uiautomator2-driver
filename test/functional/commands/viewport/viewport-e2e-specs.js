@@ -59,10 +59,8 @@ describe('testViewportCommands', function () {
     const viewB64 = new Buffer(viewScreen, 'base64');
     const fullImg = new PNG({filterType: 4});
     await B.promisify(fullImg.parse).call(fullImg, fullB64);
-    require('fs').writeFileSync('/Users/jlipps/Desktop/fullImg.png', PNG.sync.write(fullImg, {}));
     const viewImg = new PNG({filterType: 4});
     await B.promisify(viewImg.parse).call(viewImg, viewB64);
-    require('fs').writeFileSync('/Users/jlipps/Desktop/viewImg.png', PNG.sync.write(viewImg, {}));
     viewportRect.top.should.eql(statBarHeight);
     viewImg.height.should.eql(viewportRect.height);
     viewImg.width.should.eql(fullImg.width);

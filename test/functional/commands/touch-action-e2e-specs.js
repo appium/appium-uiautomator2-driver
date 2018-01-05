@@ -61,14 +61,15 @@ describe('apidemo - touch', function () {
       els.should.have.length(present ? 1 : 0);
     }
 
-    it('should swipe @skip-ci', async () => {
+    it('should swipe', async () => {
       await assertElement(driver, true);
       const action = new wd.TouchAction();
-      action.press({x: 100, y: 650})
-        .wait(3000)
-        .moveTo({x: 100, y: 50})
+      let el = await driver.elementByXPath("//*[@text='Abertam']");
+      action.press({element: el})
+        .wait(300)
+        .moveTo({element: el, x: 0, y: -1500})
         .release();
-      driver.performTouchAction(action);
+      await driver.performTouchAction(action);
       await assertElement(driver, false);
     });
   });

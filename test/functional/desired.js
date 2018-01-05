@@ -9,6 +9,7 @@ const GENERIC_CAPS = {
   platformName: 'Android',
   uiautomator2ServerLaunchTimeout,
   uiautomator2ServerInstallTimeout,
+  automationName: 'uiautomator2',
 };
 
 const APIDEMOS_CAPS = _.defaults({

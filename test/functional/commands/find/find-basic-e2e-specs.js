@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import ADB from 'appium-adb';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initDriver } from '../../helpers/session';
 
@@ -10,14 +9,9 @@ chai.use(chaiAsPromised);
 
 describe('Find - basic', function () {
   let driver;
-  let singleResourceId;
+  let singleResourceId = 'decor_content_parent';
   before(async () => {
     driver = await initDriver(APIDEMOS_CAPS);
-    let adb = new ADB({});
-    // the app behaves differently on different api levels when it comes to
-    // which resource ids are available for testing, so we switch here to make
-    // sure we're using the right resource id below
-    singleResourceId = await adb.getApiLevel() >= 21 ? 'decor_content_parent' : 'home';
   });
   after(async () => {
     await driver.quit();
@@ -28,7 +22,8 @@ describe('Find - basic', function () {
   });
   it('should find an element by class name', async () => {
     let el = await driver.elementByClassName('android.widget.TextView');
-    await el.text().should.eventually.equal('API Demos');
+    const text = await el.text();
+    text.toLowerCase().should.equal('api demos');
   });
   it('should find multiple elements by class name', async () => {
     await driver.elementsByClassName('android.widget.TextView')
@@ -65,7 +60,6 @@ describe('Find - basic', function () {
         .should.eventually.have.length(0);
       let afterMs = Date.now();
       (afterMs - beforeMs).should.be.below(implicitWaitTimeout * 2);
-      (afterMs - beforeMs).should.be.above(implicitWaitTimeout);
     });
   });
 });

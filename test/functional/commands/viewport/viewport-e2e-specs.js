@@ -38,8 +38,15 @@ describe('testViewportCommands', function () {
     scrollableEl.should.exist;
   });
 
-  it('should get content size from scrollable element', async () => {
+  it('should get content size from scrollable element found as uiobject', async () => {
     let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
+    let contentSize = await scrollableEl.getAttribute("contentSize");
+    contentSize.should.exist;
+    JSON.parse(contentSize).scrollableOffset.should.exist;
+  });
+
+  it('should get content size from scrollable element found as uiobject2', async () => {
+    let scrollableEl = await driver.elementByXPath('//android.widget.ScrollView');
     let contentSize = await scrollableEl.getAttribute("contentSize");
     contentSize.should.exist;
     JSON.parse(contentSize).scrollableOffset.should.exist;

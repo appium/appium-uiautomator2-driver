@@ -88,6 +88,8 @@ describe('apidemo - touch', function () {
     });
 
     it('should scroll to an element', async () => {
+      console.log("--- SCREENSHOT 1 ---");
+      console.log(await driver.takeScreenshot());
       const cheeseForScroll = 'Abertam';
       // first find the scrolling container
       let scrollableContainer = await driver.elementByXPath("//*[@scrollable='true']");
@@ -104,12 +106,16 @@ describe('apidemo - touch', function () {
       await driver.performTouchAction(action);
       // verify the element no longer exists
       await assertElementPresent(driver, false, cheeseForScroll);
+      console.log("--- SCREENSHOT 2 ---");
+      console.log(await driver.takeScreenshot());
       // finally, use scrollBackTo to intelligently scroll back to a point
       // where the element is visible, and verify the result
       let isFound = await driver.execute("mobile: scrollBackTo", {
         elementId: scrollableContainer.value,
         elementToId: scrollToEl.value,
       });
+      console.log("--- SCREENSHOT 3 ---");
+      console.log(await driver.takeScreenshot());
       isFound.should.be.true;
       await assertElementPresent(driver, true, cheeseForScroll);
     });

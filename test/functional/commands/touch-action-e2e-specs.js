@@ -3,6 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import wd from 'wd';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
+import { isArmEmu } from '../helpers/helpers';
 
 
 chai.should();
@@ -77,19 +78,24 @@ describe('apidemo - touch', function () {
 
   describe('mobile: scrollBackTo', function () {
     let driver;
-    before(async () => {
+    before(async function () {
+      if (await isArmEmu()) {
+        // arm emulators are too slow and android's scrollToBeginning is broken
+        // on them for some reason
+        this.skip();
+      }
       driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.List1',
       }));
     });
     after(async () => {
-      await driver.quit();
+      if (driver) {
+        await driver.quit();
+      }
     });
 
     it('should scroll to an element', async () => {
-      console.log("--- SCREENSHOT 1 ---");
-      console.log(await driver.takeScreenshot());
       const cheeseForScroll = 'Abertam';
       // first find the scrolling container
       let scrollableContainer = await driver.elementByXPath("//*[@scrollable='true']");
@@ -106,16 +112,12 @@ describe('apidemo - touch', function () {
       await driver.performTouchAction(action);
       // verify the element no longer exists
       await assertElementPresent(driver, false, cheeseForScroll);
-      console.log("--- SCREENSHOT 2 ---");
-      console.log(await driver.takeScreenshot());
       // finally, use scrollBackTo to intelligently scroll back to a point
       // where the element is visible, and verify the result
       let isFound = await driver.execute("mobile: scrollBackTo", {
         elementId: scrollableContainer.value,
         elementToId: scrollToEl.value,
       });
-      console.log("--- SCREENSHOT 3 ---");
-      console.log(await driver.takeScreenshot());
       isFound.should.be.true;
       await assertElementPresent(driver, true, cheeseForScroll);
     });

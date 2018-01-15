@@ -80,8 +80,9 @@ describe('apidemo - touch', function () {
     let driver;
     before(async function () {
       if (await isArmEmu()) {
-        // arm emulators are too slow and android's scrollToBeginning is broken
-        // on them for some reason
+        // on slower emus like arm emus, this test fails due to
+        // https://github.com/appium/appium/issues/9328, so quarantine until
+        // that is fixed
         this.skip();
       }
       driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {

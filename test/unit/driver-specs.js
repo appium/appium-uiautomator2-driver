@@ -9,6 +9,10 @@ import B from 'bluebird';
 chai.should();
 chai.use(chaiAsPromised);
 
+function defaultStub (driver) {
+  sinon.stub(driver, 'fillDeviceDetails');
+}
+
 describe('driver.js', () => {
   describe('constructor', () => {
     it('calls BaseDriver constructor with opts', () => {
@@ -21,11 +25,13 @@ describe('driver.js', () => {
   describe('createSession', () => {
     it('should throw an error if app can not be found', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       await driver.createSession({app: 'foo.apk'}).should.be.rejectedWith('does not exist or is not accessible');
     });
 
     it('should set sessionId', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       sinon.mock(driver).expects('checkAppPresent')
           .once()
           .returns(B.resolve());
@@ -40,6 +46,7 @@ describe('driver.js', () => {
 
     it('should set the default context', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       sinon.mock(driver).expects('checkAppPresent')
           .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
@@ -52,6 +59,7 @@ describe('driver.js', () => {
   describe('checkAppPresent', async () => {
     it('should resolve if app present', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       let app = path.resolve('.');
       sinon.mock(driver).expects('startUiAutomator2Session')
           .returns(B.resolve());
@@ -69,6 +77,7 @@ describe('driver.js', () => {
 
     it('should reject if app not present', async () => {
       let driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       let app = path.resolve('asdfasdf');
       sinon.mock(driver).expects('checkAppPresent')
           .returns(B.resolve());
@@ -88,6 +97,7 @@ describe('driver.js', () => {
     let driver;
     before(() => {
       driver = new AndroidUiautomator2Driver({}, false);
+      defaultStub(driver);
       driver.sessionId = 'abc';
     });
     describe('#proxyActive', () => {
@@ -123,6 +133,7 @@ describe('driver.js', () => {
         let nativeWebScreenshotFilter = item => item[0] === "GET" && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
+          defaultStub(driver);
           sinon.mock(driver).expects('checkAppPresent')
               .once()
               .returns(B.resolve());
@@ -179,4 +190,32 @@ describe('driver.js', () => {
       });
     });
   });
+
+  describe('magic first visible child xpath', () => {
+    let driver = new AndroidUiautomator2Driver({}, false);
+    it('should trap and proxy to special uia2 server endpoint', async () => {
+      defaultStub(driver);
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      await driver.doFindElementOrEls({strategy: 'xpath', selector: '/*[@firstVisible="true"]', context: 'foo'});
+      proxySpy.firstCall.args.should.eql([`/appium/element/foo/first_visible`, 'GET', {}]);
+    });
+  });
+
+  describe('magic scrollable view xpath', () => {
+    let driver = new AndroidUiautomator2Driver({}, false);
+    it('should trap and rewrite as uiautomator locator', async () => {
+      defaultStub(driver);
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      await driver.doFindElementOrEls({strategy: 'xpath', selector: '//*[@scrollable="true"]', context: 'foo'});
+      proxySpy.firstCall.args.should.eql(['/element', 'POST', {
+        context: 'foo',
+        strategy: '-android uiautomator',
+        selector: 'new UiSelector().scrollable(true)',
+      }]);
+    });
+  });
+
+
 });

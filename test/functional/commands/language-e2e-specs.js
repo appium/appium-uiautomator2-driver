@@ -40,7 +40,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
     }
   });
 
-  it('should start as FR', async () => {
+  it('should start as FR', async function () {
     let frCaps = Object.assign({}, APIDEMOS_CAPS, {
       language: 'fr',
       locale: 'FR',
@@ -48,7 +48,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
     driver = await initDriver(frCaps);
     await getLocale(driver.adb).should.eventually.equal('fr-FR');
   });
-  it('should start as US', async () => {
+  it('should start as US', async function () {
     let usCaps = Object.assign({}, APIDEMOS_CAPS, {
       language: 'en',
       locale: 'US',

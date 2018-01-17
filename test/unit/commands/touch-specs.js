@@ -7,14 +7,14 @@ import ADB from 'appium-adb';
 chai.should();
 chai.use(chaiAsPromised);
 
-describe('Touch', () => {
+describe('Touch', function () {
   let adb = new ADB();
   let driver = new AndroidUiautomator2Driver();
   driver.adb = adb;
 
-  describe('#parseTouch', () => {
-    describe('given a touch sequence with absolute coordinates', () => {
-      it('should use offsets for moveTo', async () => {
+  describe('#parseTouch', function () {
+    describe('given a touch sequence with absolute coordinates', function () {
+      it('should use offsets for moveTo', async function () {
         // let driver = new AndroidDriver({foo: 'bar'});
         let actions = [
           {action: 'press', options: {x: 100, y: 101}},

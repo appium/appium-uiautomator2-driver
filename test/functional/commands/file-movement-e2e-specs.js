@@ -13,10 +13,10 @@ chai.use(chaiAsPromised);
 
 describe('file movement', function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
 
@@ -24,7 +24,7 @@ describe('file movement', function () {
     return `/data/local/tmp/test${Math.random()}`;
   }
 
-  it('should push and pull a file', async () => {
+  it('should push and pull a file', async function () {
     let stringData = `random string data ${Math.random()}`;
     let base64Data = new Buffer(stringData).toString('base64');
     let remotePath = `${getRandomDir()}/remote.txt`;
@@ -37,7 +37,7 @@ describe('file movement', function () {
     remoteData.should.equal(stringData);
   });
 
-  it('should pull a folder', async () => {
+  it('should pull a folder', async function () {
     let stringData = `random string data ${Math.random()}`;
     let base64Data = new Buffer(stringData).toString('base64');
 

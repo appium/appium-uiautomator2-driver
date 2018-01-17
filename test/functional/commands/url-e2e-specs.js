@@ -16,7 +16,7 @@ describe('setUrl @skip-ci', function () {
     }
     driver = await initDriver(caps);
   });
-  after(async () => {
+  after(async function () {
     if (driver) {
       await driver.quit();
     }

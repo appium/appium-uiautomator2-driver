@@ -12,18 +12,18 @@ const alv = 'android.widget.ListView';
 
 describe('Find - from element', function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
-  it('should find a single element by tag name', async () => {
+  it('should find a single element by tag name', async function () {
     let el = await driver.elementByClassName(alv);
     let innerEl = await el.elementByClassName(atv);
     await innerEl.text().should.eventually.equal("Access'ibility");
   });
-  it('should find multiple elements by tag name', async () => {
+  it('should find multiple elements by tag name', async function () {
     let el = await driver.elementByClassName(alv);
     let innerEls = await el.elementsByClassName(atv);
     await innerEls.should.have.length.above(9);

@@ -9,17 +9,17 @@ chai.use(chaiAsPromised);
 describe('general', function () {
 
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
-  after(async () => {
+  after(async function () {
     if (driver) {
       await driver.quit();
     }
   });
 
   describe('startActivity', function () {
-    it('should launch a new package and activity', async () => {
+    it('should launch a new package and activity', async function () {
       let appPackage =  await driver.getCurrentPackage();
       let appActivity =  await driver.getCurrentActivity();
       appPackage.should.equal('io.appium.android.apis');
@@ -35,7 +35,7 @@ describe('general', function () {
       newAppPackage.should.equal(startAppPackage);
       newAppActivity.should.equal(startAppActivity);
     });
-    it('should be able to launch activity with custom intent parameter category', async () => {
+    it('should be able to launch activity with custom intent parameter category', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       let startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
@@ -45,7 +45,7 @@ describe('general', function () {
       let appActivity =  await driver.getCurrentActivity();
       appActivity.should.include('HelloWorld');
     });
-    it('should be able to launch activity with dontStopAppOnReset = true', async () => {
+    it('should be able to launch activity with dontStopAppOnReset = true', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
@@ -55,7 +55,7 @@ describe('general', function () {
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
     });
-    it('should be able to launch activity with dontStopAppOnReset = false', async () => {
+    it('should be able to launch activity with dontStopAppOnReset = false', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});

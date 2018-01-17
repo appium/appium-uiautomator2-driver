@@ -16,13 +16,13 @@ const caps = _.defaults({
 
 describe('apidemo - context', function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(caps);
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
-  it('should find webview context', async () => {
+  it('should find webview context', async function () {
     let contexts = await driver.contexts();
     contexts.length.should.be.at.least(2);
 

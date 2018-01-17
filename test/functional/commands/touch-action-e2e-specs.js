@@ -19,17 +19,17 @@ describe('apidemo - touch', function () {
 
   describe('multi-actions', function () {
     let driver;
-    before(async () => {
+    before(async function () {
       driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
       }));
     });
-    after(async () => {
+    after(async function () {
       await driver.quit();
     });
 
-    it('should scroll two different lists', async () => {
+    it('should scroll two different lists', async function () {
       let [leftEl, rightEl] = await driver.elementsByClassName('android.widget.ListView');
 
       const leftGesture = new wd.TouchAction()
@@ -53,17 +53,17 @@ describe('apidemo - touch', function () {
 
   describe('swipe-action', function () {
     let driver;
-    before(async () => {
+    before(async function () {
       driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.List1',
       }));
     });
-    after(async () => {
+    after(async function () {
       await driver.quit();
     });
 
-    it('should swipe', async () => {
+    it('should swipe', async function () {
       await assertElementPresent(driver, true);
       const action = new wd.TouchAction();
       let el = await driver.elementByXPath("//*[@text='Abertam']");
@@ -90,13 +90,13 @@ describe('apidemo - touch', function () {
         appActivity: '.view.List1',
       }));
     });
-    after(async () => {
+    after(async function () {
       if (driver) {
         await driver.quit();
       }
     });
 
-    it('should scroll to an element', async () => {
+    it('should scroll to an element', async function () {
       const cheeseForScroll = 'Abertam';
       // first find the scrolling container
       let scrollableContainer = await driver.elementByXPath("//*[@scrollable='true']");

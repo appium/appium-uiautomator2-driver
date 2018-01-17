@@ -32,14 +32,14 @@ describe('createSession', function () {
       driver = null;
     });
 
-    it('should start android session focusing on default pkg and act', async () => {
+    it('should start android session focusing on default pkg and act', async function () {
       driver = await initDriver(APIDEMOS_CAPS);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
     });
-    it('should start android session focusing on custom pkg and act', async () => {
+    it('should start android session focusing on custom pkg and act', async function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
@@ -50,7 +50,7 @@ describe('createSession', function () {
       appPackage.should.equal(caps.appPackage);
       appActivity.should.equal(caps.appActivity);
     });
-    it('should error out for not apk extension', async () => {
+    it('should error out for not apk extension', async function () {
       // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
       if (process.env.TESTOBJECT_E2E_TESTS) {
         return;
@@ -67,7 +67,7 @@ describe('createSession', function () {
         e.data.should.match(/does not exist or is not accessible/);
       }
     });
-    it('should error out for invalid app path', async () => {
+    it('should error out for invalid app path', async function () {
       // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
       if (process.env.TESTOBJECT_E2E_TESTS) {
         return;
@@ -85,7 +85,7 @@ describe('createSession', function () {
         e.data.should.match(/does not exist or is not accessible/);
       }
     });
-    it('should get device model, manufacturer and screen size in session details', async () => {
+    it('should get device model, manufacturer and screen size in session details', async function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
@@ -118,7 +118,7 @@ describe('createSession', function () {
       await killServer(adbPort);
     });
 
-    it('should start android session with a custom adb port', async () => {
+    it('should start android session with a custom adb port', async function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
       });
@@ -149,7 +149,7 @@ describe('createSession', function () {
 });
 
 describe('close', function () {
-  it('should close application', async () => {
+  it('should close application', async function () {
     let driver = await initDriver(APIDEMOS_CAPS);
     await driver.closeApp();
     let appPackage = await driver.getCurrentPackage();

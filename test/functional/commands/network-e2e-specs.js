@@ -9,10 +9,10 @@ chai.use(chaiAsPromised);
 
 describe('wifi @skip-ci', function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
   it.skip('should enable WIFI', async () => {

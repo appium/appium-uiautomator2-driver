@@ -8,13 +8,13 @@ chai.use(chaiAsPromised);
 
 describe('mobile: shell', function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
-  it('should call execute command without proxy error, but require relaxed security flag', async () => {
+  it('should call execute command without proxy error, but require relaxed security flag', async function () {
     try {
       await driver.execute('mobile: shell', {command: 'echo', args: ['hello']});
     } catch (e) {

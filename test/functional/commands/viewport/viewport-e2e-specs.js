@@ -11,16 +11,16 @@ chai.use(chaiAsPromised);
 let driver;
 
 describe('testViewportCommands', function () {
-  before(async () => {
+  before(async function () {
     driver = await initDriver(SCROLL_CAPS);
   });
-  after(async () => {
+  after(async function () {
     if (driver) {
       await driver.quit();
     }
   });
 
-  it('should get device pixel ratio, status bar height, and viewport rect', async () => {
+  it('should get device pixel ratio, status bar height, and viewport rect', async function () {
     const {viewportRect, statBarHeight, pixelRatio} = await driver.sessionCapabilities();
     pixelRatio.should.exist;
     pixelRatio.should.not.equal(0);
@@ -33,32 +33,32 @@ describe('testViewportCommands', function () {
     viewportRect.height.should.exist;
   });
 
-  it('should get scrollable element', async () => {
+  it('should get scrollable element', async function () {
     let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
     scrollableEl.should.exist;
   });
 
-  it('should get content size from scrollable element found as uiobject', async () => {
+  it('should get content size from scrollable element found as uiobject', async function () {
     let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
     let contentSize = await scrollableEl.getAttribute("contentSize");
     contentSize.should.exist;
     JSON.parse(contentSize).scrollableOffset.should.exist;
   });
 
-  it('should get content size from scrollable element found as uiobject2', async () => {
+  it('should get content size from scrollable element found as uiobject2', async function () {
     let scrollableEl = await driver.elementByXPath('//android.widget.ScrollView');
     let contentSize = await scrollableEl.getAttribute("contentSize");
     contentSize.should.exist;
     JSON.parse(contentSize).scrollableOffset.should.exist;
   });
 
-  it('should get first element from scrollable element', async () => {
+  it('should get first element from scrollable element', async function () {
     let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
     let element = await scrollableEl.elementByXPath('/*[@firstVisible="true"]');
     element.should.exist;
   });
 
-  it('should get a cropped screenshot of the viewport without statusbar', async () => {
+  it('should get a cropped screenshot of the viewport without statusbar', async function () {
     const {viewportRect, statBarHeight} = await driver.sessionCapabilities();
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute("mobile: viewportScreenshot");

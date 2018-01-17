@@ -10,14 +10,14 @@ chai.use(chaiAsPromised);
 
 describe("geo-location", function () {
   let driver;
-  before(async () => {
+  before(async function () {
     driver = await initDriver(GPS_DEMO_CAPS);
   });
-  after(async () => {
+  after(async function () {
     await driver.quit();
   });
 
-  it('should set geo location', async () => {
+  it('should set geo location', async function () {
     let getText = async () => {
       const textViews = await driver.elementsByClassName('android.widget.TextView');
       return await textViews[1].text();

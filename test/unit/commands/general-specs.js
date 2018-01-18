@@ -8,16 +8,16 @@ let sandbox = sinon.sandbox.create();
 chai.should();
 chai.use(chaiAsPromised);
 
-describe('General', () => {
-  describe('getWindowRect', () => {
-    beforeEach(async () => {
+describe('General', function () {
+  describe('getWindowRect', function () {
+    beforeEach(async function () {
       driver = new AndroidUiautomator2Driver();
     });
-    afterEach(() => {
+    afterEach(function () {
       sandbox.restore();
     });
 
-    it('should get window size', async () => {
+    it('should get window size', async function () {
       sandbox.stub(driver, 'getWindowSize')
           .withArgs().returns({width: 300, height: 400});
       const result = await driver.getWindowRect();

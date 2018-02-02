@@ -113,7 +113,9 @@ describe('createSession', function () {
       await killServer(5037);
     });
     afterEach(async function () {
-      await driver.quit();
+      if (driver) {
+        await driver.quit();
+      }
 
       await killServer(adbPort);
     });

@@ -14,7 +14,7 @@ describe('Touch', function () {
 
   describe('#parseTouch', function () {
     describe('given a touch sequence with absolute coordinates', function () {
-      it('should use offsets for moveTo', async function () {
+      it('should use absolutes for moveTo', async function () {
         // let driver = new AndroidDriver({foo: 'bar'});
         let actions = [
           {action: 'press', options: {x: 100, y: 101}},

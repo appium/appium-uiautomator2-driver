@@ -132,7 +132,7 @@ let languageTests = [
   { label: 'should be able to send Hebrew', text: 'בדיקות' },
 ];
 
-describe('keyboard', function () {
+describe.only('keyboard', function () { // eslint-disable-line
   describe('ascii', function () {
     let driver;
     before(async function () {
@@ -151,6 +151,11 @@ describe('keyboard', function () {
     });
     after(async function () {
       await driver.quit();
+    });
+
+    beforeEach(async function () {
+      let src = await driver.source();
+      console.log(src); // eslint-disable-line
     });
 
 

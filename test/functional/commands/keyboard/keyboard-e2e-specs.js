@@ -152,6 +152,12 @@ describe('keyboard', function () {
     after(async function () {
       await driver.quit();
     });
+    beforeEach(async function () {
+      if (process.env.CI) {
+        // pause a moment to let things settle
+        await B.delay(1000);
+      }
+    });
 
     describe('editing a text field', function () {
       for (let test of tests) {

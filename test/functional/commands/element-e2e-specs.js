@@ -3,6 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { APIDEMOS_CAPS } from '../desired';
 import { initDriver } from '../helpers/session';
+import { retryInterval } from 'asyncbox';
 
 
 chai.should();
@@ -13,7 +14,11 @@ describe('element', function () {
   let el;
   before(async function () {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
-    el = _.last(await driver.elementsByClassName('android.widget.EditText'));
+    el = await retryInterval(5, 1000, async function () {
+      const els = await driver.elementsByClassName('android.widget.EditText');
+      els.should.have.length.at.least(1);
+      _.last(els);
+    });
   });
   after(async function () {
     await driver.quit();

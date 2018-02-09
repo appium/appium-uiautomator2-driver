@@ -19,8 +19,11 @@ describe("geo-location", function () {
 
   it('should set geo location', async function () {
     let getText = async () => {
-      const textViews = await driver.elementsByClassName('android.widget.TextView');
-      return await textViews[1].text();
+      return await retryInterval(5, 1000, async function () {
+        const textViews = await driver.elementsByClassName('android.widget.TextView');
+        textViews.length.should.be.at.least(2);
+        return await textViews[1].text();
+      });
     };
 
     let latitude = '27.17';

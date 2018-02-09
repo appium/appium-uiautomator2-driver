@@ -156,6 +156,7 @@ describe('keyboard', function () {
       if (process.env.CI) {
         // pause a moment to let things settle
         await B.delay(1000);
+        console.log(await driver.source()); // eslint-disable-line
       }
     });
 

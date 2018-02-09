@@ -12,7 +12,7 @@ let animationEl;
 describe('apidemo - attributes', function () {
   before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
-    animationEl = await driver.elementByAccessibilityId('Animation');
+    animationEl = await driver.waitForElementByAccessibilityId('Animation');
   });
   after(async function () {
     await driver.quit();

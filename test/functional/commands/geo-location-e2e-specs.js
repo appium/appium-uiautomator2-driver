@@ -20,6 +20,9 @@ describe("geo-location", function () {
   it('should set geo location', async function () {
     let getText = async () => {
       return await retryInterval(5, 1000, async function () {
+        let appPackage = await driver.getCurrentPackage();
+        let appActivity = await driver.getCurrentActivity();
+        console.log('\n\n\nCURRENT:', appPackage, appActivity); // eslint-disable-line
         const textViews = await driver.elementsByClassName('android.widget.TextView');
         textViews.length.should.be.at.least(2);
         return await textViews[1].text();

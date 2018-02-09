@@ -15,6 +15,9 @@ describe('element', function () {
   before(async function () {
     driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
     el = await retryInterval(5, 1000, async function () {
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentActivity();
+      console.log('\n\n\nCURRENT:', appPackage, appActivity); // eslint-disable-line
       const els = await driver.elementsByClassName('android.widget.EditText');
       els.should.have.length.at.least(1);
       return _.last(els);

@@ -27,10 +27,12 @@ const SCROLL_CAPS = _.defaults({
 
 const GPS_DEMO_CAPS = _.defaults({
   app: require.resolve('gps-demo-app'),
+  appPackage: 'de.impressive.artworx.tutorials.gps',
+  appActivity: '.GPSTest',
 }, GENERIC_CAPS);
 
 const BROWSER_CAPS = _.defaults({
-  browserName: 'Chrome'
+  browserName: 'Chrome',
 }, GENERIC_CAPS);
 
 export { GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS, SCROLL_CAPS };

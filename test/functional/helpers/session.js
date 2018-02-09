@@ -24,7 +24,7 @@ async function initDriver (caps, adbPort) {
     let appPackage = await driver.getCurrentPackage();
     let appActivity = await driver.getCurrentActivity();
     appPackage.should.eql(caps.appPackage);
-    appActivity.should.eql(caps.appActivity);
+    appActivity.should.include(caps.appActivity);
   });
   return driver;
 }

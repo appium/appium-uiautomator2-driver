@@ -155,8 +155,10 @@ describe('keyboard', function () {
     beforeEach(async function () {
       if (process.env.CI) {
         // pause a moment to let things settle
-        await B.delay(1000);
-        console.log(await driver.source()); // eslint-disable-line
+        await retryInterval(5, 1000, async function () {
+          let els = await driver.elementsByClassName(EDITTEXT_CLASS);
+          els.should.have.length.at.least(1);
+        });
       }
     });
 
@@ -181,8 +183,10 @@ describe('keyboard', function () {
         let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
         await passwordTextField.sendKeys(password);
         await waitForText(passwordOutput, password);
-        await passwordTextField.clear();
-        await waitForText(passwordOutput, '');
+        await retryInterval(5, 1000, async function () {
+          await passwordTextField.clear();
+          await waitForText(passwordOutput, '');
+        });
       });
 
       it('should be able to type in length-limited field', async function () {

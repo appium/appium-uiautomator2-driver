@@ -26,10 +26,10 @@ env:
     - ANDROID_EMU_TARGET=android-21
     - ANDROID_EMU_ABI=armeabi-v7a
   matrix:
-    # - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
-    # - TEST=functional
+    - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
+    - TEST=functional
     - TEST=functional/commands
-    # - TEST=functional/commands/find
+    - TEST=functional/commands/find
     - TEST=functional/commands/keyboard
 before_script:
   # node stuff

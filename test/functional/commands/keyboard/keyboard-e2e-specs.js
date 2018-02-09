@@ -152,17 +152,19 @@ describe('keyboard', function () {
     after(async function () {
       await driver.quit();
     });
-    beforeEach(async function () {
-      if (process.env.CI) {
-        // pause a moment to let things settle
-        await retryInterval(5, 1000, async function () {
-          let els = await driver.elementsByClassName(EDITTEXT_CLASS);
-          els.should.have.length.at.least(1);
-        });
-      }
-    });
 
     describe('editing a text field', function () {
+      let els;
+      beforeEach(async function () {
+        if (process.env.CI) {
+          // pause a moment to let things settle
+          els = await retryInterval(5, 1000, async function () {
+            const els = await driver.elementsByClassName(EDITTEXT_CLASS);
+            els.should.have.length.at.least(1);
+            return els;
+          });
+        }
+      });
       for (let test of tests) {
         describe(test.label, function () {
           it('should work with setValue', async function () {
@@ -178,7 +180,6 @@ describe('keyboard', function () {
         // there is currently no way to directly assert anything about the contents
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';
-        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let passwordTextField = els[1];
         let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
         await passwordTextField.sendKeys(password);
@@ -199,7 +200,6 @@ describe('keyboard', function () {
             return this.skip();
           }
         }
-        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 

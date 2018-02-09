@@ -9,15 +9,14 @@ import { retryInterval } from 'asyncbox';
 chai.should();
 chai.use(chaiAsPromised);
 
+const textFieldsActivity = '.view.TextFields';
+
 describe('element', function () {
   let driver;
   let el;
   before(async function () {
-    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
+    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {appActivity: textFieldsActivity}));
     el = await retryInterval(5, 1000, async function () {
-      let appPackage = await driver.getCurrentPackage();
-      let appActivity = await driver.getCurrentActivity();
-      console.log('\n\n\nCURRENT:', appPackage, appActivity); // eslint-disable-line
       const els = await driver.elementsByClassName('android.widget.EditText');
       els.should.have.length.at.least(1);
       return _.last(els);

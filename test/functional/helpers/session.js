@@ -2,6 +2,8 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
+import { retryInterval } from 'asyncbox';
+
 
 async function initDriver (caps, adbPort) {
   if (process.env.TRAVIS) {
@@ -17,6 +19,13 @@ async function initDriver (caps, adbPort) {
   logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
   let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
   await driver.init(caps);
+  // wait for the right activity
+  await retryInterval(10, 1000, async function () {
+    let appPackage = await driver.getCurrentPackage();
+    let appActivity = await driver.getCurrentActivity();
+    appPackage.should.eql(caps.appPackage);
+    appActivity.should.eql(caps.appActivity);
+  });
   return driver;
 }
 

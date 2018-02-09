@@ -17,7 +17,7 @@ describe('element', function () {
     el = await retryInterval(5, 1000, async function () {
       const els = await driver.elementsByClassName('android.widget.EditText');
       els.should.have.length.at.least(1);
-      _.last(els);
+      return _.last(els);
     });
   });
   after(async function () {

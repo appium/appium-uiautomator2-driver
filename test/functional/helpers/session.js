@@ -2,7 +2,7 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
-import { waitForCondition } from 'asyncbox';
+import { retryInterval } from 'asyncbox';
 
 
 async function initDriver (caps, adbPort) {
@@ -21,14 +21,11 @@ async function initDriver (caps, adbPort) {
   await driver.init(caps);
 
   // wait for the right activity
-  await waitForCondition(async function () {
+  await retryInterval(10, 1000, async function () {
     let appPackage = await driver.getCurrentPackage();
     let appActivity = await driver.getCurrentActivity();
     appPackage.should.eql(caps.appPackage);
     appActivity.should.include(caps.appActivity);
-  }, {
-    waitMs: 300000,
-    intervalMs: 500,
   });
 
   return driver;

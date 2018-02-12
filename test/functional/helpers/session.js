@@ -19,19 +19,12 @@ async function initDriver (caps, adbPort) {
   let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
   await driver.init(caps);
 
-  // // wait for the right activity
-  // await retryInterval(10, 1000, async function () {
-  //   let appPackage = await driver.getCurrentPackage();
-  //   let appActivity = await driver.getCurrentActivity();
-  //   appPackage.should.eql(caps.appPackage);
-  //   appActivity.should.include(caps.appActivity);
-  // });
-
   // In Travis, there is sometimes a popup
   if (process.env.CI) {
     try {
       const src = await driver.source();
       if (src.includes('Unfortunately, Calendar has stopped')) {
+        logger.warn('Calendar crashed. Trying to dismiss alert');
         const okBtn = await driver.elementById('android:id/button1');
         await okBtn.click();
         await driver.startActivity(caps);

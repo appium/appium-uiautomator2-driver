@@ -16,7 +16,7 @@ describe('Find - accessibility ID', function () {
     await driver.quit();
   });
   it('should find an element by name', async function () {
-    console.log(await driver.souce()); // eslint-disable-line
+    console.log(await driver.source()); // eslint-disable-line
     await driver.elementByAccessibilityId('Animation').should.eventually.exist;
   });
   it('should return an array of one element if the `multi` param is true', async function () {

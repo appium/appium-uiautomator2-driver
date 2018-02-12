@@ -28,7 +28,7 @@
   "dependencies": {
     "adbkit": "^2.4.1",
     "appium-adb": "^6.0.1",
-    "appium-android-driver": "^1.40.0",
+    "appium-android-driver": "^2.0.0",
     "appium-base-driver": "^2.18.4",
     "appium-support": "^2.12.0",
     "appium-uiautomator2-server": "1.x",
@@ -47,6 +47,7 @@
   "scripts": {
     "prepublish": "rimraf build && gulp prepublish",
     "transpile": "gulp transpile",
+    "clean": "rm -rf node_modules && rm package-lock.json && npm install",
     "build": "gulp transpile",
     "test": "gulp once",
     "e2e-test": "gulp e2e-test",

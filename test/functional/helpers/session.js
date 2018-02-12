@@ -3,6 +3,7 @@ import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
 
+
 async function initDriver (caps, adbPort) {
   if (process.env.TRAVIS) {
     let adb = await ADB.createADB({adbPort});
@@ -17,6 +18,22 @@ async function initDriver (caps, adbPort) {
   logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
   let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
   await driver.init(caps);
+
+  // In Travis, there is sometimes a popup
+  if (process.env.CI) {
+    try {
+      const src = await driver.source();
+      if (src.includes('Unfortunately, Calendar has stopped')) {
+        logger.warn('Calendar crashed. Trying to dismiss alert');
+        const okBtn = await driver.elementById('android:id/button1');
+        await okBtn.click();
+        await driver.startActivity(caps);
+      }
+    } catch (err) {
+      logger.error(`TEST RUN ERROR: ${err.message}`);
+    }
+  }
+
   return driver;
 }
 

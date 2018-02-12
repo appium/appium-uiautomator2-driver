@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { APIDEMOS_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);

@@ -15,22 +15,24 @@ const GENERIC_CAPS = {
 const APIDEMOS_CAPS = _.defaults({
   app: require.resolve('android-apidemos'),
   appPackage: 'io.appium.android.apis',
-  appActivity: 'io.appium.android.apis.ApiDemos',
+  appActivity: '.ApiDemos',
   disableWindowAnimation: true,
 }, GENERIC_CAPS);
 
 const SCROLL_CAPS = _.defaults({
   app: require.resolve('android-apidemos'),
   appPackage: 'io.appium.android.apis',
-  appActivity: 'io.appium.android.apis.view.ScrollView2',
+  appActivity: '.view.ScrollView2',
 }, GENERIC_CAPS);
 
 const GPS_DEMO_CAPS = _.defaults({
   app: require.resolve('gps-demo-app'),
+  appPackage: 'de.impressive.artworx.tutorials.gps',
+  appActivity: '.GPSTest',
 }, GENERIC_CAPS);
 
 const BROWSER_CAPS = _.defaults({
-  browserName: 'Chrome'
+  browserName: 'Chrome',
 }, GENERIC_CAPS);
 
 export { GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS, SCROLL_CAPS };

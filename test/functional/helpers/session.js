@@ -28,6 +28,9 @@ async function initDriver (caps, adbPort) {
     appActivity.should.include(caps.appActivity);
   });
 
+  const src = await driver.source();
+  console.log(src); // eslint-disable-line
+
   return driver;
 }
 

@@ -2,8 +2,6 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
-import { retryInterval } from 'asyncbox';
-import B from 'bluebird';
 
 
 async function initDriver (caps, adbPort) {
@@ -21,17 +19,26 @@ async function initDriver (caps, adbPort) {
   let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
   await driver.init(caps);
 
-  // wait for the right activity
-  await retryInterval(10, 1000, async function () {
-    let appPackage = await driver.getCurrentPackage();
-    let appActivity = await driver.getCurrentActivity();
-    appPackage.should.eql(caps.appPackage);
-    appActivity.should.include(caps.appActivity);
-  });
+  // // wait for the right activity
+  // await retryInterval(10, 1000, async function () {
+  //   let appPackage = await driver.getCurrentPackage();
+  //   let appActivity = await driver.getCurrentActivity();
+  //   appPackage.should.eql(caps.appPackage);
+  //   appActivity.should.include(caps.appActivity);
+  // });
 
-  // Travis gets ahead of itself and the slow ARM emus sometimes
+  // In Travis, there is sometimes a popup
   if (process.env.CI) {
-    await B.delay(2000);
+    try {
+      const src = await driver.source();
+      if (src.includes('Unfortunately, Calendar has stopped')) {
+        const okBtn = await driver.elementById('android:id/button1');
+        await okBtn.click();
+        await driver.startActivity(caps);
+      }
+    } catch (err) {
+      logger.error(`TEST RUN ERROR: ${err.message}`);
+    }
   }
 
   return driver;

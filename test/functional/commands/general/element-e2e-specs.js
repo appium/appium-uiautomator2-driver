@@ -1,8 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import { APIDEMOS_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 import { retryInterval } from 'asyncbox';
 
 

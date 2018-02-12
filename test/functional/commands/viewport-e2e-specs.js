@@ -2,8 +2,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { PNG } from 'pngjs';
-import { SCROLL_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { SCROLL_CAPS } from '../desired';
+import { initDriver } from '../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);

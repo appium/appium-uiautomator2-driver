@@ -31,6 +31,7 @@ env:
     - TEST=functional/commands
     - TEST=functional/commands/find
     - TEST=functional/commands/keyboard
+    - TEST=functional/commands/general
 before_script:
   # node stuff
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash

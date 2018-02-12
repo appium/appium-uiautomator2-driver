@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { BROWSER_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { BROWSER_CAPS } from '../../desired';
+import { initDriver } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);

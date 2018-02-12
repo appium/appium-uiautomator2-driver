@@ -1,10 +1,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
-import { initDriver } from '../../helpers/session';
-import { APIDEMOS_CAPS } from '../../desired';
+import { initDriver } from '../helpers/session';
+import { APIDEMOS_CAPS } from '../desired';
 import { androidHelpers } from 'appium-android-driver';
-import { getLocale } from '../../helpers/helpers';
+import { getLocale } from '../helpers/helpers';
 
 
 chai.should();

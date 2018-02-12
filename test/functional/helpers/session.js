@@ -3,6 +3,7 @@ import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
 import { retryInterval } from 'asyncbox';
+import B from 'bluebird';
 
 
 async function initDriver (caps, adbPort) {
@@ -28,8 +29,10 @@ async function initDriver (caps, adbPort) {
     appActivity.should.include(caps.appActivity);
   });
 
-  const src = await driver.source();
-  console.log(src); // eslint-disable-line
+  // Travis gets ahead of itself and the slow ARM emus sometimes
+  if (process.env.CI) {
+    await B.delay(2000);
+  }
 
   return driver;
 }

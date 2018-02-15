@@ -11,7 +11,7 @@ describe('Find - uiautomator', function () {
   let driver;
   before(async function () {
     driver = await initDriver(APIDEMOS_CAPS);
-    await driver.updateSettings({'enableNotificationListener': false})
+    await driver.updateSettings({'enableNotificationListener': false});
     await driver.setImplicitWaitTimeout(20000);
   });
   after(async function () {

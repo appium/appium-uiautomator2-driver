@@ -23,6 +23,7 @@ async function initDriver (caps, adbPort) {
   if (process.env.CI) {
     try {
       const src = await driver.source();
+      console.log('Source:', src); // eslint-disable-line
       if (src.includes('Unfortunately, Calendar has stopped')) {
         logger.warn('Calendar crashed. Trying to dismiss alert');
         const okBtn = await driver.elementById('android:id/button1');

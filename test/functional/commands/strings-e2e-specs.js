@@ -31,12 +31,12 @@ describe('strings', function () {
 
     it('should return app strings', async function () {
       let strings = await driver.getAppStrings('en');
-      strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
+      strings.hello_world.should.equal('Hello, World!');
     });
 
     it('should return app strings for different language', async function () {
       let strings = await driver.getAppStrings('fr');
-      strings.hello_world.should.equal('<b>Bonjour, <i>Monde!</i></b>');
+      strings.hello_world.should.equal('Bonjour, Monde!');
     });
   });
 
@@ -69,7 +69,7 @@ describe('strings', function () {
       driver = await initDriver(APIDEMOS_CAPS);
 
       let strings = await driver.getAppStrings();
-      strings.hello_world.should.equal('<b>Hello, <i>World!</i></b>');
+      strings.hello_world.should.equal('Hello, World!');
     });
     it('should return app strings when language/locale set @skip-ci', async function () {
       if (process.env.TESTOBJECT_E2E_TESTS) {
@@ -81,7 +81,7 @@ describe('strings', function () {
       }, APIDEMOS_CAPS));
 
       let strings = await driver.getAppStrings();
-      strings.hello_world.should.equal('<b>Bonjour, <i>Monde!</i></b>');
+      strings.hello_world.should.equal('Bonjour, Monde!');
     });
   });
 });

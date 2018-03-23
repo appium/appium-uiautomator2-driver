@@ -36,17 +36,18 @@ describe('mobile', function () {
     it('should be able to launch apps using Instant Apps', async function () {
       try {
         await driver.execute("mobile: deepLink", {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
-
-        // Check that the source has the package name somewhere
-        await driver.source().should.eventually.match(/com\.move\.realtor/);
-
-        // Check that we can find a native element and interact with it
-        const btn = await driver.elementsByXPath('//android.widget.Button');
-        btn.length.should.be.above(0);
-        await btn[0].click();
       } catch (e) {
         e.message.should.match(/unable to resolve intent/i);
+        return;
       }
+
+      // Check that the source has the package name somewhere
+      await driver.source().should.eventually.match(/com\.move\.realtor/);
+
+      // Check that we can find a native element and interact with it
+      const btn = await driver.elementsByXPath('//android.widget.Button');
+      btn.length.should.be.above(0);
+      await btn[0].click();
     });
   });
 });

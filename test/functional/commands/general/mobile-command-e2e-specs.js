@@ -37,6 +37,9 @@ describe('mobile', function () {
       try {
         await driver.execute("mobile: deepLink", {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
       } catch (e) {
+        // Note: Currently no emulators have this feature enabled so for this test to make it past this try-catch
+        // block it has to be run on a local emulator/device that has Instant Apps enabled
+        // (https://developer.android.com/topic/instant-apps/getting-started/setup.html)
         e.message.should.match(/unable to resolve intent/i);
         return;
       }

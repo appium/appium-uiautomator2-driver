@@ -26,8 +26,8 @@ describe('geo-location -', function () {
       });
     };
 
-    let latitude = '27.17';
-    let longitude = '78.04';
+    let latitude = '27.1';
+    let longitude = '78.0';
 
     let text = await getText();
     text.should.not.include(`Latitude: ${latitude}`);

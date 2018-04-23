@@ -28,6 +28,7 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
   after(async function () {
     await disableTestObject(wdObject);
   });
+} else if (process.env.SAUCE_LABS) {
 
 } else {
   before(async function () {

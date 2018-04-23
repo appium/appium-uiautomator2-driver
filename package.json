@@ -35,6 +35,7 @@
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
     "bluebird": "^2.10.2",
+    "jest-codemods": "^0.13.9",
     "lodash": "^4.17.4",
     "portscanner": "2.1.1",
     "request": "^2.81.0",
@@ -62,7 +63,10 @@
     "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/find/*-specs.js",
     "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/keyboard/*-specs.js",
     "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/*-specs.js",
-    "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
+    "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e",
+    "sauce1": "export PLATFORM_VERSION=7.1 DEVICE_NAME=\"Samsung Galaxy S6 GoogleAPI Emulator\" mocha --timeout 7000000 $TESTPATH",
+    "e2e:sauce:find": "export TESTPATH=build/test/functional/commands/find concurrently \"npm run sauce1\"",
+    "e2e:sauce": "export MOCHA_TIMEOUT=7000000 && export SAUCE_LABS=true && bash ./run-sauce.sh"
   },
   "pre-commit": [
     "precommit-msg",
@@ -75,6 +79,7 @@
     "babel-eslint": "^7.1.1",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
+    "concurrently": "^3.5.1",
     "eslint": "^3.10.2",
     "eslint-config-appium": "^2.1.0",
     "eslint-plugin-babel": "^3.3.0",
@@ -83,6 +88,7 @@
     "eslint-plugin-promise": "^3.3.1",
     "gps-demo-app": "^1.0.0",
     "gulp": "^3.9.0",
+    "mocha-parallel-tests": "^2.0.0-alpha.2",
     "pngjs": "^3.3.1",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.1",

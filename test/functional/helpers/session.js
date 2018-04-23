@@ -15,8 +15,14 @@ async function initDriver (caps, adbPort) {
   }
 
   // Create a WD driver
-  logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
-  let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
+  let driver;
+  if (process.env.SAUCE_LABS) {
+    logger.debug(`Starting session on ondemand.saucelabs.com`);
+    driver = await wd.promiseChainRemote(`http://${process.env.SAUCE_USERNAME}:${process.env.SAUCE_ACCESS_KEY}@ondemand.saucelabs.com/wd/hub`);
+  } else {
+    logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
+    driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
+  }
   await driver.init(caps);
 
   // In Travis, there is sometimes a popup

@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import AndroidUiautomator2Driver from '../../..';
 
 let driver;
-let sandbox = sinon.sandbox.create();
+let sandbox = sinon.createSandbox();
 chai.should();
 chai.use(chaiAsPromised);
 

@@ -49,11 +49,11 @@ before_script:
   # for chromedriver
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
   - sudo apt-get update
-  - sudo apt-get install libstdc++6-4.7-dev  
+  - sudo apt-get install libstdc++6-4.7-dev
 
   # make sure emulator started
   - $(npm bin)/android-emu-travis-post
 script:
-  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
+  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit
 after_success:
   - if [ -n "$COVERALLS" ]; then _FORCE_LOGS=0 npm run coverage; fi

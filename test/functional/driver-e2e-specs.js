@@ -97,6 +97,7 @@ describe('createSession', function () {
       serverCaps.deviceScreenDensity.should.exist;
       serverCaps.deviceModel.should.exist;
       serverCaps.deviceManufacturer.should.exist;
+      serverCaps.deviceApiLevel.should.be.greaterThan(0);
     });
   });
 

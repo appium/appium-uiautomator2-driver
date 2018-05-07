@@ -53,4 +53,11 @@ describe('mobile', function () {
       await btn[0].click();
     });
   });
+  describe('mobile:batteryInfo', function () {
+    it('should get battery info', async function () {
+      const {level, state} = await driver.execute('mobile: batteryInfo', {});
+      level.should.be.greaterThan(0.0);
+      state.should.be.greaterThan(1);
+    });
+  });
 });

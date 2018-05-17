@@ -13,12 +13,13 @@ const caps = _.defaults({
   appActivity: '.view.WebView1',
   showChromedriverLog: true,
 }, APIDEMOS_CAPS);
+
 const WEBVIEW = 'WEBVIEW_io.appium.android.apis';
 const NATIVE = 'NATIVE_APP';
 const NATIVE_LOCATOR = "//*[@class='android.widget.TextView']";
 const WEBVIEW_LOCATOR = "//*[text()='This page is a Selenium sandbox']";
 
-describe('apidemo - context', function () {
+describe('apidemo - context @skip-ci', function () {
   let driver;
   before(async function () {
     driver = await initDriver(caps);

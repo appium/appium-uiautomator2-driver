@@ -4,6 +4,9 @@ Appium UiAutomator2 Driver is a test automation framework for Android devices. A
 *Note*: Issue tracking for this repo has been disabled. Please use the [main Appium issue tracker](https://github.com/appium/appium/issues) instead.
 
 ## Installation
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/appium/appium-uiautomator2-driver.svg)](https://greenkeeper.io/)
+
 ```
 npm install appium-uiautomator2-driver
 ```

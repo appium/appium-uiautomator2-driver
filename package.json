@@ -36,7 +36,7 @@
     "babel-runtime": "=5.8.24",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
-    "portscanner": "2.1.1",
+    "portscanner": "2.2.0",
     "request": "^2.81.0",
     "request-promise": "^4.1.1",
     "source-map-support": "^0.5.5",
@@ -91,5 +91,18 @@
     "wd": "^1.4.0",
     "xmldom": "^0.1.19",
     "xpath": "^0.0.27"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "babel-eslint",
+      "babel-preset-env",
+      "eslint",
+      "eslint-plugin-babel",
+      "eslint-plugin-import",
+      "eslint-plugin-mocha",
+      "eslint-plugin-promise",
+      "gulp",
+      "babel-runtime"
+    ]
   }
 }

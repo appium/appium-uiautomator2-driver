@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import gpsDemoApp from 'gps-demo-app';
 
 
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
@@ -26,7 +27,7 @@ const SCROLL_CAPS = _.defaults({
 }, GENERIC_CAPS);
 
 const GPS_DEMO_CAPS = _.defaults({
-  app: require.resolve('gps-demo-app'),
+  app: gpsDemoApp,
   appPackage: 'de.impressive.artworx.tutorials.gps',
   appActivity: '.GPSTest',
 }, GENERIC_CAPS);

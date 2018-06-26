@@ -1,7 +1,5 @@
 language: android
 dist: precise
-language: node_js
-node_js: "6"
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -45,6 +43,10 @@ before_install:
     fi
 install:
   # node stuff
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+  - nvm install 6
+  - node --version
+  - npm --version
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install

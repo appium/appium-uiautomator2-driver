@@ -5,25 +5,31 @@ import request from 'request-promise';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initDriver } from './helpers/session';
+import B from 'bluebird';
+
 
 const should = chai.should();
 chai.use(chaiAsPromised);
 
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
+const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
+const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
+
+const DEFAULT_ADB_PORT = 5037;
 
 async function killServer (adbPort) {
   if (!process.env.TESTOBJECT_E2E_TESTS) {
     let adb = await ADB.createADB({adbPort});
     await adb.killServer();
+    if (process.env.CI) {
+      // on Travis this takes a while to get into a good state
+      await B.delay(10000);
+    }
   }
 }
 
 describe('createSession', function () {
   let driver;
-  before(async function () {
-    await killServer(5037);
-  });
-
   describe('default adb port', function () {
     afterEach(async function () {
       if (driver) {
@@ -36,13 +42,13 @@ describe('createSession', function () {
       driver = await initDriver(APIDEMOS_CAPS);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
-      appPackage.should.equal('io.appium.android.apis');
-      appActivity.should.equal('.ApiDemos');
+      appPackage.should.equal(APIDEMOS_PACKAGE);
+      appActivity.should.equal(APIDEMOS_MAIN_ACTIVITY);
     });
     it('should start android session focusing on custom pkg and act', async function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
-        appPackage: 'io.appium.android.apis',
-        appActivity: '.view.SplitTouchView',
+        appPackage: APIDEMOS_PACKAGE,
+        appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       driver = await initDriver(caps);
       let appPackage = await driver.getCurrentPackage();
@@ -57,8 +63,8 @@ describe('createSession', function () {
       }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo',
-        appPackage: 'io.appium.android.apis',
-        appActivity: '.view.SplitTouchView',
+        appPackage: APIDEMOS_PACKAGE,
+        appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       try {
         await initDriver(caps);
@@ -74,8 +80,8 @@ describe('createSession', function () {
       }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo.apk',
-        appPackage: 'io.appium.android.apis',
-        appActivity: '.view.SplitTouchView',
+        appPackage: APIDEMOS_PACKAGE,
+        appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
 
       try {
@@ -87,8 +93,8 @@ describe('createSession', function () {
     });
     it('should get device model, manufacturer and screen size in session details', async function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
-        appPackage: 'io.appium.android.apis',
-        appActivity: '.view.SplitTouchView',
+        appPackage: APIDEMOS_PACKAGE,
+        appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       driver = await initDriver(caps);
 
@@ -111,7 +117,7 @@ describe('createSession', function () {
     let driver;
 
     before(async function () {
-      await killServer(5037);
+      await killServer(DEFAULT_ADB_PORT);
     });
     afterEach(async function () {
       if (driver) {
@@ -128,8 +134,8 @@ describe('createSession', function () {
       driver = await initDriver(caps, adbPort);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
-      appPackage.should.equal('io.appium.android.apis');
-      appActivity.should.equal('.ApiDemos');
+      appPackage.should.equal(APIDEMOS_PACKAGE);
+      appActivity.should.equal(APIDEMOS_MAIN_ACTIVITY);
     });
   });
 

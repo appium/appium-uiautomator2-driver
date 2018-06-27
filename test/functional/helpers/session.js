@@ -22,17 +22,14 @@ async function initDriver (caps, adbPort) {
   // In Travis, there is sometimes a popup
   if (process.env.CI) {
     try {
-      const src = await driver.source();
-      console.log('Source:', src); // eslint-disable-line
-      if (src.includes('Unfortunately, Calendar has stopped')) {
-        logger.warn('Calendar crashed. Trying to dismiss alert');
-        const okBtn = await driver.elementById('android:id/button1');
-        await okBtn.click();
-        await driver.startActivity(caps);
-      }
-    } catch (err) {
-      logger.error(`TEST RUN ERROR: ${err.message}`);
-    }
+      const okBtn = await driver.elementById('android:id/button1');
+      logger.warn('*******************************************************');
+      logger.warn('*******************************************************');
+      logger.warn('*******************************************************');
+      logger.warn('Alert found on session startup. Trying to dismiss alert');
+      await okBtn.click();
+      await driver.startActivity(caps);
+    } catch (ign) {}
   }
 
   return driver;

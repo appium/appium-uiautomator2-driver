@@ -60,6 +60,7 @@ before_script:
     if [ ${START_EMU} = "1" ]; then
       # make sure emulator started
       $(npm bin)/android-emu-travis-post;
+      sleep 30
     fi
 script:
   - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit

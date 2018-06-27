@@ -174,6 +174,9 @@ describe('keyboard', function () {
       }
 
       it('should be able to clear a password field', async function () {
+        // this test is flakey
+        this.retries(4);
+
         // there is currently no way to directly assert anything about the contents
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';

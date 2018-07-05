@@ -30,7 +30,7 @@
     "appium-adb": "^6.5.2",
     "appium-android-driver": "^3.0.0",
     "appium-base-driver": "^3.0.0",
-    "appium-support": "^2.12.0",
+    "appium-support": "^2.18.0",
     "appium-uiautomator2-server": "^1.9.2",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",

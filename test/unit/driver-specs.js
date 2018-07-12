@@ -38,7 +38,7 @@ describe('driver.js', function () {
       sinon.mock(driver).expects('startUiAutomator2Session')
           .once()
           .returns(B.resolve());
-      await driver.createSession({cap: 'foo'});
+      await driver.createSession({cap: 'foo', browserName: 'chrome'});
 
       driver.sessionId.should.exist;
       driver.caps.cap.should.equal('foo');
@@ -51,7 +51,7 @@ describe('driver.js', function () {
           .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
           .returns(B.resolve());
-      await driver.createSession({});
+      await driver.createSession({browserName: 'chrome'});
       driver.curContext.should.equal('NATIVE_APP');
     });
   });

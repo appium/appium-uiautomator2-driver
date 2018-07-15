@@ -1,5 +1,11 @@
 language: android
 dist: precise
+addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - g++-4.9
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -26,6 +32,7 @@ env:
     - ANDROID_EMU_NAME=test
     - ANDROID_EMU_TARGET=android-21
     - ANDROID_EMU_ABI=armeabi-v7a
+    - CC=gcc-4.9 CXX=g++-4.9
   matrix:
     - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional

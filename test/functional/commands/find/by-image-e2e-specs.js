@@ -57,8 +57,8 @@ describe('Find - Image', function () {
     size.width.should.be.above(0);
     size.height.should.be.above(0);
     let loc = await el.getLocation();
-    (loc.x >= 0).should.be.true;
-    (loc.y >= 0).should.be.true;
+    loc.x.should.be.at.least(0);
+    loc.y.should.be.at.least(0);
     let locInView = await el.getLocationInView();
     locInView.x.should.eql(loc.x);
     locInView.y.should.eql(loc.y);

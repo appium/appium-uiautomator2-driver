@@ -47,8 +47,11 @@ describe('Find - Image', function () {
   it('should find anything with a threshold low enough', async function () {
     const {imageMatchThreshold} = await driver.settings();
     await driver.updateSettings({imageMatchThreshold: 0});
-    await driver.elementByImageFile(SQUARES_IMG).should.eventually.exist;
-    await driver.updateSettings({imageMatchThreshold});
+    try {
+      await driver.elementByImageFile(SQUARES_IMG).should.eventually.exist;
+    } finally {
+      await driver.updateSettings({imageMatchThreshold});
+    }
   });
   it('should be able to get basic element properties', async function () {
     let el = await driver.elementByImageFile(START_IMG);

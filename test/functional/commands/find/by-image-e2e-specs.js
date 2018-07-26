@@ -25,8 +25,6 @@ describe('Find - Image', function () {
     await driver.updateSettings({
       fixImageTemplateSize: true,
       autoUpdateImageElementPosition: true,
-      // due to https://github.com/appium/appium/issues/11111 use touchActions
-      imageElementTapStrategy: 'touchActions',
     });
   });
 

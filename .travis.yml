@@ -62,6 +62,9 @@ install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
   - sudo apt-get update
   - sudo apt-get install libstdc++6-4.7-dev
+
+  # for mjpeg stuff
+  - npm install --no-save mjpeg-consumer
 before_script:
   - |
     if [ ${START_EMU} = "1" ]; then

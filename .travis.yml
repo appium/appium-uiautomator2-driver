@@ -4,8 +4,10 @@ addons:
     apt:
       sources:
         - ubuntu-toolchain-r-test
+        - llvm-toolchain-precise-5.0
       packages:
         - g++-4.9
+        - clang-5.0
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -54,7 +56,7 @@ install:
   - nvm install 6
   - node --version
   - npm --version
-  - npm install -g opencv4nodejs
+  - CC=clang-5.0 CXX=clang++-5.0 npm install -g opencv4nodejs
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install

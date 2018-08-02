@@ -39,7 +39,7 @@ env:
     - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
     - TEST=functional/commands
-    - TEST=functional/commands/find
+    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/keyboard
     - TEST=functional/commands/general
 before_install:
@@ -56,7 +56,6 @@ install:
   - nvm install 6
   - node --version
   - npm --version
-  - CC=clang-5.0 CXX=clang++-5.0 npm install -g opencv4nodejs
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
@@ -74,6 +73,12 @@ before_script:
       # make sure emulator started
       $(npm bin)/android-emu-travis-post;
       sleep 30
+    fi
+    if [ ${OPENCV} = "1" ]; then
+      sudo add-apt-repository ppa:kalakris/cmake --yes
+      sudo apt-get update
+      sudo apt-get install cmake
+      CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
     fi
 script:
   - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit

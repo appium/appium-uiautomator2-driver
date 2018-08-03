@@ -75,7 +75,7 @@ before_script:
       sleep 30
     fi
     if [ ${OPENCV} = "1" ]; then
-      sudo add-apt-repository ppa:kalakris/cmake --yes
+      sudo add-apt-repository ppa:smspillaz/cmake-2.8.12 --yes
       sudo apt-get update
       sudo apt-get install cmake
       CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs

@@ -48,7 +48,7 @@
   "scripts": {
     "prepublish": "rimraf build && gulp prepublish",
     "transpile": "gulp transpile",
-    "clean": "rm -rf node_modules && rm package-lock.json && npm install",
+    "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "build": "gulp transpile",
     "test": "gulp once",
     "e2e-test": "gulp e2e-test",

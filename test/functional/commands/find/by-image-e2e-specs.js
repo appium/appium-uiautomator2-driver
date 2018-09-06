@@ -13,7 +13,7 @@ const START_IMG = path.resolve('.', 'test', 'functional', 'assets', 'start-butto
 const STOP_IMG = path.resolve('.', 'test', 'functional', 'assets', 'stop-button.png');
 const SQUARES_IMG = path.resolve('.', 'test', 'functional', 'assets', 'checkered-squares.png');
 
-describe('Find - Image', function () {
+describe('Find - Image @skip-ci', function () {
   let driver;
 
   before(async function () {

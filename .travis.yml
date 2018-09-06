@@ -75,9 +75,9 @@ before_script:
       sleep 30
     fi
     if [ ${OPENCV} = "1" ]; then
-      sudo add-apt-repository ppa:smspillaz/cmake-2.8.12 --yes
-      sudo apt-get update
-      sudo apt-get install cmake
+      CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.1-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
       CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
     fi
 script:

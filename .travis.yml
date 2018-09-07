@@ -4,8 +4,10 @@ addons:
     apt:
       sources:
         - ubuntu-toolchain-r-test
+        - llvm-toolchain-trusty-5.0
       packages:
         - g++-4.9
+        - clang-5.0
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -37,7 +39,7 @@ env:
     - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
     - TEST=functional/commands
-    - TEST=functional/commands/find
+    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/keyboard
     - TEST=functional/commands/general
 before_install:
@@ -71,6 +73,13 @@ before_script:
       # make sure emulator started
       $(npm bin)/android-emu-travis-post;
       sleep 30
+    fi
+    if [ ${OPENCV} = "1" ]; then
+      #CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.1-Linux-x86_64.tar.gz"
+      #mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      #export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+      #CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
+      echo "Skipping opencv install for now"
     fi
 script:
   - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit

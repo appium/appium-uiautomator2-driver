@@ -29,7 +29,7 @@
     "adbkit": "^2.4.1",
     "appium-adb": "^6.5.2",
     "appium-android-driver": "^4.0.0",
-    "appium-base-driver": "^3.0.0",
+    "appium-base-driver": "^3.4.0",
     "appium-support": "^2.18.0",
     "appium-uiautomator2-server": "^1.9.2",
     "asyncbox": "^2.3.1",
@@ -88,7 +88,7 @@
     "rimraf": "^2.6.1",
     "sinon": "^6.0.0",
     "unzip": "^0.1.11",
-    "wd": "^1.8.1",
+    "wd": "^1.10.3",
     "xmldom": "^0.1.19",
     "xpath": "^0.0.27"
   },

@@ -1,5 +1,5 @@
 {
-  "name": "appium-uiautomator2-driver",
+  "name": "uutest-appium-uiautomator2-driver",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "appium",

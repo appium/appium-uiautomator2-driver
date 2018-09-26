@@ -5,9 +5,12 @@ addons:
       sources:
         - ubuntu-toolchain-r-test
         - llvm-toolchain-trusty-5.0
+        - sourceline: 'ppa:ubuntu-toolchain-r/test'
       packages:
         - g++-4.9
         - clang-5.0
+        # for chromedriver
+        - libstdc++6-4.7-dev
 android:
   components:
     # use the latest revision of Android SDK Tools
@@ -59,11 +62,6 @@ install:
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
-
-  # for chromedriver
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
-  - sudo apt-get update
-  - sudo apt-get install libstdc++6-4.7-dev
 
   # for mjpeg stuff
   - npm install --no-save mjpeg-consumer

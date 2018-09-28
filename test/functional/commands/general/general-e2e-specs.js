@@ -20,8 +20,8 @@ describe('general', function () {
 
   describe('startActivity', function () {
     it('should launch a new package and activity', async function () {
-      let appPackage =  await driver.getCurrentPackage();
-      let appActivity =  await driver.getCurrentActivity();
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentActivity();
       appPackage.should.equal('io.appium.android.apis');
       appActivity.should.equal('.ApiDemos');
 
@@ -30,8 +30,8 @@ describe('general', function () {
 
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
-      let newAppPackage =  await driver.getCurrentPackage();
-      let newAppActivity =  await driver.getCurrentActivity();
+      let newAppPackage = await driver.getCurrentPackage();
+      let newAppActivity = await driver.getCurrentActivity();
       newAppPackage.should.equal(startAppPackage);
       newAppActivity.should.equal(startAppActivity);
     });
@@ -42,7 +42,7 @@ describe('general', function () {
 
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity, intentCategory: startIntentCategory});
 
-      let appActivity =  await driver.getCurrentActivity();
+      let appActivity = await driver.getCurrentActivity();
       appActivity.should.include('HelloWorld');
     });
     it('should be able to launch activity with dontStopAppOnReset = true', async function () {
@@ -50,8 +50,8 @@ describe('general', function () {
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
-      let appPackage =  await driver.getCurrentPackage();
-      let appActivity =  await driver.getCurrentActivity();
+      let appPackage = await driver.getCurrentPackage();
+      let appActivity = await driver.getCurrentActivity();
       appPackage.should.equal(startAppPackage);
       appActivity.should.equal(startAppActivity);
     });

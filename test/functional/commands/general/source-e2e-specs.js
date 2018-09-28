@@ -9,7 +9,7 @@ import { initDriver } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
-let assertSource = async (source) => {
+let assertSource = (source) => {
   source.should.exist;
   let dom = new DOMParser().parseFromString(source);
   let nodes = xpath.select('//hierarchy', dom);
@@ -26,7 +26,7 @@ describe('apidemo - source', function () {
   });
   it('should return the page source', async function () {
     let source = await driver.source();
-    await assertSource(source);
+    assertSource(source);
   });
   it('should get less source when compression is enabled', async function () {
     let getSourceWithoutCompression = async () => {

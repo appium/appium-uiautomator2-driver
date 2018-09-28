@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import * as helpers from '../../lib/helpers';
+import helpers from '../../lib/helpers';
 import ADB from 'appium-adb';
 import { withMocks } from 'appium-test-support';
 

@@ -2,9 +2,12 @@
 
 import yargs from 'yargs';
 import { asyncify } from 'asyncbox';
-import AndroidUiautomator2Driver from './lib/driver';
-import startServer from './lib/server';
+import * as driver from './lib/driver';
+import * as server from './lib/server';
 
+
+const { AndroidUiautomator2Driver } = driver;
+const { startServer } = server;
 
 export const DEFAULT_HOST = "localhost";
 export const DEFAULT_PORT = process.env.TESTOBJECT_E2E_TESTS ? 4723 : 4884;
@@ -21,4 +24,3 @@ if (require.main === module) {
 
 export { AndroidUiautomator2Driver, startServer };
 export default AndroidUiautomator2Driver;
-

@@ -10,7 +10,7 @@ chai.use(chaiAsPromised);
 
 describe('General', function () {
   describe('getWindowRect', function () {
-    beforeEach(async function () {
+    beforeEach(function () {
       driver = new AndroidUiautomator2Driver();
     });
     afterEach(function () {

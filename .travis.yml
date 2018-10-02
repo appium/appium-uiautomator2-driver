@@ -56,7 +56,7 @@ before_install:
 install:
   # node stuff
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-  - nvm install 6
+  - nvm install 8
   - node --version
   - npm --version
   - npm install appium-test-support # get the travis emu scripts

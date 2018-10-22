@@ -154,23 +154,16 @@ describe('keyboard', function () {
     });
 
     describe('editing a text field', function () {
-      async function getTextFields (driver) {
-        return await retryInterval(5, 1000, async function () {
+      let els;
+      beforeEach(async function () {
+        await driver.startActivity(defaultAsciiCaps);
+        els = await retryInterval(5, 1000, async function () {
           const els = await driver.elementsByClassName(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
           return els;
         });
-      }
-      let els;
-      beforeEach(async function () {
-        try {
-          els = await getTextFields(driver);
-        } catch (err) {
-          // try to restart activity
-          await driver.startActivity(defaultAsciiCaps);
-          els = await getTextFields(driver);
-        }
       });
+
       for (let test of tests) {
         describe(test.label, function () {
           it('should work with setValue', async function () {
@@ -259,6 +252,10 @@ describe('keyboard', function () {
     });
 
     describe('editing a text field', function () {
+      beforeEach(async function () {
+        await driver.startActivity(defaultUnicodeCaps);
+      });
+
       for (let testSet of [tests, unicodeTests, languageTests]) {
         for (let test of testSet) {
           describe(test.label, function () {

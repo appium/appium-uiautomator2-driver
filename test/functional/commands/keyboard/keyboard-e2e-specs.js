@@ -156,7 +156,11 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
-        await driver.startActivity(defaultAsciiCaps);
+
+        await driver.startActivity({
+          appPackage: defaultAsciiCaps.appPackage,
+          appActivity: defaultAsciiCaps.appActivity,
+        });
         els = await retryInterval(5, 1000, async function () {
           const els = await driver.elementsByClassName(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
@@ -253,7 +257,10 @@ describe('keyboard', function () {
 
     describe('editing a text field', function () {
       beforeEach(async function () {
-        await driver.startActivity(defaultUnicodeCaps);
+        await driver.startActivity({
+          appPackage: defaultUnicodeCaps.appPackage,
+          appActivity: defaultUnicodeCaps.appActivity,
+        });
       });
 
       for (let testSet of [tests, unicodeTests, languageTests]) {

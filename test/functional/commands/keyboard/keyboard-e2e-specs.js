@@ -107,7 +107,7 @@ async function runKeyEventTest (driver) {
   await keyEventTest(driver, 82, undefined, ['[keycode=82]', 'keyCode=KEYCODE_MENU']);
 }
 
-let tests = [
+const tests = [
   { label: 'editing a text field', text: 'Life, the Universe and Everything.' },
   { label: 'sending \'&-\'', text: '&-' },
   { label: 'sending \'&\' and \'-\' in other text', text: 'In the mid-1990s he ate fish & chips as mayor-elect.' },
@@ -115,7 +115,7 @@ let tests = [
   { label: 'sending numbers', text: '0123456789'},
 ];
 
-let unicodeTests = [
+const unicodeTests = [
   { label: 'should be able to send \'-\' in unicode text', text: 'परीक्षा-परीक्षण' },
   { label: 'should be able to send \'&\' in text', text: 'Fish & chips' },
   { label: 'should be able to send \'&\' in unicode text', text: 'Mīna & chips' },
@@ -123,7 +123,7 @@ let unicodeTests = [
   { label: 'should be able to send a \'u\' with an umlaut', text: 'ü' },
 ];
 
-let languageTests = [
+const languageTests = [
   { label: 'should be able to send Tamil', text: 'சோதனை' },
   { label: 'should be able to send Gujarati', text: 'પરીક્ષણ' },
   { label: 'should be able to send Chinese', text: '测试' },
@@ -156,12 +156,18 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
+
+        await driver.startActivity({
+          appPackage: defaultAsciiCaps.appPackage,
+          appActivity: defaultAsciiCaps.appActivity,
+        });
         els = await retryInterval(5, 1000, async function () {
           const els = await driver.elementsByClassName(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
           return els;
         });
       });
+
       for (let test of tests) {
         describe(test.label, function () {
           it('should work with setValue', async function () {
@@ -250,6 +256,13 @@ describe('keyboard', function () {
     });
 
     describe('editing a text field', function () {
+      beforeEach(async function () {
+        await driver.startActivity({
+          appPackage: defaultUnicodeCaps.appPackage,
+          appActivity: defaultUnicodeCaps.appActivity,
+        });
+      });
+
       for (let testSet of [tests, unicodeTests, languageTests]) {
         for (let test of testSet) {
           describe(test.label, function () {

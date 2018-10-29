@@ -1,5 +1,6 @@
 language: android
 dist: precise
+jdk: oraclejdk8
 addons:
     apt:
       sources:
@@ -42,8 +43,8 @@ env:
     - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
     - TEST=functional/commands
-    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/keyboard
+    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/general
 before_install:
   - |

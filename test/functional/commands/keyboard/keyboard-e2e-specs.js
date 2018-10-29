@@ -18,16 +18,29 @@ const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
 const KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
-let defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
+const defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
   appPackage: PACKAGE,
   appActivity: TEXTFIELD_ACTIVITY
 });
 
-let defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
+const defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
   unicodeKeyboard: true,
   resetKeyboard: true
 });
+
+async function ensureUnlocked (driver) {
+  // on Travis the device is sometimes not unlocked
+  await retryInterval(10, 1000, async function () {
+    if (!await driver.isLocked()) {
+      return;
+    }
+    console.log(`\n\nDevice locked. Attempting to unlock`); // eslint-disable-line
+    await driver.unlock();
+    // trigger another iteration
+    throw new Error(`The device is locked.`);
+  });
+}
 
 function deSamsungify (text) {
   // For samsung S5 text is appended with ". Editing."
@@ -153,6 +166,10 @@ describe('keyboard', function () {
       await driver.quit();
     });
 
+    beforeEach(async function () {
+      await ensureUnlocked(driver);
+    });
+
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
@@ -253,6 +270,10 @@ describe('keyboard', function () {
         ime.should.eql(initialIME);
         ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
       }
+    });
+
+    beforeEach(async function () {
+      await ensureUnlocked(driver);
     });
 
     describe('editing a text field', function () {

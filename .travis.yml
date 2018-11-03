@@ -63,6 +63,7 @@ install:
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
+  - npm ls
 
   # for mjpeg stuff
   - npm install --no-save mjpeg-consumer

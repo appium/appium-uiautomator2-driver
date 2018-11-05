@@ -26,14 +26,6 @@ describe('apidemo - attributes', function () {
   it('should be able to find name attribute', async function () {
     await animationEl.getAttribute('name').should.eventually.become('Animation');
   });
-  it('should be able to find name attribute, falling back to text', async function () {
-    await animationEl.click();
-    await driver.waitForElementByAccessibilityId('Bouncing Balls');
-    let textViewEl = await driver.elementByAccessibilityId('Bouncing Balls');
-    await textViewEl.getAttribute('name');
-    await driver.back();
-    await driver.waitForElementByAccessibilityId('Animation');
-  });
   it('should be able to find content description attribute', async function () {
     await animationEl.getAttribute('contentDescription').should.eventually.become("Animation");
   });

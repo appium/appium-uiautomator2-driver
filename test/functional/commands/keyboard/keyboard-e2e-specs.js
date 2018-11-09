@@ -256,7 +256,7 @@ describe('keyboard', function () {
       // save the initial ime so we can make sure it is restored
       if (adb) {
         initialIME = await adb.defaultIME();
-        initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+        initialIME.should.not.eql('io.appium.settings/.UnicodeIME');
       }
 
       driver = await initDriver(defaultUnicodeCaps);
@@ -268,7 +268,7 @@ describe('keyboard', function () {
       if (adb) {
         let ime = await adb.defaultIME();
         ime.should.eql(initialIME);
-        ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+        ime.should.not.eql('io.appium.settings/.UnicodeIME');
       }
     });
 

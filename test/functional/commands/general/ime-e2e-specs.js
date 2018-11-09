@@ -7,7 +7,7 @@ import { initDriver } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
-const unicodeImeId = 'io.appium.android.ime/.UnicodeIME';
+const unicodeImeId = 'io.appium.settings/.UnicodeIME';
 
 describe('apidemo - IME', function () {
   let driver;

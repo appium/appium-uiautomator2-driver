@@ -1,5 +1,6 @@
 language: android
 dist: precise
+jdk: oraclejdk8
 addons:
     apt:
       sources:
@@ -42,8 +43,8 @@ env:
     - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
     - TEST=functional/commands
-    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/keyboard
+    - TEST=functional/commands/find OPENCV=1
     - TEST=functional/commands/general
 before_install:
   - |
@@ -62,6 +63,7 @@ install:
   - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
+  - npm ls
 
   # for mjpeg stuff
   - npm install --no-save mjpeg-consumer

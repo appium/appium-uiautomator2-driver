@@ -38,7 +38,7 @@
     "appium-android-driver": "^4.0.0",
     "appium-base-driver": "^3.10.0",
     "appium-support": "^2.24.0",
-    "appium-uiautomator2-server": "^2.3.0",
+    "appium-uiautomator2-server": "^2.6.0",
     "asyncbox": "^2.3.1",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",

@@ -151,16 +151,31 @@ describe('keyboard', function () {
     before(async function () {
       driver = await initDriver(defaultAsciiCaps);
 
-      // sometimes the default ime is not what we are using
-      let engines = await driver.availableIMEEngines();
-      let selectedEngine = _.first(engines);
-      for (let engine of engines) {
-        // it seems that the latin ime has `android.inputmethod` in its package name
-        if (engine.indexOf('android.inputmethod') !== -1) {
-          selectedEngine = engine;
+      if (!process.env.CI) {
+        // sometimes the default ime is not what we are using
+        let engines = await driver.availableIMEEngines();
+        let selectedEngine = _.first(engines);
+        for (let engine of engines) {
+          // it seems that the latin ime has `android.inputmethod` in its package name
+          if (engine.indexOf('android.inputmethod') !== -1) {
+            selectedEngine = engine;
+          }
         }
+        await driver.activateIMEEngine(selectedEngine);
       }
-      await driver.activateIMEEngine(selectedEngine);
+
+      const opts = {
+        appPackage: defaultAsciiCaps.appPackage,
+        appActivity: defaultAsciiCaps.appActivity,
+      };
+      await driver.startActivity(opts);
+      try {
+        const okBtn = await driver.elementById('android:id/button1');
+        console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
+        await okBtn.click();
+        await ensureUnlocked(driver);
+        await driver.startActivity(opts);
+      } catch (ign) {}
     });
     after(async function () {
       await driver.quit();
@@ -173,12 +188,12 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
-
-        await driver.startActivity({
+        const opts = {
           appPackage: defaultAsciiCaps.appPackage,
           appActivity: defaultAsciiCaps.appActivity,
-        });
-        els = await retryInterval(5, 1000, async function () {
+        };
+        await driver.startActivity(opts);
+        els = await retryInterval(10, 1000, async function () {
           const els = await driver.elementsByClassName(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
           return els;

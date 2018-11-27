@@ -221,7 +221,7 @@ describe('driver.js', function () {
 
   describe('startUiAutomator2Session', function () {
     let driver;
-    beforeEach(function () {
+    beforeEach(async function () {
       driver = new AndroidUiautomator2Driver({}, false);
       driver.caps = {};
       driver.opts = { autoLaunch: false, skipUnlock: true};
@@ -229,7 +229,7 @@ describe('driver.js', function () {
       sandbox.stub(driver, 'addDeviceInfoToCaps');
 
       driver.uiautomator2 = new UiAutomator2Server({
-        adb: new ADB.createADB(), tmpDir: 'tmp', systemPort: 4724, host: 'localhost', devicePort: 6790, disableWindowAnimation: false
+        adb: await ADB.createADB(), tmpDir: 'tmp', systemPort: 4724, host: 'localhost', devicePort: 6790, disableWindowAnimation: false
       });
       sandbox.stub(driver.uiautomator2, 'startSession');
     });

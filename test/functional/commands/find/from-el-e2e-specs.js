@@ -26,6 +26,6 @@ describe('Find - from element', function () {
   it('should find multiple elements by tag name', async function () {
     let el = await driver.elementByClassName(alv);
     let innerEls = await el.elementsByClassName(atv);
-    await innerEls.should.have.length.above(9);
+    await innerEls.should.have.length.above(1);
   });
 });

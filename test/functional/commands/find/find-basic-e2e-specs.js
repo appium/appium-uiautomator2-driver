@@ -42,7 +42,7 @@ describe('Find - basic', function () {
   });
   it('should find multiple elements by resource-id', async function () {
     await driver.elementsById('android:id/text1')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.above(1);
   });
   it('should find multiple elements by resource-id even when theres just one', async function () {
     await driver.elementsById(`android:id/${singleResourceId}`)

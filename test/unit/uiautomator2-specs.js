@@ -9,15 +9,13 @@ chai.use(chaiAsPromised);
 
 describe('UiAutomator2', function () {
   const adb = new ADB();
-
   describe('installServerApk', withMocks({adb}, (mocks) => {
     let uiautomator2;
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server({
-        adb: ADB.createADB(), tmpDir: 'tmp', systemPort: 4724,
+        adb, tmpDir: 'tmp', systemPort: 4724,
         host: 'localhost', devicePort: 6790, disableWindowAnimation: false
       });
-      uiautomator2.adb = adb;
     });
     afterEach(function () {
       mocks.verify();

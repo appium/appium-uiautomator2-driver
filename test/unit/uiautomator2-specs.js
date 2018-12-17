@@ -27,9 +27,8 @@ describe('UiAutomator2', function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
-      mocks.adb.expects('checkApkCert').once().returns(true);
 
-      // SERVER_TEST_PACKAGE_ID
+      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
@@ -45,9 +44,8 @@ describe('UiAutomator2', function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
-      mocks.adb.expects('checkApkCert').once().returns(true);
 
-      // SERVER_TEST_PACKAGE_ID
+      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
@@ -63,9 +61,8 @@ describe('UiAutomator2', function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
-      mocks.adb.expects('checkApkCert').once().returns(true);
 
-      // SERVER_TEST_PACKAGE_ID
+      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').never();
@@ -81,12 +78,12 @@ describe('UiAutomator2', function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
-      mocks.adb.expects('checkApkCert').once().returns(false);
-      mocks.adb.expects('sign').once();
 
-      // SERVER_TEST_PACKAGE_ID
+      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('checkApkCert').twice().returns(false);
       mocks.adb.expects('sign').twice();
+
+      // SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('isAppInstalled').once().returns(false);
 
       mocks.adb.expects('uninstallApk').never();
@@ -97,14 +94,13 @@ describe('UiAutomator2', function () {
       await uiautomator2.installServerApk();
     });
 
-    it('version number of new server and server.test are unknown', async function () {
+    it('version numbers of new server and server.test are unknown', async function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.UNKNOWN);
-      mocks.adb.expects('checkApkCert').once().returns(true);
 
-      // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').once().returns(true);
+      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
+      mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
       mocks.adb.expects('install').twice();

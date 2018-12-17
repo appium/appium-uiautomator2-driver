@@ -65,6 +65,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
       mocks.adb.expects('checkApkCert').once().returns(true);
+
       // SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('checkApkCert').once().returns(true);
 
@@ -98,9 +99,13 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are unknown', async function () {
-      mocks.adb.expects('checkApkCert').twice().returns(true);
+      // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.UNKNOWN);
+      mocks.adb.expects('checkApkCert').once().returns(true);
+
+      // SERVER_TEST_PACKAGE_ID
+      mocks.adb.expects('checkApkCert').once().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
       mocks.adb.expects('install').twice();

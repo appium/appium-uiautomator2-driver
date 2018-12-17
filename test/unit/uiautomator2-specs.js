@@ -2,14 +2,13 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ADB } from 'appium-adb';
 import { withMocks } from 'appium-test-support';
-import UiAutomator2Server from '../../lib/uiautomator2';
+import { UiAutomator2Server, INSTRUMENTATION_TARGET } from '../../lib/uiautomator2';
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('UiAutomator2', function () {
   const adb = new ADB();
-  const INSTRUMENTATION_TARGET = 'io.appium.uiautomator2.server.test/android.support.test.runner.AndroidJUnitRunner';
 
   describe('installServerApk', withMocks({adb}, (mocks) => {
     let uiautomator2;
@@ -31,7 +30,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').once().returns(true);
 
       // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').once().returns(true);
+      mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
       mocks.adb.expects('install').twice();
@@ -49,7 +48,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').once().returns(true);
 
       // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').once().returns(true);
+      mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
       mocks.adb.expects('install').twice();
@@ -67,7 +66,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').once().returns(true);
 
       // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').once().returns(true);
+      mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('uninstallApk').never();
       mocks.adb.expects('install').never();
@@ -86,8 +85,8 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('sign').once();
 
       // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').once().returns(false);
-      mocks.adb.expects('sign').once();
+      mocks.adb.expects('checkApkCert').twice().returns(false);
+      mocks.adb.expects('sign').twice();
       mocks.adb.expects('isAppInstalled').once().returns(false);
 
       mocks.adb.expects('uninstallApk').never();
@@ -98,7 +97,7 @@ describe('UiAutomator2', function () {
       await uiautomator2.installServerApk();
     });
 
-    it('new server and server.test are unknown', async function () {
+    it('version number of new server and server.test are unknown', async function () {
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.UNKNOWN);

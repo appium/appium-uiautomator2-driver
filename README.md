@@ -13,7 +13,7 @@ npm install appium-uiautomator2-driver
 ```
 
 ## Usage
-Import Android Driver, set [desired capabilities](http://appium.io/slate/en/1.5/?javascript#appium-server-capabilities) and create a session:
+Import Android Driver, set [desired capabilities](http://appium.io/docs/en/writing-running-appium/caps/index.html#android-only) and create a session:
 
 ```
 import { AndroidUiautomator2Driver } from `appium-uiautomator2-driver`

@@ -9,7 +9,7 @@ async function getLocale (adb) {
 }
 
 async function isArmEmu () {
-  const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(" ")];
+  const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(' ')];
   const serialCmd = ['adb', ['get-serialno']];
   const {stdout: arch} = await exec(...archCmd);
   const {stdout: serial} = await exec(...serialCmd);

@@ -31,7 +31,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   after(async function () {
     if (driver) {
       if (await adb.getApiLevel() > 23) {
-        let [language, country] = initialLocale.split("-");
+        let [language, country] = initialLocale.split('-');
         await androidHelpers.ensureDeviceLocale(driver.adb, language, country);
       } else {
         await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);

@@ -9,7 +9,7 @@ import * as server from './lib/server';
 const { AndroidUiautomator2Driver } = driver;
 const { startServer } = server;
 
-export const DEFAULT_HOST = "localhost";
+export const DEFAULT_HOST = 'localhost';
 export const DEFAULT_PORT = process.env.TESTOBJECT_E2E_TESTS ? 4723 : 4884;
 
 async function main () {

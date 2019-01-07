@@ -34,7 +34,7 @@ describe('apidemo - source', function () {
       return await driver.source();
     };
     let getSourceWithCompression = async () => {
-      await driver.updateSettings({"ignoreUnimportantViews": true});
+      await driver.updateSettings({'ignoreUnimportantViews': true});
       return await driver.source();
     };
     let sourceWithoutCompression = await getSourceWithoutCompression();

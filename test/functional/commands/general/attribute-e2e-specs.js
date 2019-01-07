@@ -27,7 +27,7 @@ describe('apidemo - attributes', function () {
     await animationEl.getAttribute('name').should.eventually.become('Animation');
   });
   it('should be able to find content description attribute', async function () {
-    await animationEl.getAttribute('contentDescription').should.eventually.become("Animation");
+    await animationEl.getAttribute('contentDescription').should.eventually.become('Animation');
   });
   it('should be able to find displayed attribute', async function () {
     await animationEl.getAttribute('displayed').should.eventually.become('true');

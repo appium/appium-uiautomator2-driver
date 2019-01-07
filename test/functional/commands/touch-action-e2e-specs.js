@@ -115,7 +115,7 @@ describe('apidemo - touch', function () {
       await assertElementPresent(driver, false, cheeseForScroll);
       // finally, use scrollBackTo to intelligently scroll back to a point
       // where the element is visible, and verify the result
-      let isFound = await driver.execute("mobile: scrollBackTo", {
+      let isFound = await driver.execute('mobile: scrollBackTo', {
         elementId: scrollableContainer.value,
         elementToId: scrollToEl.value,
       });

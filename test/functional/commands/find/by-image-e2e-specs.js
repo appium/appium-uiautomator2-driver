@@ -19,7 +19,7 @@ describe('Find - Image @skip-ci', function () {
   before(async function () {
     driver = await initDriver({
       ...APIDEMOS_CAPS,
-      appActivity: ".view.ChronometerDemo"
+      appActivity: '.view.ChronometerDemo'
     });
     // use the driver settings that cause the most code paths to be exercised
     await driver.updateSettings({

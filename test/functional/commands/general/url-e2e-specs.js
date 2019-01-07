@@ -36,8 +36,8 @@ describe('setUrl @skip-ci', function () {
 
     await driver.get('http://saucelabs.com');
 
-    await driver.waitForElementByTagName("title");
-    let el = await driver.elementByTagName("title");
-    await el.getAttribute("innerHTML").should.eventually.include('Sauce Labs');
+    await driver.waitForElementByTagName('title');
+    let el = await driver.elementByTagName('title');
+    await el.getAttribute('innerHTML').should.eventually.include('Sauce Labs');
   });
 });

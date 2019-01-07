@@ -35,7 +35,7 @@ describe('mobile', function () {
   describe('mobile:deepLink', function () {
     it('should be able to launch apps using Instant Apps', async function () {
       try {
-        await driver.execute("mobile: deepLink", {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
+        await driver.execute('mobile: deepLink', {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
       } catch (e) {
         // Note: Currently no emulators have this feature enabled so for this test to make it past this try-catch
         // block it has to be run on a local emulator/device that has Instant Apps enabled

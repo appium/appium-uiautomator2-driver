@@ -132,7 +132,7 @@ describe('driver.js', function () {
       });
       describe('nativeWebScreenshot', function () {
         let proxyAvoidList;
-        let nativeWebScreenshotFilter = (item) => item[0] === "GET" && item[1].test('/session/xxx/screenshot/');
+        let nativeWebScreenshotFilter = (item) => item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
           defaultStub(driver);

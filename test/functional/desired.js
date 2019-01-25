@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import gpsDemoApp from 'gps-demo-app';
+import '../env';
 
 
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
@@ -16,15 +16,32 @@ const GENERIC_CAPS = {
   adbExecTimeout: ADB_EXEC_TIMEOUT,
 };
 
+
+if (process.env.CLOUD) {
+  GENERIC_CAPS.platformVersion = process.env.CLOUD_PLATFORM_VERSION;
+  GENERIC_CAPS.deviceName = process.env.CLOUD_DEVICE_NAME;
+  GENERIC_CAPS.build = process.env.SAUCE_BUILD;
+  GENERIC_CAPS[process.env.APPIUM_BUNDLE_CAP] = {'appium-url': 'sauce-storage:appium.zip'};
+}
+
+
+
+const apiDemosApp = process.env.CLOUD
+  ? 'http://appium.github.io/appium/assets/ApiDemos-debug.apk'
+  : require.resolve('android-apidemos');
+const gpsDemoApp = process.env.CLOUD
+  ? 'http://appium.github.io/appium/assets/gpsDemo-debug.apk'
+  : require('gps-demo-app');
+
 const APIDEMOS_CAPS = _.defaults({
-  app: require.resolve('android-apidemos'),
+  app: apiDemosApp,
   appPackage: 'io.appium.android.apis',
   appActivity: '.ApiDemos',
   disableWindowAnimation: true,
 }, GENERIC_CAPS);
 
 const SCROLL_CAPS = _.defaults({
-  app: require.resolve('android-apidemos'),
+  app: apiDemosApp,
   appPackage: 'io.appium.android.apis',
   appActivity: '.view.ScrollView2',
 }, GENERIC_CAPS);

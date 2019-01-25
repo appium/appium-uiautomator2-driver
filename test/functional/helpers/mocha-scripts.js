@@ -30,7 +30,7 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
     await disableTestObject(wdObject);
   });
 
-} else {
+} else if (!process.env.CLOUD) {
   let server;
   before(async function () {
     server = await startServer(DEFAULT_PORT, 'localhost');
@@ -39,5 +39,10 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
     if (server) {
       await server.close();
     }
+  });
+  after(async function () {
+    try {
+      await server.close();
+    } catch (ign) {}
   });
 }

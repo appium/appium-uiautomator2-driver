@@ -6,11 +6,6 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-6
-android:
-  components:
-    - platform-tools
-    - tools
-    - build-tools
 env:
   global:
     - NODE_VERSION=8
@@ -25,36 +20,76 @@ env:
     - ANDROID_BUILD_TOOLS=28.0.3
     - ANDROID_PLATFORM=android-21
     - CC=gcc-6 CXX=g++-6
-  matrix:
-    - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
-    - TEST=functional
-    - TEST=functional/commands
-    - TEST=functional/commands/keyboard
-    - TEST=functional/commands/find OPENCV=1
-    - TEST=functional/commands/general
+    - MAX_PARALLEL=0
+    - DEBUG=mocha-parallel-tests
+jobs:
+  include:
+    - stage: tests
+      if: type != cron
+      env:
+        - START_EMU=0
+        - RECURSIVE=--recursive
+        - TEST=unit
+        - COVERALLS=1
+    - stage:
+      if: type != cron
+      env: TEST=functional
+      android: &android
+        components:
+          - platform-tools
+          - tools
+          - build-tools
+    - stage:
+      if: type != cron
+      env: TEST=functional/commands
+      android:
+        *android
+    - stage:
+      if: type != cron
+      env: TEST=functional/commands/keyboard
+    - stage:
+      if: type != cron
+      env:
+        - TEST=functional/commands/find
+        - OPENCV=1
+    - stage:
+      if: type != cron
+      env: TEST=functional/commands/general
+
+    # - stage: "[CRON] Sauce Emusim tests"
+    #   if: type = cron
+    #   name: Basic, device 0
+    #   env:
+    #     - CLOUD=1
+    #     - SAUCE_EMUSIM=1
+    #     - PLATFORM_VERSION="8.0"
+    #     - DEVICE_NAME="Android GoogleAPI Emulator"
+    #     - TEST=functional/commands/general/general-e2e-specs.js
 before_install:
   - |
-    echo y | android update sdk --no-ui -t tools
-    echo yes | sdkmanager tools > /dev/null
-    echo yes | sdkmanager --update > /dev/null
-    echo yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
-    echo yes | sdkmanager "extras;android;m2repository" > /dev/null
-    echo yes | sdkmanager "extras;google;m2repository" > /dev/null
-    if [ ${START_EMU} = "1" ]; then
-      echo yes | sdkmanager "platforms;${ANDROID_PLATFORM}" > /dev/null
-      export ANDROID_EMU_IMAGE="system-images;${ANDROID_PLATFORM};${ANDROID_EMU_TAG};${ANDROID_EMU_ABI}"
-      for retry in 1 2 3; do
-        echo yes | sdkmanager "${ANDROID_EMU_IMAGE}" > /dev/null && break
-        echo "sdkmanager was not able to download the ${ANDROID_EMU_IMAGE} image (retry ${retry})"
-        sleep 5
-      done
-      sdkmanager --list
-      export TOOLS=${ANDROID_HOME}/tools
-      export PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
-      echo no | avdmanager create avd -k "${ANDROID_EMU_IMAGE}" -n "${ANDROID_EMU_NAME}" -f --abi "${ANDROID_EMU_ABI}" --tag "${ANDROID_EMU_TAG}" || exit 1
-      emulator -avd "${ANDROID_EMU_NAME}" -no-window -camera-back none -camera-front none &
-    else
-      sdkmanager --list
+    if [ -z ${CLOUD} ]; then
+      echo y | android update sdk --no-ui -t tools
+      echo yes | sdkmanager tools > /dev/null
+      echo yes | sdkmanager --update > /dev/null
+      echo yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
+      echo yes | sdkmanager "extras;android;m2repository" > /dev/null
+      echo yes | sdkmanager "extras;google;m2repository" > /dev/null
+      if [ ${START_EMU} = "1" ]; then
+        echo yes | sdkmanager "platforms;${ANDROID_PLATFORM}" > /dev/null
+        export ANDROID_EMU_IMAGE="system-images;${ANDROID_PLATFORM};${ANDROID_EMU_TAG};${ANDROID_EMU_ABI}"
+        for retry in 1 2 3; do
+          echo yes | sdkmanager "${ANDROID_EMU_IMAGE}" > /dev/null && break
+          echo "sdkmanager was not able to download the ${ANDROID_EMU_IMAGE} image (retry ${retry})"
+          sleep 5
+        done
+        sdkmanager --list
+        export TOOLS=${ANDROID_HOME}/tools
+        export PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
+        echo no | avdmanager create avd -k "${ANDROID_EMU_IMAGE}" -n "${ANDROID_EMU_NAME}" -f --abi "${ANDROID_EMU_ABI}" --tag "${ANDROID_EMU_TAG}" || exit 1
+        emulator -avd "${ANDROID_EMU_NAME}" -no-window -camera-back none -camera-front none &
+      else
+        sdkmanager --list
+      fi
     fi
 install:
   # node stuff
@@ -62,13 +97,16 @@ install:
   - nvm install $NODE_VERSION
   - node --version
   - npm --version
-  - npm install appium-test-support # get the travis emu scripts
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
   - npm ls
 
-  # for mjpeg stuff
-  - npm install --no-save mjpeg-consumer
+  - |
+    if [ -z ${CLOUD} ]; then
+      npm install appium-test-support # get the travis emu scripts
+      # for mjpeg stuff
+      npm install --no-save mjpeg-consumer
+    fi
 before_script:
   - |
     if [ ${START_EMU} = "1" ]; then
@@ -82,13 +120,25 @@ before_script:
       #CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
       echo "Skipping opencv install for now"
     fi
+    if [ ${CLOUD} = "1" ]; then
+      $(npm bin)/gulp fix-mocha-parallel-tests;
+      $(npm bin)/gulp periodic-output & export LONG_PID=$!;
+    fi
 script:
-  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit
+  - if [ $CLOUD = "1" ]; then
+      npm run mocha -- -t 480000 --recursive build/test/$TEST;
+    else
+      npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit;
+    fi
+after_script:
+  - if [-n "$LONG_PID" ]; then
+      kill $LONG_PID;
+    fi
 after_success:
   - if [ -n "$COVERALLS" ]; then _FORCE_LOGS=0 npm run coverage; fi
 after_failure:
   - |
-    if [ "$TEST" != "unit" ]; then
+    if [ "$TEST" != "unit" and ${CLOUD} = "0" ]; then
       echo -e "----LOGCAT----\n"
       adb logcat -d
     fi

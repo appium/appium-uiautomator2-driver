@@ -4,7 +4,7 @@ import _ from 'lodash';
 import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 import ADB from 'appium-adb';
 
 
@@ -149,7 +149,7 @@ describe('keyboard', function () {
   describe('ascii', function () {
     let driver;
     before(async function () {
-      driver = await initDriver(defaultAsciiCaps);
+      driver = await initSession(defaultAsciiCaps);
 
       if (!process.env.CI) {
         // sometimes the default ime is not what we are using
@@ -178,7 +178,7 @@ describe('keyboard', function () {
       } catch (ign) {}
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
     });
 
     beforeEach(async function () {
@@ -274,10 +274,10 @@ describe('keyboard', function () {
         initialIME.should.not.eql('io.appium.settings/.UnicodeIME');
       }
 
-      driver = await initDriver(defaultUnicodeCaps);
+      driver = await initSession(defaultUnicodeCaps);
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
 
       // make sure the IME has been restored
       if (adb) {

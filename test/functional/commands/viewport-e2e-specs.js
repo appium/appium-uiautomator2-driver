@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { PNG } from 'pngjs';
 import { SCROLL_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -12,11 +12,11 @@ let driver;
 
 describe('testViewportCommands', function () {
   before(async function () {
-    driver = await initDriver(SCROLL_CAPS);
+    driver = await initSession(SCROLL_CAPS);
   });
   after(async function () {
     if (driver) {
-      await driver.quit();
+      await deleteSession();
     }
   });
 

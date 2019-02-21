@@ -2,7 +2,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ADB } from 'appium-adb';
 import { withMocks } from 'appium-test-support';
-import { UiAutomator2Server, INSTRUMENTATION_TARGET } from '../../lib/uiautomator2';
+import { UiAutomator2Server, INSTRUMENTATION_TARGET,
+         SERVER_TEST_PACKAGE_ID } from '../../lib/uiautomator2';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -33,7 +34,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('install').twice();
 
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
       mocks.adb.expects('shell')
@@ -51,7 +52,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
       mocks.adb.expects('uninstallApk').twice();
@@ -72,7 +73,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
       mocks.adb.expects('uninstallApk').never();
@@ -95,7 +96,7 @@ describe('UiAutomator2', function () {
 
       // SERVER_TEST_PACKAGE_ID
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
       mocks.adb.expects('uninstallApk').never();
@@ -115,7 +116,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
       mocks.adb.expects('uninstallApk').twice();
@@ -137,7 +138,7 @@ describe('UiAutomator2', function () {
       mocks.adb.expects('checkApkCert').twice().returns(true);
 
       mocks.adb.expects('isAppInstalled')
-        .withExactArgs('io.appium.uiautomator2.server.test')
+        .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
       mocks.adb.expects('uninstallApk').never();

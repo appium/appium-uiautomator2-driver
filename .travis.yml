@@ -83,7 +83,7 @@ before_script:
       echo "Skipping opencv install for now"
     fi
 script:
-  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit
+  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit
 after_success:
   - if [ -n "$COVERALLS" ]; then _FORCE_LOGS=0 npm run coverage; fi
 after_failure:

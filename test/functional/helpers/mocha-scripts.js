@@ -8,6 +8,7 @@ import wd from 'wd';
 import { startServer, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 
+
 if (process.env.TESTOBJECT_E2E_TESTS) {
   logger.debug('Running tests on TestObject');
 
@@ -30,7 +31,13 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
   });
 
 } else {
+  let server;
   before(async function () {
-    await startServer(DEFAULT_PORT, 'localhost');
+    server = await startServer(DEFAULT_PORT, 'localhost');
+  });
+  after(async function () {
+    if (server) {
+      await server.close();
+    }
   });
 }

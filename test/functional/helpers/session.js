@@ -2,6 +2,7 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
+import './mocha-scripts';
 
 
 async function initDriver (caps, adbPort) {

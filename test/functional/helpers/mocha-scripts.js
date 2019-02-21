@@ -8,6 +8,7 @@ import wd from 'wd';
 import { startServer, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 
+
 if (process.env.TESTOBJECT_E2E_TESTS) {
   logger.debug('Running tests on TestObject');
 

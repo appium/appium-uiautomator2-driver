@@ -6,6 +6,7 @@ jobs:
       CI: true
       SESSION_ID: 6b153523-874e-4f86-9b6d-5a9f99d61a60 # Temporary until Sauce RDC rolls out new solution
       REAL_DEVICE: true
+      MOCHA_FILE: mocha-test-results.xml
     steps:
     - script: java -jar jars/client.jar server --manualUrl https://us1-manual.app.testobject.com --routerUrl wss://us1.api.testobject.com/api/vusb/forward &
       displayName: Start Client
@@ -24,3 +25,7 @@ jobs:
       displayName: Build
     - script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
       displayName: Run tests
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFiles: ${{ parameters.MOCHA_FILE }}

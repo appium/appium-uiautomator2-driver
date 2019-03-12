@@ -64,8 +64,7 @@
     "e2e": "gulp transpile && mocha -t 6400000 --reporter spec build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
     "e2e:find": "gulp transpile && mocha -t 6400000 --reporter spec build/test/functional/commands/find/*-specs.js",
     "e2e:keyboard": "gulp transpile && mocha -t 6400000 --reporter spec build/test/functional/commands/keyboard/*-specs.js",
-    "e2e:commands": "gulp transpile && mocha -t 6400000 --reporter spec build/test/functional/commands/*-specs.js",
-    "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
+    "e2e:commands": "gulp transpile && mocha -t 6400000 --reporter spec build/test/functional/commands/*-specs.js"
   },
   "pre-commit": [
     "precommit-msg",

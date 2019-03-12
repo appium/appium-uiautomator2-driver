@@ -37,10 +37,6 @@ describe('apidemo - context @skip-ci', function () {
       contexts.join('').should.include(WEBVIEW);
     });
     it('should go into the webview', async function () {
-      // TODO: Fix this on TestObject. Chromedriver does not exist error
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       let contexts = await driver.contexts();
       await driver.context(contexts[1]);
     });
@@ -56,20 +52,12 @@ describe('apidemo - context @skip-ci', function () {
       await driver.elementByXPath(NATIVE_LOCATOR);
     });
     it('should be able to go into webview context and interact with it after restarting app', async function () {
-      // TODO: Fix this on TestObject. Chromedriver does not exist error
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       await driver.closeApp();
       await driver.launchApp();
       await driver.context(WEBVIEW);
       await driver.elementByXPath(WEBVIEW_LOCATOR);
     });
     it('should be able to go into webview context and interact with it after resetting app', async function () {
-      // TODO: Fix this on TestObject. Chromedriver does not exist error
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       await driver.resetApp();
       await driver.context(WEBVIEW);
       await driver.elementByXPath(WEBVIEW_LOCATOR);

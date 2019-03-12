@@ -18,13 +18,11 @@ const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
 const DEFAULT_ADB_PORT = 5037;
 
 async function killServer (adbPort) {
-  if (!process.env.TESTOBJECT_E2E_TESTS) {
-    let adb = await ADB.createADB({adbPort});
-    await adb.killServer();
-    if (process.env.CI) {
-      // on Travis this takes a while to get into a good state
-      await B.delay(10000);
-    }
+  let adb = await ADB.createADB({adbPort});
+  await adb.killServer();
+  if (process.env.CI) {
+    // on Travis this takes a while to get into a good state
+    await B.delay(10000);
   }
 }
 
@@ -57,10 +55,6 @@ describe('createSession', function () {
       appActivity.should.equal(caps.appActivity);
     });
     it('should error out for not apk extension', async function () {
-      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        return;
-      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo',
         appPackage: APIDEMOS_PACKAGE,
@@ -74,10 +68,6 @@ describe('createSession', function () {
       }
     });
     it('should error out for invalid app path', async function () {
-      // Don't test this on TestObject. The 'app' cap gets stripped out and can't be tested
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        return;
-      }
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         app: 'foo.apk',
         appPackage: APIDEMOS_PACKAGE,
@@ -108,11 +98,6 @@ describe('createSession', function () {
   });
 
   describe('custom adb port', function () {
-    // Don't do these tests on TestObject. Cannot use TestObject's ADB.
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      return;
-    }
-
     let adbPort = 5042;
     let driver;
 

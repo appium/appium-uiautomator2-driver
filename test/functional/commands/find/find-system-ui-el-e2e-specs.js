@@ -16,9 +16,6 @@ let defaultCaps = {
 
 describe('Find - android ui elements @skip-ci', function () {
   before(async function () {
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
-    }
     // TODO: why does travis fail on this?
 
     driver = await initDriver(defaultCaps);

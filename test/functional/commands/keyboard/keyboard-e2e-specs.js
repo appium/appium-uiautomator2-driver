@@ -48,13 +48,13 @@ function deSamsungify (text) {
 }
 
 async function getElement (driver, className) {
-  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
+  return await retryInterval(10, 1000, async () => {
     return await driver.elementByClassName(className);
   });
 }
 
 async function waitForText (element, expectedText) {
-  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
+  return await retryInterval(10, 1000, async () => {
     const text = await element.text();
     if (text !== expectedText) {
       throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);
@@ -72,7 +72,7 @@ async function runTextEditTest (driver, testText, keys = false) {
     await el.sendKeys(testText);
   }
 
-  await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
+  await retryInterval(10, 1000, async () => {
     let text = await el.text();
     deSamsungify(text).should.be.equal(testText);
   });
@@ -227,14 +227,12 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
-        if (!process.env.TESTOBJECT_E2E_TESTS) {
-          let adb = new ADB();
-          if (parseInt(await adb.getApiLevel(), 10) < 24) {
-            // below Android 7.0 (API level 24) typing too many characters in a
-            // length-limited field will either throw a NullPointerException or
-            // crash the app
-            return this.skip();
-          }
+        let adb = new ADB();
+        if (parseInt(await adb.getApiLevel(), 10) < 24) {
+          // below Android 7.0 (API level 24) typing too many characters in a
+          // length-limited field will either throw a NullPointerException or
+          // crash the app
+          return this.skip();
         }
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
@@ -261,10 +259,7 @@ describe('keyboard', function () {
   });
 
   describe('unicode', function () {
-    let adb;
-    if (!process.env.TESTOBJECT_E2E_TESTS) {
-      adb = new ADB();
-    }
+    let adb = new ADB();
     let initialIME;
     let driver;
     before(async function () {

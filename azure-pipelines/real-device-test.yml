@@ -23,7 +23,7 @@ jobs:
       displayName: Install Node dependencies
     - script: npm run build
       displayName: Build
-    - script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
+    - script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/commands -g @skip-ci -i --exit
       displayName: Run tests
     - task: PublishTestResults@2
       condition: always()

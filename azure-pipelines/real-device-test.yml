@@ -4,7 +4,7 @@ jobs:
       vmImage: 'macOS-10.13'
     variables:
       CI: true
-      SESSION_ID: bc5451c2-415c-4ac5-a90d-6d4eaeb7c7a6 # Temporary until Sauce RDC rolls out new solution
+      SESSION_ID: 18ade986-757a-4b9d-8146-116e3c534d1a # Temporary until Sauce RDC rolls out new solution
       REAL_DEVICE: true
       MOCHA_FILE: mocha-test-results.xml
     steps:

@@ -15,3 +15,12 @@ jobs:
       displayName: Start Remote ADB
     - script: adb devices
       displayName: List Android Devices
+    - task: NodeTool@0
+      inputs:
+        versionSpec: 11.x
+    - script: npm install
+      displayName: Install Node dependencies
+    - script: npm run build
+      displayName: Build
+    - script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
+      displayName: Run tests

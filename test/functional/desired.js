@@ -5,7 +5,7 @@ import gpsDemoApp from 'gps-demo-app';
 const uiautomator2ServerLaunchTimeout = process.env.TRAVIS ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.TRAVIS ? 120000 : 20000;
 
-const ADB_EXEC_TIMEOUT = process.env.TRAVIS ? 60000 : 20000;
+const ADB_EXEC_TIMEOUT = (process.env.TRAVIS || process.env.CI) ? 60000 : 20000;
 
 const GENERIC_CAPS = {
   deviceName: 'Android',

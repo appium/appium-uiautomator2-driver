@@ -1,5 +1,5 @@
 jobs:
-  - job: real_device-e2e
+  - job: real_device_e2e
     variables:
       SESSION_ID: c1f7c108-156d-4f6f-9768-42f712bfbc4e # Temporary until Sauce RDC rolls out new solution
       REAL_DEVICE: true

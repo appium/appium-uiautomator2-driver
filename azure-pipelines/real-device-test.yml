@@ -9,11 +9,11 @@ jobs:
       MOCHA_FILE: mocha-test-results.xml
     steps:
     - script: java -jar jars/client.jar server --manualUrl https://us1-manual.app.testobject.com --routerUrl wss://us1.api.testobject.com/api/vusb/forward &
-      displayName: Start Client
+      displayName: Start vUSB Client
     - script: |
         java -jar jars/client.jar connect --apiKey $SAUCE_LABS_RDC_API_KEY --sessionId $SESSION_ID
         adb connect localhost:7000
-      displayName: Start Remote ADB
+      displayName: Start vUSB Remote Device
     - script: adb devices
       displayName: List Android Devices
     - task: NodeTool@0

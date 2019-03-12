@@ -1,6 +1,8 @@
 jobs:
   - job: real_device_e2e
+    vmImage: 'macOS-10.13'
     variables:
+      CI: true
       SESSION_ID: 6b153523-874e-4f86-9b6d-5a9f99d61a60 # Temporary until Sauce RDC rolls out new solution
       REAL_DEVICE: true
     steps:

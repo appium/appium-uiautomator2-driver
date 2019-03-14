@@ -1,6 +1,8 @@
 import { exec } from 'teen_process';
+import ADB from 'appium-adb';
 
-async function getLocale (adb) {
+
+async function getLocale (adb = new ADB()) {
   if (await adb.getApiLevel() < 23) {
     return await adb.getDeviceCountry();
   } else {

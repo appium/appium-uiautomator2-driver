@@ -128,7 +128,7 @@ script:
   - if [ $CLOUD = "1" ]; then
       npm run mocha -- -t 480000 --recursive build/test/$TEST;
     else
-      npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci --exit;
+      npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit;
     fi
 after_script:
   - if [-n "$LONG_PID" ]; then

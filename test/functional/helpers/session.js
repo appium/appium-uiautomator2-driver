@@ -2,10 +2,13 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
+import { retry } from 'asyncbox';
 import './mocha-scripts';
 
 
 const {SAUCE_RDC, SAUCE_EMUSIM, CLOUD, TRAVIS, CI} = process.env;
+
+const INIT_RETRIES = process.env.CI ? 2 : 1;
 
 function getPort () {
   if (SAUCE_EMUSIM || SAUCE_RDC) {
@@ -49,7 +52,7 @@ async function initSession (caps, adbPort) {
   const port = getPort();
   logger.debug(`Starting session on ${host}:${port}`);
   driver = await wd.promiseChainRemote(host, port);
-  await driver.init(caps);
+  await retry(INIT_RETRIES, driver.init.bind(driver), caps);
 
   // In Travis, there is sometimes a popup
   if (CI && !CLOUD) {

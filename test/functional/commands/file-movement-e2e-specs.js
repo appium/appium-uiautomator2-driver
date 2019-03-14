@@ -5,7 +5,7 @@ import B from 'bluebird';
 import stream from 'stream';
 import Unzip from 'unzip';
 import { APIDEMOS_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 
 
 chai.should();
@@ -14,10 +14,10 @@ chai.use(chaiAsPromised);
 describe('file movement', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
 
   function getRandomDir () {

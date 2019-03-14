@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../desired';
 import ADB from 'appium-adb';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 import { getLocale } from '../helpers/helpers';
 import _ from 'lodash';
 import { androidHelpers } from 'appium-android-driver';
@@ -21,11 +21,11 @@ describe('strings', function () {
       if (process.env.TESTOBJECT_E2E_TESTS) {
         this.skip();
       }
-      driver = await initDriver(APIDEMOS_CAPS);
+      driver = await initSession(APIDEMOS_CAPS);
     });
     after(async function () {
       if (!process.env.TESTOBJECT_E2E_TESTS) {
-        await driver.quit();
+        await deleteSession();
       }
     });
 
@@ -61,12 +61,12 @@ describe('strings', function () {
           await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
         }
 
-        await driver.quit();
+        await deleteSession();
       }
     });
 
     it('should return app strings with default locale/language', async function () {
-      driver = await initDriver(APIDEMOS_CAPS);
+      driver = await initSession(APIDEMOS_CAPS);
 
       let strings = await driver.getAppStrings();
       strings.hello_world.should.equal('Hello, World!');
@@ -75,7 +75,7 @@ describe('strings', function () {
       if (process.env.TESTOBJECT_E2E_TESTS) {
         this.skip();
       }
-      driver = await initDriver(_.defaults({
+      driver = await initSession(_.defaults({
         language: 'fr',
         locale: 'CA',
       }, APIDEMOS_CAPS));

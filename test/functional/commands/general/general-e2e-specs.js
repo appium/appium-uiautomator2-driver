@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -10,12 +10,10 @@ describe('general', function () {
 
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    if (driver) {
-      await driver.quit();
-    }
+    await deleteSession();
   });
 
   describe('startActivity', function () {

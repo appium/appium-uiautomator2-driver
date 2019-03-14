@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { retryInterval } from 'asyncbox';
 import { GPS_DEMO_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 
 
 chai.should();
@@ -11,10 +11,10 @@ chai.use(chaiAsPromised);
 describe('geo-location -', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(GPS_DEMO_CAPS);
+    driver = await initSession(GPS_DEMO_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
 
   it('should set geo location', async function () {

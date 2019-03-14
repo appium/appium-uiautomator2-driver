@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import { DOMParser } from 'xmldom';
 import xpath from 'xpath';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -19,10 +19,10 @@ let assertSource = (source) => {
 describe('apidemo - source', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should return the page source', async function () {
     let source = await driver.source();

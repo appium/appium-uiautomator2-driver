@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { mjpeg } from 'appium-support';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -17,10 +17,10 @@ describe('screenshot - mjpeg server', function () {
   before(async function () {
     mjpegServer = mjpeg.initMJpegServer(MJPEG_SERVER_PORT);
     const caps = {...APIDEMOS_CAPS, mjpegScreenshotUrl: MJPEG_SERVER_URL};
-    driver = await initDriver(caps);
+    driver = await initSession(caps);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
     mjpegServer.close();
   });
   it('should get the screenshot via an mjpeg server if requested', async function () {

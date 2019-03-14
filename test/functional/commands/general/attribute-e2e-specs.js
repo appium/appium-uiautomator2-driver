@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,11 +11,11 @@ let animationEl;
 
 describe('apidemo - attributes', function () {
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
     animationEl = await driver.waitForElementByAccessibilityId('Animation');
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should be able to find resourceId attribute', async function () {
     await animationEl.getAttribute('resourceId').should.eventually.become('android:id/text1');

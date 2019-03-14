@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -10,7 +10,7 @@ describe('mobile', function () {
   let driver;
   before(async function () {
     delete APIDEMOS_CAPS.app;
-    driver = await initDriver({
+    driver = await initSession({
       ...APIDEMOS_CAPS,
 
       // For deeplinking to work, it has to run a session in a native
@@ -21,7 +21,7 @@ describe('mobile', function () {
     });
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   describe('mobile:shell', function () {
     it('should call execute command without proxy error, but require relaxed security flag', async function () {

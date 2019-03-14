@@ -2,11 +2,36 @@ import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
+import { retry } from 'asyncbox';
 import './mocha-scripts';
 
 
-async function initDriver (caps, adbPort) {
-  if (process.env.TRAVIS) {
+const {SAUCE_RDC, SAUCE_EMUSIM, CLOUD, TRAVIS, CI} = process.env;
+
+const INIT_RETRIES = process.env.CI ? 2 : 1;
+
+function getPort () {
+  if (SAUCE_EMUSIM || SAUCE_RDC) {
+    return 80;
+  }
+  return DEFAULT_PORT;
+}
+
+function getHost () {
+  if (SAUCE_RDC) {
+    return 'appium.staging.testobject.org';
+  } else if (SAUCE_EMUSIM) {
+    return 'ondemand.saucelabs.com';
+  }
+
+  return DEFAULT_HOST;
+}
+
+
+let driver;
+
+async function initSession (caps, adbPort) {
+  if (TRAVIS && !CLOUD) {
     let adb = await ADB.createADB({adbPort});
     try {
       // on Travis, sometimes we get the keyboard dying and the screen stuck
@@ -15,13 +40,22 @@ async function initDriver (caps, adbPort) {
     } catch (ign) {}
   }
 
+  if (CLOUD) {
+    // on cloud tests, we want to set the `name` capability
+    if (!caps.name) {
+      caps.name = process.env.SAUCE_JOB_NAME || process.env.TRAVIS_JOB_NUMBER || 'unnamed';
+    }
+  }
+
   // Create a WD driver
-  logger.debug(`Starting session on ${DEFAULT_HOST}:${DEFAULT_PORT}`);
-  let driver = await wd.promiseChainRemote(DEFAULT_HOST, DEFAULT_PORT);
-  await driver.init(caps);
+  const host = getHost();
+  const port = getPort();
+  logger.debug(`Starting session on ${host}:${port}`);
+  driver = await wd.promiseChainRemote(host, port);
+  await retry(INIT_RETRIES, driver.init.bind(driver), caps);
 
   // In Travis, there is sometimes a popup
-  if (process.env.CI) {
+  if (CI && !CLOUD) {
     try {
       const okBtn = await driver.elementById('android:id/button1');
       logger.warn('*******************************************************');
@@ -36,4 +70,10 @@ async function initDriver (caps, adbPort) {
   return driver;
 }
 
-export { initDriver };
+async function deleteSession () {
+  try {
+    await driver.quit();
+  } catch (ign) {}
+}
+
+export { initSession, deleteSession };

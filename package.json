@@ -57,6 +57,7 @@
     "e2e-test": "gulp e2e-test",
     "watch": "gulp watch",
     "mocha": "mocha",
+    "mocha:parallel": "mocha-parallel-tests",
     "coverage": "gulp coveralls",
     "lint": "gulp eslint",
     "lint:fix": "gulp eslint --fix",
@@ -74,7 +75,7 @@
   "devDependencies": {
     "ajv": "^6.5.3",
     "android-apidemos": "^3.0.0",
-    "appium-gulp-plugins": "^3.1.0",
+    "appium-gulp-plugins": "^3.6.0",
     "appium-test-support": "^1.0.0",
     "babel-eslint": "^10.0.0",
     "chai": "^4.1.0",

@@ -4,7 +4,7 @@ import ADB from 'appium-adb';
 import request from 'request-promise';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
-import { initDriver } from './helpers/session';
+import { initSession, deleteSession } from './helpers/session';
 import B from 'bluebird';
 
 
@@ -33,13 +33,13 @@ describe('createSession', function () {
   describe('default adb port', function () {
     afterEach(async function () {
       if (driver) {
-        await driver.quit();
+        await deleteSession();
       }
       driver = null;
     });
 
     it('should start android session focusing on default pkg and act', async function () {
-      driver = await initDriver(APIDEMOS_CAPS);
+      driver = await initSession(APIDEMOS_CAPS);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(APIDEMOS_PACKAGE);
@@ -50,7 +50,7 @@ describe('createSession', function () {
         appPackage: APIDEMOS_PACKAGE,
         appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      driver = await initDriver(caps);
+      driver = await initSession(caps);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(caps.appPackage);
@@ -67,8 +67,8 @@ describe('createSession', function () {
         appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       try {
-        await initDriver(caps);
-        throw new Error(`Call to 'initDriver' should not have succeeded`);
+        await initSession(caps);
+        throw new Error(`Call to 'initSession' should not have succeeded`);
       } catch (e) {
         e.data.should.match(/does not exist or is not accessible/);
       }
@@ -85,8 +85,8 @@ describe('createSession', function () {
       });
 
       try {
-        await initDriver(caps);
-        throw new Error(`Call to 'initDriver' should not have succeeded`);
+        await initSession(caps);
+        throw new Error(`Call to 'initSession' should not have succeeded`);
       } catch (e) {
         e.data.should.match(/does not exist or is not accessible/);
       }
@@ -96,7 +96,7 @@ describe('createSession', function () {
         appPackage: APIDEMOS_PACKAGE,
         appActivity: APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      driver = await initDriver(caps);
+      driver = await initSession(caps);
 
       let serverCaps = await driver.sessionCapabilities();
       serverCaps.deviceScreenSize.should.exist;
@@ -121,7 +121,7 @@ describe('createSession', function () {
     });
     afterEach(async function () {
       if (driver) {
-        await driver.quit();
+        await deleteSession();
       }
 
       await killServer(adbPort);
@@ -131,7 +131,7 @@ describe('createSession', function () {
       let caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
       });
-      driver = await initDriver(caps, adbPort);
+      driver = await initSession(caps, adbPort);
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(APIDEMOS_PACKAGE);
@@ -159,7 +159,7 @@ describe('createSession', function () {
 
 describe('close', function () {
   it('should close application', async function () {
-    let driver = await initDriver(APIDEMOS_CAPS);
+    let driver = await initSession(APIDEMOS_CAPS);
     await driver.closeApp();
     let appPackage = await driver.getCurrentPackage();
     if (appPackage) {

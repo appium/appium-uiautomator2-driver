@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { APIDEMOS_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 
 
 chai.should();
@@ -14,24 +14,24 @@ describe('apidemo - orientation -', function () {
   describe('initial -', function () {
     afterEach(async function () {
       await driver.setOrientation('PORTRAIT');
-      await driver.quit();
+      await deleteSession();
     });
     it('should have portrait orientation if requested', async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appActivity: '.view.TextFields',
         orientation: 'PORTRAIT',
       }));
       await driver.getOrientation().should.eventually.eql('PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appActivity: '.view.TextFields',
         orientation: 'LANDSCAPE',
       }));
       await driver.getOrientation().should.eventually.eql('LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appActivity: '.view.TextFields',
       }));
       await driver.getOrientation().should.eventually.eql('PORTRAIT');
@@ -39,12 +39,12 @@ describe('apidemo - orientation -', function () {
   });
   describe('setting -', function () {
     before(async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appActivity: '.view.TextFields'
       }));
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
     });
     it('should rotate screen to landscape', async function () {
       await driver.setOrientation('PORTRAIT');

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 import { APIDEMOS_CAPS } from '../desired';
 import { androidHelpers } from 'appium-android-driver';
 import { getLocale } from '../helpers/helpers';
@@ -36,7 +36,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
       } else {
         await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);
       }
-      await driver.quit();
+      await deleteSession();
     }
   });
 
@@ -45,7 +45,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
       language: 'fr',
       locale: 'FR',
     });
-    driver = await initDriver(frCaps);
+    driver = await initSession(frCaps);
     await getLocale(driver.adb).should.eventually.equal('fr-FR');
   });
   it('should start as US', async function () {
@@ -53,7 +53,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
       language: 'en',
       locale: 'US',
     });
-    driver = await initDriver(usCaps);
+    driver = await initSession(usCaps);
     await getLocale(driver.adb).should.eventually.equal('en-US');
   });
 });

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 import _ from 'lodash';
 
 
@@ -23,10 +23,10 @@ describe('apidemo - context @skip-ci', function () {
   describe('general', function () {
     let driver;
     before(async function () {
-      driver = await initDriver(caps);
+      driver = await initSession(caps);
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
     });
     it('should find webview context', async function () {
       let contexts = await driver.contexts();
@@ -79,13 +79,14 @@ describe('apidemo - context @skip-ci', function () {
   describe('autoWebview', function () {
     let driver;
     afterEach(async function () {
-      await driver.quit();
+      await deleteSession();
     });
     it('should enter into the webview', async function () {
-      driver = await initDriver(Object.assign({}, caps, {
+      driver = await initSession(Object.assign({}, caps, {
         autoWebview: true,
         autoWebviewTimeout: 20000,
       }));
+      driver.currentContext().should.not.eql('NATIVE_APP');
     });
   });
 });

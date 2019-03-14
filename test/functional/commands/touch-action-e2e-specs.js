@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import wd from 'wd';
 import { APIDEMOS_CAPS } from '../desired';
-import { initDriver } from '../helpers/session';
+import { initSession, deleteSession } from '../helpers/session';
 import { isArmEmu } from '../helpers/helpers';
 
 
@@ -20,13 +20,13 @@ describe('apidemo - touch', function () {
   describe('multi-actions', function () {
     let driver;
     before(async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.SplitTouchView',
       }));
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
     });
 
     it('should scroll two different lists', async function () {
@@ -54,13 +54,13 @@ describe('apidemo - touch', function () {
   describe('swipe-action', function () {
     let driver;
     before(async function () {
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.List1',
       }));
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
     });
 
     it('should swipe', async function () {
@@ -85,14 +85,14 @@ describe('apidemo - touch', function () {
         // that is fixed
         this.skip();
       }
-      driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {
+      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
         appPackage: 'io.appium.android.apis',
         appActivity: '.view.List1',
       }));
     });
     after(async function () {
       if (driver) {
-        await driver.quit();
+        await deleteSession();
       }
     });
 

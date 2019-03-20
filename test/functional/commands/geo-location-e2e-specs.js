@@ -9,16 +9,18 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('geo-location -', function () {
+  this.retries(2);
+
   let driver;
-  before(async function () {
+  beforeEach(async function () {
     driver = await initSession(GPS_DEMO_CAPS);
   });
-  after(async function () {
+  afterEach(async function () {
     await deleteSession();
   });
 
   it('should set geo location', async function () {
-    let getText = async () => {
+    const getText = async function () {
       return await retryInterval(5, 1000, async function () {
         const textViews = await driver.elementsByClassName('android.widget.TextView');
         textViews.length.should.be.at.least(2);
@@ -26,8 +28,8 @@ describe('geo-location -', function () {
       });
     };
 
-    let latitude = '27.1';
-    let longitude = '78.0';
+    const latitude = '27.1';
+    const longitude = '78.0';
 
     let text = await getText();
     text.should.not.include(`Latitude: ${latitude}`);

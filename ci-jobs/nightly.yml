@@ -1,5 +1,6 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
 jobs:
+  # TODO: Add Sauce OnDemand and RDC tests here
   - template: templates/android-e2e-template.yml
     parameters:
       script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit

@@ -1,0 +1,20 @@
+# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+jobs:
+  - template: templates/android-e2e-template.yml
+    parameters:
+      script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
+      name: sdk28_e2e_tests
+      CHROMEDRIVER_VERSION: 2.44
+      ANDROID_SDK_VERSION: 28
+  - template: templates/android-e2e-template.yml
+    parameters:
+      script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
+      name: sdk28_e2e_tests
+      CHROMEDRIVER_VERSION: 2.44
+      ANDROID_SDK_VERSION: 26
+  - template: templates/android-e2e-template.yml
+    parameters:
+      script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
+      name: sdk28_e2e_tests
+      CHROMEDRIVER_VERSION: 2.44
+      ANDROID_SDK_VERSION: 24

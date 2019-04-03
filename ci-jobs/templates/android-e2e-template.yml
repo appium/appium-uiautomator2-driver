@@ -27,7 +27,7 @@ jobs:
       displayName: NPM Test
     - script: npm install -g mjpeg-consumer
       displayName: Install MJPEG Consumer
-    - script: bash ci-jobs/scripts/start-emulator.sh
+    - script: bash ../scripts/start-emulator.sh
       displayName: Create and run Emulator
     - script: npm run build
       displayName: Build

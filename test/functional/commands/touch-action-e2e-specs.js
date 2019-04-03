@@ -96,7 +96,7 @@ describe('apidemo - touch', function () {
       }
     });
 
-    it.only('should scroll to an element', async function () {
+    it('should scroll to an element', async function () {
       const cheeseForScroll = 'Abertam';
       // first find the scrolling container
       let scrollableContainer = await driver.elementByXPath("//*[@scrollable='true']");

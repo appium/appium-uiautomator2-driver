@@ -24,7 +24,7 @@ describe('file movement', function () {
     return `/data/local/tmp/test${Math.random()}`;
   }
 
-  it.only('should push and pull a file', async function () {
+  it('should push and pull a file', async function () {
     let stringData = `random string data ${Math.random()}`;
     let base64Data = Buffer.from(stringData).toString('base64');
     let remotePath = `${getRandomDir()}/remote.txt`;

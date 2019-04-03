@@ -6,4 +6,3 @@ jobs:
       name: sdk28_e2e_tests
       CHROMEDRIVER_VERSION: 2.44
       ANDROID_SDK_VERSION: 28
- 

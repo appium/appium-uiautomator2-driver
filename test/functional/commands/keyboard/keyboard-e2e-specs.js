@@ -65,6 +65,7 @@ async function waitForText (element, expectedText) {
 async function runTextEditTest (driver, testText, keys = false) {
   let el = await getElement(driver, EDITTEXT_CLASS);
   await el.clear();
+  await el.click();
 
   if (keys) {
     await driver.keys([testText]);

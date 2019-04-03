@@ -23,7 +23,7 @@ jobs:
         versionSpec: ${{ parameters.NODE_VERSION }}
     - script: npm install --chromedriver_version="${{ parameters.CHROMEDRIVER_VERSION }}"
       displayName: Install Node dependencies
-    - script: npm install -g mjpeg-consumer
+    - script: npm install --no-save mjpeg-consumer
       displayName: Install MJPEG Consumer
     - script: npm test
       displayName: NPM Test

@@ -12,10 +12,10 @@ jobs:
       script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
       name: sdk26_e2e_tests
       CHROMEDRIVER_VERSION: 2.44
-      ANDROID_SDK_VERSION: 26
+      ANDROID_SDK_VERSION: 25
   - template: templates/android-e2e-template.yml
     parameters:
       script: npx mocha --timeout 6000000 --reporter mocha-junit-reporter --recursive build/test/functional/ -g @skip-ci -i --exit
       name: sdk24_e2e_tests
       CHROMEDRIVER_VERSION: 2.44
-      ANDROID_SDK_VERSION: 24
+      ANDROID_SDK_VERSION: 22

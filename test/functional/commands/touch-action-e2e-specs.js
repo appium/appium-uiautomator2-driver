@@ -110,7 +110,7 @@ describe('apidemo - touch', function () {
       const action = new wd.TouchAction();
       action.press({element: scrollToEl})
         .wait(300)
-        .moveTo({element: scrollToEl, x: 0, y: -500})
+        .moveTo({element: scrollToEl, x: 0, y: -1500})
         .release();
       await driver.performTouchAction(action);
       // verify the element no longer exists

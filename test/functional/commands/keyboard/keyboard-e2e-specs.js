@@ -227,7 +227,7 @@ describe('keyboard', function () {
         await waitForText(passwordOutput, '');
       });
 
-      it.only('should be able to type in length-limited field', async function () {
+      it('should be able to type in length-limited field', async function () {
         let charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         if (!process.env.TESTOBJECT_E2E_TESTS) {
           let adb = new ADB();

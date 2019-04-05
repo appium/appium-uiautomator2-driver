@@ -58,7 +58,10 @@ describe('strings', function () {
           let [language, country] = initialLocale.split('-');
           await androidHelpers.ensureDeviceLocale(adb, language, country);
         } else {
-          await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
+          // This method is flakey in CI
+          if (!process.env.CI) {
+            await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
+          }
         }
 
         await deleteSession();

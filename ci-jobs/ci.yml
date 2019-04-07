@@ -11,8 +11,6 @@ jobs:
         versionSpec: 11.x
     - script: npm install
       displayName: Install Node dependencies
-    - script: npm test
-      displayName: NPM Test
     - script: npm run build
       displayName: Build
     - script: npm test

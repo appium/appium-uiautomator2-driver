@@ -1,0 +1,14 @@
+jobs:
+  - job: real_device-e2e
+    variables:
+      SESSION_ID: c1f7c108-156d-4f6f-9768-42f712bfbc4e # Temporary until Sauce RDC rolls out new solution
+      REAL_DEVICE: true
+    steps:
+    - script: java -jar ../jars/client.jar server --manualUrl https://us1-manual.app.testobject.com --routerUrl wss://us1.api.testobject.com/api/vusb/forward &
+      displayName: Start Client
+    - script: |
+        java -jar client.jar connect --apiKey $SAUCE_LABS_RDC_API_KEY --sessionId $SESSION_ID
+        adb connect localhost:7000
+      displayName: Start Remote ADB
+    - script: adb devices
+      displayName: List Android Devices

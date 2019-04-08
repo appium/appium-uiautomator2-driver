@@ -19,7 +19,7 @@ describe('Find - uiautomator', function () {
   });
   it('should find elements with a boolean argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements within the context of another element', async function () {
     let els = await driver
@@ -29,19 +29,19 @@ describe('Find - uiautomator', function () {
   });
   it('should find elements without prepending "new UiSelector()"', async function () {
     await driver.elementsByAndroidUIAutomator('.clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements without prepending "new UiSelector()"', async function () {
     await driver.elementsByAndroidUIAutomator('clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements without prepending "new "', async function () {
     await driver.elementsByAndroidUIAutomator('UiSelector().clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should ignore trailing semicolons', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().clickable(true);')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with an int argument', async function () {
     let el = await driver.elementByAndroidUIAutomator('new UiSelector().index(0)');
@@ -54,11 +54,11 @@ describe('Find - uiautomator', function () {
   });
   it('should find an element with an overloaded method argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().className("android.widget.TextView")')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with a Class<T> method argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().className(android.widget.TextView)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with a long chain of methods', async function () {
     let el = await driver.elementByAndroidUIAutomator('new UiSelector().clickable(true).className(android.widget.TextView).index(1)');

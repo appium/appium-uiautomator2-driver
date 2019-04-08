@@ -65,6 +65,7 @@ async function waitForText (element, expectedText) {
 async function runTextEditTest (driver, testText, keys = false) {
   let el = await getElement(driver, EDITTEXT_CLASS);
   await el.clear();
+  await el.click();
 
   if (keys) {
     await driver.keys([testText]);
@@ -227,17 +228,20 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
+        let charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         if (!process.env.TESTOBJECT_E2E_TESTS) {
           let adb = new ADB();
-          if (parseInt(await adb.getApiLevel(), 10) < 24) {
+          let apiLevel = parseInt(await adb.getApiLevel(), 10);
+          if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
             // below Android 7.0 (API level 24) typing too many characters in a
             // length-limited field will either throw a NullPointerException or
             // crash the app
+            // also can be flakey in CI for SDK < 28
             return this.skip();
           }
         }
         let el = els[3];
-        await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        await el.setImmediateValue(charactersToType);
 
         // expect first 11 characters (limit of the field) to be in the field
         let text = await el.text();

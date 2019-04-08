@@ -96,7 +96,9 @@ describe('apidemo - touch', function () {
       }
     });
 
-    it('should scroll to an element', async function () {
+    // TODO: Has this test ever worked? How can it scroll so that an element is off-screen and then scroll
+    // back to that element?
+    it.skip('should scroll to an element', async function () {
       const cheeseForScroll = 'Abertam';
       // first find the scrolling container
       let scrollableContainer = await driver.elementByXPath("//*[@scrollable='true']");

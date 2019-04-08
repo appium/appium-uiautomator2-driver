@@ -9,8 +9,7 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('geo-location -', function () {
-  this.retries(2);
-
+  // TODO: Skip for SDK 28+
   let driver;
   beforeEach(async function () {
     driver = await initSession(GPS_DEMO_CAPS);

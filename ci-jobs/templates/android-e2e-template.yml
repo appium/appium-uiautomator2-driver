@@ -1,0 +1,40 @@
+# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+parameters:
+  script: echo "NO TEST SCRIPT WAS PROVIDED" && exit 1
+  name: 'android_e2e_tests'
+  vmImage: 'macOS-10.13'
+  MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
+  CHROMEDRIVER_VERSION: 2.44
+  NODE_VERSION: 10.x
+  ANDROID_SDK_VERSION: 28 
+
+jobs:
+  - job: ${{ parameters.name }}
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    variables:
+      CI: true
+      TERM: dumb
+      MOCHA_FILE: ${{ parameters.MOCHA_FILE }}
+      ANDROID_SDK_VERSION: ${{ parameters.ANDROID_SDK_VERSION }}
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: ${{ parameters.NODE_VERSION }}
+    - script: npm install --chromedriver_version="${{ parameters.CHROMEDRIVER_VERSION }}"
+      displayName: Install Node dependencies
+    - script: npm install --no-save mjpeg-consumer
+      displayName: Install MJPEG Consumer
+    - script: npm test
+      displayName: NPM Test
+    - script: bash ci-jobs/scripts/start-emulator.sh
+      displayName: Create and run Emulator
+    - script: npm run build
+      displayName: Build
+    - script: ${{ parameters.script }}
+      displayName: Run tests
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFiles: ${{ parameters.MOCHA_FILE }}
+  

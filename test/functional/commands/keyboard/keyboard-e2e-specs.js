@@ -237,7 +237,7 @@ describe('keyboard', function () {
             // length-limited field will either throw a NullPointerException or
             // crash the app
             // also can be flakey in CI for SDK < 28
-            this.skip();
+            return this.skip();
           }
         }
         let el = els[3];

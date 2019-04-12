@@ -6,6 +6,15 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-6
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
 env:
   global:
     - NODE_VERSION=8
@@ -14,11 +23,12 @@ env:
     - MOCHA_TIMEOUT=640000
     - RECURSIVE=
     - START_EMU=1
-    - ANDROID_EMU_NAME=test
-    - ANDROID_EMU_ABI=armeabi-v7a
-    - ANDROID_EMU_TAG=default
-    - ANDROID_BUILD_TOOLS=28.0.3
-    - ANDROID_PLATFORM=android-21
+    - EMU_NAME=test
+    - EMU_ABI=x86_64
+    - EMU_TAG=default
+    - EMU_TARGET=android-26
+    - BUILD_TOOLS=28.0.3
+    - API_TARGET=android-28
     - CC=gcc-6 CXX=g++-6
     - MAX_PARALLEL=0
     - DEBUG=mocha-parallel-tests
@@ -66,37 +76,39 @@ jobs:
     #     - DEVICE_NAME="Android GoogleAPI Emulator"
     #     - TEST=functional/commands/general/general-e2e-specs.js
 before_install:
+  - echo $ANDROID_HOME
   - |
     if [ -z ${CLOUD} ]; then
-      echo y | android update sdk --no-ui -t tools
-      echo yes | sdkmanager tools > /dev/null
-      echo yes | sdkmanager --update > /dev/null
-      echo yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
-      echo yes | sdkmanager "extras;android;m2repository" > /dev/null
-      echo yes | sdkmanager "extras;google;m2repository" > /dev/null
       if [ ${START_EMU} = "1" ]; then
-        echo yes | sdkmanager "platforms;${ANDROID_PLATFORM}" > /dev/null
-        export ANDROID_EMU_IMAGE="system-images;${ANDROID_PLATFORM};${ANDROID_EMU_TAG};${ANDROID_EMU_ABI}"
+        echo 'count=0' > /home/travis/.android/repositories.cfg
+        echo yes | android update sdk --no-ui -t tools
+        echo yes | sdkmanager --update > /dev/null
+        echo yes | sdkmanager "platform-tools" > /dev/null
+        echo yes | sdkmanager > /dev/null
+        echo yes | sdkmanager "build-tools;${BUILD_TOOLS}" > /dev/null
+        echo yes | sdkmanager "build-tools;${API_TARGET}" > /dev/null
+        echo yes | sdkmanager "platforms;${EMU_TARGET}" > /dev/null
+        echo yes | sdkmanager "platforms;${API_TARGET}" > /dev/null
+        echo yes | sdkmanager "extras;android;m2repository" > /dev/null
+        echo yes | sdkmanager "extras;google;m2repository" > /dev/null
+        echo yes | sdkmanager --channel=3 "emulator" > /dev/null
+        export EMU_IMAGE="system-images;${EMU_TARGET};${EMU_TAG};${EMU_ABI}"
         for retry in 1 2 3; do
-          echo yes | sdkmanager "${ANDROID_EMU_IMAGE}" > /dev/null && break
-          echo "sdkmanager was not able to download the ${ANDROID_EMU_IMAGE} image (retry ${retry})"
+          echo yes | sdkmanager "${EMU_IMAGE}" > /dev/null && break
+          echo "sdkmanager was not able to download the ${EMU_IMAGE} image (retry ${retry})"
           sleep 5
         done
         sdkmanager --list
         export TOOLS=${ANDROID_HOME}/tools
         export PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
-        echo no | avdmanager create avd -k "${ANDROID_EMU_IMAGE}" -n "${ANDROID_EMU_NAME}" -f --abi "${ANDROID_EMU_ABI}" --tag "${ANDROID_EMU_TAG}" || exit 1
-        emulator -avd "${ANDROID_EMU_NAME}" -no-window -camera-back none -camera-front none &
+        echo no | avdmanager create avd -k "${EMU_IMAGE}" -n "${EMU_NAME}" -f --abi "${EMU_ABI}" --tag "${EMU_TAG}" || exit 1
+        emulator -avd "${EMU_NAME}" -no-accel -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
       else
         sdkmanager --list
       fi
     fi
 install:
-  # node stuff
-  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
   - nvm install $NODE_VERSION
-  - node --version
-  - npm --version
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
   - npm ls

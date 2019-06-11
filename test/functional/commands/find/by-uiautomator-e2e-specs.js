@@ -102,6 +102,10 @@ describe('Find - uiautomator', function () {
     let selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     await driver.elementByAndroidUIAutomator(selector).should.eventually.exist;
   });
+  it('should allow selectors using fromParent contruct', async function () {
+    let selector = 'new UiSelector().className("android.widget.ListView").fromParent(new UiSelector().resourceId("android:id/text1"))';
+    await driver.elementByAndroidUIAutomator(selector).should.eventually.exist;
+  });
   it('should scroll to, and return elements using UiScrollable', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';

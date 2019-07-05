@@ -27,4 +27,48 @@ describe('General', function () {
       result.y.should.be.equal(0);
     });
   });
+
+  describe('mobileGetDeviceInfo', function () {
+    driver = new AndroidUiautomator2Driver({}, false);
+
+    afterEach(function () {
+      sandbox.restore();
+    });
+
+    it('should device all info', async function () {
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      const proxyStub = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      proxyStub.returns({model: 'Android SDK built for x86_64'});
+
+      driver.adb = {
+        getDeviceLocale: () => {},
+        getTimeZone: () => {},
+      };
+      sinon.stub(driver.adb, 'getDeviceLocale').returns('ja_EN');
+      sinon.stub(driver.adb, 'getTimeZone').returns('US/Pacific');
+
+      const out = await driver.mobileGetDeviceInfo();
+      out.model.should.eq('Android SDK built for x86_64');
+      out.locale.should.eq('ja_EN');
+      out.timeZone.should.eq('US/Pacific');
+    });
+
+    it('should device without locale and timeZone', async function () {
+      driver.uiautomator2 = {jwproxy: {command: () => {}}};
+      const proxyStub = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      proxyStub.returns({model: 'Android SDK built for x86_64'});
+
+      driver.adb = {
+        getDeviceLocale: () => {},
+        getTimeZone: () => {},
+      };
+      const proxyStub2 = sinon.stub(driver.adb, 'getDeviceLocale');
+      proxyStub2.throws();
+
+      const proxyStub3 = sinon.stub(driver.adb, 'getTimeZone');
+      proxyStub3.throws();
+
+      await driver.mobileGetDeviceInfo().should.eventually.be.rejected;
+    });
+  });
 });

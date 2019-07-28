@@ -28,7 +28,7 @@ describe('mobile', function () {
       try {
         await driver.execute('mobile: shell', {command: 'echo', args: ['hello']});
       } catch (e) {
-        e.message.should.match(/Original error: Appium server must have relaxed security flag set in order to run any shell commands/);
+        e.message.should.match(/Potentially insecure feature 'adb_shell' has not been enabled/);
       }
     });
   });

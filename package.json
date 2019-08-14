@@ -87,7 +87,7 @@
     "mocha-multi-reporters": "^1.1.7",
     "pngjs": "^3.3.1",
     "pre-commit": "^1.2.2",
-    "rimraf": "^2.6.1",
+    "rimraf": "^3.0.0",
     "sinon": "^7.2.4",
     "unzipper": "^0.10.0",
     "wd": "^1.10.3",

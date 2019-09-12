@@ -4,13 +4,14 @@ import { ADB } from 'appium-adb';
 import { withMocks } from 'appium-test-support';
 import { UiAutomator2Server, INSTRUMENTATION_TARGET,
          SERVER_TEST_PACKAGE_ID } from '../../lib/uiautomator2';
+import helpers from '../../lib/helpers';
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('UiAutomator2', function () {
   const adb = new ADB();
-  describe('installServerApk', withMocks({adb}, (mocks) => {
+  describe('installServerApk', withMocks({adb, helpers}, (mocks) => {
     let uiautomator2;
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server({
@@ -23,6 +24,9 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are older than installed version', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
@@ -44,6 +48,9 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are newer than installed version', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
@@ -65,6 +72,9 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are the same as installed version', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
@@ -86,6 +96,9 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are not installed', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
@@ -108,6 +121,9 @@ describe('UiAutomator2', function () {
     });
 
     it('version numbers of new server and server.test are unknown', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.UNKNOWN);
@@ -130,6 +146,9 @@ describe('UiAutomator2', function () {
 
 
     it('a server is installed but server.test is not', async function () {
+      mocks.helpers.expects('isWriteable').atLeast(1)
+        .returns(true);
+
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);

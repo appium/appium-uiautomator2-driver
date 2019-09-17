@@ -24,8 +24,6 @@ if (process.env.CLOUD) {
   GENERIC_CAPS[process.env.APPIUM_BUNDLE_CAP] = {'appium-url': 'sauce-storage:appium.zip'};
 }
 
-
-
 const apiDemosApp = process.env.CLOUD
   ? 'http://appium.github.io/appium/assets/ApiDemos-debug.apk'
   : require.resolve('android-apidemos');
@@ -38,6 +36,7 @@ const APIDEMOS_CAPS = _.defaults({
   appPackage: 'io.appium.android.apis',
   appActivity: '.ApiDemos',
   disableWindowAnimation: true,
+  autoGrantPermissions: true, // This will need to be set until api-demos min-sdk >= 23 (see: https://developer.android.com/about/versions/10/privacy/changes#user-permission-legacy-apps)
 }, GENERIC_CAPS);
 
 const SCROLL_CAPS = _.defaults({

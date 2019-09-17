@@ -6,7 +6,7 @@ parameters:
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 10.x
-  ANDROID_SDK_VERSION: 28 
+  ANDROID_SDK_VERSION: 29
 
 jobs:
   - job: ${{ parameters.name }}

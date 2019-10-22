@@ -20,6 +20,14 @@
   "engines": [
     "node"
   ],
+  "appium": {
+    "driverName": "uiautomator2",
+    "automationName": "UiAutomator2",
+    "platformNames": [
+      "Android"
+    ],
+    "mainClass": "AndroidUiAutomator2Driver"
+  },
   "main": "./build/index.js",
   "bin": {},
   "directories": {

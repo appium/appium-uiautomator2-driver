@@ -78,19 +78,17 @@ jobs:
 before_install:
   - echo $ANDROID_HOME
   - |
-    if [ -z ${CLOUD} ]; then
-      if [ ${START_EMU} = "1" ]; then
+    if [[ -z ${CLOUD} ]]; then
+      if [[ "${START_EMU}" == "1" ]]; then
+        mkdir -p "/home/travis/.android"
         echo 'count=0' > /home/travis/.android/repositories.cfg
-        echo yes | android update sdk --no-ui -t tools
+        export TOOLS=${ANDROID_HOME}/tools
+        curl -o "${HOME}/sdk.zip" https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+        rm -rf "${TOOLS}"
+        unzip -o "${HOME}/sdk.zip" -d "$ANDROID_HOME" > /dev/null
+        rm -f "${HOME}/sdk.zip"
         echo yes | sdkmanager --update > /dev/null
-        echo yes | sdkmanager "platform-tools" > /dev/null
-        echo yes | sdkmanager > /dev/null
-        echo yes | sdkmanager "build-tools;${BUILD_TOOLS}" > /dev/null
-        echo yes | sdkmanager "build-tools;${API_TARGET}" > /dev/null
-        echo yes | sdkmanager "platforms;${EMU_TARGET}" > /dev/null
-        echo yes | sdkmanager "platforms;${API_TARGET}" > /dev/null
-        echo yes | sdkmanager "extras;android;m2repository" > /dev/null
-        echo yes | sdkmanager "extras;google;m2repository" > /dev/null
+        echo yes | sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS}" "build-tools;${API_TARGET}" "platforms;${EMU_TARGET}" "platforms;${API_TARGET}" "extras;android;m2repository" "extras;google;m2repository" > /dev/null
         echo yes | sdkmanager --channel=3 "emulator" > /dev/null
         export EMU_IMAGE="system-images;${EMU_TARGET};${EMU_TAG};${EMU_ABI}"
         for retry in 1 2 3; do
@@ -99,10 +97,9 @@ before_install:
           sleep 5
         done
         sdkmanager --list
-        export TOOLS=${ANDROID_HOME}/tools
         export PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
         echo no | avdmanager create avd -k "${EMU_IMAGE}" -n "${EMU_NAME}" -f --abi "${EMU_ABI}" --tag "${EMU_TAG}" || exit 1
-        emulator -avd "${EMU_NAME}" -no-accel -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+        emulator -avd "${EMU_NAME}" -gpu swiftshader_indirect -no-accel -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
       else
         sdkmanager --list
       fi
@@ -114,43 +111,43 @@ install:
   - npm ls
 
   - |
-    if [ -z ${CLOUD} ]; then
+    if [[ -z ${CLOUD} ]]; then
       npm install appium-test-support # get the travis emu scripts
       # for mjpeg stuff
       npm install --no-save mjpeg-consumer
     fi
 before_script:
   - |
-    if [ ${START_EMU} = "1" ]; then
+    if [[ "${START_EMU}" == "1" ]]; then
       # make sure emulator started
       $(npm bin)/android-emu-travis-post;
     fi
-    if [ ${OPENCV} = "1" ]; then
+    if [[ "${OPENCV}" == "1" ]]; then
       #CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.1-Linux-x86_64.tar.gz"
       #mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       #export PATH=${DEPS_DIR}/cmake/bin:${PATH}
       #CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
       echo "Skipping opencv install for now"
     fi
-    if [ ${CLOUD} = "1" ]; then
+    if [[ "${CLOUD}" == "1" ]]; then
       $(npm bin)/gulp fix-mocha-parallel-tests;
       $(npm bin)/gulp periodic-output & export LONG_PID=$!;
     fi
 script:
-  - if [ $CLOUD = "1" ]; then
+  - if [[ $CLOUD == "1" ]]; then
       npm run mocha -- -t 480000 --recursive build/test/$TEST;
     else
       npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit;
     fi
 after_script:
-  - if [-n "$LONG_PID" ]; then
+  - if [[ -n "$LONG_PID" ]]; then
       kill $LONG_PID;
     fi
 after_success:
-  - if [ -n "$COVERALLS" ]; then _FORCE_LOGS=0 npm run coverage; fi
+  - if [[ -n "$COVERALLS" ]]; then _FORCE_LOGS=0 npm run coverage; fi
 after_failure:
   - |
-    if [ "$TEST" != "unit" and ${CLOUD} = "0" ]; then
+    if [[ "$TEST" != "unit" and ${CLOUD} = "0" ]]; then
       echo -e "----LOGCAT----\n"
       adb logcat -d
     fi

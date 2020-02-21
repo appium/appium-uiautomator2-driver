@@ -108,7 +108,7 @@ install:
   - nvm install $NODE_VERSION
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
-  - npm ls
+  - npm outdated || true
 
   - |
     if [[ -z ${CLOUD} ]]; then

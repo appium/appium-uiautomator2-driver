@@ -19,7 +19,7 @@ const DEFAULT_ADB_PORT = 5037;
 
 async function killServer (adbPort) {
   if (!process.env.TESTOBJECT_E2E_TESTS) {
-    let adb = await ADB.createADB({adbPort});
+    const adb = await ADB.createADB({adbPort});
     await adb.killServer();
     if (process.env.CI) {
       // on Travis this takes a while to get into a good state
@@ -113,7 +113,7 @@ describe('createSession', function () {
       return;
     }
 
-    let adbPort = 5042;
+    const adbPort = 5042;
     let driver;
 
     before(async function () {
@@ -123,17 +123,18 @@ describe('createSession', function () {
       if (driver) {
         await deleteSession();
       }
-
+    });
+    after(async function () {
       await killServer(adbPort);
     });
 
     it('should start android session with a custom adb port', async function () {
-      let caps = Object.assign({}, APIDEMOS_CAPS, {
+      const caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
       });
       driver = await initSession(caps, adbPort);
-      let appPackage = await driver.getCurrentPackage();
-      let appActivity = await driver.getCurrentDeviceActivity();
+      const appPackage = await driver.getCurrentPackage();
+      const appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(APIDEMOS_PACKAGE);
       appActivity.should.equal(APIDEMOS_MAIN_ACTIVITY);
     });
@@ -141,7 +142,7 @@ describe('createSession', function () {
 
   describe('w3c compliance', function () {
     it('should start a session with W3C caps', async function () {
-      const { value, sessionId, status } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
+      const {value, sessionId, status} = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
         capabilities: {
           alwaysMatch: APIDEMOS_CAPS,
           firstMatch: [{}],

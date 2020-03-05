@@ -15,9 +15,13 @@ const GENERIC_CAPS = {
   automationName: 'uiautomator2',
   adbExecTimeout: ADB_EXEC_TIMEOUT,
   allowOfflineDevices: true,
-  // TODO: newer build tools require Java9+
-  buildToolsVersion: '28.0.3',
 };
+
+if (process.env.CI && !process.env.TRAVIS) {
+  // TODO: newer build tools require Java9+
+  // which is not available on Azure
+  GENERIC_CAPS.buildToolsVersion = '28.0.3';
+}
 
 
 if (process.env.CLOUD) {

@@ -15,6 +15,8 @@ const GENERIC_CAPS = {
   automationName: 'uiautomator2',
   adbExecTimeout: ADB_EXEC_TIMEOUT,
   allowOfflineDevices: true,
+  // TODO: newer build tools require Java9+
+  buildToolsVersion: '28.0.3',
 };
 
 

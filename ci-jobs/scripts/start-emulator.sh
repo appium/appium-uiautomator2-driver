@@ -3,6 +3,8 @@
 # This script was copy-pasted from https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/android?view=azure-devops#test-on-the-android-emulator
 # with some changes
 
+export JAVA_OPTS='-XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee'
+
 # Install AVD files
 declare -r emulator="system-images;android-$ANDROID_SDK_VERSION;google_apis;x86"
 echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "$emulator"

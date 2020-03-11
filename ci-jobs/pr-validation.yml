@@ -1,4 +1,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
+variables:
+  - name: JAVA_HOME
+    value: /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
 jobs:
   - template: templates/android-e2e-template.yml
     parameters:

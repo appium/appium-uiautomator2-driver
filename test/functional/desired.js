@@ -16,12 +16,6 @@ const GENERIC_CAPS = {
   adbExecTimeout: ADB_EXEC_TIMEOUT,
 };
 
-if (process.env.CI && !process.env.TRAVIS) {
-  // TODO: newer build tools require Java9+
-  GENERIC_CAPS.buildToolsVersion = '28.0.3';
-}
-
-
 if (process.env.CLOUD) {
   GENERIC_CAPS.platformVersion = process.env.CLOUD_PLATFORM_VERSION;
   GENERIC_CAPS.deviceName = process.env.CLOUD_DEVICE_NAME;

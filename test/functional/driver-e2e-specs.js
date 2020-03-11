@@ -19,7 +19,7 @@ const DEFAULT_ADB_PORT = 5037;
 
 async function killServer (adbPort) {
   if (!process.env.TESTOBJECT_E2E_TESTS) {
-    let adb = await ADB.createADB({adbPort});
+    const adb = await ADB.createADB({adbPort});
     await adb.killServer();
     if (process.env.CI) {
       // on Travis this takes a while to get into a good state
@@ -116,8 +116,10 @@ describe('createSession', function () {
     let adbPort = 5042;
     let driver;
 
-    before(async function () {
+    beforeEach(async function () {
       await killServer(DEFAULT_ADB_PORT);
+      const adb = await ADB.createADB({adbPort});
+      await adb.getConnectedDevices();
     });
     afterEach(async function () {
       if (driver) {

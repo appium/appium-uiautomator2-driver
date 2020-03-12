@@ -18,14 +18,16 @@ const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
 
 const DEFAULT_ADB_PORT = 5037;
 
-async function killServer (adbPort) {
+async function killAndPrepareServer (oldPort, newPort) {
   if (!process.env.TESTOBJECT_E2E_TESTS) {
-    const adb = await ADB.createADB({adbPort});
+    let adb = await ADB.createADB({adbPort: oldPort});
     await adb.killServer();
     if (process.env.CI) {
       // on Travis this takes a while to get into a good state
       await B.delay(10000);
     }
+    adb = await ADB.createADB({adbPort: newPort});
+    await retryInterval(5, 500, async () => await adb.getApiLevel());
   }
 }
 
@@ -118,16 +120,14 @@ describe('createSession', function () {
     let driver;
 
     beforeEach(async function () {
-      await killServer(DEFAULT_ADB_PORT);
-      const adb = await ADB.createADB({adbPort});
-      await retryInterval(5, 500, async () => await adb.getApiLevel());
+      await killAndPrepareServer(DEFAULT_ADB_PORT, adbPort);
     });
     afterEach(async function () {
       if (driver) {
         await deleteSession();
       }
 
-      await killServer(adbPort);
+      await killAndPrepareServer(adbPort, DEFAULT_ADB_PORT);
     });
 
     it('should start android session with a custom adb port', async function () {

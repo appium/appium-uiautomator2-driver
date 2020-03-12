@@ -6,6 +6,7 @@ import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initSession, deleteSession } from './helpers/session';
 import B from 'bluebird';
+import { retryInterval } from 'asyncbox';
 
 
 const should = chai.should();
@@ -119,7 +120,7 @@ describe('createSession', function () {
     beforeEach(async function () {
       await killServer(DEFAULT_ADB_PORT);
       const adb = await ADB.createADB({adbPort});
-      await adb.getConnectedDevices();
+      await retryInterval(5, 500, async () => await adb.getApiLevel());
     });
     afterEach(async function () {
       if (driver) {
@@ -130,12 +131,13 @@ describe('createSession', function () {
     });
 
     it('should start android session with a custom adb port', async function () {
-      let caps = Object.assign({}, APIDEMOS_CAPS, {
+      const caps = Object.assign({}, APIDEMOS_CAPS, {
         adbPort,
+        allowOfflineDevices: true,
       });
       driver = await initSession(caps, adbPort);
-      let appPackage = await driver.getCurrentPackage();
-      let appActivity = await driver.getCurrentDeviceActivity();
+      const appPackage = await driver.getCurrentPackage();
+      const appActivity = await driver.getCurrentDeviceActivity();
       appPackage.should.equal(APIDEMOS_PACKAGE);
       appActivity.should.equal(APIDEMOS_MAIN_ACTIVITY);
     });

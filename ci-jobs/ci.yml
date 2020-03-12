@@ -1,18 +1,17 @@
 jobs:
   - job: UiAutomator2CI
     pool:
-      vmImage: macOS-10.13
+      vmImage: macOS-10.14
     variables:
       CI: true
       TERM: dumb
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: 11.x
+        versionSpec: 10.x
     - script: npm install
       displayName: Install Node dependencies
     - script: npm run build
       displayName: Build
     - script: npm test
       displayName: Run Unit Tests
-  

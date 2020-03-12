@@ -35,14 +35,14 @@ env:
 jobs:
   include:
     - stage: tests
-      if: type != cron
+      if: &noncron type != cron
       env:
         - START_EMU=0
         - RECURSIVE=--recursive
         - TEST=unit
         - COVERALLS=1
     - stage:
-      if: type != cron
+      if: *noncron
       env: TEST=functional
       android: &android
         components:
@@ -50,20 +50,20 @@ jobs:
           - tools
           - build-tools
     - stage:
-      if: type != cron
+      if: *noncron
       env: TEST=functional/commands
       android:
         *android
     - stage:
-      if: type != cron
+      if: *noncron
       env: TEST=functional/commands/keyboard
     - stage:
-      if: type != cron
+      if: *noncron
       env:
         - TEST=functional/commands/find
         - OPENCV=1
     - stage:
-      if: type != cron
+      if: *noncron
       env: TEST=functional/commands/general
 
     # - stage: "[CRON] Sauce Emusim tests"
@@ -134,10 +134,10 @@ before_script:
       $(npm bin)/gulp periodic-output & export LONG_PID=$!;
     fi
 script:
-  - if [[ $CLOUD == "1" ]]; then
+  - if [[ "${CLOUD}" == "1" ]]; then
       npm run mocha -- -t 480000 --recursive build/test/$TEST;
     else
-      npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit;
+      npm run lint && npx mocha -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit;
     fi
 after_script:
   - if [[ -n "$LONG_PID" ]]; then
@@ -147,7 +147,7 @@ after_success:
   - if [[ -n "$COVERALLS" ]]; then _FORCE_LOGS=0 npm run coverage; fi
 after_failure:
   - |
-    if [[ "$TEST" != "unit" and ${CLOUD} = "0" ]]; then
+    if [[ "${TEST}" != "unit" && "${CLOUD}" != "1" ]]; then
       echo -e "----LOGCAT----\n"
       adb logcat -d
     fi

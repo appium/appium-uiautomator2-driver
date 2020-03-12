@@ -16,7 +16,6 @@ const GENERIC_CAPS = {
   adbExecTimeout: ADB_EXEC_TIMEOUT,
 };
 
-
 if (process.env.CLOUD) {
   GENERIC_CAPS.platformVersion = process.env.CLOUD_PLATFORM_VERSION;
   GENERIC_CAPS.deviceName = process.env.CLOUD_DEVICE_NAME;

@@ -2,11 +2,11 @@
 parameters:
   script: echo "NO TEST SCRIPT WAS PROVIDED" && exit 1
   name: 'android_e2e_tests'
-  vmImage: 'macOS-10.13'
+  vmImage: 'macOS-10.14'
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 10.x
-  ANDROID_SDK_VERSION: 28 
+  ANDROID_SDK_VERSION: 28
 
 jobs:
   - job: ${{ parameters.name }}
@@ -29,12 +29,9 @@ jobs:
       displayName: NPM Test
     - script: bash ci-jobs/scripts/start-emulator.sh
       displayName: Create and run Emulator
-    - script: npm run build
-      displayName: Build
     - script: ${{ parameters.script }}
       displayName: Run tests
     - task: PublishTestResults@2
       condition: always()
       inputs:
         testResultsFiles: ${{ parameters.MOCHA_FILE }}
-  

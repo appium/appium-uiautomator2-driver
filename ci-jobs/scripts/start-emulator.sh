@@ -24,4 +24,6 @@ $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sy
 
 $ANDROID_HOME/platform-tools/adb devices
 
+sleep 30s
+
 echo "Emulator started"

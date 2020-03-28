@@ -229,7 +229,13 @@ describe('driver.js', function () {
       sandbox.stub(driver, 'addDeviceInfoToCaps');
 
       driver.uiautomator2 = new UiAutomator2Server({
-        adb: ADB.createADB(), tmpDir: 'tmp', systemPort: 4724, host: 'localhost', devicePort: 6790, disableWindowAnimation: false
+        adb: ADB.createADB(),
+        tmpDir: 'tmp',
+        systemPort: 4724,
+        host: 'localhost',
+        devicePort: 6790,
+        disableWindowAnimation: false,
+        disableSuppressAccessibilityService: false,
       });
       sandbox.stub(driver.uiautomator2, 'startSession');
     });

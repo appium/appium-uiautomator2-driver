@@ -15,8 +15,13 @@ describe('UiAutomator2', function () {
     let uiautomator2;
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server({
-        adb, tmpDir: 'tmp', systemPort: 4724,
-        host: 'localhost', devicePort: 6790, disableWindowAnimation: false
+        adb,
+        tmpDir: 'tmp',
+        systemPort: 4724,
+        host: 'localhost',
+        devicePort: 6790,
+        disableWindowAnimation: false,
+        disableSuppressAccessibilityService: false
       });
     });
     afterEach(function () {

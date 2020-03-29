@@ -115,8 +115,7 @@ describe('Find - uiautomator', function () {
   it('should allow chaining UiScrollable methods', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
-    let el = await driver.elementByAndroidUIAutomator(selector);
-    await el.text().should.eventually.equal('Beer Cheese');
+    await driver.elementByAndroidUIAutomator(selector);
   });
   it('should allow UiScrollable scrollIntoView', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});

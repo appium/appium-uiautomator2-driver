@@ -29,10 +29,6 @@ describe('General', function () {
     it('should raise error on non-existent mobile command', async function () {
       await driver.executeMobile('fruta', {}).should.eventually.be.rejectedWith('Unknown mobile command "fruta"');
     });
-    it('should reject sensorSet on real devices', async function () {
-      sandbox.stub(driver, 'isEmulator').returns(false);
-      await driver.executeMobile('sensorSet', { sensorType: 'acceleration', value: '0:9.77631:0.812349' }).should.eventually.be.rejectedWith('sensorSet method is only available for emulators');
-    });
     it('should accept sensorSet on emulator', async function () {
       sandbox.stub(driver, 'isEmulator').returns(true);
       let stub = sandbox.stub(driver, 'sensorSet');

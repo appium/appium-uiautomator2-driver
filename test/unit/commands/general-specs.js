@@ -26,5 +26,15 @@ describe('General', function () {
       result.x.should.be.equal(0);
       result.y.should.be.equal(0);
     });
+    it('should raise error on non-existent mobile command', async function () {
+      await driver.executeMobile('fruta', {}).should.eventually.be.rejectedWith('Unknown mobile command "fruta"');
+    });
+    it('should accept sensorSet on emulator', async function () {
+      sandbox.stub(driver, 'isEmulator').returns(true);
+      let stub = sandbox.stub(driver, 'sensorSet');
+      await driver.executeMobile('sensorSet', { sensorType: 'acceleration', value: '0:9.77631:0.812349' });
+      stub.calledOnce.should.equal(true);
+      stub.calledWithExactly({ sensorType: 'acceleration', value: '0:9.77631:0.812349' });
+    });
   });
 });

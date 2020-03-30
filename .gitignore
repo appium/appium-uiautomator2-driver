@@ -7,3 +7,4 @@ uiautomator2/
 coverage
 .nyc_output/
 test-results.xml
+.DS_Store

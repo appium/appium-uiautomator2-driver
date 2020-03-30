@@ -7,6 +7,8 @@ parameters:
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 10.x
   ANDROID_SDK_VERSION: 28
+  buildToolsVersion: ''
+  javaHome: ''
 
 jobs:
   - job: ${{ parameters.name }}
@@ -17,6 +19,10 @@ jobs:
       TERM: dumb
       MOCHA_FILE: ${{ parameters.MOCHA_FILE }}
       ANDROID_SDK_VERSION: ${{ parameters.ANDROID_SDK_VERSION }}
+      ${{ if not(empty(parameters('buildToolsVersion'))) }}:
+        BUILD_TOOLS_VERSION: ${{ parameters.buildToolsVersion }}
+      ${{ if not(empty(parameters('javaHome'))) }}:
+        JAVA_HOME: ${{ parameters.javaHome }}
     steps:
     - task: NodeTool@0
       inputs:

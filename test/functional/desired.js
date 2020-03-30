@@ -23,7 +23,9 @@ if (process.env.CLOUD) {
   GENERIC_CAPS[process.env.APPIUM_BUNDLE_CAP] = {'appium-url': 'sauce-storage:appium.zip'};
 }
 
-
+if (process.env.BUILD_TOOLS_VERSION) {
+  GENERIC_CAPS.buildToolsVersion = process.env.BUILD_TOOLS_VERSION;
+}
 
 const apiDemosApp = process.env.CLOUD
   ? 'http://appium.github.io/appium/assets/ApiDemos-debug.apk'

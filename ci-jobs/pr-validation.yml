@@ -1,7 +1,4 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
-variables:
-  - name: JAVA_HOME
-    value: /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
 jobs:
   - template: templates/android-e2e-template.yml
     parameters:
@@ -9,15 +6,18 @@ jobs:
       name: sdk28_e2e_tests
       CHROMEDRIVER_VERSION: 2.44
       ANDROID_SDK_VERSION: 28
+      javaHome: /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
   - template: templates/android-e2e-template.yml
     parameters:
       script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/ -g @skip-ci -i --exit
       name: sdk25_e2e_tests
       CHROMEDRIVER_VERSION: 2.28
       ANDROID_SDK_VERSION: 25
+      buildToolsVersion: 28.0.3
   - template: templates/android-e2e-template.yml
     parameters:
       script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/ -g @skip-ci -i --exit
       name: sdk23_e2e_tests
       CHROMEDRIVER_VERSION: 2.20
       ANDROID_SDK_VERSION: 23
+      buildToolsVersion: 28.0.3

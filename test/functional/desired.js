@@ -14,6 +14,7 @@ const GENERIC_CAPS = {
   uiautomator2ServerInstallTimeout,
   automationName: 'uiautomator2',
   adbExecTimeout: ADB_EXEC_TIMEOUT,
+  remoteAppsCacheLimit: 0,
 };
 
 if (process.env.CLOUD) {

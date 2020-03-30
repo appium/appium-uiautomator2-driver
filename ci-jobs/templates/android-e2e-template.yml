@@ -19,9 +19,9 @@ jobs:
       TERM: dumb
       MOCHA_FILE: ${{ parameters.MOCHA_FILE }}
       ANDROID_SDK_VERSION: ${{ parameters.ANDROID_SDK_VERSION }}
-      ${{ if length(parameters('buildToolsVersion')) > 0 }}:
+      ${{ if greater(length(parameters('buildToolsVersion')), 0) }}:
         BUILD_TOOLS_VERSION: ${{ parameters.buildToolsVersion }}
-      ${{ if length(parameters('javaHome')) > 0 }}:
+      ${{ if greater(length(parameters('javaHome')), 0) }}:
         JAVA_HOME: ${{ parameters.javaHome }}
     steps:
     - task: NodeTool@0

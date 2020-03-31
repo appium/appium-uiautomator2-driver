@@ -68,7 +68,7 @@
     "mocha": "mocha",
     "mocha:parallel": "mocha-parallel-tests",
     "coverage": "gulp coveralls",
-    "lint": "gulp eslint",
+    "lint": "gulp lint",
     "lint:fix": "gulp eslint --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",

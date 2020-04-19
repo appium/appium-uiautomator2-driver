@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -11,10 +11,10 @@ describe('Find - basic', function () {
   let driver;
   let singleResourceId = 'decor_content_parent';
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should find a single element by content-description', async function () {
     let el = await driver.elementByAccessibilityId('Animation');
@@ -42,7 +42,7 @@ describe('Find - basic', function () {
   });
   it('should find multiple elements by resource-id', async function () {
     await driver.elementsById('android:id/text1')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.above(1);
   });
   it('should find multiple elements by resource-id even when theres just one', async function () {
     await driver.elementsById(`android:id/${singleResourceId}`)

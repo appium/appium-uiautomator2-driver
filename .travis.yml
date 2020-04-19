@@ -1,59 +1,153 @@
 language: android
-dist: precise
+jdk: oraclejdk8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-6
 android:
   components:
-    # use the latest revision of Android SDK Tools
     - platform-tools
     - tools
-
-    # Additional components
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-19
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-22
+    - build-tools
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
 env:
   global:
+    - NODE_VERSION=10
     - _FORCE_LOGS=1
     - DEVICE=android
     - MOCHA_TIMEOUT=640000
     - RECURSIVE=
     - START_EMU=1
-    - ANDROID_EMU_NAME=test
-    - ANDROID_EMU_TARGET=android-21
-    - ANDROID_EMU_ABI=armeabi-v7a
-  matrix:
-    - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
-    - TEST=functional
-    - TEST=functional/commands
-    - TEST=functional/commands/find
-    - TEST=functional/commands/keyboard
-    - TEST=functional/commands/general
-before_script:
-  # node stuff
-  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-  - nvm install 6
-  - node --version
-  - npm --version
-  - npm install appium-test-support # get the travis emu scripts
+    - EMU_NAME=test
+    - EMU_ABI=x86_64
+    - EMU_TAG=default
+    - EMU_TARGET=android-26
+    - BUILD_TOOLS=28.0.3
+    - API_TARGET=android-28
+    - CC=gcc-6 CXX=g++-6
+    - MAX_PARALLEL=0
+    - DEBUG=mocha-parallel-tests
+jobs:
+  include:
+    - stage: tests
+      if: &noncron type != cron
+      env:
+        - START_EMU=0
+        - RECURSIVE=--recursive
+        - TEST=unit
+        - COVERALLS=1
+    - stage:
+      if: *noncron
+      env: TEST=functional
+      android: &android
+        components:
+          - platform-tools
+          - tools
+          - build-tools
+    - stage:
+      if: *noncron
+      env: TEST=functional/commands
+      android:
+        *android
+    - stage:
+      if: *noncron
+      env: TEST=functional/commands/keyboard
+    - stage:
+      if: *noncron
+      env:
+        - TEST=functional/commands/find
+        - OPENCV=1
+    - stage:
+      if: *noncron
+      env: TEST=functional/commands/general
 
-  # android stuff
-  - android list target
-  - $(npm bin)/android-emu-travis-pre
+    # - stage: "[CRON] Sauce Emusim tests"
+    #   if: type = cron
+    #   name: Basic, device 0
+    #   env:
+    #     - CLOUD=1
+    #     - SAUCE_EMUSIM=1
+    #     - PLATFORM_VERSION="8.0"
+    #     - DEVICE_NAME="Android GoogleAPI Emulator"
+    #     - TEST=functional/commands/general/general-e2e-specs.js
+before_install:
+  - echo $ANDROID_HOME
+  - |
+    if [[ -z ${CLOUD} ]]; then
+      if [[ "${START_EMU}" == "1" ]]; then
+        mkdir -p "/home/travis/.android"
+        echo 'count=0' > /home/travis/.android/repositories.cfg
+        export TOOLS=${ANDROID_HOME}/tools
+        curl -o "${HOME}/sdk.zip" https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+        rm -rf "${TOOLS}"
+        unzip -o "${HOME}/sdk.zip" -d "$ANDROID_HOME" > /dev/null
+        rm -f "${HOME}/sdk.zip"
+        echo yes | sdkmanager --update > /dev/null
+        echo yes | sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS}" "build-tools;${API_TARGET}" "platforms;${EMU_TARGET}" "platforms;${API_TARGET}" "extras;android;m2repository" "extras;google;m2repository" > /dev/null
+        echo yes | sdkmanager --channel=3 "emulator" > /dev/null
+        export EMU_IMAGE="system-images;${EMU_TARGET};${EMU_TAG};${EMU_ABI}"
+        for retry in 1 2 3; do
+          echo yes | sdkmanager "${EMU_IMAGE}" > /dev/null && break
+          echo "sdkmanager was not able to download the ${EMU_IMAGE} image (retry ${retry})"
+          sleep 5
+        done
+        sdkmanager --list
+        export PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
+        echo no | avdmanager create avd -k "${EMU_IMAGE}" -n "${EMU_NAME}" -f --abi "${EMU_ABI}" --tag "${EMU_TAG}" || exit 1
+        emulator -avd "${EMU_NAME}" -gpu swiftshader_indirect -no-accel -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+      else
+        sdkmanager --list
+      fi
+    fi
+install:
+  - nvm install $NODE_VERSION
 
   - SERVER_INSTALL_ATTEMPTS=50 npm install
+  - npm outdated || true
 
-  # for chromedriver
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
-  - sudo apt-get update
-  - sudo apt-get install libstdc++6-4.7-dev  
-
-  # make sure emulator started
-  - $(npm bin)/android-emu-travis-post
+  - |
+    if [[ -z ${CLOUD} ]]; then
+      npm install appium-test-support # get the travis emu scripts
+      # for mjpeg stuff
+      npm install --no-save mjpeg-consumer
+    fi
+before_script:
+  - |
+    if [[ "${START_EMU}" == "1" ]]; then
+      # make sure emulator started
+      $(npm bin)/android-emu-travis-post;
+    fi
+    if [[ "${OPENCV}" == "1" ]]; then
+      #CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.1-Linux-x86_64.tar.gz"
+      #mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      #export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+      #CC=clang-5.0 CXX=clang++-5.0 npm install opencv4nodejs
+      echo "Skipping opencv install for now"
+    fi
+    if [[ "${CLOUD}" == "1" ]]; then
+      $(npm bin)/gulp fix-mocha-parallel-tests;
+      $(npm bin)/gulp periodic-output & export LONG_PID=$!;
+    fi
 script:
-  - npm run lint && npm run mocha -- -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -ig @skip-ci
+  - if [[ "${CLOUD}" == "1" ]]; then
+      npm run mocha -- -t 480000 --recursive build/test/$TEST;
+    else
+      npm run lint && npx mocha -t $MOCHA_TIMEOUT -R spec $RECURSIVE build/test/$TEST -i -g @skip-ci --exit;
+    fi
+after_script:
+  - if [[ -n "$LONG_PID" ]]; then
+      kill $LONG_PID;
+    fi
 after_success:
-  - if [ -n "$COVERALLS" ]; then _FORCE_LOGS=0 npm run coverage; fi
+  - if [[ -n "$COVERALLS" ]]; then _FORCE_LOGS=0 npm run coverage; fi
+after_failure:
+  - |
+    if [[ "${TEST}" != "unit" && "${CLOUD}" != "1" ]]; then
+      echo -e "----LOGCAT----\n"
+      adb logcat -d
+    fi

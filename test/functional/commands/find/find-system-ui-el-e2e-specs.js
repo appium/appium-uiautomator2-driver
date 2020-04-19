@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -21,22 +21,22 @@ describe('Find - android ui elements @skip-ci', function () {
     }
     // TODO: why does travis fail on this?
 
-    driver = await initDriver(defaultCaps);
+    driver = await initSession(defaultCaps);
   });
   after(async function () {
     if (driver) {
-      await driver.quit();
+      await deleteSession();
     }
   });
   it('should not find statusBarBackground element via xpath', async function () {
     let statusBar = await driver.elementsByXPath(`//*[@resource-id='android:id/statusBarBackground']`); //check server (NPE) if allowInvisibleElements is unset on server side
     statusBar.length.should.be.equal(0);
-    await driver.updateSettings({"allowInvisibleElements": false});
+    await driver.updateSettings({'allowInvisibleElements': false});
     let statusBarWithInvisibleEl = await driver.elementsByXPath(`//*[@resource-id='android:id/statusBarBackground']`);
     statusBarWithInvisibleEl.length.should.be.equal(0);
   });
   it('should find statusBarBackground element via xpath', async function () {
-    await driver.updateSettings({"allowInvisibleElements": true});
+    await driver.updateSettings({'allowInvisibleElements': true});
     await driver.elementByXPath(`//*[@resource-id='android:id/statusBarBackground']`).should.eventually.exist;
   });
 });

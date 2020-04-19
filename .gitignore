@@ -5,3 +5,6 @@ build
 uiautomator2/
 *.log
 coverage
+.nyc_output/
+test-results.xml
+.DS_Store

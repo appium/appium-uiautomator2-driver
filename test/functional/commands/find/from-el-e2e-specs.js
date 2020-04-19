@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -13,10 +13,10 @@ const alv = 'android.widget.ListView';
 describe('Find - from element', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should find a single element by tag name', async function () {
     let el = await driver.elementByClassName(alv);
@@ -26,6 +26,6 @@ describe('Find - from element', function () {
   it('should find multiple elements by tag name', async function () {
     let el = await driver.elementByClassName(alv);
     let innerEls = await el.elementsByClassName(atv);
-    await innerEls.should.have.length.above(9);
+    await innerEls.should.have.length.above(1);
   });
 });

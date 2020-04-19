@@ -8,6 +8,7 @@ import wd from 'wd';
 import { startServer, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 
+
 if (process.env.TESTOBJECT_E2E_TESTS) {
   logger.debug('Running tests on TestObject');
 
@@ -29,8 +30,19 @@ if (process.env.TESTOBJECT_E2E_TESTS) {
     await disableTestObject(wdObject);
   });
 
-} else {
+} else if (!process.env.CLOUD) {
+  let server;
   before(async function () {
-    await startServer(DEFAULT_PORT, 'localhost');
+    server = await startServer(DEFAULT_PORT, 'localhost');
+  });
+  after(async function () {
+    if (server) {
+      await server.close();
+    }
+  });
+  after(async function () {
+    try {
+      await server.close();
+    } catch (ign) {}
   });
 }

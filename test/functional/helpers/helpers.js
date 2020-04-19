@@ -1,6 +1,8 @@
 import { exec } from 'teen_process';
+import ADB from 'appium-adb';
 
-async function getLocale (adb) {
+
+async function getLocale (adb = new ADB()) {
   if (await adb.getApiLevel() < 23) {
     return await adb.getDeviceCountry();
   } else {
@@ -9,7 +11,7 @@ async function getLocale (adb) {
 }
 
 async function isArmEmu () {
-  const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(" ")];
+  const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(' ')];
   const serialCmd = ['adb', ['get-serialno']];
   const {stdout: arch} = await exec(...archCmd);
   const {stdout: serial} = await exec(...serialCmd);

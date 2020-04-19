@@ -1,22 +1,22 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
 chai.use(chaiAsPromised);
 
 const atv = 'android.widget.TextView';
-const f = "android.widget.FrameLayout";
+const f = 'android.widget.FrameLayout';
 
 describe('Find - xpath', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should find element by type', async function () {
     let el = await driver.elementByXPath(`//${atv}`);
@@ -43,7 +43,7 @@ describe('Find - xpath', function () {
   it('should find the last element', async function () {
     let el = await driver.elementByXPath(`(//${atv})[last()]`);
     let text = await el.text();
-    ["OS", "Text", "Views", "Preference"].should.include(text);
+    ['OS', 'Text', 'Views', 'Preference'].should.include(text);
   });
   it('should find element by index and embedded desc', async function () {
     let el = await driver.elementByXPath(`//${f}//${atv}[5]`);
@@ -58,9 +58,9 @@ describe('Find - xpath', function () {
     el.should.exist;
   });
   it('should find less elements with compression turned on', async function () {
-    await driver.updateSettings({"ignoreUnimportantViews": false});
+    await driver.updateSettings({'ignoreUnimportantViews': false});
     let elementsWithoutCompression = await driver.elementsByXPath(`//*`);
-    await driver.updateSettings({"ignoreUnimportantViews": true});
+    await driver.updateSettings({'ignoreUnimportantViews': true});
     let elementsWithCompression = await driver.elementsByXPath(`//*`);
     elementsWithoutCompression.length.should.be.greaterThan(elementsWithCompression.length);
   });

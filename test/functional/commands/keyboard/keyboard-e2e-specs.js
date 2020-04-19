@@ -4,7 +4,7 @@ import _ from 'lodash';
 import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 import ADB from 'appium-adb';
 
 
@@ -18,26 +18,38 @@ const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
 const KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
-let defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
+const defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
   appPackage: PACKAGE,
   appActivity: TEXTFIELD_ACTIVITY
 });
 
-let defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
+const defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
   unicodeKeyboard: true,
   resetKeyboard: true
 });
 
+async function ensureUnlocked (driver) {
+  // on Travis the device is sometimes not unlocked
+  await retryInterval(10, 1000, async function () {
+    if (!await driver.isLocked()) {
+      return;
+    }
+    console.log(`\n\nDevice locked. Attempting to unlock`); // eslint-disable-line
+    await driver.unlock();
+    // trigger another iteration
+    throw new Error(`The device is locked.`);
+  });
+}
+
 function deSamsungify (text) {
   // For samsung S5 text is appended with ". Editing."
-  return text.replace(". Editing.", "");
+  return text.replace('. Editing.', '');
 }
 
 async function getElement (driver, className) {
-  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
-    return await driver.elementByClassName(className);
-  });
+  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000,
+    async () => await driver.elementByClassName(className));
 }
 
 async function waitForText (element, expectedText) {
@@ -52,6 +64,7 @@ async function waitForText (element, expectedText) {
 async function runTextEditTest (driver, testText, keys = false) {
   let el = await getElement(driver, EDITTEXT_CLASS);
   await el.clear();
+  await el.click();
 
   if (keys) {
     await driver.keys([testText]);
@@ -107,7 +120,7 @@ async function runKeyEventTest (driver) {
   await keyEventTest(driver, 82, undefined, ['[keycode=82]', 'keyCode=KEYCODE_MENU']);
 }
 
-let tests = [
+const tests = [
   { label: 'editing a text field', text: 'Life, the Universe and Everything.' },
   { label: 'sending \'&-\'', text: '&-' },
   { label: 'sending \'&\' and \'-\' in other text', text: 'In the mid-1990s he ate fish & chips as mayor-elect.' },
@@ -115,7 +128,7 @@ let tests = [
   { label: 'sending numbers', text: '0123456789'},
 ];
 
-let unicodeTests = [
+const unicodeTests = [
   { label: 'should be able to send \'-\' in unicode text', text: 'परीक्षा-परीक्षण' },
   { label: 'should be able to send \'&\' in text', text: 'Fish & chips' },
   { label: 'should be able to send \'&\' in unicode text', text: 'Mīna & chips' },
@@ -123,7 +136,7 @@ let unicodeTests = [
   { label: 'should be able to send a \'u\' with an umlaut', text: 'ü' },
 ];
 
-let languageTests = [
+const languageTests = [
   { label: 'should be able to send Tamil', text: 'சோதனை' },
   { label: 'should be able to send Gujarati', text: 'પરીક્ષણ' },
   { label: 'should be able to send Chinese', text: '测试' },
@@ -136,32 +149,57 @@ describe('keyboard', function () {
   describe('ascii', function () {
     let driver;
     before(async function () {
-      driver = await initDriver(defaultAsciiCaps);
+      driver = await initSession(defaultAsciiCaps);
 
-      // sometimes the default ime is not what we are using
-      let engines = await driver.availableIMEEngines();
-      let selectedEngine = _.first(engines);
-      for (let engine of engines) {
-        // it seems that the latin ime has `android.inputmethod` in its package name
-        if (engine.indexOf('android.inputmethod') !== -1) {
-          selectedEngine = engine;
+      if (!process.env.CI) {
+        // sometimes the default ime is not what we are using
+        let engines = await driver.availableIMEEngines();
+        let selectedEngine = _.first(engines);
+        for (let engine of engines) {
+          // it seems that the latin ime has `android.inputmethod` in its package name
+          if (engine.indexOf('android.inputmethod') !== -1) {
+            selectedEngine = engine;
+          }
         }
+        await driver.activateIMEEngine(selectedEngine);
       }
-      await driver.activateIMEEngine(selectedEngine);
+
+      const opts = {
+        appPackage: defaultAsciiCaps.appPackage,
+        appActivity: defaultAsciiCaps.appActivity,
+      };
+      await driver.startActivity(opts);
+      try {
+        const okBtn = await driver.elementById('android:id/button1');
+        console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
+        await okBtn.click();
+        await ensureUnlocked(driver);
+        await driver.startActivity(opts);
+      } catch (ign) {}
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
+    });
+
+    beforeEach(async function () {
+      await ensureUnlocked(driver);
     });
 
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
-        els = await retryInterval(5, 1000, async function () {
+        const opts = {
+          appPackage: defaultAsciiCaps.appPackage,
+          appActivity: defaultAsciiCaps.appActivity,
+        };
+        await driver.startActivity(opts);
+        els = await retryInterval(10, 1000, async function () {
           const els = await driver.elementsByClassName(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
           return els;
         });
       });
+
       for (let test of tests) {
         describe(test.label, function () {
           it('should work with setValue', async function () {
@@ -174,6 +212,9 @@ describe('keyboard', function () {
       }
 
       it('should be able to clear a password field', async function () {
+        // this test is flakey
+        this.retries(4);
+
         // there is currently no way to directly assert anything about the contents
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';
@@ -186,17 +227,20 @@ describe('keyboard', function () {
       });
 
       it('should be able to type in length-limited field', async function () {
+        let charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         if (!process.env.TESTOBJECT_E2E_TESTS) {
           let adb = new ADB();
-          if (parseInt(await adb.getApiLevel(), 10) < 24) {
+          let apiLevel = parseInt(await adb.getApiLevel(), 10);
+          if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
             // below Android 7.0 (API level 24) typing too many characters in a
             // length-limited field will either throw a NullPointerException or
             // crash the app
+            // also can be flakey in CI for SDK < 28
             return this.skip();
           }
         }
         let el = els[3];
-        await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        await el.setImmediateValue(charactersToType);
 
         // expect first 11 characters (limit of the field) to be in the field
         let text = await el.text();
@@ -230,23 +274,34 @@ describe('keyboard', function () {
       // save the initial ime so we can make sure it is restored
       if (adb) {
         initialIME = await adb.defaultIME();
-        initialIME.should.not.eql('io.appium.android.ime/.UnicodeIME');
+        initialIME.should.not.eql('io.appium.settings/.UnicodeIME');
       }
 
-      driver = await initDriver(defaultUnicodeCaps);
+      driver = await initSession(defaultUnicodeCaps);
     });
     after(async function () {
-      await driver.quit();
+      await deleteSession();
 
       // make sure the IME has been restored
       if (adb) {
         let ime = await adb.defaultIME();
         ime.should.eql(initialIME);
-        ime.should.not.eql('io.appium.android.ime/.UnicodeIME');
+        ime.should.not.eql('io.appium.settings/.UnicodeIME');
       }
     });
 
+    beforeEach(async function () {
+      await ensureUnlocked(driver);
+    });
+
     describe('editing a text field', function () {
+      beforeEach(async function () {
+        await driver.startActivity({
+          appPackage: defaultUnicodeCaps.appPackage,
+          appActivity: defaultUnicodeCaps.appActivity,
+        });
+      });
+
       for (let testSet of [tests, unicodeTests, languageTests]) {
         for (let test of testSet) {
           describe(test.label, function () {

@@ -1,24 +1,24 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
 chai.use(chaiAsPromised);
 
-const unicodeImeId = 'io.appium.android.ime/.UnicodeIME';
+const unicodeImeId = 'io.appium.settings/.UnicodeIME';
 
 describe('apidemo - IME', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
+    driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
   });
   beforeEach(async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: 'io.appium.android.apis.ApiDemos'});
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should get the default (enabled) input method', async function () {
     await driver.activeIMEEngine().should.eventually.equal(unicodeImeId);

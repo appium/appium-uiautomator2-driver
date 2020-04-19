@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -14,11 +14,11 @@ describe('setUrl @skip-ci', function () {
     if (process.env.TESTOBJECT_E2E_TESTS) {
       this.skip();
     }
-    driver = await initDriver(caps);
+    driver = await initSession(caps);
   });
   after(async function () {
     if (driver) {
-      await driver.quit();
+      await deleteSession();
     }
   });
 
@@ -36,8 +36,8 @@ describe('setUrl @skip-ci', function () {
 
     await driver.get('http://saucelabs.com');
 
-    await driver.waitForElementByTagName("title");
-    let el = await driver.elementByTagName("title");
-    await el.getAttribute("innerHTML").should.eventually.include('Sauce Labs');
+    await driver.waitForElementByTagName('title');
+    let el = await driver.elementByTagName('title');
+    await el.getAttribute('innerHTML').should.eventually.include('Sauce Labs');
   });
 });

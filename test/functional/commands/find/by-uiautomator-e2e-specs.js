@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 
 chai.should();
@@ -10,16 +10,16 @@ chai.use(chaiAsPromised);
 describe('Find - uiautomator', function () {
   let driver;
   before(async function () {
-    driver = await initDriver(APIDEMOS_CAPS);
+    driver = await initSession(APIDEMOS_CAPS);
     await driver.updateSettings({'enableNotificationListener': false});
     await driver.setImplicitWaitTimeout(20000);
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   it('should find elements with a boolean argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements within the context of another element', async function () {
     let els = await driver
@@ -29,19 +29,19 @@ describe('Find - uiautomator', function () {
   });
   it('should find elements without prepending "new UiSelector()"', async function () {
     await driver.elementsByAndroidUIAutomator('.clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements without prepending "new UiSelector()"', async function () {
     await driver.elementsByAndroidUIAutomator('clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find elements without prepending "new "', async function () {
     await driver.elementsByAndroidUIAutomator('UiSelector().clickable(true)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should ignore trailing semicolons', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().clickable(true);')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with an int argument', async function () {
     let el = await driver.elementByAndroidUIAutomator('new UiSelector().index(0)');
@@ -54,11 +54,11 @@ describe('Find - uiautomator', function () {
   });
   it('should find an element with an overloaded method argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().className("android.widget.TextView")')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with a Class<T> method argument', async function () {
     await driver.elementsByAndroidUIAutomator('new UiSelector().className(android.widget.TextView)')
-      .should.eventually.have.length.at.least(10);
+      .should.eventually.have.length.at.least(8);
   });
   it('should find an element with a long chain of methods', async function () {
     let el = await driver.elementByAndroidUIAutomator('new UiSelector().clickable(true).className(android.widget.TextView).index(1)');
@@ -102,6 +102,10 @@ describe('Find - uiautomator', function () {
     let selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     await driver.elementByAndroidUIAutomator(selector).should.eventually.exist;
   });
+  it('should allow selectors using fromParent contruct', async function () {
+    let selector = 'new UiSelector().className("android.widget.ListView").fromParent(new UiSelector().resourceId("android:id/text1"))';
+    await driver.elementByAndroidUIAutomator(selector).should.eventually.exist;
+  });
   it('should scroll to, and return elements using UiScrollable', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
@@ -111,8 +115,7 @@ describe('Find - uiautomator', function () {
   it('should allow chaining UiScrollable methods', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     let selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
-    let el = await driver.elementByAndroidUIAutomator(selector);
-    await el.text().should.eventually.equal('Beer Cheese');
+    await driver.elementByAndroidUIAutomator(selector);
   });
   it('should allow UiScrollable scrollIntoView', async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});

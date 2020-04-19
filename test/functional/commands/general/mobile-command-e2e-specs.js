@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
-import { initDriver } from '../../helpers/session';
+import { initSession, deleteSession } from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -10,7 +10,7 @@ describe('mobile', function () {
   let driver;
   before(async function () {
     delete APIDEMOS_CAPS.app;
-    driver = await initDriver({
+    driver = await initSession({
       ...APIDEMOS_CAPS,
 
       // For deeplinking to work, it has to run a session in a native
@@ -21,21 +21,21 @@ describe('mobile', function () {
     });
   });
   after(async function () {
-    await driver.quit();
+    await deleteSession();
   });
   describe('mobile:shell', function () {
     it('should call execute command without proxy error, but require relaxed security flag', async function () {
       try {
         await driver.execute('mobile: shell', {command: 'echo', args: ['hello']});
       } catch (e) {
-        e.message.should.match(/Original error: Appium server must have relaxed security flag set in order to run any shell commands/);
+        e.message.should.match(/Potentially insecure feature 'adb_shell' has not been enabled/);
       }
     });
   });
   describe('mobile:deepLink', function () {
     it('should be able to launch apps using Instant Apps', async function () {
       try {
-        await driver.execute("mobile: deepLink", {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
+        await driver.execute('mobile: deepLink', {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
       } catch (e) {
         // Note: Currently no emulators have this feature enabled so for this test to make it past this try-catch
         // block it has to be run on a local emulator/device that has Instant Apps enabled
@@ -51,6 +51,13 @@ describe('mobile', function () {
       const btn = await driver.elementsByXPath('//android.widget.Button');
       btn.length.should.be.above(0);
       await btn[0].click();
+    });
+  });
+  describe('mobile:batteryInfo', function () {
+    it('should get battery info', async function () {
+      const {level, state} = await driver.execute('mobile: batteryInfo', {});
+      level.should.be.greaterThan(0.0);
+      state.should.be.greaterThan(1);
     });
   });
 });

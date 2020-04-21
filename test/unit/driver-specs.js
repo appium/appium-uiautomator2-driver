@@ -234,6 +234,7 @@ describe('driver.js', function () {
         systemPort: 4724,
         host: 'localhost',
         devicePort: 6790,
+        mjpegServerPort: 7810,
         disableWindowAnimation: false,
         disableSuppressAccessibilityService: false,
       });

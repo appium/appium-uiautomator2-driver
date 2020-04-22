@@ -224,7 +224,7 @@ describe('driver.js', function () {
     beforeEach(function () {
       driver = new AndroidUiautomator2Driver({}, false);
       driver.caps = {};
-      driver.opts = { autoLaunch: false, skipUnlock: true};
+      driver.opts = {autoLaunch: false, skipUnlock: true};
       sandbox.stub(driver, 'initUiAutomator2Server');
       sandbox.stub(driver, 'addDeviceInfoToCaps');
 
@@ -234,7 +234,6 @@ describe('driver.js', function () {
         systemPort: 4724,
         host: 'localhost',
         devicePort: 6790,
-        mjpegServerPort: 7810,
         disableWindowAnimation: false,
         disableSuppressAccessibilityService: false,
       });

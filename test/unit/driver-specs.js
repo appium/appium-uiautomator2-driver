@@ -224,7 +224,7 @@ describe('driver.js', function () {
     beforeEach(function () {
       driver = new AndroidUiautomator2Driver({}, false);
       driver.caps = {};
-      driver.opts = { autoLaunch: false, skipUnlock: true};
+      driver.opts = {autoLaunch: false, skipUnlock: true};
       sandbox.stub(driver, 'initUiAutomator2Server');
       sandbox.stub(driver, 'addDeviceInfoToCaps');
 

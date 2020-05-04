@@ -2,7 +2,7 @@
 parameters:
   script: echo "NO TEST SCRIPT WAS PROVIDED" && exit 1
   name: 'android_e2e_tests'
-  vmImage: 'macOS-10.15' # TODO: Catalina?
+  vmImage: 'macOS-10.15'
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 10.x

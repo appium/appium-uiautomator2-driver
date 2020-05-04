@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
-import request from 'request-promise';
+import axios from 'axios';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../..';
 import { APIDEMOS_CAPS } from './desired';
 import { initSession, deleteSession } from './helpers/session';
@@ -145,18 +145,22 @@ describe('createSession', function () {
 
   describe('w3c compliance', function () {
     it('should start a session with W3C caps', async function () {
-      const { value, sessionId, status } = await request.post({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`, json: {
-        capabilities: {
-          alwaysMatch: APIDEMOS_CAPS,
-          firstMatch: [{}],
+      const { value, sessionId, status } = (await axios({
+        url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`,
+        method: 'POST',
+        data: {
+          capabilities: {
+            alwaysMatch: APIDEMOS_CAPS,
+            firstMatch: [{}],
+          }
         }
-      }});
+      })).data;
       value.should.exist;
       value.capabilities.should.exist;
       value.sessionId.should.exist;
       should.not.exist(sessionId);
       should.not.exist(status);
-      await request.delete({url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${value.sessionId}`});
+      await axios.delete(`http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${value.sessionId}`);
     });
   });
 });

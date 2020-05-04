@@ -48,11 +48,10 @@
     "appium-support": "^2.44.0",
     "appium-uiautomator2-server": "^4.8.0",
     "asyncbox": "^2.3.1",
+    "axios": "^0.19.2",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
     "portscanner": "2.2.0",
-    "request": "^2.81.0",
-    "request-promise": "^4.1.1",
     "source-map-support": "^0.5.5",
     "teen_process": "^1.3.1",
     "yargs": "^15.3.0"

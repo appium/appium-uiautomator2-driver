@@ -5,7 +5,6 @@ import sinon from 'sinon';
 import path from 'path';
 import B from 'bluebird';
 import { ADB } from 'appium-adb';
-import UiAutomator2Server from '../../lib/uiautomator2';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -216,82 +215,6 @@ describe('driver.js', function () {
         strategy: '-android uiautomator',
         selector: 'new UiSelector().scrollable(true)',
       }]);
-    });
-  });
-
-  describe('startUiAutomator2Session', function () {
-    let driver;
-    beforeEach(function () {
-      driver = new AndroidUiautomator2Driver({}, false);
-      driver.caps = {};
-      driver.opts = {autoLaunch: false, skipUnlock: true};
-      sandbox.stub(driver, 'initUiAutomator2Server');
-      sandbox.stub(driver, 'addDeviceInfoToCaps');
-
-      driver.uiautomator2 = new UiAutomator2Server({
-        adb: ADB.createADB(),
-        tmpDir: 'tmp',
-        systemPort: 4724,
-        host: 'localhost',
-        devicePort: 6790,
-        disableWindowAnimation: false,
-        disableSuppressAccessibilityService: false,
-      });
-      sandbox.stub(driver.uiautomator2, 'startSession');
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('should call setHiddenApiPolicy', async function () {
-      sandbox.stub(ADB, 'createADB').callsFake(function () {
-        let calledCount = 0;
-        return {
-          getDevicesWithRetry: () => [{udid: 'emulator-1234'}],
-          getPortFromEmulatorString: () => 1234,
-          setDeviceId: () => {},
-          setEmulatorPort: () => {},
-          networkSpeed: () => {},
-          getApiLevel: () => 28,
-          setHiddenApiPolicy: () => {
-            calledCount += 1;
-            return calledCount;
-          },
-          waitForDevice: () => {},
-          processExists: () => true, // skip launching avd
-          startLogcat: () => {},
-          forwardPort: () => {},
-        };
-      });
-
-      await driver.startUiAutomator2Session();
-      driver.adb.setHiddenApiPolicy().should.eql(2);
-    });
-
-    it('should not call setHiddenApiPolicy', async function () {
-      sandbox.stub(ADB, 'createADB').callsFake(function () {
-        let calledCount = 0;
-        return {
-          getDevicesWithRetry: () => [{udid: 'emulator-1234'}],
-          getPortFromEmulatorString: () => 1234,
-          setDeviceId: () => {},
-          setEmulatorPort: () => {},
-          networkSpeed: () => {},
-          getApiLevel: () => 27,
-          setHiddenApiPolicy: () => {
-            calledCount += 1;
-            return calledCount;
-          },
-          waitForDevice: () => {},
-          processExists: () => true, // skip launching avd
-          startLogcat: () => {},
-          forwardPort: () => {},
-        };
-      });
-
-      await driver.startUiAutomator2Session();
-      driver.adb.setHiddenApiPolicy().should.eql(1);
     });
   });
 

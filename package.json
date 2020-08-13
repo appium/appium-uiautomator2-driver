@@ -91,7 +91,7 @@
     "gps-demo-app": "^2.1.1",
     "gulp": "^4.0.0",
     "mocha": "^8.0.1",
-    "mocha-junit-reporter": "^1.23.0",
+    "mocha-junit-reporter": "^2.0.0",
     "mocha-multi-reporters": "^1.1.7",
     "pngjs": "^5.0.0",
     "pre-commit": "^1.2.2",

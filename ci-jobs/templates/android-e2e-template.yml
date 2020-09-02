@@ -30,6 +30,9 @@ jobs:
     - script: bash ci-jobs/scripts/start-emulator.sh
       displayName: Create and run Emulator
     - script: ${{ parameters.script }}
+      env:
+        JAVA_HOME: $(JAVA_HOME_11_X64)
+        PATH: $(JAVA_HOME_11_X64)/bin:$(PATH)
       displayName: Run tests
     - task: PublishTestResults@2
       condition: always()

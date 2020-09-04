@@ -32,7 +32,11 @@ describe('css-converter.js', function () {
         'android.widget.TextView[checkable] android.widget.WidgetView[focusable]:nth-child(1)',
         'new UiSelector().className("android.widget.TextView").checkable().childSelector(new UiSelector().className("android.widget.WidgetView").focusable().index(1))'
       ],
-      ['* *[clickable=true][focused]', 'new UiSelector().childSelector(new UiSelector().clickable(true).focused())']
+      ['* *[clickable=true][focused]', 'new UiSelector().childSelector(new UiSelector().clickable(true).focused())'],
+      [
+          '*[clickable=true], *[clickable=false]',
+          'new UiSelector().clickable(true); new UiSelector().clickable(false);',
+      ]
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {

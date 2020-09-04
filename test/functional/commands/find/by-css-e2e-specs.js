@@ -40,4 +40,8 @@ describe('Find - CSS', function () {
     let el = await driver.elementByCss('android.widget.TextView[clickable=true]:nth-child(1)');
     await el.text().should.eventually.equal('Accessibility');
   });
+  it('should find an element with recursive UiSelectors', async function () {
+    await driver.elementsByCss('*[focused=true] *[clickable=true]')
+      .should.eventually.have.length(1);
+  });
 });

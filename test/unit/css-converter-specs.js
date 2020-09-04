@@ -21,13 +21,18 @@ describe('css-converter.js', function () {
       ['*[description$=bar]', 'new UiSelector().descriptionMatches("bar$")'],
       ['*[description*=bar]', 'new UiSelector().descriptionContains("bar")'],
       ['#identifier[description=foo]', 'new UiSelector().resourceId("android:id/identifier").description("foo")'],
-      ['*[id=foo]', 'new UiSelector().resourceId("identifier").description("android:id/foo")'],
+      ['*[id=foo]', 'new UiSelector().resourceId("android:id/foo")'],
       ['*[description$="hello [ ^ $ . | ? * + ( ) world"]', 'new UiSelector().descriptionMatches("hello \\[ \\^ \\$ \\. \\| \\? \\* \\+ \\( \\) world$")'],
       ['TextView:iNdEx(4)', 'new UiSelector().className("TextView").index(4)'],
       ['*:long-clickable', 'new UiSelector().longClickable()'],
       ['*[lOnG-cLiCkAbLe]', 'new UiSelector().longClickable()'],
       ['*:nth-child(3)', 'new UiSelector().index(3)'],
       ['*:instance(3)', 'new UiSelector().instance(3)'],
+      [
+        'android.widget.TextView[checkable] android.widget.WidgetView[focusable]:nth-child(1)',
+        'new UiSelector().className("android.widget.TextView").checkable().childSelector(new UiSelector().className("android.widget.WidgetView").focusable().index(1))'
+      ],
+      ['* *[clickable=true][focused]', 'new UiSelector().childSelector(new UiSelector().clickable(true).focused())']
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {

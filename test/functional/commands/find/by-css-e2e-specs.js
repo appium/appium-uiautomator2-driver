@@ -44,4 +44,29 @@ describe('Find - CSS', function () {
     await driver.elementsByCss('*[focused=true] *[clickable=true]')
       .should.eventually.have.length(1);
   });
+  it('should allow multiple selector statements and return the Union of the two sets', async function () {
+    let clickableEls = await driver.elementsByCss('*[clickable]');
+    clickableEls.length.should.be.above(0);
+    let notClickableEls = await driver.elementsByCss('*[clickable=false]');
+    notClickableEls.length.should.be.above(0);
+    let both = await driver.elementsByCss('*[clickable=true], *[clickable=false]');
+    both.should.have.length(clickableEls.length + notClickableEls.length);
+  });
+  it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
+    let selector = 'not.a.class, android.widget.TextView';
+    const els = await driver.elementsByCss(selector);
+    els.length.should.be.above(0);
+  });
+  it('should find elements using starts with attribute', async function () {
+    await driver.elementByCss('*[description^="Animation"]').should.eventually.exist;
+  });
+  it('should find elements using ends with attribute', async function () {
+    await driver.elementByCss('*[description$="Animation"]').should.eventually.exist;
+  });
+  it('should find elements using word match attribute', async function () {
+    await driver.elementByCss('*[description~="Animation"]').should.eventually.exist;
+  });
+  it('should find elements using wildcard attribute', async function () {
+    await driver.elementByCss('*[description*="Animation"]').should.eventually.exist;
+  });
 });

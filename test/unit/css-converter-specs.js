@@ -12,9 +12,9 @@ describe('css-converter.js', function () {
       ['.TextView', 'new UiSelector().classNameMatches("\\.TextView")'],
       ['.widget.TextView', 'new UiSelector().classNameMatches("\\.widget\\.TextView")'],
       ['*[checkable=true]', 'new UiSelector().checkable(true)'],
-      ['*[checkable]', 'new UiSelector().checkable()'],
-      ['*:checked', 'new UiSelector().checked()'],
-      ['*[checked]', 'new UiSelector().checked()'],
+      ['*[checkable]', 'new UiSelector().checkable(true)'],
+      ['*:checked', 'new UiSelector().checked(true)'],
+      ['*[checked]', 'new UiSelector().checked(true)'],
       ['TextView[description="Some description"]', 'new UiSelector().className("TextView").description("Some description")'],
       ['*[description]', 'new UiSelector().descriptionMatches("")'],
       ['*[description^=blah]', 'new UiSelector().descriptionStartsWith("blah")'],
@@ -24,19 +24,20 @@ describe('css-converter.js', function () {
       ['*[id=foo]', 'new UiSelector().resourceId("android:id/foo")'],
       ['*[description$="hello [ ^ $ . | ? * + ( ) world"]', 'new UiSelector().descriptionMatches("hello \\[ \\^ \\$ \\. \\| \\? \\* \\+ \\( \\) world$")'],
       ['TextView:iNdEx(4)', 'new UiSelector().className("TextView").index(4)'],
-      ['*:long-clickable', 'new UiSelector().longClickable()'],
-      ['*[lOnG-cLiCkAbLe]', 'new UiSelector().longClickable()'],
+      ['*:long-clickable', 'new UiSelector().longClickable(true)'],
+      ['*[lOnG-cLiCkAbLe]', 'new UiSelector().longClickable(true)'],
       ['*:nth-child(3)', 'new UiSelector().index(3)'],
       ['*:instance(3)', 'new UiSelector().instance(3)'],
       [
         'android.widget.TextView[checkable] android.widget.WidgetView[focusable]:nth-child(1)',
-        'new UiSelector().className("android.widget.TextView").checkable().childSelector(new UiSelector().className("android.widget.WidgetView").focusable().index(1))'
+        'new UiSelector().className("android.widget.TextView").checkable(true).childSelector(new UiSelector().className("android.widget.WidgetView").focusable(true).index(1))'
       ],
-      ['* *[clickable=true][focused]', 'new UiSelector().childSelector(new UiSelector().clickable(true).focused())'],
+      ['* *[clickable=true][focused]', 'new UiSelector().childSelector(new UiSelector().clickable(true).focused(true))'],
       [
-          '*[clickable=true], *[clickable=false]',
-          'new UiSelector().clickable(true); new UiSelector().clickable(false);',
-      ]
+        '*[clickable=true], *[clickable=false]',
+        'new UiSelector().clickable(true); new UiSelector().clickable(false)',
+      ],
+      ['*[description~="word"]', 'new UiSelector().descriptionMatches("\\b(\\w*word\\w*)\\b")'],
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {
@@ -44,10 +45,17 @@ describe('css-converter.js', function () {
       });
     }
   });
-  describe('attributes', function () {
-
-  });
-  describe('pseudo-classes', function () {
-
+  describe('unsupported css', function () {
+    const testCases = [
+      ['*[checked="ItS ChEcKeD"]', /^Could not parse 'checked=ItS ChEcKeD'. 'checked' must be true, false or empty/],
+      ['*[foo="bar"]', /^'foo' is not a valid attribute. Supported attributes are */],
+      ['*:checked("ischecked")', /^Could not parse 'checked=ischecked'. 'checked' must be true, false or empty/],
+      [`This isn't valid[ css`, /^Could not parse CSS. Reason: */],
+    ];
+    for (const [cssSelector, error] of testCases) {
+      it(`should reject '${cssSelector}' with '${error}'`, function () {
+        (() => CssConverter.toUiAutomatorSelector(cssSelector)).should.throw(error);
+      });
+    }
   });
 });

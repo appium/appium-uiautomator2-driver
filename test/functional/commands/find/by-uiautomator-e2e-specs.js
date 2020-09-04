@@ -7,6 +7,8 @@ import { initSession, deleteSession } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
+// TODO: Add the companion CSS selectors here
+
 describe('Find - uiautomator', function () {
   let driver;
   before(async function () {

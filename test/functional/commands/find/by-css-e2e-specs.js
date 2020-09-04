@@ -69,4 +69,10 @@ describe('Find - CSS', function () {
   it('should find elements using wildcard attribute', async function () {
     await driver.elementByCss('*[description*="Animation"]').should.eventually.exist;
   });
+  it('should allow UiScrollable with unicode string', async function () {
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.text.Unicode'});
+    let selector = '*[text="عربي"]:instance(0)';
+    let el = await driver.elementByCss(selector);
+    await el.text().should.eventually.equal('عربي');
+  });
 });

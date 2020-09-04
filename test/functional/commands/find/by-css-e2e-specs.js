@@ -52,6 +52,10 @@ describe('Find - CSS', function () {
     let both = await driver.elementsByCss('*[clickable=true], *[clickable=false]');
     both.should.have.length(clickableEls.length + notClickableEls.length);
   });
+  it('should find an element by a non-fully qualified class name using CSS tag name', async function () {
+    const els = await driver.elementsByCss('android.widget.TextView');
+    els.length.should.be.above(0);
+  });
   it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
     let selector = 'not.a.class, android.widget.TextView';
     const els = await driver.elementsByCss(selector);

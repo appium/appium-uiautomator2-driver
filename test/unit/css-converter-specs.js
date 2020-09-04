@@ -54,7 +54,7 @@ describe('css-converter.js', function () {
       ['*[checked="ItS ChEcKeD"]', /^Could not parse 'checked=ItS ChEcKeD'. 'checked' must be true, false or empty/],
       ['*[foo="bar"]', /^'foo' is not a valid attribute. Supported attributes are */],
       ['*:checked("ischecked")', /^Could not parse 'checked=ischecked'. 'checked' must be true, false or empty/],
-      [`This isn't valid[ css`, /^Could not parse CSS. Reason: */],
+      [`This isn't valid[ css`, /^Could not parse CSS/],
       ['p ~ a', /^'~' is not a supported combinator. /],
       ['p > a', /^'>' is not a supported combinator. /],
     ];

@@ -48,7 +48,7 @@
     "appium-support": "^2.49.0",
     "appium-uiautomator2-server": "^4.8.0",
     "asyncbox": "^2.3.1",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "bluebird": "^3.5.1",
     "css-selector-parser": "^1.4.1",
     "lodash": "^4.17.4",

@@ -82,7 +82,6 @@
     "test"
   ],
   "devDependencies": {
-    "ajv": "^6.5.3",
     "android-apidemos": "^3.0.0",
     "appium-gulp-plugins": "^5.0.0",
     "appium-test-support": "^1.0.0",

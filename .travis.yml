@@ -40,7 +40,6 @@ jobs:
         - START_EMU=0
         - RECURSIVE=--recursive
         - TEST=unit
-        - COVERALLS=1
     - stage:
       if: *noncron
       env: TEST=functional
@@ -143,8 +142,6 @@ after_script:
   - if [[ -n "$LONG_PID" ]]; then
       kill $LONG_PID;
     fi
-after_success:
-  - if [[ -n "$COVERALLS" ]]; then _FORCE_LOGS=0 npm run coverage; fi
 after_failure:
   - |
     if [[ "${TEST}" != "unit" && "${CLOUD}" != "1" ]]; then

@@ -35,6 +35,7 @@ jobs:
       displayName: Create and run Emulator
       env:
         ANDROID_FLAVOUR: ${{ parameters.ANDROID_FLAVOUR }}
+        ANDROID_ARCH: ${{ parameters.ANDROID_ARCH }}
     - script: ${{ parameters.script }}
       env:
         JAVA_HOME: $(JAVA_HOME_11_X64)

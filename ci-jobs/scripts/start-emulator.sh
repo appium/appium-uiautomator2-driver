@@ -30,10 +30,10 @@ while [[ $(( `date +%s` - $secondsStarted )) -lt $TIMEOUT ]]; do
 
   processList=`adb shell ps`
   if ! [[ $processList =~ "root " ]]; then
-        # In recent APIs running `ps` without `-A` only returns
-        # processes belonging to the current user (in this case `shell`)
-        $processList=$(adb shell ps -A)
-    fi
+    # In recent APIs running `ps` without `-A` only returns
+    # processes belonging to the current user (in this case `shell`)
+    processList=$(adb shell ps -A)
+  fi
   if [[ "$processList" =~ "com.android.systemui" ]]; then
     echo "System UI process is running. Checking IME services availability"
     $ANDROID_HOME/platform-tools/adb shell ime list && break

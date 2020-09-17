@@ -7,6 +7,7 @@ parameters:
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 10.x
   ANDROID_SDK_VERSION: 28
+  ANDROID_FLAVOUR: default
 
 jobs:
   - job: ${{ parameters.name }}
@@ -27,8 +28,12 @@ jobs:
       displayName: Install MJPEG Consumer
     - script: npm test
       displayName: NPM Test
+    - script: $ANDROID_HOME/tools/bin/sdkmanager --list
+      displayName: 
     - script: bash ci-jobs/scripts/start-emulator.sh
       displayName: Create and run Emulator
+      env:
+        ANDROID_FLAVOUR: ${{ parameters.ANDROID_FLAVOUR }}
     - script: ${{ parameters.script }}
       env:
         JAVA_HOME: $(JAVA_HOME_11_X64)

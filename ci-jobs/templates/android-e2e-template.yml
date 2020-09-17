@@ -8,7 +8,7 @@ parameters:
   NODE_VERSION: 10.x
   ANDROID_SDK_VERSION: 28
   ANDROID_FLAVOUR: default
-
+  ANDROID_ARCH: x86
 jobs:
   - job: ${{ parameters.name }}
     timeoutInMinutes: 120
@@ -30,7 +30,7 @@ jobs:
     - script: npm test
       displayName: NPM Test
     - script: $ANDROID_HOME/tools/bin/sdkmanager --list
-      displayName: 
+      displayName: List SDKs
     - script: bash ci-jobs/scripts/start-emulator.sh
       displayName: Create and run Emulator
       env:

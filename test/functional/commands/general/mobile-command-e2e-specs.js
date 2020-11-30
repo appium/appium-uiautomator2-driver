@@ -60,4 +60,9 @@ describe('mobile', function () {
       state.should.be.greaterThan(1);
     });
   });
+  describe('mobile:uiautomatorViewer', function () {
+    it('should open the uiautomatorViewer', async function () {
+      await driver.execute('mobile: uiautomatorViewer');
+    });
+  });
 });

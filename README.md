@@ -227,7 +227,7 @@ def generate_caps():
         # If it is omitted then the first available device will be used
         'appium:udid': '123456',
         # Or run the test on the emulator
-        # 'avd': 'emulator-5554',
+        # 'appium:avd': 'emulator-5554',
     }
     app_caps = {
         **common_caps,
@@ -246,7 +246,7 @@ def generate_caps():
         # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/hybrid.md
         'appium:chromedriverExecutable': '/Project/chromedriver_linux64',
     }
-    return [android_caps, desktop_browser_caps]
+    return [app_caps, browser_caps]
 
 
 @pytest.fixture(params=generate_caps())

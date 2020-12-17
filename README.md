@@ -260,7 +260,7 @@ includeStderr | boolean | no | Whether to include stderr stream into the returne
 
 #### Returned Result
 
-Depending on the `includeStderr` value this API could either return a string, which is equal to the `stdout` stream content of the given command or a dictionary whose elements are `stdout` and `stderr` and values are contents of the corresponding outgoing streams. If the command exists with non-zero return code then an exception is going to be thrown. The exception message will be equal to the command stderr.
+Depending on the `includeStderr` value this API could either return a string, which is equal to the `stdout` stream content of the given command or a dictionary whose elements are `stdout` and `stderr` and values are contents of the corresponding outgoing streams. If the command exits with a non-zero return code then an exception is going to be thrown. The exception message will be equal to the command stderr.
 
 ### mobile: execEmuConsoleCommand
 
@@ -625,9 +625,36 @@ UiAutomator2 driver supports Appium endpoints for applications management:
 
 Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
 
-Some useful links:
+Useful links:
 - https://appiumpro.com/editions/9-testing-android-app-upgrades
+- https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/applications.py
 - https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/InteractsWithApps.java
+
+
+## Files Management
+
+UiAutomator2 driver supports Appium endpoints for files management:
+- Push file (`POST /appium/device/push_file`)
+- Pull file (`POST /appium/device/pull_file`)
+- Pull folder (`POST /appium/device/pull_folder`)
+
+Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
+
+Useful links:
+- https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/InteractsWithFiles.java
+- https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/remote_fs.py
+
+
+## Clipboard Management
+
+UiAutomator2 driver supports Appium endpoints for clipboard management:
+- Set clipboard content (`POST /appium/device/set_clipboard'`)
+- Get clipboard content (`POST /appium/device/get_clipboard`)
+
+Useful links:
+- https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/clipboard.py
+- https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/clipboard/HasClipboard.java
+- https://appiumpro.com/editions/16-automating-the-clipboard-on-ios-and-android
 
 
 ## Usage Examples

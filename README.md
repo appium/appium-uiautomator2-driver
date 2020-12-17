@@ -241,6 +241,395 @@ mjpegBilinearFiltering | boolean | Controls whether (`true`) or not (`false`, th
 useResourcesForOrientationDetection | boolean | Defines the strategy used by UiAutomator2 server to detect the original device orientation. By default (`false` value) the server uses device rotation value for this purpose. Although, this approach may not work for some devices and a portrait orientation may erroneously be detected as the landscape one (and vice versa). In such case it makes sense to play with this setting.
 
 
+## Platform-Specific Extensions
+
+Beside of standard W3C APIs the driver provides the following custom command extensions to execute platform specific scenarios:
+
+### mobile: shell
+
+Executes the given shell command on the device under test via ADB connection. This extension exposes a potential security risk and thus is only enabled when explicitly activated by the `adb_shell` server [command line feature specifier](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md)
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+command | string | yes | Shell command name to execute, for example `echo` or `rm` | echo
+args | `Array<string>` | no | Array of command arguments | `['-f', '/sdcard/myfile.txt']`
+timeout | number | no | Command timeout in milliseconds. If the command blocks for longer than this timeout then an exception is going to be thrown. The default timeout is `20000` ms | 100000
+includeStderr | boolean | no | Whether to include stderr stream into the returned result. `false` by default | true
+
+#### Returned Result
+
+Depending on the `includeStderr` value this API could either return a string, which is equal to the `stdout` stream content of the given command or a dictionary whose elements are `stdout` and `stderr` and values are contents of the corresponding outgoing streams. If the command exists with non-zero return code then an exception is going to be thrown. The exception message will be equal to the command stderr.
+
+### mobile: execEmuConsoleCommand
+
+Executes a command through emulator telnet console interface and returns its output.
+The `emulator_console` server [feature](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) must be enabled in order to use this method.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+command | string | yes | The actual command to execute. See [Android Emulator Console Guide](https://developer.android.com/studio/run/emulator-console) for more details on available commands | help-verbose
+execTimeout | number | no | Timeout used to wait for a server reply to the given command in milliseconds. `60000` ms by default | 100000
+connTimeout | boolean | no | Console connection timeout in milliseconds. `5000` ms by default | 10000
+initTimeout | boolean | no | Telnet console initialization timeout in milliseconds (the time between the connection happens and the command prompt). `5000` ms by default | 10000
+
+#### Returned Result
+
+The actual command output. An error is thrown if command execution fails.
+
+### Mobile Gesture Commands
+
+UiAutomator2 provides several extensions that allow to automate popular mobile gesture shortcuts:
+
+- mobile: dragGesture
+- mobile: flingGesture
+- mobile: longClickGesture
+- mobile: pinchCloseGesture
+- mobile: pinchOpenGesture
+- mobile: swipeGesture
+- mobile: scrollGesture
+
+These gestures are documented in the [Automating Mobile Gestures](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/android-mobile-gestures.md) tutorial. Refer [W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api) if you need to automate more complicated gestures.
+
+### mobile: scroll
+
+Scrolls the given scrollable element until an element identified by `strategy` and `selector` becomes visible. This function returns immediately if the destination element is already visible in the view port. Otherwise it would scroll to the very beginning of the scrollable control and tries to reach the destination element by scrolling its parent to the end step by step. The scroll direction (vertical or horizontal) is detected automatically.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+element | string | no | The identifier of the scrollable element. It is required this element is a valid scrollable container and it was located by `-android uiautomator` strategy. If this property is not provided then the first currently available scrollable view is selected for the interaction. | 123456-3456-3435-3453453
+strategy | string | yes | The following strategies are supported: `accessibility id` (UiSelector().description), `class name` (UiSelector().className), `-android uiautomator` (UiSelector) | 'accessibility id'
+selector | string | yes | The corresponding lookup value for the selected strategy. | 'com.mycompany:id/table'
+maxSwipes | number | no | The maximum number of swipes to perform on the target scrollable view in order to reach the destination element. In case this value is unset then it would be retrieved from the scrollable element itself (vua `getMaxSearchSwipes()` property). | 10
+
+### mobile: deepLink
+
+Start URI that may take users directly to the specific content in the app. Read [Reliably Opening Deep Links Across Platforms and Devices](https://appiumpro.com/editions/84-reliably-opening-deep-links-across-platforms-and-devices) for more details.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+url | string | yes | The URL to start | theapp://login/
+package | string | yes | The name of the package to start the URI with | 'com.mycompany'
+waitForLaunch | boolean | no | If `false` then ADB won't wait for the started activity to return the control. `true` by default | false
+
+### mobile: startLogsBroadcast
+
+Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected webcoket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
+
+### mobile: stopLogsBroadcast
+
+Stops the previously started logcat broadcasting websocket server. This method will return immediately if no server is running. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
+
+### mobile: acceptAlert
+
+Tries to accept an Android alert. This method might not always be reliable as there is no single standard for how Android alerts should look like within the Accessibility representation.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+buttonLabel | string | no | The name/text of the alert button to click in order to accept it. If not provided then the driver will try to autodetect it | Accept
+
+### mobile: acceptAlert
+
+Tries to dismiss an Android alert. This method might not always be reliable as there is no single standard for how Android alerts should look like within the Accessibility representation.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+buttonLabel | string | no | The name/text of the alert button to click in order to dismiss it. If not provided then the driver will try to autodetect it | Dismiss
+
+### mobile: batteryInfo
+
+Retrieves the battery information from the device under test.
+
+#### Returned Result
+
+The extension returns a dictionary whose entries are:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+level | number | Battery level in range [0.0, 1.0], where 1.0 means 100% charge. -1 is returned if the actual value cannot be retrieved from the system. | 0.5
+state | number| Battery state. The following values are possible: BATTERY_STATUS_UNKNOWN = 1; BATTERY_STATUS_CHARGING = 2; BATTERY_STATUS_DISCHARGING = 3; BATTERY_STATUS_NOT_CHARGING = 4; BATTERY_STATUS_FULL = 5. -1 is returned if the actual value cannot be retrieved from the system. | 4
+
+### mobile: deviceInfo
+
+Retrieves the information about the device under test, like the device model, serial number, network connectivity info, etc.
+
+#### Returned Result
+
+The extension returns a dictionary whose entries are the device properties. Check https://github.com/appium/appium-uiautomator2-server/blob/master/app/src/main/java/io/appium/uiautomator2/handler/GetDeviceInfo.java to get the full list of returned keys and their corresponding values.
+
+### mobile: getDeviceTime
+
+Retrieves the current device's timestamp.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+format | string | no | The set of format specifiers. Read https://momentjs.com/docs/ to get the full list of supported datetime format specifiers. The default format is `YYYY-MM-DDTHH:mm:ssZ`, which complies to ISO-8601 | YYYY-MM-DDTHH:mm:ssZ
+
+#### Returned Result
+
+The device timestamp string formatted according to the given specifiers
+
+### mobile: changePermissions
+
+Changes package permissions in runtime.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+permissions | string or `Array<string>` | yes | The full name of the permission to be changed or a list of permissions. Mandatory argument. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']`
+appPackage | string | no | The application package to set change permissions on. Defaults to the package name under test | com.mycompany.myapp
+action | string | no | Either `grant` (the default action) or `revoke` | grant
+
+### mobile: changePermissions
+
+Gets runtime permissions list for the given application package.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+type | string | no | One of possible permission types to get. Can be one of: `denied`, `granted` or `requested` (the default value). | granted
+appPackage | string | no | The application package to get permissions from. Defaults to the package name under test | com.mycompany.myapp
+
+#### Returned Result
+
+Array of strings, where each string is a permission name. the array could be empty.
+
+### mobile: performEditorAction
+
+Performs IME action on the focused edit element. Read [How To Emulate IME Actions Generation](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/android-ime.md) for more details.
+
+### mobile: startScreenStreaming
+
+Starts device screen broadcast by creating MJPEG server. Multiple calls to this method have no effect unless the previous streaming session is stopped. This method only works if the `adb_screen_streaming` [feature](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) is enabled on the server side. It is also required that [GStreamer](https://gstreamer.freedesktop.org/) with `gst-plugins-base`, `gst-plugins-good` and `gst-plugins-bad` packages are installed and available in PATH on the server machine.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+width | number | no | The scaled width of the device's screen. If unset then the script will assign it to the actual screen width measured in pixels. | 768
+height | number | no | The scaled height of the device's screen. If unset then the script will assign it to the actual screen height measured in pixels. | 1024
+bitRate | number | no | The video bit rate for the video, in bits per second. The default value is 4000000 (4 Mb/s). You can increase the bit rate to improve video quality, but doing so results in larger movie files. | 1024000
+host | string | no | The IP address/host name to start the MJPEG server on. You can set it to `0.0.0.0` to trigger the broadcast on all available network interfaces. `127.0.0.1` by default | 0.0.0.0
+pathname | string | no | The HTTP request path the MJPEG server should be available on. If unset then any pathname on the given `host`/`port` combination will work. Note that the value should always start with a single slash: `/` | /myserver
+tcpPort | number | no | The port number to start the internal TCP MJPEG broadcast on. This type of broadcast always starts on the loopback interface (`127.0.0.1`). `8094` by default | 5024
+port | number | no | The port number to start the MJPEG server on. `8093` by default | 5023
+quality | number | no | The quality value for the streamed JPEG images. This number should be in range [1, 100], where 100 is the best quality. `70` by default | 80
+considerRotation | boolean | no | If set to `true` then GStreamer pipeline will increase the dimensions of the resulting images to properly fit images in both landscape and portrait orientations. Set it to `true` if the device rotation is not going to be the same during the broadcasting session. `false` by default | false
+logPipelineDetails | boolean | no | Whether to log GStreamer pipeline events into the standard log output. Might be useful for debugging purposes. `false` by default | true
+
+### mobile: stopScreenStreaming
+
+Stop the previously started screen streaming. If no screen streaming server has been started then nothing is done.
+
+### mobile: getNotifications
+
+Retrieves Android notifications via Appium Settings helper. Appium Settings app itself must be *manually* granted to access notifications under device Settings in order to make this feature working. Appium Settings helper keeps all the active notifications plus notifications that appeared while it was running in the internal buffer, but no more than 100 items altogether. Newly appeared notifications are always added to the head of the notifications array. The `isRemoved` flag is set to `true` for notifications that have been removed.
+See https://developer.android.com/reference/android/service/notification/StatusBarNotification and https://developer.android.com/reference/android/app/Notification.html for more information on available notification properties and their values.
+
+#### Returned Result
+
+The example output is:
+```json
+{
+   "statusBarNotifications":[
+     {
+       "isGroup":false,
+       "packageName":"io.appium.settings",
+       "isClearable":false,
+       "isOngoing":true,
+       "id":1,
+       "tag":null,
+       "notification":{
+         "title":null,
+         "bigTitle":"Appium Settings",
+         "text":null,
+         "bigText":"Keep this service running, so Appium for Android can properly interact with several system APIs",
+         "tickerText":null,
+         "subText":null,
+         "infoText":null,
+         "template":"android.app.Notification$BigTextStyle"
+       },
+       "userHandle":0,
+       "groupKey":"0|io.appium.settings|1|null|10133",
+       "overrideGroupKey":null,
+       "postTime":1576853518850,
+       "key":"0|io.appium.settings|1|null|10133",
+       "isRemoved":false
+     }
+   ]
+}
+```
+
+### mobile: listSms
+
+Retrieves the list of the most recent SMS properties list via Appium Settings helper. Messages are sorted by date in descending order.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+max | number | no | The maximum count of recent messages to retrieve. `100` by default | 10
+
+#### Returned Result
+
+The example output is:
+```json
+ {
+   "items":[
+     {
+       "id":"2",
+       "address":"+123456789",
+       "person":null,
+       "date":"1581936422203",
+       "read":"0",
+       "status":"-1",
+       "type":"1",
+       "subject":null,
+       "body":"\"text message2\"",
+       "serviceCenter":null
+     },
+     {
+       "id":"1",
+       "address":"+123456789",
+       "person":null,
+       "date":"1581936382740",
+       "read":"0",
+       "status":"-1",
+       "type":"1",
+       "subject":null,
+       "body":"\"text message\"",
+       "serviceCenter":null
+     }
+   ],
+   "total":2
+ }
+```
+
+### mobile: type
+
+Types the given Unicode string. It is expected that the focus is already put to the destination input field before this method is called. The main difference between this method and the sendKeys one is that it emulates `true` typing like it was done from an on-screen keyboard. It also properly supports Unicode input characters.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+text | string | yes | The text to type | testing
+
+### mobile: sensorSet
+
+Emulate sensors values on the connected emulator.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+sensorType | string | yes | Supported sensor types are: `acceleration`, `light`, `proximity`, `temperature`, `pressure` and `humidity` | light
+value | string | yes | value to set to the sensor | 50
+
+### mobile: deleteFile
+
+Deletes a file on the remote device.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | yes | The full path to the remote file or a file inside an application bundle | `/sdcard/myfile.txt` or `@my.app.id/path/in/bundle`
+
+### mobile: startService
+
+Starts the given service intent.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+intent | string | yes | The name of the service intent to start | `com.some.package.name/.YourServiceSubClassName`
+user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
+foreground | boolean | no | Set it to `true` if your service must be started as foreground service. | false
+
+### mobile: stopService
+
+Stops the given service intent.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+intent | string | yes | The name of the service intent to stop | `com.some.package.name/.YourServiceSubClassName`
+user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
+
+### mobile: getContexts
+
+Retrieves a webviews mapping based on CDP endpoints
+
+#### Returned Result
+
+The following json demonstrates the example of WebviewsMapping object.
+Note that `description` in `page` can be an empty string most likely when it comes to Mobile Chrome)
+
+```json
+ {
+   "proc": "@webview_devtools_remote_22138",
+   "webview": "WEBVIEW_22138",
+   "info": {
+     "Android-Package": "io.appium.settings",
+     "Browser": "Chrome/74.0.3729.185",
+     "Protocol-Version": "1.3",
+     "User-Agent": "Mozilla/5.0 (Linux; Android 10; Android SDK built for x86 Build/QSR1.190920.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.185 Mobile Safari/537.36",
+     "V8-Version": "7.4.288.28",
+     "WebKit-Version": "537.36 (@22955682f94ce09336197bfb8dffea991fa32f0d)",
+     "webSocketDebuggerUrl": "ws://127.0.0.1:10900/devtools/browser"
+   },
+   "pages": [
+     {
+       "description": "{\"attached\":true,\"empty\":false,\"height\":1458,\"screenX\":0,\"screenY\":336,\"visible\":true,\"width\":1080}",
+       "devtoolsFrontendUrl": "http://chrome-devtools-frontend.appspot.com/serve_rev/@22955682f94ce09336197bfb8dffea991fa32f0d/inspector.html?ws=127.0.0.1:10900/devtools/page/27325CC50B600D31B233F45E09487B1F",
+       "id": "27325CC50B600D31B233F45E09487B1F",
+       "title": "Releases · appium/appium · GitHub",
+       "type": "page",
+       "url": "https://github.com/appium/appium/releases",
+       "webSocketDebuggerUrl": "ws://127.0.0.1:10900/devtools/page/27325CC50B600D31B233F45E09487B1F"
+     }
+   ],
+   "webviewName": "WEBVIEW_com.io.appium.setting"
+ }
+```
+
+
+## Applications Management
+
+UiAutomator2 driver supports Appium endpoints for applications management:
+- Check if app is installed (`POST /appium/device/app_installed`)
+- Install/upgrade app (`POST /appium/device/install_app`)
+- Active app (`POST /appium/device/activate_app`)
+- Uninstall app (`POST /appium/device/remove_app`)
+- Terminate app (`POST /appium/device/terminate_app`)
+- Start app activity (`POST /appium/device/start_activity`)
+- Query the current app state (`POST /appium/device/app_state`)
+
+Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
+
+Some useful links:
+- https://appiumpro.com/editions/9-testing-android-app-upgrades
+- https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/InteractsWithApps.java
+
+
 ## Usage Examples
 
 ```python

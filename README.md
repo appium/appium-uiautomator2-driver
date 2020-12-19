@@ -394,7 +394,7 @@ permissions | string or `Array<string>` | yes | The full name of the permission 
 appPackage | string | no | The application package to set change permissions on. Defaults to the package name under test | com.mycompany.myapp
 action | string | no | Either `grant` (the default action) or `revoke` | grant
 
-### mobile: changePermissions
+### mobile: getPermissions
 
 Gets runtime permissions list for the given application package.
 

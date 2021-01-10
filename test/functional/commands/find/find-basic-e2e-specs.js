@@ -56,7 +56,7 @@ describe('Find - basic', function () {
     });
     it('should respect implicit wait with multiple elements', async function () {
       let beforeMs = Date.now();
-      await driver.elementsById('there_is_nothing_called_this')
+      await driver.elementsById('android:id/there_is_nothing_called_this')
         .should.eventually.have.length(0);
       let afterMs = Date.now();
       (afterMs - beforeMs).should.be.below(implicitWaitTimeout * 2);

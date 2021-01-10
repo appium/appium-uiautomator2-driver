@@ -5,7 +5,7 @@ parameters:
   vmImage: 'macOS-10.15'
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
-  NODE_VERSION: 10.x
+  NODE_VERSION: 12.x
   ANDROID_SDK_VERSION: 28
   ANDROID_FLAVOUR: default
   ANDROID_ARCH: x86

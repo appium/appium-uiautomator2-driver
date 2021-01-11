@@ -42,6 +42,7 @@ appium:systemPort | The number of the port the UiAutomator2 server is listening 
 appium:skipServerInstallation | Skip the UiAutomator2 Server component installation on the device under test and all the related checks if set to `true`. This could help to speed up the session startup if you know for sure the correct server version is installed on the device. In case the server is not installed or an incorrect version of it is installed then you may get an unexpected error later. `false` by default
 appium:uiautomator2ServerLaunchTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is listening on the device. `30000` ms by default
 appium:uiautomator2ServerInstallTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is installed on the device. `20000` ms by default
+appium:uiautomator2ServerReadTimeout | The maximum number of milliseconds to wait for a HTTP response from UiAutomator2Server. Only values greater than zero are accepted. If the given value is too low then expect driver commands to fail with `timeout of Xms exceeded` error. `240000` ms by default
 appium:disableWindowAnimation | Whether to disable window animations when starting the instrumentation process. `false` by default
 appium:skipDeviceInitialization | If set to `true` then device startup checks (whether it is ready and whether Settings app is installed) will be canceled on session creation. Could speed up the session creation if you know what you are doing. `false` by default
 

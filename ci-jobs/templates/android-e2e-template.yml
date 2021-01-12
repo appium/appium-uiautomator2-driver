@@ -3,6 +3,7 @@ parameters:
   script: echo "NO TEST SCRIPT WAS PROVIDED" && exit 1
   name: 'android_e2e_tests'
   vmImage: 'macOS-10.15'
+  sleep: 1
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 12.x
@@ -36,6 +37,8 @@ jobs:
       env:
         ANDROID_FLAVOUR: ${{ parameters.ANDROID_FLAVOUR }}
         ANDROID_ARCH: ${{ parameters.ANDROID_ARCH }}
+    - script: sleep ${{ parameters.sleep }}
+      displayName: Sleep ${{parameters.sleep}} seconds
     - script: ${{ parameters.script }}
       env:
         JAVA_HOME: $(JAVA_HOME_11_X64)

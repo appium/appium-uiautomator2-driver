@@ -229,7 +229,6 @@ which allows you to avoid possible issues with such sessions silently running/ex
 - `chromedriverPort`: The unique chromedriver port if testing web views or Chrome.
 - `mjpegServerPort`: Set a unique MJPEG server port for each parallel session if you are going to record a video.
 
-
 #### Important Emulator Capabilities
 
 - `avd`: The unique emulator name.

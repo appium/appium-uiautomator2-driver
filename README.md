@@ -222,14 +222,14 @@ _Note_: If you are not going to run your tests in parallel then consider enablin
 It forces the server to close all pending sessions before a new one could be opened,
 which allows you to avoid possible issues with such sessions silently running/expiring in the background.
 
-#### Important Real Device Capabilities
+### Important Real Device Capabilities
 
 - `udid`: The unique device id.
 - `systemPort`: Set a unique system port number for each parallel session. Otherwise you might get a port conflict such as in [this issue](https://github.com/appium/appium/issues/7745).
 - `chromedriverPort`: The unique chromedriver port if testing web views or Chrome.
 - `mjpegServerPort`: Set a unique MJPEG server port for each parallel session if you are going to record a video.
 
-#### Important Emulator Capabilities
+### Important Emulator Capabilities
 
 - `avd`: The unique emulator name.
 - `systemPort`: Set a unique system port number for each parallel session.

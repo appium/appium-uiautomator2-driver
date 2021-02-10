@@ -314,6 +314,7 @@ UiAutomator2 provides several extensions that allow to automate popular mobile g
 
 - mobile: dragGesture
 - mobile: flingGesture
+- mobile: doubleClickGesture
 - mobile: longClickGesture
 - mobile: pinchCloseGesture
 - mobile: pinchOpenGesture

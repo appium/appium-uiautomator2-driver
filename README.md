@@ -639,6 +639,17 @@ Note that `description` in `page` can be an empty string most likely when it com
  }
 ```
 
+### mobile: installMultipleApks
+
+Install applications via `install-multiple` option.
+Please read more details in the secrion by `adb --help`.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+apks | array<string> | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
+options | object | Whether enable options in `install-multiple` installation as `boolean`. `allowTestPackages` is `-t`, `useSdcard` is `-s`, `grantPermissions` is `-g`, `replace` is `-r`, `partialInstall` is `-p`. | `{grantPermissions: true, partialInstall: true}`
 
 ## Applications Management
 

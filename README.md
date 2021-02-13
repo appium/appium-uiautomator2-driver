@@ -649,7 +649,7 @@ Please read more details in the corresponding section of the `adb --help` comman
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 apks | array<string> | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
-options | object | no | Options to be enabled in `install-multiple` installation. If you want enable `-g` option, you can specify `grantPermissions` as `{grantPermissions: true}` as `options`. `allowTestPackages` is `-t`, `useSdcard` is `-s`, `replace` is `-r` (`-r` is enabled by default), `partialInstall` is `-p`. | `{grantPermissions: true, partialInstall: true}`
+options | object | no | Installation options. If you want enable `-g` option, you could specify that `{grantPermissions: true}`. `allowTestPackages` corresponds `-t`, `useSdcard` corresponds `-s`, `replace` corresponds `-r` (`-r` is enabled by default), `partialInstall` corresponds `-p`. | `{grantPermissions: true, partialInstall: true}`
 
 ## Applications Management
 

@@ -63,7 +63,13 @@ describe('General', function () {
     });
 
     it('should raise error if no apks were given', async function () {
-      await driver.executeMobile('installMultipleApks', {}).should.eventually.be.rejectedWith('No apks are given to install');
+      await driver.executeMobile('installMultipleApks', {apks: []})
+        .should.eventually.be.rejectedWith('No apks are given to install');
+    });
+
+    it('should raise error if no apks were given', async function () {
+      await driver.executeMobile('installMultipleApks', {})
+        .should.eventually.be.rejectedWith('No apks are given to install');
     });
   });
 });

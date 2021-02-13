@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import AndroidUiautomator2Driver from '../../..';
+import ADB from 'appium-adb';
 
 let driver;
 let sandbox = sinon.createSandbox();
@@ -35,6 +36,40 @@ describe('General', function () {
       await driver.executeMobile('sensorSet', { sensorType: 'acceleration', value: '0:9.77631:0.812349' });
       stub.calledOnce.should.equal(true);
       stub.calledWithExactly({ sensorType: 'acceleration', value: '0:9.77631:0.812349' });
+    });
+  });
+
+  describe('mobileInstallMultipleApks', function () {
+    let adb = new ADB();
+
+    beforeEach(function () {
+      driver = new AndroidUiautomator2Driver();
+      driver.adb = adb;
+      driver.helpers = {
+        configureApp: () => {}
+      };
+    });
+    afterEach(function () {
+      sandbox.restore();
+    });
+
+    it('should call mobileInstallMultipleApks', async function () {
+      sandbox.stub(driver.helpers, 'configureApp')
+          .returns(['/path/to/test/apk.apk']);
+      sandbox.stub(driver.adb, 'installMultipleApks')
+          .withArgs().returns();
+      await driver.executeMobile('installMultipleApks',
+        {apks: ['/path/to/test/apk.apk']});
+    });
+
+    it('should raise error if no apks were given', async function () {
+      await driver.executeMobile('installMultipleApks', {apks: []})
+        .should.eventually.be.rejectedWith('No apks are given to install');
+    });
+
+    it('should raise error if no apks were given', async function () {
+      await driver.executeMobile('installMultipleApks', {})
+        .should.eventually.be.rejectedWith('No apks are given to install');
     });
   });
 });

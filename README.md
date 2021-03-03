@@ -366,7 +366,7 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 buttonLabel | string | no | The name/text of the alert button to click in order to accept it. If not provided then the driver will try to autodetect it | Accept
 
-### mobile: acceptAlert
+### mobile: dismissAlert
 
 Tries to dismiss an Android alert. This method might not always be reliable as there is no single standard for how Android alerts should look like within the Accessibility representation.
 

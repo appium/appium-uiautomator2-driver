@@ -134,7 +134,7 @@ appium:unlockSuccessTimeout | Maximum number of milliseconds to wait until the d
 
 Capability Name | Description
 --- | ---
-appium:mjpegServerPort | The number of the port UiAutomator2 server starts the MJPEG server on. If not provided then no screenshots broadcast thread is started on the server side.
+appium:mjpegServerPort | The number of the port UiAutomator2 server starts the MJPEG server on. If not provided then the screenshots broadcasting service on the remote device does not get exposed to a local port (e.g. no adb port forwarding is happening)
 appium:mjpegScreenshotUrl | The URL of a service that provides realtime device screenshots in MJPEG format. If provided then the actual command to retrieve a screenshot will be requesting pictures from this service rather than directly from the server
 
 ### Web Context

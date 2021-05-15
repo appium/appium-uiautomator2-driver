@@ -32,4 +32,12 @@ describe('element', function () {
       await el.text().should.eventually.equal('original value');
     });
   });
+
+  describe('active', function () {
+    it('should active element be equal to clicked element', async function () {
+      await el.click();
+      const activeElement = await driver.active();
+      activeElement.value.should.equal(el.value);
+    });
+  });
 });

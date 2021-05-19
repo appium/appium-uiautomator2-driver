@@ -331,7 +331,7 @@ Scrolls the given scrollable element until an element identified by `strategy` a
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | no | The identifier of the scrollable element. It is required this element is a valid scrollable container and it was located by `-android uiautomator` strategy. If this property is not provided then the first currently available scrollable view is selected for the interaction. | 123456-3456-3435-3453453
+elementId | string | no | The identifier of the scrollable element. It is required this element is a valid scrollable container and it was located by `-android uiautomator` strategy. If this property is not provided then the first currently available scrollable view is selected for the interaction. | 123456-3456-3435-3453453
 strategy | string | yes | The following strategies are supported: `accessibility id` (UiSelector().description), `class name` (UiSelector().className), `-android uiautomator` (UiSelector) | 'accessibility id'
 selector | string | yes | The corresponding lookup value for the selected strategy. | 'com.mycompany:id/table'
 maxSwipes | number | no | The maximum number of swipes to perform on the target scrollable view in order to reach the destination element. In case this value is unset then it would be retrieved from the scrollable element itself (vua `getMaxSearchSwipes()` property). | 10

@@ -32,4 +32,34 @@ describe('UiAutomator2 Driver Helpers', function () {
         .should.be.rejectedWith(/INTERNET/);
     });
   }));
+
+  describe('parseChromeDriverPort', function () {
+    it('should return null if driverArgs is empty', function () {
+      (helpers.parseChromeDriverPort({}) === null).should.be.true;
+    });
+    it('should throw error if value of port is not an int', function () {
+      (() => helpers.parseChromeDriverPort({'chromedriver-port': 'foo'})).should.throw();
+    });
+    it(`should return null if 'chromedriver-port' key doesnt exist`, function () {
+      (helpers.parseChromeDriverPort({'foo': 'bar'}) === null).should.be.true;
+    });
+    it('should return port when passed in as driver arg', function () {
+      helpers.parseChromeDriverPort({'chromedriver-port': 5555}).should.equal(5555);
+    });
+  });
+
+  describe('parseChromedriverExecutable', function () {
+    it('should return null if driverArgs is empty', function () {
+      (helpers.parseChromedriverExecutable({}) === null).should.be.true;
+    });
+    it('should throw error if value of port is not a string', function () {
+      (() => helpers.parseChromedriverExecutable({'chromedriver-executable': 4322})).should.throw();
+    });
+    it(`should return null if 'chromedriver-executable' key doesnt exist`, function () {
+      (helpers.parseChromedriverExecutable({'foo': 'bar'}) === null).should.be.true;
+    });
+    it('should return path when passed in as driver arg', function () {
+      helpers.parseChromedriverExecutable({'chromedriver-executable': '/path/to/foo'}).should.equal('/path/to/foo');
+    });
+  });
 });

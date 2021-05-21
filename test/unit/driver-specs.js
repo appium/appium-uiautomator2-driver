@@ -243,4 +243,39 @@ describe('driver.js', function () {
       driver.adb.setDefaultHiddenApiPolicy.calledOnce.should.be.false;
     });
   });
+
+  describe('driverArgs', function () {
+    describe('driver args passed in', function () {
+      let driver;
+      const reboot = true;
+      const suppressKillServer = true;
+      const chromeDriverPort = 4444;
+      const chromedriverExecutable = '/path/to/foo';
+      const driverArgs = {reboot, 'suppress-adb-kill-server': suppressKillServer,
+                          'chromedriver-port': chromeDriverPort, 'chromedriver-executable': chromedriverExecutable};
+      before(function () {
+        driver = new AndroidUiautomator2Driver({}, true, driverArgs);
+      });
+
+      it('should set passed in driver args to opts', function () {
+        driver.opts.reboot.should.eql(reboot);
+        driver.opts.suppressKillServer.should.eql(suppressKillServer);
+        driver.opts.chromeDriverPort.should.eql(chromeDriverPort);
+        driver.opts.chromedriverExecutable.should.eql(chromedriverExecutable);
+      });
+    });
+    describe('no driver args passed in', function () {
+      let driver;
+      before(function () {
+        driver = new AndroidUiautomator2Driver({}, true);
+      });
+
+      it('should set default driver args to opts', function () {
+        driver.opts.reboot.should.eql(false);
+        driver.opts.suppressKillServer.should.eql(false);
+        (driver.opts.chromedriverExecutable === null).should.be.true;
+        (driver.opts.chromeDriverPort === null).should.be.true;
+      });
+    });
+  });
 });

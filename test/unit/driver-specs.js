@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import path from 'path';
 import B from 'bluebird';
 import { ADB } from 'appium-adb';
+import _ from 'lodash';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -245,19 +246,37 @@ describe('driver.js', function () {
   });
 
   describe('driverArgs', function () {
+    const reboot = true;
+    const suppressKillServer = true;
+    const chromeDriverPort = 4444;
+    const chromedriverExecutable = '/path/to/foo';
+
+    const driverArgs = {reboot, suppressKillServer,
+                        chromeDriverPort, chromedriverExecutable};
     describe('driver args passed in', function () {
       let driver;
-      const reboot = true;
-      const suppressKillServer = true;
-      const chromeDriverPort = 4444;
-      const chromedriverExecutable = '/path/to/foo';
-      const driverArgs = {reboot, 'suppress-adb-kill-server': suppressKillServer,
-                          'chromedriver-port': chromeDriverPort, 'chromedriver-executable': chromedriverExecutable};
       before(function () {
         driver = new AndroidUiautomator2Driver({}, true, driverArgs);
       });
 
       it('should set passed in driver args to opts', function () {
+        driver.opts.reboot.should.eql(reboot);
+        driver.opts.suppressKillServer.should.eql(suppressKillServer);
+        driver.opts.chromeDriverPort.should.eql(chromeDriverPort);
+        driver.opts.chromedriverExecutable.should.eql(chromedriverExecutable);
+      });
+    });
+    describe('driver args with opts', function () {
+      let driver;
+      const opts = _.assign({'foo': 'bar', 'foobar': 'foobar'}, driverArgs);
+
+      before(function () {
+        driver = new AndroidUiautomator2Driver(opts, true, {});
+      });
+
+      it('should set passed in driver args in opts to opts', function () {
+        driver.opts.foo.should.eql('bar');
+        driver.opts.foobar.should.eql('foobar');
         driver.opts.reboot.should.eql(reboot);
         driver.opts.suppressKillServer.should.eql(suppressKillServer);
         driver.opts.chromeDriverPort.should.eql(chromeDriverPort);

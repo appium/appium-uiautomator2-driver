@@ -580,9 +580,36 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 remotePath | string | yes | The full path to the remote file or a file inside an application bundle | `/sdcard/myfile.txt` or `@my.app.id/path/in/bundle`
 
+### mobile: startActivity
+
+Starts the given activity intent. Invokes `am start` or `am start-activity` command under the hood.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+intent | string | yes | The name of the activity intent to start | `com.some.package.name/.YourActivityClassName`
+user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
+wait | boolean | no | Set it to `true` if you want to block the method call until the Activity Manager's process returns the control to the system. | false
+stop | boolean | no | Set it to `true` to force stop the target app before starting the activity. | false
+windowingMode | integer | no | The windowing mode to launch the activity into. Check [WindowConfiguration.java](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) for more details on possible windowing modes (constants starting with `WINDOWING_MODE_`). | 1
+activityType | integer | no | The activity type to launch the activity as. Check [WindowConfiguration.java](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) for more details on possible activity types (constants starting with `ACTIVITY_TYPE_`). | 1
+action | string | no | Action name. The actual value for the Activity Manager's `-a` argument. | my_action
+uri | string | no | Unified resource identifier. The actual value for the Activity Manager's `-d` argument. | http://appium.io
+mimeType | string | no | Mime type. The actual value for the Activity Manager's `-t` argument. | application/json
+identifier | string | no | Optional identifier. The actual value for the Activity Manager's `-i` argument. | my_identifier
+categories | string or `Array<string>` | no | One or more category names. The actual value(s) for the Activity Manager's `-c` argument. | ['com.my.category.name1', 'com.my.category.name2']
+component | string | no | Component name. The actual value for the Activity Manager's `-n` argument. | com.my.component.name
+extras | `Array<Array<string>>` | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two items: value type and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List<Integer>. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List<Long>. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List<Float>. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List<String>. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+flags | string | no | Intent startup-specific flags as a hexadecimal string. Check [Intent documentation](https://developer.android.com/reference/android/content/Intent.html) for the list of available flag values (constants starting with `FLAG_ACTIVITY_`). Flag values could be merged using the logical 'or' operation. | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
+
+#### Returned Result:
+
+The actual stdout of the downstream `am` command.
+
 ### mobile: startService
 
-Starts the given service intent.
+Starts the given service intent. Invokes `am startservice` or `am start-service` command under the hood.
 
 #### Arguments
 
@@ -590,11 +617,19 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 intent | string | yes | The name of the service intent to start | `com.some.package.name/.YourServiceSubClassName`
 user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
-foreground | boolean | no | Set it to `true` if your service must be started as foreground service. | false
+foreground | boolean | no | Set it to `true` if your service must be started as a foreground service. The argument only works for Android 8 and above. | false
+action | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_action
+uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | http://appium.io
+mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
+identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
+categories | string or `Array<string>` | no | See the documentation for [startActivity extension](#mobile-startactivity) | ['com.my.category.name1', 'com.my.category.name2']
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.my.component.name
+extras | `Array<Array<string>>` | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
 ### mobile: stopService
 
-Stops the given service intent.
+Stops the given service intent. Invokes `am stopservice` or `am stop-service` command under the hood.
 
 #### Arguments
 

@@ -282,7 +282,7 @@ Executes the given shell command on the device under test via ADB connection. Th
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 command | string | yes | Shell command name to execute, for example `echo` or `rm` | echo
-args | `Array<string>` | no | Array of command arguments | `['-f', '/sdcard/myfile.txt']`
+args | Array&lt;string&gt; | no | Array of command arguments | `['-f', '/sdcard/myfile.txt']`
 timeout | number | no | Command timeout in milliseconds. If the command blocks for longer than this timeout then an exception is going to be thrown. The default timeout is `20000` ms | 100000
 includeStderr | boolean | no | Whether to include stderr stream into the returned result. `false` by default | true
 
@@ -419,7 +419,7 @@ Changes package permissions in runtime.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-permissions | string or `Array<string>` | yes | The full name of the permission to be changed or a list of permissions. Mandatory argument. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']`
+permissions | string or Array&lt;string&gt; | yes | The full name of the permission to be changed or a list of permissions. Mandatory argument. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']`
 appPackage | string | no | The application package to set change permissions on. Defaults to the package name under test | com.mycompany.myapp
 action | string | no | Either `grant` (the default action) or `revoke` | grant
 
@@ -588,7 +588,7 @@ Starts the given activity intent. Invokes `am start` or `am start-activity` comm
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The name of the activity intent to start | `com.some.package.name/.YourActivityClassName`
+intent | string | yes | The name of the activity intent to start | com.some.package.name/.YourActivityClassName
 user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
 wait | boolean | no | Set it to `true` if you want to block the method call until the Activity Manager's process returns the control to the system. | false
 stop | boolean | no | Set it to `true` to force stop the target app before starting the activity. | false
@@ -598,9 +598,9 @@ action | string | no | Action name. The actual value for the Activity Manager's 
 uri | string | no | Unified resource identifier. The actual value for the Activity Manager's `-d` argument. | http://appium.io
 mimeType | string | no | Mime type. The actual value for the Activity Manager's `-t` argument. | application/json
 identifier | string | no | Optional identifier. The actual value for the Activity Manager's `-i` argument. | my_identifier
-categories | string or `Array<string>` | no | One or more category names. The actual value(s) for the Activity Manager's `-c` argument. | ['com.my.category.name1', 'com.my.category.name2']
+categories | string or Array&lt;string&gt; | no | One or more category names. The actual value(s) for the Activity Manager's `-c` argument. | ['com.my.category.name1', 'com.my.category.name2']
 component | string | no | Component name. The actual value for the Activity Manager's `-n` argument. | com.my.component.name
-extras | `Array<Array<string>>` | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two items: value type and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List<Integer>. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List<Long>. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List<Float>. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List<String>. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+extras | Array&lt;Array&lt;string&gt;&gt; | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two items: value type and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List&lt;Integer&gt;. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List&lt;Long&gt;. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List&lt;Float&gt;. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List&lt;String&gt;. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
 flags | string | no | Intent startup-specific flags as a hexadecimal string. Check [Intent documentation](https://developer.android.com/reference/android/content/Intent.html) for the list of available flag values (constants starting with `FLAG_ACTIVITY_`). Flag values could be merged using the logical 'or' operation. | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
 #### Returned Result
@@ -615,16 +615,16 @@ Starts the given service intent. Invokes `am startservice` or `am start-service`
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The name of the service intent to start | `com.some.package.name/.YourServiceSubClassName`
+intent | string | yes | The name of the service intent to start | com.some.package.name/.YourServiceSubClassName
 user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
 foreground | boolean | no | Set it to `true` if your service must be started as a foreground service. The argument only works for Android 8 and above. | false
 action | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_action
 uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | http://appium.io
 mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
 identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
-categories | string or `Array<string>` | no | See the documentation for [startActivity extension](#mobile-startactivity) | ['com.my.category.name1', 'com.my.category.name2']
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | ['com.my.category.name1', 'com.my.category.name2']
 component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.my.component.name
-extras | `Array<Array<string>>` | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
 #### Returned Result
@@ -688,7 +688,7 @@ Please read more details in the corresponding section of the `adb --help` comman
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-apks | array<string> | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
+apks | Array&lt;string&gt; | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
 options | object | no | Installation options. If you want enable `-g` option, you could specify that `{grantPermissions: true}`. `allowTestPackages` corresponds `-t`, `useSdcard` corresponds `-s`, `replace` corresponds `-r` (`-r` is enabled by default), `partialInstall` corresponds `-p`. | `{grantPermissions: true, partialInstall: true}`
 
 ## Applications Management

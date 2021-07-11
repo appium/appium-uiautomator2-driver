@@ -603,7 +603,7 @@ component | string | no | Component name. The actual value for the Activity Mana
 extras | `Array<Array<string>>` | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two items: value type and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List<Integer>. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List<Long>. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List<Float>. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List<String>. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
 flags | string | no | Intent startup-specific flags as a hexadecimal string. Check [Intent documentation](https://developer.android.com/reference/android/content/Intent.html) for the list of available flag values (constants starting with `FLAG_ACTIVITY_`). Flag values could be merged using the logical 'or' operation. | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
-#### Returned Result:
+#### Returned Result
 
 The actual stdout of the downstream `am` command.
 
@@ -626,6 +626,10 @@ categories | string or `Array<string>` | no | See the documentation for [startAc
 component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.my.component.name
 extras | `Array<Array<string>>` | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
+
+#### Returned Result
+
+The actual stdout of the downstream `am` command.
 
 ### mobile: stopService
 

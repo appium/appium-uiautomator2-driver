@@ -582,7 +582,8 @@ remotePath | string | yes | The full path to the remote file or a file inside an
 
 ### mobile: startActivity
 
-Starts the given activity intent. Invokes `am start` or `am start-activity` command under the hood.
+Starts the given activity intent. Invokes `am start`/`am start-activity` command under the hood.
+This method extends the functionality of the [Start Activity](#applications-management) app management API.
 
 #### Arguments
 

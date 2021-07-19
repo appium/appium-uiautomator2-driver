@@ -9,6 +9,7 @@ import _ from 'lodash';
 
 chai.should();
 chai.use(chaiAsPromised);
+const expect = chai.expect;
 let sandbox = sinon.createSandbox();
 
 function defaultStub (driver) {
@@ -289,11 +290,11 @@ describe('driver.js', function () {
         driver = new AndroidUiautomator2Driver({}, true);
       });
 
-      it('should set default driver args to opts', function () {
-        driver.opts.reboot.should.eql(false);
-        driver.opts.suppressKillServer.should.eql(false);
-        (driver.opts.chromedriverExecutable === null).should.be.true;
-        (driver.opts.chromeDriverPort === null).should.be.true;
+      it('driver args should not exist if none passed in', function () {
+        expect(typeof driver.opts.reboot === 'undefined').to.be.true;
+        expect(typeof driver.opts.suppressKillServer === 'undefined').to.be.true;
+        expect(typeof driver.opts.chromedriverExecutable === 'undefined').to.be.true;
+        expect(typeof driver.opts.chromeDriverPort === 'undefined').to.be.true;
       });
     });
   });

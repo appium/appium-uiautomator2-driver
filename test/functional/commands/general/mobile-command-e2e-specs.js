@@ -35,7 +35,8 @@ describe('mobile', function () {
   describe('mobile:broadcast', function () {
     it('should call broadcast', async function () {
       const output = await driver.execute('mobile: broadcast', {
-        action: 'io.appium.settings.sms.read', extras: [['s', 'max', '10']]
+        action: 'io.appium.settings.sms.read',
+        extras: [['s', 'max', '10']],
       });
       output.should.include('result=-1');
     });

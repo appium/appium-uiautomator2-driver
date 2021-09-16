@@ -589,8 +589,8 @@ This method extends the functionality of the [Start Activity](#applications-mana
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The name of the activity intent to start | com.some.package.name/.YourActivityClassName
-user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
+intent | string | yes | The full name of the activity intent to start | `com.some.package.name/.YourActivityClassName`
+user | number or string | no | The user ID for which the service is started. The `current` user is used by default | 1006
 wait | boolean | no | Set it to `true` if you want to block the method call until the Activity Manager's process returns the control to the system. | false
 stop | boolean | no | Set it to `true` to force stop the target app before starting the activity. | false
 windowingMode | integer | no | The windowing mode to launch the activity into. Check [WindowConfiguration.java](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) for more details on possible windowing modes (constants starting with `WINDOWING_MODE_`). | 1
@@ -601,7 +601,8 @@ mimeType | string | no | Mime type. The actual value for the Activity Manager's 
 identifier | string | no | Optional identifier. The actual value for the Activity Manager's `-i` argument. | my_identifier
 categories | string or Array&lt;string&gt; | no | One or more category names. The actual value(s) for the Activity Manager's `-c` argument. | android.intent.category.LAUNCHER
 component | string | no | Component name. The actual value for the Activity Manager's `-n` argument. | com.myapp/com.myapp.SplashActivity
-extras | Array&lt;Array&lt;string&gt;&gt; | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two items: value type and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List&lt;Integer&gt;. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List&lt;Long&gt;. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List&lt;Float&gt;. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List&lt;String&gt;. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+package | string | no | Package name. The actual value for the Activity Manager's `-p` argument. | com.myapp
+extras | Array&lt;Array&lt;string&gt;&gt; | no | Optional intent arguments. Must be represented as an array of arrays, where each subarray item contains two (only in case it no value is required for the given type) or three string items: value type, key (variable name) and the value itself. Supported value types are: `s`: string. Value must be a valid string; `sn`: null. Value is ignored for this type; `z`: boolean. Value must be either `true` or `false`; `i`: integer. Value must be a valid 4-byte integer number; `l`: long. Value must be a valid 8-byte long number; `f`: float: Value must be a valid float number; `u`: uri. Value must be a valid uniform resource identifier string; `cn`: component name. Value must be a valid component name string; `ia`: Integer[]. Value must be a string of comma-separated integers; `ial`: List&lt;Integer&gt;. Value must be a string of comma-separated integers; `la`: Long[]. Value must be a string of comma-separated long numbers; `lal`: List&lt;Long&gt;. Value must be a string of comma-separated long numbers; `fa`: Float[]. Value must be a string of comma-separated float numbers; `fal`: List&lt;Float&gt;. Value must be a string of comma-separated float numbers; `sa`: String[]. Value must be comma-separated strings. To embed a comma into a string escape it using "\,"; `sal`: List&lt;String&gt;. Value must be comma-separated strings. To embed a comma into a string, escape it using "\," | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
 flags | string | no | Intent startup-specific flags as a hexadecimal string. Check [Intent documentation](https://developer.android.com/reference/android/content/Intent.html) for the list of available flag values (constants starting with `FLAG_ACTIVITY_`). Flag values could be merged using the logical 'or' operation. | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
 #### Returned Result
@@ -616,7 +617,7 @@ Starts the given service intent. Invokes `am startservice` or `am start-service`
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The name of the service intent to start | com.some.package.name/.YourServiceSubClassName
+intent | string | no | The full name of the service intent to start | `com.some.package.name/.YourServiceSubClassName`
 user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
 foreground | boolean | no | Set it to `true` if your service must be started as a foreground service. The argument only works for Android 8 and above. | false
 action | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.action.MAIN
@@ -625,7 +626,8 @@ mimeType | string | no | See the documentation for [startActivity extension](#mo
 identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
 categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
 component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
-extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'My String1'], ['s', 'My String2'], ['ia', '1,2,3,4']]
+package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
+extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
 
 #### Returned Result
@@ -640,8 +642,43 @@ Stops the given service intent. Invokes `am stopservice` or `am stop-service` co
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The name of the service intent to stop | `com.some.package.name/.YourServiceSubClassName`
+intent | string | no | The full name of the service intent to stop | `com.some.package.name/.YourServiceSubClassName`
 user | number or string | no | The user ID for which the service is started. The `current` user id is used by default | 1006
+action | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.action.MAIN
+uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
+mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
+identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
+extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
+flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
+
+### mobile: broadcast
+
+Send a broadcast Intent. Invokes `am broadcast` command under the hood.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+intent | string | no | The full name of the intent to broadcast | `com.some.package.name/.YourIntentClassName`
+user | number or string | no | Specify which user to send to; if not specified then send to all users. Possible values are `all`/`current`/`<numeric user id>` | current
+receiverPermission | string | no | Require receiver to hold the given permission | android.permission.READ_PROFILE
+allowBackgroundActivityStarts | string | no | The receiver may start activities even if in the background if set to `true` | false
+action | string | no | See the documentation for [startActivity extension](#mobile-startactivity)  | android.intent.action.MAIN
+uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
+mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
+identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
+extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
+flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
+
+#### Returned Result
+
+The actual stdout of the downstream `am` command.
 
 ### mobile: getContexts
 

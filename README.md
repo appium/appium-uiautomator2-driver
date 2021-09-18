@@ -580,6 +580,22 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 remotePath | string | yes | The full path to the remote file or a file inside an application bundle | `/sdcard/myfile.txt` or `@my.app.id/path/in/bundle`
 
+### mobile: clearApp
+
+Deletes all data associated with a package. Calls `adb shell pm clear` under the hood.
+The app should be accessible, should not be running,
+and should exist on the device under test for this extension to work properly.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be cleared | `my.app.id`
+
+#### Returned Result
+
+Stdout of the corresponding adb command.
+
 ### mobile: startActivity
 
 Starts the given activity intent. Invokes `am start`/`am start-activity` command under the hood.

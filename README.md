@@ -754,10 +754,10 @@ Unlocks the device if it is locked. Noop if the device's screen is not locked.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-key | string | yes | The unlock key. See the documentation of [appium:unlockKey](#device-locking) capability for more details | 12345
-type | string | yes | The unlock type. See the documentation of [appium:unlockType](#device-locking) capability for more details | password
-strategy | string | no | Unlock strategy. See the douemntation of [appium:unlockStrategy](#device-locking) capability for more details | uiautomator
-timeoutMs | number | no | Unlock timeout. See the douemntation of [appium:unlockSuccessTimeout](#device-locking) capability for more details | 5000
+key | string | yes | The unlock key. See the documentation on [appium:unlockKey](#device-locking) capability for more details | 12345
+type | string | yes | The unlock type. See the documentation on [appium:unlockType](#device-locking) capability for more details | password
+strategy | string | no | Unlock strategy. See the documentation on [appium:unlockStrategy](#device-locking) capability for more details | uiautomator
+timeoutMs | number | no | Unlock timeout. See the documentation on [appium:unlockSuccessTimeout](#device-locking) capability for more details | 5000
 
 ## Applications Management
 

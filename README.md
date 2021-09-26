@@ -128,6 +128,7 @@ Capability Name | Description
 appium:skipUnlock | Whether to skip the check for lock screen presence (`true`). By default UiAutomator2 driver tries to detect if the device's screen is locked before starting the test and to unlock that (which sometimes might be unstable). Note, that this operation takes some time, so it is highly recommended to set this capability to `true` and disable screen locking on devices under test.
 appium:unlockType | Set one of the possible types of Android lock screens to unlock. Read the [Unlock tutorial](https://github.com/appium/appium-android-driver/blob/master/docs/UNLOCK.md) for more details.
 appium:unlockKey | Allows to set an unlock key. Read the [Unlock tutorial](https://github.com/appium/appium-android-driver/blob/master/docs/UNLOCK.md) for more details.
+appium:unlockStrategy | Either 'locksettings' (default) or 'uiautomator'. Setting it to 'uiautomator' will enforce the driver to avoid using special ADB shortcuts in order to speed up the unlock procedure.
 appium:unlockSuccessTimeout | Maximum number of milliseconds to wait until the device is unlocked. `2000` ms by default
 
 ### MJPEG
@@ -744,6 +745,19 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 apks | Array&lt;string&gt; | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
 options | object | no | Installation options. If you want enable `-g` option, you could specify that `{grantPermissions: true}`. `allowTestPackages` corresponds `-t`, `useSdcard` corresponds `-s`, `replace` corresponds `-r` (`-r` is enabled by default), `partialInstall` corresponds `-p`. | `{grantPermissions: true, partialInstall: true}`
+
+### mobile: unlock
+
+Unlocks the device if it is locked. Noop if the device's screen is not locked.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+key | string | yes | The unlock key. See the documentation of [appium:unlockKey](#device-locking) capability for more details | 12345
+type | string | yes | The unlock type. See the documentation of [appium:unlockType](#device-locking) capability for more details | password
+strategy | string | no | Unlock strategy. See the douemntation of [appium:unlockStrategy](#device-locking) capability for more details | uiautomator
+timeoutMs | number | no | Unlock timeout. See the douemntation of [appium:unlockSuccessTimeout](#device-locking) capability for more details | 5000
 
 ## Applications Management
 

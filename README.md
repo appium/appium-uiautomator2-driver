@@ -682,7 +682,7 @@ Name | Type | Required | Description | Example
 intent | string | no | The full name of the intent to broadcast | `com.some.package.name/.YourIntentClassName`
 user | number or string | no | Specify which user to send to; if not specified then send to all users. Possible values are `all`/`current`/`<numeric user id>` | current
 receiverPermission | string | no | Require receiver to hold the given permission | android.permission.READ_PROFILE
-allowBackgroundActivityStarts | string | no | The receiver may start activities even if in the background if set to `true` | false
+allowBackgroundActivityStarts | boolean | no | The receiver may start activities even if in the background if set to `true` | false
 action | string | no | See the documentation for [startActivity extension](#mobile-startactivity)  | android.intent.action.MAIN
 uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
 mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json

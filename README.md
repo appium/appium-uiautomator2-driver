@@ -161,6 +161,7 @@ appium:extractChromeAndroidPackageFromContextName | If set to `true`, tell chrom
 appium:showChromedriverLog | If set to `true` then all the output from chromedriver binary will be forwarded to the Appium server log. `false` by default.
 pageLoadStrategy | One of the available page load strategies. See https://www.w3.org/TR/webdriver/#capabilities
 appium:chromeOptions | A mapping, that allows to customize chromedriver options. See https://chromedriver.chromium.org/capabilities for the list of available entries.
+appium:chromeLoggingPrefs | Chrome logging preferences mapping. Basically the same as [goog:loggingPrefs](https://newbedev.com/getting-console-log-output-from-chrome-with-selenium-python-api-bindings). It is set to `{"browser": "ALL"}` by default.
 
 ### Other
 

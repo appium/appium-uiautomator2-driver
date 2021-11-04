@@ -81,6 +81,7 @@
     "test"
   ],
   "devDependencies": {
+    "@xmldom/xmldom": "^0.x",
     "android-apidemos": "^3.0.0",
     "appium-gulp-plugins": "^5.4.0",
     "appium-test-support": "^1.0.0",
@@ -98,7 +99,6 @@
     "sinon": "^11.0.0",
     "unzipper": "^0.10.0",
     "wd": "^1.10.3",
-    "xmldom": "^0.x",
     "xpath": "^0.x"
   }
 }

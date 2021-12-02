@@ -564,14 +564,15 @@ text | string | yes | The text to type | testing
 
 ### mobile: sensorSet
 
-Emulate sensors values on the connected emulator.
+Emulate changing of sensor values on the connected emulator.
+This extension does not work on real devices.
 
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-sensorType | string | yes | Supported sensor types are: `acceleration`, `light`, `proximity`, `temperature`, `pressure` and `humidity` | light
-value | string | yes | value to set to the sensor | 50
+sensorType | string | yes | The set of all supported sensor types could be found in [adb-emu-commands.js](https://github.com/appium/appium-adb/blob/master/lib/tools/adb-emu-commands.js) (look for *SENSORS* object values). Check the output of `sensor status` command in the [emulator console](https://developer.android.com/studio/run/emulator-console) to see more details on the available sensor types | light
+value | string | yes | Check the output of `sensor get <sensorType>` command in the [emulator console](https://developer.android.com/studio/run/emulator-console) to see the acceptable value format for the given sensor type | 50
 
 ### mobile: deleteFile
 

@@ -29,7 +29,7 @@ platformName | Could be set to `android`. Appium itself is not strict about this
 appium:automationName | Must always be set to `uiautomator2`. Values of `automationName` are compared case-insensitively.
 appium:deviceName | The name of the device under test (actually, it is not used to select a device under test). Consider setting `udid` for real devices and `avd` for emulators instead
 appium:platformVersion | The platform version of an emulator or a real device. This capability is used for device autodetection if `udid` is not provided
-appium:udid | UDID of the device to be tested. Could ve retrieved from `adb devices -l` output. If unset then the driver will try to use the first connected device. Always set this capability if you run parallel tests.
+appium:udid | UDID of the device to be tested. Could be retrieved from `adb devices -l` output. If unset then the driver will try to use the first connected device. Always set this capability if you run parallel tests.
 appium:noReset | Prevents the device to be reset before the session startup if set to `true`. This means that the application under test is not going to be terminated neither its data cleaned. `false` by default
 appium:fullReset | Being set to `true` always enforces the application under test to be fully uninstalled before starting a new session. `false` by default
 appium:printPageSourceOnFindFailure | Enforces the server to dump the actual XML page source into the log if any error happens. `false` by default.

@@ -46,7 +46,7 @@ describe('css-converter.js', function () {
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {
-        CssConverter.toUiAutomatorSelector(cssSelector).should.equal(uiAutomatorSelector);
+        new CssConverter(cssSelector).toUiAutomatorSelector().should.equal(uiAutomatorSelector);
       });
     }
   });
@@ -61,7 +61,7 @@ describe('css-converter.js', function () {
     ];
     for (const [cssSelector, error] of testCases) {
       it(`should reject '${cssSelector}' with '${error}'`, function () {
-        (() => CssConverter.toUiAutomatorSelector(cssSelector)).should.throw(error);
+        (() => new CssConverter(cssSelector).toUiAutomatorSelector()).should.throw(error);
       });
     }
   });

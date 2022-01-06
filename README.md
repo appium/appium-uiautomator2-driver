@@ -762,6 +762,24 @@ type | string | yes | The unlock type. See the documentation on [appium:unlockTy
 strategy | string | no | Unlock strategy. See the documentation on [appium:unlockStrategy](#device-locking) capability for more details | uiautomator
 timeoutMs | number | no | Unlock timeout. See the documentation on [appium:unlockSuccessTimeout](#device-locking) capability for more details | 5000
 
+### mobile: refreshGpsCache
+
+Sends a request to refresh the GPS cache on the device under test.
+By default the location tracking is configured for
+[low battery consumption](https://github.com/appium/io.appium.settings/blob/master/app/src/main/java/io/appium/settings/LocationTracker.java),
+so you might need to call this extension periodically to get the updated geo
+location if the actual (or mocked) device location is changed too frequently.
+The feature only works if the device under test has Google Play Services installed.
+In case the vanilla
+[LocationManager](https://developer.android.com/reference/android/location/LocationManager)
+is used the device API level must be at version 30 (Android R) or higher.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+timeoutMs | number | no | The maximum number of milliseconds to block until GPS cache is refreshed. If the API call does not receive a confirmation about successful cache refresh within this timeout then an error is thrown. Providing zero or a negative value to it skips waiting completely and does not check for any errors. 20000 ms by default. | 60000
+
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:

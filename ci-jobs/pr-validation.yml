@@ -7,7 +7,7 @@ stages:
   jobs:
   - job: unit_tests
     pool:
-      vmImage: ubuntu-latest
+      vmImage: macOS-11
     variables:
       CI: true
       TERM: dumb

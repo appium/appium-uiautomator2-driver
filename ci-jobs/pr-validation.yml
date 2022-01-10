@@ -7,7 +7,7 @@ stages:
   jobs:
   - job: unit_tests
     pool:
-      vmImage: $(DEFAULT_VM_IMAGE)
+      vmImage: ubuntu-latest
     variables:
       CI: true
       TERM: dumb

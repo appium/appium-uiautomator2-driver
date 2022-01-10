@@ -17,7 +17,7 @@ stages:
         versionSpec: $(DEFAULT_NODE_VERSION)
     - script: npm run clean
       displayName: Build
-    - script: npm test
+    - script: NODE_OPTIONS=--max_old_space_size=4096 npm test
       displayName: Run Unit Tests
 
 - stage: Integration_Tests

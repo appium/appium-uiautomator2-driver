@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ADB } from 'appium-adb';
-import { withMocks } from 'appium-test-support';
+import { withMocks } from '@appium/test-support';
 import { UiAutomator2Server, INSTRUMENTATION_TARGET,
          SERVER_TEST_PACKAGE_ID } from '../../lib/uiautomator2';
 import helpers from '../../lib/helpers';

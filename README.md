@@ -18,6 +18,7 @@ On top of standard Appium requirements UiAutomator2 driver also expects the foll
 - Real Android devices must have [USB debugging enabled](https://developer.android.com/studio/debug/dev-options) and should be visible as `online` in `adb devices -l` output.
 - The minimum version of Android API must be 5.0 (API level 21) (6.0 is recommended as version 5 has some known compatibility issues).
 
+Since version 2.0.0 this driver is only compatible to Appium 2.
 
 ## Capabilities
 

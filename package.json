@@ -82,7 +82,7 @@
   ],
   "devDependencies": {
     "@xmldom/xmldom": "^0.x",
-    "android-apidemos": "^3.0.0",
+    "android-apidemos": "^4.0.0",
     "appium-gulp-plugins": "^5.4.0",
     "appium-test-support": "^1.0.0",
     "chai": "^4.1.0",

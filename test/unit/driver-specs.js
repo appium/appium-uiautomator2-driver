@@ -27,7 +27,12 @@ describe('driver.js', function () {
     it('should throw an error if app can not be found', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
-      await driver.createSession({app: 'foo.apk'}).should.be.rejectedWith('does not exist or is not accessible');
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {
+          'appium:app': 'foo.apk'
+        }
+      }).should.be.rejectedWith('does not exist or is not accessible');
     });
 
     it('should set sessionId', async function () {
@@ -39,8 +44,13 @@ describe('driver.js', function () {
       sinon.mock(driver).expects('startUiAutomator2Session')
           .once()
           .returns(B.resolve());
-      await driver.createSession({cap: 'foo', browserName: 'chrome'});
-
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {
+          'appium:cap': 'foo',
+          browserName: 'chrome',
+        }
+      });
       driver.sessionId.should.exist;
       driver.caps.cap.should.equal('foo');
     });
@@ -52,7 +62,12 @@ describe('driver.js', function () {
           .returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session')
           .returns(B.resolve());
-      await driver.createSession({browserName: 'chrome'});
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {
+          browserName: 'chrome'
+        }
+      });
       driver.curContext.should.equal('NATIVE_APP');
     });
   });
@@ -67,7 +82,10 @@ describe('driver.js', function () {
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
-      await driver.createSession({app});
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {'appium:app': app}
+      });
 
       await driver.checkAppPresent(); // should not error
 
@@ -87,7 +105,10 @@ describe('driver.js', function () {
       sinon.mock(driver.helpers).expects('configureApp')
           .returns(app);
 
-      await driver.createSession({app});
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {'appium:app': app}
+      });
 
       driver.checkAppPresent.restore();
       await driver.checkAppPresent().should.eventually.be.rejectedWith('Could not find');
@@ -148,12 +169,28 @@ describe('driver.js', function () {
             driver.chromedriver = true;
           });
           it('should proxy screenshot if nativeWebScreenshot is off on chromedriver mode', async function () {
-            await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
+            await driver.createSession(null, null, {
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': false
+              }
+            });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.be.empty;
           });
           it('should not proxy screenshot if nativeWebScreenshot is on on chromedriver mode', async function () {
-            await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
+            await driver.createSession(null, null, {
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': true
+              }
+            });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
           });
@@ -162,14 +199,30 @@ describe('driver.js', function () {
         describe('on native mode', function () {
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (on)', async function () {
             // nativeWebScreenshot on
-            await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: true});
+            await driver.createSession(null, null, {
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': true
+              }
+            });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
           });
 
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (off)', async function () {
             // nativeWebScreenshot off
-            await driver.createSession({platformName: 'Android', deviceName: 'device', browserName: 'chrome', nativeWebScreenshot: false});
+            await driver.createSession(null, null, {
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': false
+              }
+            });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
           });

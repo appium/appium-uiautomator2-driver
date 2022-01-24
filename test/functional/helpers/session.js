@@ -1,7 +1,7 @@
 import ADB from 'appium-adb';
 import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
-import wd from 'wd';
+import remote from 'webdriverio';
 import { retry, retryInterval } from 'asyncbox';
 import _ from 'lodash';
 import './mocha-scripts';
@@ -50,12 +50,11 @@ async function initSession (caps, adbPort) {
     }
   }
 
-  // Create a WD driver
+  // Create the driver
   const host = getHost();
   const port = getPort();
   logger.debug(`Starting session on ${host}:${port}`);
-  driver = await wd.promiseChainRemote(host, port);
-  await retry(INIT_RETRIES, driver.init.bind(driver), caps);
+  driver = retry(INIT_RETRIES, async (x) => await remote(x), caps);
 
   // In Travis, there is sometimes a popup
   if (CI && !CLOUD) {

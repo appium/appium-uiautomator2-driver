@@ -146,7 +146,7 @@ describe('createSession', function () {
   describe('w3c compliance', function () {
     it('should start a session with W3C caps', async function () {
       const { value, sessionId, status } = (await axios({
-        url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session`,
+        url: `http://${DEFAULT_HOST}:${DEFAULT_PORT}/session`,
         method: 'POST',
         data: {
           capabilities: {
@@ -160,7 +160,7 @@ describe('createSession', function () {
       value.sessionId.should.exist;
       should.not.exist(sessionId);
       should.not.exist(status);
-      await axios.delete(`http://${DEFAULT_HOST}:${DEFAULT_PORT}/wd/hub/session/${value.sessionId}`);
+      await axios.delete(`http://${DEFAULT_HOST}:${DEFAULT_PORT}/session/${value.sessionId}`);
     });
   });
 });

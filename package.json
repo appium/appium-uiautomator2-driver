@@ -97,7 +97,7 @@
     "pngjs": "^6.0.0",
     "pre-commit": "^1.2.2",
     "rimraf": "^3.0.0",
-    "sinon": "^12.0.0",
+    "sinon": "^13.0.0",
     "unzipper": "^0.x",
     "webdriverio": "^7.0.0",
     "xpath": "^0.x"

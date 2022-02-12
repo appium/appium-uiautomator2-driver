@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Release
 
 on:
   workflow_dispatch:

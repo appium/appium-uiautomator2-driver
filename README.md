@@ -1,5 +1,11 @@
 # Appium UiAutomator2 Driver
 
+[![NPM version](http://img.shields.io/npm/v/appium-uiautomator2-driver.svg)](https://npmjs.org/package/appium-uiautomator2-driver)
+[![Downloads](http://img.shields.io/npm/dm/appium-uiautomator2-driver.svg)](https://npmjs.org/package/appium-uiautomator2-driver)
+
+[![Release](https://github.com/appium/appium-uiautomator2-driver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-uiautomator2-driver/actions/workflows/publish.js.yml)
+
+
 Appium UiAutomator2 Driver is a test automation framework for Android devices. Appium UiAutomator2 Driver automates native, hybrid and mobile web apps, tested on emulators and real devices. Appium UiAutomator2 Driver is part of the [Appium](https://github.com/appium/appium) mobile test automation tool. The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/webdriver/) with several custom extensions to cover operating-system specific scenarios.
 
 UiAutomator2 Driver proxies most of the commands to [UiAutomator2 server](https://github.com/appium/appium-uiautomator2-server), which uses Google's [UiAutomator](https://developer.android.com/training/testing/ui-automator) framework under the hood. Some commands are proxied directly to [appium-adb](https://github.com/appium/appium-adb) and other helpers built on top of Android platform tools.

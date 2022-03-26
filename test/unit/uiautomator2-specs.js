@@ -2,9 +2,11 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ADB } from 'appium-adb';
 import { withMocks } from '@appium/test-support';
-import { UiAutomator2Server, INSTRUMENTATION_TARGET,
-         SERVER_TEST_PACKAGE_ID } from '../../lib/uiautomator2';
+import {
+  UiAutomator2Server, INSTRUMENTATION_TARGET, SERVER_TEST_PACKAGE_ID
+} from '../../lib/uiautomator2';
 import helpers from '../../lib/helpers';
+import log from '../../lib/logger';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -14,7 +16,7 @@ describe('UiAutomator2', function () {
   describe('installServerApk', withMocks({adb, helpers}, (mocks) => {
     let uiautomator2;
     beforeEach(function () {
-      uiautomator2 = new UiAutomator2Server({
+      uiautomator2 = new UiAutomator2Server(log, {
         adb,
         tmpDir: 'tmp',
         systemPort: 4724,

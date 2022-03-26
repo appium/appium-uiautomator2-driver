@@ -40,7 +40,7 @@
     "build/lib"
   ],
   "dependencies": {
-    "@appium/base-driver": "^8.0.0",
+    "@appium/base-driver": "^8.3.0",
     "@appium/support": "^2.55.3",
     "@babel/runtime": "^7.0.0",
     "appium-adb": "^9.0.0",

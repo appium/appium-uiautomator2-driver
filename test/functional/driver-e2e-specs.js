@@ -41,7 +41,7 @@ describe('createSession', function () {
     it('should start android session focusing on default pkg and act', async function () {
       driver = await initSession(APIDEMOS_CAPS);
       await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentDeviceActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
     });
     it('should start android session focusing on custom pkg and act', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -50,7 +50,7 @@ describe('createSession', function () {
       });
       driver = await initSession(caps);
       await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentDeviceActivity().should.eventually.equal(APIDEMOS_SPLIT_TOUCH_ACTIVITY);
+      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_SPLIT_TOUCH_ACTIVITY);
     });
     it('should error out for not apk extension', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -58,12 +58,7 @@ describe('createSession', function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      try {
-        await initSession(caps);
-        throw new Error(`Call to 'initSession' should not have succeeded`);
-      } catch (e) {
-        e.data.should.match(/does not exist or is not accessible/);
-      }
+      await initSession(caps).should.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
     it('should error out for invalid app path', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -71,12 +66,7 @@ describe('createSession', function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      try {
-        await initSession(caps);
-        throw new Error(`Call to 'initSession' should not have succeeded`);
-      } catch (e) {
-        e.data.should.match(/does not exist or is not accessible/);
-      }
+      await initSession(caps).should.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
   });
 
@@ -103,7 +93,7 @@ describe('createSession', function () {
       });
       driver = await initSession(caps, adbPort);
       await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentDeviceActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
     });
   });
 });

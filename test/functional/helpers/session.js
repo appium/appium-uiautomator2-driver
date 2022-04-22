@@ -58,7 +58,7 @@ async function initSession (caps) {
     }
   }
 
-  await driver.timeouts({'implicit': process.env.CI ? 30000 : 5000});
+  await driver.setTimeout({implicit: process.env.CI ? 30000 : 5000});
 
   return driver;
 }

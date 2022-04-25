@@ -206,7 +206,7 @@ text or name | The element's text. It never equals to null | 'my text'
 bounds | The element's visible frame (`[left, top][right, bottom]`) | `[0,0][100,100]`
 displayed | Whether the element is visible to the user | 'true'
 contentSize | The dimensions of the element's content area | `{"left": 0, "top":0, "width": 100, "height": 100, "scrollableOffset": 10, "touchPadding": 0}`
-extras | The result of [getExtras](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getExtras()). The value includes all of keys/values by combining them with `;` separator. No value for a key ends with blank. | Part of extras in chrome browser as an example: `AccessibilityNodeInfo.roleDescription=;AccessibilityNodeInfo.chromeRole=rootWebArea;ACTION_ARGUMENT_HTML_ELEMENT_STRING_VALUES=ARTICLE,BLOCKQUOTE,BUTTON,CHECKBOX`
+extras | The result of [getExtras](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getExtras()). The value includes all of keys/values by combining them with `;` separator. No value for a key ends with blank. | Part of extras in chrome browser:<br> `AccessibilityNodeInfo.roleDescription=;`<br>`AccessibilityNodeInfo.chromeRole=rootWebArea;`<br> `ACTION_ARGUMENT_HTML_ELEMENT_STRING_VALUES=`<br> `ARTICLE,BLOCKQUOTE,BUTTON,CHECKBOX`
 
 
 ## Element Location

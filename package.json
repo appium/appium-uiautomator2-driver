@@ -81,8 +81,8 @@
     "test"
   ],
   "devDependencies": {
-    "@appium/gulp-plugins": "^6.0.0",
-    "@appium/eslint-config-appium": "^5.0.0",
+    "@appium/gulp-plugins": "^7.0.0",
+    "@appium/eslint-config-appium": "^6.0.0",
     "@appium/test-support": "^1.0.0",
     "@babel/core": "^7.16.0",
     "@semantic-release/git": "^10.0.1",
@@ -90,6 +90,7 @@
     "android-apidemos": "^4.0.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
+    "eslint-config-prettier": "^8.5.0",
     "gps-demo-app": "^2.1.1",
     "gulp": "^4.0.0",
     "mocha": "^10.0.0",

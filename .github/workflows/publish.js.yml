@@ -14,8 +14,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
-    - name: install newer npm
-      run: npm install -g npm
+    - name: install newer npm and gulp
+      run: npm install -g npm gulp
     - run: npm install --production
       name: Install prod dependencies
     - run: rm -rf package-lock.json

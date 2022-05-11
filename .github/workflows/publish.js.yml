@@ -14,14 +14,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
-    - name: install newer npm and gulp
-      run: npm install -g npm gulp
-    - run: npm install --production
-      name: Install prod dependencies
+    - name: install newer npm
+      run: npm install -g npm
+    - run: npm install
+      name: Install dependencies
     - run: rm -rf package-lock.json
     - run: npm shrinkwrap
-    - run: npm install --no-package-lock
-      name: Install dev dependencies
     - run: npm test
       name: Run NPM Test
     - run: npx semantic-release

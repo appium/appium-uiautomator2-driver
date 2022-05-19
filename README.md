@@ -798,7 +798,9 @@ UiAutomator2 driver supports Appium endpoints for applications management:
 - Check if app is installed (`POST /appium/device/app_installed`)
 - Install/upgrade app (`POST /appium/device/install_app`)
 - Active app (`POST /appium/device/activate_app`)
-    - The backend calls [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) command. It [turns on auto rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock), so please consider to use [mobile: startActivity](#mobile-startactivity) if you would like to keep the rotation preference.
+    - Since UIAutomator2 driver v2.2.0, this backend calls `am start`/`am start-activity` command to start the application for over API Level 24 devices. IT still calls [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) command for lower than API Level 24 devices.
+    - Before the version calls the monkey command.
+    - The monkey command [turns on auto rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock), so please consider to use [mobile: startActivity](#mobile-startactivity) if you would like to keep the rotation preference.
 - Uninstall app (`POST /appium/device/remove_app`)
 - Terminate app (`POST /appium/device/terminate_app`)
 - Start app activity (`POST /appium/device/start_activity`)

@@ -44,7 +44,7 @@
     "@appium/support": "^2.55.3",
     "@babel/runtime": "^7.0.0",
     "appium-adb": "^9.0.0",
-    "appium-android-driver": "^5.0.9",
+    "appium-android-driver": "^5.0.15",
     "appium-chromedriver": "^5.0.2",
     "appium-uiautomator2-server": "^5.6.0",
     "asyncbox": "^2.3.1",

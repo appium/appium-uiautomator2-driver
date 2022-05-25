@@ -797,10 +797,10 @@ timeoutMs | number | no | The maximum number of milliseconds to block until GPS 
 UiAutomator2 driver supports Appium endpoints for applications management:
 - Check if app is installed (`POST /appium/device/app_installed`)
 - Install/upgrade app (`POST /appium/device/install_app`)
-- Active app (`POST /appium/device/activate_app`)
-    - Since UIAutomator2 driver v2.2.0, the backend calls `am start`/`am start-activity` to start the application for over API Level 24 devices. It calls [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) command for devices that are lower than API Level 24.
-    - UIAutomator2 driver v2.1.2 and lower versions call the `monkey` command for all devices.
-    - The monkey command [turns on auto rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock), so please consider to use [mobile: startActivity](#mobile-startactivity) if you would like to keep the rotation preference.
+- Activate app (`POST /appium/device/activate_app`)
+    - Since UIAutomator2 driver v2.2.0, the server calls `am start`/`am start-activity` to start the application on devices with API level 24+. [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) tool is called on devices below API level 24.
+    - UIAutomator2 driver v2.1.2 and lower versions call the `monkey` tool on all devices.
+    - The `monkey` tool [turns on auto rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock), so please consider using [mobile: startActivity](#mobile-startactivity) if you would like to keep your current rotation preferences.
 - Uninstall app (`POST /appium/device/remove_app`)
 - Terminate app (`POST /appium/device/terminate_app`)
 - Start app activity (`POST /appium/device/start_activity`)

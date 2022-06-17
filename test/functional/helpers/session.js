@@ -1,4 +1,4 @@
-import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
+import { DEFAULT_HOST, DEFAULT_PORT } from './constants';
 import logger from '../../../lib/logger';
 import { remote } from 'webdriverio';
 import { retry, retryInterval } from 'asyncbox';

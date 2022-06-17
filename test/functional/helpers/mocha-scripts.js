@@ -3,7 +3,8 @@
  *
  * This script starts the server or if it's TestObject, runs the tests on TO server
  */
-import { startServer, DEFAULT_PORT } from '../../..';
+import { startServer } from '../../server';
+import { DEFAULT_PORT } from './constants';
 
 
 if (!process.env.CLOUD) {

@@ -1,5 +1,5 @@
 variables:
-  DEFAULT_NODE_VERSION: 14.x
+  DEFAULT_NODE_VERSION: 16.x
   DEFAULT_VM_IMAGE: macOS-latest
 
 stages:

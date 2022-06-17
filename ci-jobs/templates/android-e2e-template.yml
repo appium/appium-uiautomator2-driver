@@ -2,11 +2,11 @@
 parameters:
   script: echo "NO TEST SCRIPT WAS PROVIDED" && exit 1
   name: 'android_e2e_tests'
-  vmImage: 'macOS-10.15'
+  vmImage: 'macOS-12'
   sleep: 1
   MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
-  NODE_VERSION: 14.x
+  NODE_VERSION: 16.x
   ANDROID_SDK_VERSION: 28
   ANDROID_FLAVOUR: default
   ANDROID_ARCH: x86

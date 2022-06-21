@@ -1,2 +1,2 @@
-export const DEFAULT_PORT = 4884;
-export const DEFAULT_HOST = '127.0.0.1';
+export const DEFAULT_PORT = parseInt(process.env.APPIUM_TEST_SERVER_PORT, 10) || 4567;
+export const DEFAULT_HOST = process.env.APPIUM_TEST_SERVER_HOST || '127.0.0.1';

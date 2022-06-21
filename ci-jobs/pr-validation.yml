@@ -15,7 +15,9 @@ stages:
     - task: NodeTool@0
       inputs:
         versionSpec: $(DEFAULT_NODE_VERSION)
-    - script: npm run clean
+    - script: |
+        npm install -g appium@next
+        npm run clean
       displayName: Build
     - script: npm test
       displayName: Run Unit Tests

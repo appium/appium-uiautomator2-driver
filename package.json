@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -42,7 +42,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "appium-adb": "^9.0.0",
-    "appium-android-driver": "^5.2.0",
+    "appium-android-driver": "^5.2.1",
     "appium-chromedriver": "^5.0.2",
     "appium-uiautomator2-server": "^5.6.0",
     "asyncbox": "^2.3.1",
@@ -68,10 +68,10 @@
     "lint": "gulp lint",
     "lint:fix": "gulp eslint --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
-    "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/find/*-specs.js",
-    "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/keyboard/*-specs.js",
-    "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/helpers/mocha-scripts.js build/test/functional/commands/*-specs.js",
+    "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
+    "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/find/*-specs.js",
+    "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/keyboard/*-specs.js",
+    "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/*-specs.js",
     "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
   },
   "pre-commit": [
@@ -88,8 +88,6 @@
     "@babel/core": "^7.16.0",
     "@semantic-release/git": "^10.0.1",
     "@xmldom/xmldom": "^0.x",
-    "appium": "^2.0.0-beta.40",
-    "appium-uiautomator2-driver": "file:.",
     "android-apidemos": "^4.0.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",

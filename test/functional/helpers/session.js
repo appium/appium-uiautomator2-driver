@@ -2,7 +2,6 @@ import { DEFAULT_HOST, DEFAULT_PORT } from './constants';
 import logger from '../../../lib/logger';
 import { remote } from 'webdriverio';
 import { retry, retryInterval } from 'asyncbox';
-import './mocha-scripts';
 
 
 const INIT_RETRIES = process.env.CI ? 2 : 1;

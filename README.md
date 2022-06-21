@@ -792,6 +792,54 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 timeoutMs | number | no | The maximum number of milliseconds to block until GPS cache is refreshed. If the API call does not receive a confirmation about successful cache refresh within this timeout then an error is thrown. Providing zero or a negative value to it skips waiting completely and does not check for any errors. 20000 ms by default. | 60000
 
+### mobile: startMediaProjectionRecording
+
+Starts a new recording of the device activity using [Media Projection](https://developer.android.com/reference/android/media/projection/MediaProjection) API. This API is available since Android 10 (API level 29) and allows to record device screen and audio in high quality. Video and audio encoding is done by Android itself.
+The recording is done by [Appium Settings helper](https://github.com/appium/io.appium.settings#internal-audio--video-recording).
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+resolution | string | no | The resolution of the resulting video, which usually equals to Full HD 1920x1080 on most phones, however you could change it to one of the following supported resolutions: "1920x1080", "1280x720", "720x480", "320x240", "176x144" | 1280x720
+maxDurationSec | number | no | The maximum number of seconds allowed for the recording to run. 900 seconds by default (15 minutes) | 300
+priority | string | no | Recording thread priority is set to maximum (`high`) by default. However if you face performance drops during testing with recording enabled, you could reduce the recording priority to `normal` or `low`. | low
+filename | string | no | You can type recording video file name as you want,
+but recording currently supports only "mp4" format so your filename must end with ".mp4". An invalid file name will fail to start the recording. If not provided then the current timestamp will be used as file name. | screen.mp4
+
+#### Returned Result
+
+`true` if a new recording has successfully started. `false` if another recording is currently running.
+
+### mobile: isMediaProjectionRecordingRunning
+
+Check if a media projection recording is currently running
+
+#### Returned Result
+
+`true` if a recording is running.
+
+### mobile: stopMediaProjectionRecording
+
+Stops a recording and retrieves the recently recorded media. If no recording has been started before then an error is thrown. If the recording has been already finished before this API has been called then the most recent recorded media is returned.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | no | The path to the remote location, where the resulting video should be uploaded. The following protocols are supported: http/https, ftp. Null or empty string value (the default setting) means the content of resulting file should be encoded as Base64 and passed as the endpoont response value. An exception will be thrown if the generated media file is too big to fit into the available process memory. | https://myserver.com/upload
+user | string | no | The name of the user for the remote authentication. | admin
+pass | string | no | The password for the remote authentication. | pa$$w0rd
+method | string | no | The http multipart upload method name. The 'PUT' one is used by default. | POST
+headers | Map&lt;string, string&gt; | no | Additional headers mapping for multipart http(s) uploads | {'Agent': '007'}
+fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | blob
+formFields | Map&lt;string, string&gt; or Array&lt;Pair&gt; | no | Additional form fields for multipart http(s) uploads. | {'name': 'yolo.mp4'}
+
+#### Returned Result
+
+Base64-encoded content of the recorded media file if `remotePath` argument is falsy or an empty string.
+
+
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:

@@ -804,8 +804,7 @@ Name | Type | Required | Description | Example
 resolution | string | no | The resolution of the resulting video, which usually equals to Full HD 1920x1080 on most phones, however you could change it to one of the following supported resolutions: "1920x1080", "1280x720", "720x480", "320x240", "176x144" | 1280x720
 maxDurationSec | number | no | The maximum number of seconds allowed for the recording to run. 900 seconds by default (15 minutes) | 300
 priority | string | no | Recording thread priority is set to maximum (`high`) by default. However if you face performance drops during testing with recording enabled, you could reduce the recording priority to `normal` or `low`. | low
-filename | string | no | You can type recording video file name as you want,
-but recording currently supports only "mp4" format so your filename must end with ".mp4". An invalid file name will fail to start the recording. If not provided then the current timestamp will be used as file name. | screen.mp4
+filename | string | no | You can type recording video file name as you want, but recording currently supports only "mp4" format so your filename must end with ".mp4". An invalid file name will fail to start the recording. If not provided then the current timestamp will be used as file name. | screen.mp4
 
 #### Returned Result
 

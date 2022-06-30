@@ -894,42 +894,38 @@ Useful links:
 import pytest
 
 from appium import webdriver
+# Options are available in Python client since v2.6.0
+from appium.options.android import UiAutomator2Options
 
 
-def generate_caps():
+def generate_options():
     common_caps = {
-        # automationName capability presence is mandatory for this UiAutomator2 Driver to be selected
-        'appium:automationName': 'UiAutomator2',
-        'platformName': 'linux',
-        # The real device udid could be retrieved from `adb devices -l` output
-        # If it is omitted then the first available device will be used
+        # A real device udid could be retrieved from `adb devices -l` output
+        # If it is ommitted then the first available device will be used
         'appium:udid': '123456',
-        # Or run the test on the emulator
+        # ...or run the test on an emulator
         # 'appium:avd': 'emulator-5554',
     }
-    app_caps = {
-        **common_caps,
-        'appium:app': '/Projects/myapp.apk',
-        # It might also be necessary to provide more info about app activities
-        # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md
-        # for more details
-        # 'appium:appPackage': 'com.mypackage',
-        # 'appium:appActivity': '.myMainActivity',
-        # 'appium:appWaitActivity': '.mySplashScreenActivity',
-    }
-    browser_caps = {
-        **common_caps,
-        'browserName': 'chrome',
-        # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/chromedriver.md
-        # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/hybrid.md
-        'appium:chromedriverExecutable': '/Project/chromedriver_linux64',
-    }
-    return [app_caps, browser_caps]
+    app_options = UiAutomator2Options().load_capabilities(common_caps)
+    app_options.app = '/Projects/myapp.apk'
+    # It might also be necessary to provide more info about app activities
+    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md
+    # for more details
+    # app_options.appPackage = 'com.mypackage'
+    # app_options.appActivity = '.myMainActivity'
+    # app_options.appWaitActivity = '.mySplashScreenActivity'
+    chrome_options = UiAutomator2Options().load_capabilities(common_caps)
+    chrome_options.browser_name = 'chrome'
+    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/chromedriver.md
+    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/hybrid.md
+    chrome_options.chromedriver_executable = '/Project/chromedriver_linux64'
+    return [app_options, chrome_options]
 
 
-@pytest.fixture(params=generate_caps())
+@pytest.fixture(params=generate_options())
 def driver(request):
-    drv = webdriver.Remote('http://localhost:4723/wd/hub', request.param)
+    # The default URL is http://127.0.0.1:4723/wd/hub in Appium1
+    drv = webdriver.Remote('http://localhost:4723', options=request.param)
     yield drv
     drv.quit()
 

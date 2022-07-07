@@ -26,7 +26,7 @@ jobs:
     - run: npm shrinkwrap
       name: Create shrinkwrap
     - run: npm install --only=dev
-      name: Install dev decepdencies for the release
+      name: Install dev dependencies for the release
     - run: npx semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

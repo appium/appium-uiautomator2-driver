@@ -83,7 +83,7 @@ appium:enforceAppInstall | If set to `true` then the application under test is a
 
 Capability Name | Description
 --- | ---
-appium:localeScript | Canonical name of the locale to be set for the app under test, for example `zh-Hans-CN`. See https://developer.android.com/reference/java/util/Locale.html for more details.
+appium:localeScript | Canonical name of the locale to be set for the app under test, for example `Hans` in `zh-Hans-CN`. See https://developer.android.com/reference/java/util/Locale.html for more details.
 appium:language | Name of the language to extract application strings for. Strings are extracted for the current system language by default. Also sets the language for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. Example: en, ja
 appium:locale | Sets the locale for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. Example: EN, JA
 

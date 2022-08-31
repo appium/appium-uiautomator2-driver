@@ -4,7 +4,6 @@ parameters:
   name: 'android_e2e_tests'
   vmImage: 'macOS-12'
   sleep: 1
-  MOCHA_FILE: 'sdk-$(ANDROID_SDK_VERSION)-test-results.xml'
   CHROMEDRIVER_VERSION: 2.44
   NODE_VERSION: 16.x
   ANDROID_SDK_VERSION: 28
@@ -18,7 +17,6 @@ jobs:
     variables:
       CI: true
       TERM: dumb
-      MOCHA_FILE: ${{ parameters.MOCHA_FILE }}
       ANDROID_SDK_VERSION: ${{ parameters.ANDROID_SDK_VERSION }}
     steps:
     - task: NodeTool@0
@@ -69,7 +67,3 @@ jobs:
         JAVA_HOME: $(JAVA_HOME_11_X64)
         PATH: $(JAVA_HOME_11_X64)/bin:$(PATH)
       displayName: Run tests
-    - task: PublishTestResults@2
-      condition: always()
-      inputs:
-        testResultsFiles: ${{ parameters.MOCHA_FILE }}

@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../..';
+import AndroidUiautomator2Driver from '../../lib/driver';
 import sinon from 'sinon';
 import path from 'path';
 import B from 'bluebird';

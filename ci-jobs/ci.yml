@@ -15,5 +15,5 @@ jobs:
         npm install -g appium@next
         npm run build
       displayName: Build
-    - script: npm test
+    - script: npm run test
       displayName: Run Unit Tests

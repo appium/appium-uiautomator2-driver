@@ -28,8 +28,6 @@ jobs:
       displayName: Install Node dependencies
     - script: npm install --no-save mjpeg-consumer
       displayName: Install MJPEG Consumer
-    - script: npm test
-      displayName: NPM Test
     - script: $ANDROID_HOME/tools/bin/sdkmanager --list
       displayName: List SDKs
     - script: bash ci-jobs/scripts/start-emulator.sh

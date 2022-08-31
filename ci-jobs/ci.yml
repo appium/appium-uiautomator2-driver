@@ -11,9 +11,7 @@ jobs:
         versionSpec: 16.x
     - script: npm install
       displayName: Install Node dependencies
-    - script: |
-        npm install -g appium@next
-        npm run build
+    - script: npm run build
       displayName: Build
     - script: npm run test
       displayName: Run Unit Tests

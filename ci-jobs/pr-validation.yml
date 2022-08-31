@@ -15,11 +15,9 @@ stages:
     - task: NodeTool@0
       inputs:
         versionSpec: $(DEFAULT_NODE_VERSION)
-    - script: |
-        npm install -g appium@next
-        npm run clean
+    - script: npm install
       displayName: Build
-    - script: npm test
+    - script: npm run test
       displayName: Run Unit Tests
 
 # TODO: Update e2e tests for webdriverio compatibility
@@ -27,7 +25,7 @@ stages:
   jobs:
   - template: templates/android-e2e-template.yml
     parameters:
-      script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/driver-e2e-specs.js -g @skip-ci -i --exit
+      script: npm run e2e-test:driver
       sleep: 20
       name: sdk30_e2e_tests
       vmImage: $(DEFAULT_VM_IMAGE)
@@ -38,7 +36,7 @@ stages:
       NODE_VERSION: $(DEFAULT_NODE_VERSION)
   - template: templates/android-e2e-template.yml
     parameters:
-      script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/driver-e2e-specs.js -g @skip-ci -i --exit
+      script: npm run e2e-test:driver
       name: sdk28_e2e_tests
       vmImage: $(DEFAULT_VM_IMAGE)
       CHROMEDRIVER_VERSION: 2.44
@@ -46,7 +44,7 @@ stages:
       NODE_VERSION: $(DEFAULT_NODE_VERSION)
   - template: templates/android-e2e-template.yml
     parameters:
-      script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/driver-e2e-specs.js -g @skip-ci -i --exit
+      script: npm run e2e-test:driver
       name: sdk25_e2e_tests
       vmImage: $(DEFAULT_VM_IMAGE)
       CHROMEDRIVER_VERSION: 2.28
@@ -54,7 +52,7 @@ stages:
       NODE_VERSION: $(DEFAULT_NODE_VERSION)
   - template: templates/android-e2e-template.yml
     parameters:
-      script: npx mocha --timeout 6000000 --reporter mocha-multi-reporters --reporter-options configFile=./ci-jobs/mochareporters.json --recursive build/test/functional/driver-e2e-specs.js -g @skip-ci -i --exit
+      script: npm run e2e-test:driver
       name: sdk23_e2e_tests
       vmImage: $(DEFAULT_VM_IMAGE)
       CHROMEDRIVER_VERSION: 2.20

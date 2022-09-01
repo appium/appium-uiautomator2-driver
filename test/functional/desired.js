@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import path from 'path';
 
-const uiautomator2ServerLaunchTimeout = (process.env.TRAVIS || process.env.CI) ? 60000 : 20000;
-const uiautomator2ServerInstallTimeout = (process.env.TRAVIS || process.env.CI) ? 120000 : 20000;
+const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
+const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
-const ADB_EXEC_TIMEOUT = (process.env.TRAVIS || process.env.CI) ? 60000 : 20000;
+const ADB_EXEC_TIMEOUT = process.env.CI ? 60000 : 20000;
 
 function deepFreeze (object) {
   const propNames = Object.getOwnPropertyNames(object);

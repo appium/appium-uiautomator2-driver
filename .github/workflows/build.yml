@@ -1,0 +1,101 @@
+name: Build
+
+on: [pull_request, push]
+
+
+jobs:
+  unit_test:
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm i -g npm
+      name: Update NPM
+    - run: npm install --no-package-lock
+      name: Install dev dependencies
+    - run: npm run lint
+      name: Run linter
+    - run: npm run test
+      name: Run unit tests
+
+  e2e_test:
+    strategy:
+      matrix:
+        include:
+        - chromedriverVersion: "74.0.3729.6"
+          apiLevel: 30
+          emuTag: google_apis
+        - chromedriverVersion: "2.44"
+          apiLevel: 28
+          emuTag: default
+        - chromedriverVersion: "2.28"
+          apiLevel: 25
+          emuTag: default
+        - chromedriverVersion: "2.20"
+          apiLevel: 23
+          emuTag: default
+
+    env:
+      CI: true
+      ANDROID_AVD: emulator
+      APPIUM_TEST_SERVER_PORT: 4567
+      APPIUM_TEST_SERVER_HOST: 127.0.0.1
+      _FORCE_LOGS: 1
+    # No hardware acceleration is available for emulators on Ubuntu:
+    # https://github.com/marketplace/actions/android-emulator-runner#can-i-use-this-action-on-linux-vms
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: lts/*
+        check-latest: true
+    - run: |
+        npm install -g appium@next
+        npm install --chromedriver_version="${{ matrix.chromedriverVersion }}"
+        npm install --no-save mjpeg-consumer
+      name: Install dev dependencies
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+    - run: |
+        cwd=$(pwd)
+        pushd "$cwd"
+        cd ~
+        appium driver install --source=local "$cwd"
+        nohup appium server \
+          --port=$APPIUM_TEST_SERVER_PORT \
+          --address=$APPIUM_TEST_SERVER_HOST \
+          --relaxed-security \
+          2>&1 > "$cwd/appium.log" &
+        popd
+      name: Start Appium server
+    - run: nohup adb logcat > logcat.log &
+      name: Capture logcat
+    - uses: reactivecircus/android-emulator-runner@v2
+      name: e2e_api${{ matrix.apiLevel }}
+      with:
+        script: npm run e2e-test:driver
+        avd-name: ${{ env.ANDROID_AVD }}
+        sdcard-path-or-size: 1500M
+        api-level: ${{ matrix.apiLevel }}
+        disable-spellchecker: true
+        target: ${{ matrix.emuTag }}
+    - name: Save logcat output
+      if: ${{ always() }}
+      uses: actions/upload-artifact@master
+      with:
+        name: logcat-api${{ matrix.apiLevel }}
+        path: logcat.log
+    - name: Save server output
+      if: ${{ always() }}
+      uses: actions/upload-artifact@master
+      with:
+        name: appium-api${{ matrix.apiLevel }}
+        path: appium.log

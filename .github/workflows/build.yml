@@ -43,8 +43,6 @@ jobs:
     env:
       CI: true
       ANDROID_AVD: emulator
-      ANDROID_SDK_VERSION: ${{ matrix.apiLevel }}
-      EMU_TAG: ${{ matrix.emuTag }}
       APPIUM_TEST_SERVER_PORT: 4567
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
       _FORCE_LOGS: 1
@@ -75,7 +73,7 @@ jobs:
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \
           --relaxed-security \
-          2>&1 > appium.log &
+          2>&1 > "$cwd/appium.log" &
         popd
       name: Start Appium server
     - run: nohup adb logcat > logcat.log &

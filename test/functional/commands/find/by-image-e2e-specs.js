@@ -9,9 +9,9 @@ import { initSession, deleteSession } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
-const START_IMG = path.resolve('.', 'test', 'functional', 'assets', 'start-button.png');
-const STOP_IMG = path.resolve('.', 'test', 'functional', 'assets', 'stop-button.png');
-const SQUARES_IMG = path.resolve('.', 'test', 'functional', 'assets', 'checkered-squares.png');
+const START_IMG = path.resolve(__dirname, '..', '..', 'assets', 'start-button.png');
+const STOP_IMG = path.resolve(__dirname, '..', '..', 'assets', 'stop-button.png');
+const SQUARES_IMG = path.resolve(__dirname, '..', '..', 'assets', 'checkered-squares.png');
 
 describe('Find - Image @skip-ci', function () {
   let driver;

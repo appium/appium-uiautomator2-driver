@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
-import AndroidUiautomator2Driver from '../../..';
+import AndroidUiautomator2Driver from '../../../lib/driver';
 import ADB from 'appium-adb';
 
 let driver;

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import path from 'path';
 
 const uiautomator2ServerLaunchTimeout = (process.env.TRAVIS || process.env.CI) ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = (process.env.TRAVIS || process.env.CI) ? 120000 : 20000;
@@ -37,18 +38,19 @@ const GENERIC_CAPS = deepFreeze({
 });
 
 
-const apiDemosApp = require.resolve('android-apidemos');
-const gpsDemoApp = require('gps-demo-app');
+const { API_DEMOS_APK_PATH } = require('android-apidemos');
+// http://www.impressive-artworx.de/tutorials/android/gps_tutorial_1.zip
+const gpsDemoApp = path.resolve(__dirname, 'assets', 'gpsDemo-debug.apk');
 
 const APIDEMOS_CAPS = amendCapabilities(GENERIC_CAPS, {
-  'appium:app': apiDemosApp,
+  'appium:app': API_DEMOS_APK_PATH,
   'appium:appPackage': 'io.appium.android.apis',
   'appium:appActivity': '.ApiDemos',
   'appium:disableWindowAnimation': true,
 });
 
 const SCROLL_CAPS = amendCapabilities(GENERIC_CAPS, {
-  'appium:app': apiDemosApp,
+  'appium:app': API_DEMOS_APK_PATH,
   'appium:appPackage': 'io.appium.android.apis',
   'appium:appActivity': '.view.ScrollView2',
 });

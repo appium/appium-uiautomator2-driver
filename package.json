@@ -8,7 +8,7 @@
     "android"
   ],
   "version": "2.4.8",
-  "author": "appium",
+  "author": "Appium Contributors",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -17,9 +17,20 @@
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
-  "engines": [
-    "node"
-  ],
+  "engines": {
+    "node": ">=14",
+    "npm": ">=8"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix"
+    ]
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 100,
+    "singleQuote": true
+  },
   "appium": {
     "driverName": "uiautomator2",
     "automationName": "UiAutomator2",
@@ -55,48 +66,41 @@
     "teen_process": "^2.0.0"
   },
   "scripts": {
-    "prepare": "rimraf build && gulp prepublish",
-    "transpile": "gulp transpile",
-    "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "build": "gulp transpile",
-    "test": "gulp once",
-    "e2e-test": "gulp e2e-test",
-    "watch": "gulp watch",
-    "mocha": "mocha",
-    "mocha:parallel": "mocha-parallel-tests",
-    "coverage": "gulp coveralls",
-    "lint": "gulp lint",
-    "lint:fix": "gulp eslint --fix",
+    "build": "rimraf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
+    "dev": "npm run build -- --watch",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "e2e": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/**/*-specs.js build/test/functional/*-specs.js",
-    "e2e:find": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/find/*-specs.js",
-    "e2e:keyboard": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/keyboard/*-specs.js",
-    "e2e:commands": "gulp transpile && mocha -t 6400000 -R spec build/test/functional/commands/*-specs.js",
-    "e2e:testobject": "cross-env TESTOBJECT_E2E_TESTS=true npm run e2e"
+    "precommit-lint": "lint-staged",
+    "prepare": "npm run build",
+    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
+    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.js\""
   },
   "pre-commit": [
     "precommit-msg",
-    "test"
+    "precommit-lint"
   ],
   "peerDependencies": {
     "appium": "^2.0.0-beta.40"
   },
   "devDependencies": {
-    "@appium/gulp-plugins": "^7.0.0",
     "@appium/eslint-config-appium": "^6.0.0",
     "@appium/test-support": "^1.0.0",
-    "@babel/core": "^7.16.0",
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/plugin-transform-runtime": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "@babel/register": "^7.18.9",
     "@semantic-release/git": "^10.0.1",
     "@xmldom/xmldom": "^0.x",
-    "android-apidemos": "^4.0.0",
+    "android-apidemos": "^4.1.1",
+    "babel-plugin-source-map-support": "^2.2.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "eslint-config-prettier": "^8.5.0",
-    "gps-demo-app": "^2.1.1",
-    "gulp": "^4.0.0",
+    "lint-staged": "^13.0.3",
     "mocha": "^10.0.0",
-    "mocha-junit-reporter": "^2.0.0",
-    "mocha-multi-reporters": "^1.1.7",
     "pngjs": "^6.0.0",
     "pre-commit": "^1.2.2",
     "rimraf": "^3.0.0",

@@ -4,7 +4,7 @@ on: [pull_request]
 
 
 jobs:
-  e2e_test:
+  test:
     strategy:
       matrix:
         include:

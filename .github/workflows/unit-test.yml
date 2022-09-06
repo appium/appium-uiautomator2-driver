@@ -18,7 +18,7 @@ jobs:
         VERSIONS="[$previous_lts, $current_lts, $next_lts]"
         echo ::set-output name=versions::${VERSIONS}
 
-  unit_test:
+  test:
     needs:
     - prepare_matrix
     strategy:

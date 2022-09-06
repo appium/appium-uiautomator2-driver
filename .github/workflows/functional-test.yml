@@ -1,29 +1,10 @@
-name: Build
+name: Functional Tests
 
-on: [pull_request, push]
+on: [pull_request]
 
 
 jobs:
-  unit_test:
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node }}
-    - run: npm i -g npm
-      name: Update NPM
-    - run: npm install --no-package-lock
-      name: Install dev dependencies
-    - run: npm run lint
-      name: Run linter
-    - run: npm run test
-      name: Run unit tests
-
-  e2e_test:
+  test:
     strategy:
       matrix:
         include:

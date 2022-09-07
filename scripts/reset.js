@@ -1,6 +1,6 @@
-const ADB = require('appium-adb');
+const { ADB } = require('appium-adb');
 const B = require('bluebird');
-const { flatMap } = require('lodash');
+const log = require('fancy-log');
 
 const SERVER_PKGS = [
   'io.appium.uiautomator2.server',
@@ -9,18 +9,22 @@ const SERVER_PKGS = [
 ];
 
 async function runReset () {
-  const adb = new ADB();
+  const adb = await ADB.createADB();
   const udids = (await adb.getConnectedDevices())
     .filter(({state}) => state === 'device')
     .map(({udid}) => udid);
   if (0 === udids.length) {
     return;
   }
-  const uninstallPromises = udids.map((udid) => {
-    adb.curDeviceId = udid;
-    return SERVER_PKGS.map((pkgId) => adb.uninstallApk(pkgId));
-  });
-  await B.all(flatMap(uninstallPromises));
+
+  log.info(`About to perform reset for the following device${udids.length === 1 ? '' : 's'}: ${udids}`);
+  const uninstallPromises = [];
+  for (const udid of udids) {
+    const deviceAdb = await ADB.createADB();
+    deviceAdb.setDeviceId(udid);
+    uninstallPromises.push(...(SERVER_PKGS.map((pkgId) => deviceAdb.uninstallApk(pkgId))));
+  }
+  await B.all(uninstallPromises);
 }
 
 (async () => await runReset())();

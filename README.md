@@ -586,6 +586,45 @@ Name | Type | Required | Description | Example
 sensorType | string | yes | The set of all supported sensor types could be found in [adb-emu-commands.js](https://github.com/appium/appium-adb/blob/master/lib/tools/adb-emu-commands.js) (look for *SENSORS* object values). Check the output of `sensor status` command in the [emulator console](https://developer.android.com/studio/run/emulator-console) to see more details on the available sensor types | light
 value | string | yes | Check the output of `sensor get <sensorType>` command in the [emulator console](https://developer.android.com/studio/run/emulator-console) to see the acceptable value format for the given sensor type | 50
 
+### mobile: pullFile
+
+Pulls a remote file from the device.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | yes | The full path to the remote file or a specially formatted path, which points to an item inside an app bundle, for example `@my.app.id/my/path`. It is mandatory for the app bundle to have [debugging enabled](https://developer.android.com/studio/debug) in order to use the latter remotePath format. If the file with the given name does not exist then an exception will be thrown. | /sdcard/foo.bar
+
+#### Returned Result
+
+Base64-encoded string, which represents the content of the remote file.
+
+### mobile: pushFile
+
+Pushes a local file to the device.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | yes | The path on the device to where the payload should be written. The value format is similar to the one used in [pullFile](#mobile-pullfile) extension. If the file with the same name already exists then it will be silently overridden. | /sdcard/foo.bar
+payload | string | yes | Base64-encoded content of the file to be pushed. | QXBwaXVt
+
+### mobile: pullFolder
+
+Pulls a remote folder from the device.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | yes | Same as for [pullFile](#mobile-pullfile) extension, but should be pointing to a remote folder | /sdcard/yolo/
+
+#### Returned Result
+
+Base64-encoded string, which represents the zipped content of the remote folder.
+
 ### mobile: deleteFile
 
 Deletes a file on the remote device.

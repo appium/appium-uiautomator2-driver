@@ -37,7 +37,10 @@
     "platformNames": [
       "Android"
     ],
-    "mainClass": "AndroidUiautomator2Driver"
+    "mainClass": "AndroidUiautomator2Driver",
+    "scripts": {
+      "reset": "scripts/reset.js"
+    }
   },
   "main": "./build/index.js",
   "bin": {},
@@ -67,6 +70,7 @@
   },
   "scripts": {
     "build": "rimraf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
+    "reset": "node ./scripts/reset.js",
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",

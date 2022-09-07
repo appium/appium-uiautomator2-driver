@@ -596,6 +596,95 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 remotePath | string | yes | The full path to the remote file or a file inside an application bundle | `/sdcard/myfile.txt` or `@my.app.id/path/in/bundle`
 
+### mobile: isAppInstalled
+
+Verify whether an application is installed on the device under test.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be checked | `my.app.id`
+
+#### Returned Result
+
+True or false
+
+### mobile: queryAppState
+
+Queries the current state of the app.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be checked | `my.app.id`
+
+#### Returned Result
+
+The following numbers could returned:
+- The app is not installed: `0`
+- The app is installed and is not running: `1`
+- The app is running in background: `3`
+- The app is running in foreground: `4`
+
+### mobile: activateApp
+
+Activates the given application or launches it if necessary.
+The action literally simulates
+clicking the corresponding application icon on the dashboard.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be activated | `my.app.id`
+
+### mobile: removeApp
+
+Remove the corresponding application if is installed.
+The call is ignored if the app is not installed.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be removed | `my.app.id`
+
+#### Returned Result
+
+True is the app has been found on the device and successfully removed. Otherwise false.
+
+### mobile: terminateApp
+
+Terminates the app if it is running.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appId | string | yes | The identifier of the application package to be terminated | `my.app.id`
+timeout | number | no | The count of milliseconds to wait until the app is terminated. 500ms by default. | 1500
+
+#### Returned Result
+
+True if the app has been successfully terminated.
+
+### mobile: installApp
+
+Installs the given application package to the device under test.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+appPath | string | yes | The local .apk(s) path on the server filesystem or a remote url. | `/app/path.apk`
+timeout | number | no | The count of milliseconds to wait until the app is installed.. 6000ms by default. | 120000
+allowTestPackages | boolean | no | Set to true in order to allow test packages installation. false by default | true
+useSdcard | boolean | no | Set to true to install the app on sdcard instead of the device memory. false by default | true
+grantPermissions | boolean | no | Set to true in order to grant all the permissions requested in the application's manifest automatically after the installation is completed under Android 6+. false by default | true
+replace | boolean | no | Set it to false if you don't want the application to be upgraded/reinstalled if it is already present on the device, but throw an error instead. true by default | false
+
 ### mobile: clearApp
 
 Deletes all data associated with a package. Calls `adb shell pm clear` under the hood.

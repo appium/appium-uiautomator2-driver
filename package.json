@@ -37,7 +37,10 @@
     "platformNames": [
       "Android"
     ],
-    "mainClass": "AndroidUiautomator2Driver"
+    "mainClass": "AndroidUiautomator2Driver",
+    "scripts": {
+      "reset": "scripts/reset.js"
+    }
   },
   "main": "./build/index.js",
   "bin": {},
@@ -67,6 +70,7 @@
   },
   "scripts": {
     "build": "rimraf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
+    "reset": "node ./scripts/reset.js",
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
@@ -99,6 +103,7 @@
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "eslint-config-prettier": "^8.5.0",
+    "fancy-log": "^2.0.0",
     "lint-staged": "^13.0.3",
     "mocha": "^10.0.0",
     "pngjs": "^6.0.0",

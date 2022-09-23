@@ -1029,11 +1029,10 @@ The following endpoints are used to control the current context:
 - GET `/session/:sessionId/contexts`: To retrieve the list of available context names
 - [mobile: getContexts](#mobile-getcontexts)
 
-By default the driver starts in native context, which means that most of REST API commands are being
-forwarded to the downstream [appium-uiautomator2-server](https://github.com/appium/appium-uiautomator2-server),
-which is running on the device under test, and trasforming these commands to appropriate UiAutomator framework calls. There is always only one native context, although multiple web contexts are possible. Each web context
-could contain zero or more pages/windows. It is possible to start UIA2 driver in web context by default by setting
-the `browserName` capability value or by setting the `appium:autoWebview` capability value to `true`.
+By default the driver starts in the native context, which means that most of REST API commands are being
+forwarded to the downstream [appium-uiautomator2-server](https://github.com/appium/appium-uiautomator2-server).
+This server is running on the device under test, and trasforms API commands to appropriate low-level UiAutomator framework calls. There is always only one native context, although multiple web contexts are possible.
+Each web context could contain zero or more pages/windows. It is possible to start UIA2 driver session in web context by default by setting the `browserName` capability value or by enabling the `appium:autoWebview` capability.
 
 Web context(s) could be detected if a browser or a web view is active on the device. If a context is switched to
 a web one then UIA2 driver spins up a Chromedriver instance for it and forwards most of the commands
@@ -1041,9 +1040,10 @@ to that Chromedriver instance. Note that web views must be properly configured a
 debuggable in order to connect to them or get their names in the list of available contexts.
 The availablity of a particular web view could be easily verified by using
 [Chrome Remote Debugger](https://developer.chrome.com/docs/devtools/remote-debugging/).
+You could switch between different contexts (and windows in them) at any time during the session.
 
 The [appium-chromedriver](https://github.com/appium/appium-chromedriver) package bundled with UIA2 always
-tries to download the most recent version of Chromedriver known to it. Google requires that the used Chromedriver version must always match to the version of the browser or a web view engine being automated. If these versions do not match then Chromedriver would fail its creation, and context switch API would show a failure message
+tries to download the most recent version of Chromedriver known to it. Google requires that the used Chromedriver version must always match to the version of the browser or a web view engine being automated. If these versions do not match then Chromedriver fails its creation, and context switch API shows a failure message
 similar to:
 
 ```
@@ -1051,7 +1051,7 @@ An unknown server-side error occurred while processing the command.
 Original error: unknown error: Chrome version must be >= 55.0.2883.0
 ```
 
-To work around this issue it is necessary to provide UIA2 driver with a proper Chromedriver binary,
+To work around this issue it is necessary to provide UIA2 driver with a proper Chromedriver binary
 that matches to the Chrome engine version running on the device under test.
 Read the [Chromedriver/Chrome compatibility](#chromedriverchrome-compatibility) topic below to
 know more about finding a matching Chromedriver executable.

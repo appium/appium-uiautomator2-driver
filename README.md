@@ -456,13 +456,15 @@ Array of strings, where each string is a permission name. the array could be emp
 
 ### mobile: performEditorAction
 
-Performs IME action on the _currently focused_ edit element. Very often Android developers use [onEditorAction](https://developer.android.com/reference/android/widget/TextView.OnEditorActionListener.html#onEditorAction(android.widget.TextView,%20int,%20android.view.KeyEvent)) callback with `actionId` argument to implement actions handling, for example, when `Search` or `Done` button is pressed on the on-screen keyboard.
+Performs IME action on the _currently focused_ edit element.
+
+Very often Android developers use [onEditorAction](https://developer.android.com/reference/android/widget/TextView.OnEditorActionListener.html#onEditorAction(android.widget.TextView,%20int,%20android.view.KeyEvent)) callback with `actionId` argument to implement actions handling, for example, when `Search` or `Done` button is pressed on the on-screen keyboard. This mobile extension is supposed to emulate the invokation of such callback on the focused element.
 
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-action | string | yes | The name or an integer code of the editor action to be executed. The following action names are supported: `normal, unspecified, none, go, search, send, next, done, previous`. Read https://developer.android.com/reference/android/view/inputmethod/EditorInfo for more details on this topic. | search
+action | string | yes | The name or an integer code of the editor action to be executed. The following action names are supported: `normal, unspecified, none, go, search, send, next, done, previous`. Read [EditorInfo](https://developer.android.com/reference/android/view/inputmethod/EditorInfo) for more details on this topic. | search
 
 #### Examples
 

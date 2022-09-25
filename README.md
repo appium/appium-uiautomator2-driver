@@ -45,7 +45,7 @@ appium:printPageSourceOnFindFailure | Enforces the server to dump the actual XML
 
 Capability Name | Description
 --- | ---
-appium:systemPort | The number of the port the UiAutomator2 server is listening on. By default the first free port from 8200..8299 range is selected. It is recommended to set this value if you are running [parallel tests](https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/parallel-tests.md) on the same machine.
+appium:systemPort | The number of the port the UiAutomator2 server is listening on. By default the first free port from 8200..8299 range is selected. It is recommended to set this value if you are running [parallel tests](#parallel-tests) on the same machine.
 appium:skipServerInstallation | Skip the UiAutomator2 Server component installation on the device under test and all the related checks if set to `true`. This could help to speed up the session startup if you know for sure the correct server version is installed on the device. In case the server is not installed or an incorrect version of it is installed then you may get an unexpected error later. `false` by default
 appium:uiautomator2ServerLaunchTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is listening on the device. `30000` ms by default
 appium:uiautomator2ServerInstallTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is installed on the device. `20000` ms by default
@@ -58,12 +58,12 @@ appium:skipDeviceInitialization | If set to `true` then device startup checks (w
 Capability Name | Description
 --- | ---
 appium:app | Full path to the application to be tested (the app must be located on the same machine where the server is running). Both `.apk` and `.apks` application extensions are supported. Could also be an URL to a remote location. If neither of the `app`, `appPackage` or `browserName` capabilities are provided then the driver starts from the Dashboard and expects the test knows what to do next. Do not provide both `app` and `browserName` capabilities at once.
-browserName | The name of the browser to run the test on. If this capability is provided then the driver will try to start the test in Web context mode (Native mode is applied by default). Read [Automating hybrid apps](https://appium.io/docs/en/writing-running-appium/web/hybrid/) for more details. Usually equals to `chrome`.
-appium:appPackage | Application package identifier to be started. If not provided then UiAutomator2 will try to detect it automatically from the package provided by the `app` capability. Read [How To Troubleshoot Activities Startup](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md) for more details
-appium:appActivity | Main application activity identifier. If not provided then UiAutomator2 will try to detect it automatically from the package provided by the `app` capability. Read [How To Troubleshoot Activities Startup](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md) for more details
-appium:appWaitActivity | Identifier of the first activity that the application invokes. If not provided then equals to `appium:appActivity`. Read [How To Troubleshoot Activities Startup](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md) for more details
-appium:appWaitPackage | Identifier of the first package that is invoked first. If not provided then equals to `appium:appPackage`. Read [How To Troubleshoot Activities Startup](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md) for more details
-appium:appWaitDuration | Maximum amount of milliseconds to wait until the application under test is started (e. g. an activity returns the control to the caller). `20000` ms by default. Read [How To Troubleshoot Activities Startup](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md) for more details
+browserName | The name of the browser to run the test on. If this capability is provided then the driver will try to start the test in Web context mode (Native mode is applied by default). Read [Automating hybrid apps](docs/activity-startup.md) for more details. Usually equals to `chrome`.
+appium:appPackage | Application package identifier to be started. If not provided then UiAutomator2 will try to detect it automatically from the package provided by the `app` capability. Read [How To Troubleshoot Activities Startup](docs/activity-startup.md) for more details
+appium:appActivity | Main application activity identifier. If not provided then UiAutomator2 will try to detect it automatically from the package provided by the `app` capability. Read [How To Troubleshoot Activities Startup](docs/activity-startup.md) for more details
+appium:appWaitActivity | Identifier of the first activity that the application invokes. If not provided then equals to `appium:appActivity`. Read [How To Troubleshoot Activities Startup](docs/activity-startup.md) for more details
+appium:appWaitPackage | Identifier of the first package that is invoked first. If not provided then equals to `appium:appPackage`. Read [How To Troubleshoot Activities Startup](docs/activity-startup.md) for more details
+appium:appWaitDuration | Maximum amount of milliseconds to wait until the application under test is started (e. g. an activity returns the control to the caller). `20000` ms by default. Read [How To Troubleshoot Activities Startup](docs/activity-startup.md) for more details
 appium:androidInstallTimeout | Maximum amount of milliseconds to wait until the application under test is installed. `90000` ms by default
 appium:appWaitForLaunch | Whether to block until the app under test returns the control to the caller after its activity has been started by Activity Manager (`true`, the default value) or to continue the test without waiting for that (`false`).
 appium:intentCategory | Set an optional intent category to be applied when starting the given appActivity by [Activity Manager](https://developer.android.com/studio/command-line/adb#am). Defaults to `android.intent.category.LAUNCHER`. Please use [mobile:startActivity](#mobile-startactivity) in case you don't set an explicit value.
@@ -218,7 +218,7 @@ Name | Description | Example
 id | This strategy is mapped to the native UiAutomator's `By.res` [locator](https://developer.android.com/reference/androidx/test/uiautomator/BySelector#res(java.lang.String)) (exact match of element's resource name). Package identifier prefix is added automatically if unset and is equal to the identifier of the current application under test. | 'com.mycompany:id/resourceId'
 accessibilityId | This strategy is mapped to the native UiAutomator's `By.desc` [locator](https://developer.android.com/reference/androidx/test/uiautomator/BySelector#desc(java.lang.String)) (exact match of element's content description). | 'my description'
 className | This strategy is mapped to the native UiAutomator's `By.clazz` [locator](https://developer.android.com/reference/androidx/test/uiautomator/BySelector#clazz(java.lang.String)) (exact match of element's class). | 'android.view.View'
-`-android uiautomator` | This strategy is mapped to the native UiAutomator's `UiSelector` [locator](https://developer.android.com/reference/androidx/test/uiautomator/UiSelector)). It is even possible to perform some advanced operations, like scrolling, with this locator type | `new UiScrollable(new UiSelector().resourceId(\"android:id/list\")).scrollIntoView(new UiSelector().text(\"Radio Group\"))`
+`-android uiautomator` | This strategy is mapped to the native UiAutomator's `UiSelector` [locator](https://developer.android.com/reference/androidx/test/uiautomator/UiSelector)). It is even possible to perform some advanced operations, like scrolling, with this locator type. Check [Guide on UiAutomator Locator Types](docs/uiautomator-uiselector.md) | `new UiScrollable(new UiSelector().resourceId(\"android:id/list\")).scrollIntoView(new UiSelector().text(\"Radio Group\"))`
 xpath | For elements lookup Xpath strategy the driver uses the same XML tree that is generated by page source API. Only Xpath 1.0 is supported for appium-uiatomator2-server versions below 4.25.0. All server versions starting from 4.25.0 support both Xpath 1.0 and 2.0 | `By.xpath("//android.view.View[@text=\"Regular\" and @checkable=\"true\"]")`
 
 
@@ -289,7 +289,7 @@ Beside of standard W3C APIs the driver provides the following custom command ext
 
 ### mobile: shell
 
-Executes the given shell command on the device under test via ADB connection. This extension exposes a potential security risk and thus is only enabled when explicitly activated by the `adb_shell` server [command line feature specifier](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md)
+Executes the given shell command on the device under test via ADB connection. This extension exposes a potential security risk and thus is only enabled when explicitly activated by the `adb_shell` server command line feature specifier.
 
 #### Arguments
 
@@ -307,7 +307,7 @@ Depending on the `includeStderr` value this API could either return a string, wh
 ### mobile: execEmuConsoleCommand
 
 Executes a command through emulator telnet console interface and returns its output.
-The `emulator_console` server [feature](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) must be enabled in order to use this method.
+The `emulator_console` server feature must be enabled in order to use this method.
 
 #### Arguments
 
@@ -336,7 +336,8 @@ UiAutomator2 provides several extensions that allow to automate popular mobile g
 - mobile: swipeGesture
 - mobile: scrollGesture
 
-These gestures are documented in the [Automating Mobile Gestures](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/android-mobile-gestures.md) tutorial. Refer [W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api) if you need to automate more complicated gestures.
+These gestures are documented in the [Automating Mobile Gestures](docs/android-mobile-gestures.md) tutorial. Check [W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api) and
+[Low-Level Insights on Android Input Events](docs/actions.md) if you need to automate more complicated gestures.
 
 ### mobile: scroll
 
@@ -455,11 +456,31 @@ Array of strings, where each string is a permission name. the array could be emp
 
 ### mobile: performEditorAction
 
-Performs IME action on the focused edit element. Read [How To Emulate IME Actions Generation](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/android-ime.md) for more details.
+Performs IME action on the _currently focused_ edit element.
+
+Very often Android developers use [onEditorAction](https://developer.android.com/reference/android/widget/TextView.OnEditorActionListener.html#onEditorAction(android.widget.TextView,%20int,%20android.view.KeyEvent)) callback with `actionId` argument to implement actions handling, for example, when `Search` or `Done` button is pressed on the on-screen keyboard. This mobile extension is supposed to emulate the invokation of such callback on the focused element.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+action | string | yes | The name or an integer code of the editor action to be executed. The following action names are supported: `normal, unspecified, none, go, search, send, next, done, previous`. Read [EditorInfo](https://developer.android.com/reference/android/view/inputmethod/EditorInfo) for more details on this topic. | search
+
+#### Examples
+
+```java
+// Java
+driver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "Go"));
+```
+
+```python
+# Python
+driver.execute_script('mobile: performEditorAction', {'action': 'previous'})
+```
 
 ### mobile: startScreenStreaming
 
-Starts device screen broadcast by creating MJPEG server. Multiple calls to this method have no effect unless the previous streaming session is stopped. This method only works if the `adb_screen_streaming` [feature](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) is enabled on the server side. It is also required that [GStreamer](https://gstreamer.freedesktop.org/) with `gst-plugins-base`, `gst-plugins-good` and `gst-plugins-bad` packages are installed and available in PATH on the server machine.
+Starts device screen broadcast by creating MJPEG server. Multiple calls to this method have no effect unless the previous streaming session is stopped. This method only works if the `adb_screen_streaming` feature is enabled on the server side. It is also required that [GStreamer](https://gstreamer.freedesktop.org/) with `gst-plugins-base`, `gst-plugins-good` and `gst-plugins-bad` packages are installed and available in PATH on the server machine.
 
 #### Arguments
 
@@ -1174,15 +1195,14 @@ def generate_options():
     app_options = UiAutomator2Options().load_capabilities(common_caps)
     app_options.app = '/Projects/myapp.apk'
     # It might also be necessary to provide more info about app activities
-    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md
+    # Read [How To Troubleshoot Activities Startup](docs/activity-startup.md)
     # for more details
     # app_options.appPackage = 'com.mypackage'
     # app_options.appActivity = '.myMainActivity'
     # app_options.appWaitActivity = '.mySplashScreenActivity'
     chrome_options = UiAutomator2Options().load_capabilities(common_caps)
     chrome_options.browser_name = 'chrome'
-    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/chromedriver.md
-    # Read https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/web/hybrid.md
+    # Read [Hybrid Mode](#hybrid-mode)
     chrome_options.chromedriver_executable = '/Project/chromedriver_linux64'
     return [app_options, chrome_options]
 

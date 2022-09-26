@@ -1173,6 +1173,32 @@ The history of W3C support in Chromedriver is available for reading at
 [downloads section](https://sites.google.com/a/chromium.org/chromedriver/downloads).
 
 
+## Troubleshooting
+
+### Activity Startup
+
+If you experince issues with application activities being not found or not starting then consider checking [How To Troubleshoot Activities Startup](docs/activity-startup.md) article.
+
+### Poor Elements Interaction Performance
+
+If you observe automated tests need at least 10 seconds or more to locate/interact with a single element then consider changing the default value for [waitForIdleTimeout setting](#settings-api). By default, UiAutomator framework (and all other Accessiblity-based frameworks) always waits for the accessibility event stream to become idle before interacting with it (the default timeout there is 10000ms). This is needed to make sure all animations/transitions are finished before you, for example, interact with an element by clicking it. In case the application under test constantly runs some background animations or hogs the accessibility event stream in some other way these waits may significatly slow down the automation flow.
+
+Setting the value of `waitForIdleTimeout` to zero `0` ms should completely disable any waits, and enforce interactions to happen immediately ignoring the accessibility event stream state. The downside of that would be that all interactions are never going to be delayed, so clicks and other actions might happen at wrong places of the application UI. That is why is it important to check the app under test first and fix its source to get rid of activities hogging the event loop. Sometimes it makes sence to disable animations completely for the app build under test, which could speed up your flows significantly in some situations.
+
+> **Warning**
+> `waitForIdleTimeout` is a setting, not a capability.
+
+### Session Startup Issues
+
+Sometimes various legacy driver parts might be cached on the device under test (like settings.apk), which would prevent a new/upgraded driver version from starting a session. Run
+
+```bash
+appium driver run uiautomator2 reset
+```
+
+in order to cleanup the cached UIA2 driver binaries from all connected devices on the current machine.
+
+
 ## Usage Examples
 
 ```python

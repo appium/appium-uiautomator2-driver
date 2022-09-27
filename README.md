@@ -1198,6 +1198,36 @@ appium driver run uiautomator2 reset
 
 in order to cleanup the cached UIA2 driver binaries from all connected devices on the current machine.
 
+### Element(s) Cannot be Found
+
+All element location strategies in UIA2 driver work similarly under the hood except of the xpath one.
+If some element is not found, but you see/assume it is present in the page source then make sure no race condition
+happens. Add a timer and wait for a couple of seconds before giving up on the element location. In case the lookup
+still fails after the timeout and your non-xpath locator is used then, most likely, it contains a typo, or the
+destination element is not present. There is not much that could be done in UIA2 to change/influence that, since it passes such lookup calls directly to Google's UiAutomator framework.
+
+In case of xpath locators you could also try to change values of the following settings:
+
+1. [allowInvisibleElements](#settings-api)
+2. [ignoreUnimportantViews](#settings-api)
+3. [enableMultiWindows](#settings-api)
+
+By default the first setting is set to `false`, which hides
+elements that are not visible from the the page source and from the xpath location. Changing the setting value
+to `true` would add such elements to the page source and make them locatable.
+
+The second one is enabled by default (e.g. `true`). By disabling it the page source could receive more elements
+that are normally hidden, because of their unimportance.
+
+The third setting being set to `true` extends the page source by adding the actual content of other windows that are currently present on the device's screen. For example, the on-screen keyboard in Android is not a part of the current app hierarchy, but rather belongs to a separate window.
+
+> **Warning**
+> Default values for settings above have been selected to optimize xpath lookup and page source generation performance.
+> Having these settings always different from their default values may sometimes significantly (especially in case of huge accessbility hierarchies) reduce xpath lookup and page source generation speed.
+
+> **Warning**
+> All items above are settings, not capabilities.
+
 
 ## Usage Examples
 

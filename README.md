@@ -1212,9 +1212,9 @@ In case of xpath locators you could also try to change values of the following s
 2. [ignoreUnimportantViews](#settings-api)
 3. [enableMultiWindows](#settings-api)
 
-By default the first setting is set to `false`, which hides
+By default, the first setting is set to `false`, which hides
 elements that are not visible from the the page source and from the xpath location. Changing the setting value
-to `true` would add such elements to the page source and make them locatable.
+to `true` would add such invisible elements to the page source and make them locatable.
 
 The second one is enabled by default (e.g. `true`). By disabling it the page source could receive more elements
 that are normally hidden, because of their unimportance.

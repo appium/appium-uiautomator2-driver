@@ -14,8 +14,8 @@ UiAutomator2 Driver proxies most of the commands to [UiAutomator2 server](https:
 >
 > Since version 2.0.0 UiAutomator2 driver has dropped the support of Appium 1, and is only compatible to Appium 2.
 > Use the `appium driver install uiautomator2` command to add it to your Appium 2 dist.
- 
- 
+
+
 ## Requirements
 
 On top of standard Appium requirements UiAutomator2 driver also expects the following prerequisites:
@@ -111,10 +111,10 @@ appium:allowDelayAdb | Being set to `false` prevents emulator to use `-delay-adb
 
 Capability Name | Description
 --- | ---
-appium:avd | The name of Android emulator to run the test on. The names of currently installed emulators could be listed using `avdmanager list avd` command. If the emulator with the given name is not running then it is going to be started before a test
+appium:avd | The name of Android emulator to run the test on. The names of currently installed emulators could be listed using `avdmanager list avd` command. If the emulator with the given name is not running then it is going to be launched on automated session startup.
 appium:avdLaunchTimeout | Maximum number of milliseconds to wait until Android Emulator is started. `60000` ms by default
 appium:avdReadyTimeout | Maximum number of milliseconds to wait until Android Emulator is fully booted and is ready for usage. `60000` ms by default
-appium:avdArgs | Either a string or an array of emulator [command line arguments](https://developer.android.com/studio/run/emulator-commandline).
+appium:avdArgs | Either a string or an array of emulator [command line arguments](https://developer.android.com/studio/run/emulator-commandline). If arguments contain the `-wipe-data` one then the emulator is going to be killed on automated session startup in order to wipe its data.
 appium:avdEnv | Mapping of emulator [environment variables](https://developer.android.com/studio/command-line/variables).
 appium:networkSpeed | Sets the desired network speed limit for the emulator. It is only applied if the emulator is not running before the test starts. See emulator [command line arguments](https://developer.android.com/studio/run/emulator-commandline) description for more details.
 appium:gpsEnabled | Sets whether to enable (`true`) or disable (`false`) GPS service in the Emulator. Unset by default, which means to not change the current value

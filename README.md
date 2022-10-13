@@ -438,7 +438,7 @@ Changes package permissions in runtime.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-permissions | string or Array&lt;string&gt; | yes | The full name of the permission to be changed or a list of permissions. Mandatory argument. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']`
+permissions | string or Array&lt;string&gt; | yes | The full name of the permission to be changed or a list of permissions. Consider checking [the full list](https://developer.android.com/reference/android/Manifest.permission) of standard Android permission names. If `all` magic string is passed (available since driver version 2.8.0) then the chosen action is going to be applied to all permissions requested/granted by the 'appPackage'. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']`
 appPackage | string | no | The application package to set change permissions on. Defaults to the package name under test | com.mycompany.myapp
 action | string | no | Either `grant` (the default action) or `revoke` | grant
 

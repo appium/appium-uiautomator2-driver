@@ -16,9 +16,24 @@ function defaultStub (driver) {
 
 describe('driver.js', function () {
   describe('constructor', function () {
-    it('calls BaseDriver constructor with opts', function () {
+    it('calls BaseDriver constructor with opts', async function () {
       let driver = new AndroidUiautomator2Driver({foo: 'bar'});
       driver.should.exist;
+      defaultStub(driver);
+      sinon.mock(driver).expects('checkAppPresent')
+          .once()
+          .returns(B.resolve());
+      sinon.mock(driver).expects('startUiAutomator2Session')
+          .once()
+          .returns(B.resolve());
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {
+          platformName: 'Android',
+          'appium:deviceName': 'device',
+          browserName: 'chrome',
+        }
+      });
       driver.opts.foo.should.equal('bar');
     });
   });
@@ -140,7 +155,23 @@ describe('driver.js', function () {
       it('should exist', function () {
         driver.getProxyAvoidList.should.be.an.instanceof(Function);
       });
-      it('should return jwpProxyAvoid array', function () {
+      it('should return jwpProxyAvoid array', async function () {
+        driver = new AndroidUiautomator2Driver({}, false);
+        defaultStub(driver);
+        sinon.mock(driver).expects('checkAppPresent')
+            .once()
+            .returns(B.resolve());
+        sinon.mock(driver).expects('startUiAutomator2Session')
+            .once()
+            .returns(B.resolve());
+        await driver.createSession(null, null, {
+          firstMatch: [{}],
+          alwaysMatch: {
+            platformName: 'Android',
+            'appium:deviceName': 'device',
+            browserName: 'chrome',
+          }
+        });
         let avoidList = driver.getProxyAvoidList('abc');
         avoidList.should.be.an.instanceof(Array);
         avoidList.should.eql(driver.jwpProxyAvoid);
@@ -150,6 +181,7 @@ describe('driver.js', function () {
           driver.getProxyAvoidList('aaa');
         }).should.throw;
       });
+
       describe('nativeWebScreenshot', function () {
         let proxyAvoidList;
         let nativeWebScreenshotFilter = (item) => item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
@@ -273,11 +305,27 @@ describe('driver.js', function () {
 
   describe('deleteSession', function () {
     let driver;
-    beforeEach(function () {
+    beforeEach(async function () {
       driver = new AndroidUiautomator2Driver({}, false);
       driver.adb = new ADB();
       driver.caps = {};
       sandbox.stub(driver.adb, 'stopLogcat');
+
+      defaultStub(driver);
+      sinon.mock(driver).expects('checkAppPresent')
+          .once()
+          .returns(B.resolve());
+      sinon.mock(driver).expects('startUiAutomator2Session')
+          .once()
+          .returns(B.resolve());
+      await driver.createSession(null, null, {
+        firstMatch: [{}],
+        alwaysMatch: {
+          platformName: 'Android',
+          'appium:deviceName': 'device',
+          browserName: 'chrome'
+        }
+      });
     });
     afterEach(function () {
       sandbox.restore();

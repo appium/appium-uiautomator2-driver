@@ -724,8 +724,8 @@ Terminates the app and waits until the app is terminated up to the given timeout
 by checking the app state to ensure if the app process is actually stopped.
 
 The app state check can be skipped if the given timeout is lower or equal to zero since UIAutomator driver 2.9.0.
-The skip helps when you want to terminate the app process but does not want to check the process
-because the app has implemented restarting the process immediately after the process stopped, for example.
+The skip helps when you want to terminate the app process but do not want to check the process existence
+because the app under test may, for example, restart it automatically.
 
 #### Arguments
 

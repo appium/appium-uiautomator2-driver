@@ -720,14 +720,19 @@ True is the app has been found on the device and successfully removed. Otherwise
 
 ### mobile: terminateApp
 
-Terminates the app if it is running.
+Terminates the app and waits until the app is terminated up to the given timeout
+by checking the app state to ensure if the app process is actually stopped.
+
+The app state check can be skipped if the given timeout is lower or equal to zero since UIAutomator driver 2.9.0.
+The skip helps when you want to terminate the app process but do not want to check the process existence
+because the app under test may, for example, restart it automatically.
 
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 appId | string | yes | The identifier of the application package to be terminated | `my.app.id`
-timeout | number | no | The count of milliseconds to wait until the app is terminated. 500ms by default. | 1500
+timeout | number | no | The count of milliseconds to wait until the app is terminated. 500ms by default. | 1500, 0
 
 #### Returned Result
 
@@ -1308,4 +1313,3 @@ Functional tests:
 ```
 npm run e2e-test
 ```
-

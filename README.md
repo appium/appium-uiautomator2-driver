@@ -1214,7 +1214,7 @@ happens. Add a timer and wait for a couple of seconds before giving up on the el
 still fails after the timeout and your non-xpath locator is used then, most likely, it contains a typo, or the
 destination element is not present. There is not much that could be done in UIA2 to change/influence that, since it passes such lookup calls directly to Google's UiAutomator framework.
 
-In case of xpath locators you could also try to change values of the following settings:
+In case of _xpath_ locators you could try to change values of the following settings:
 
 1. [allowInvisibleElements](#settings-api)
 2. [ignoreUnimportantViews](#settings-api)
@@ -1229,12 +1229,22 @@ that are normally hidden, because of their unimportance.
 
 The third setting being set to `true` extends the page source by adding the actual content of other windows that are currently present on the device's screen. For example, the on-screen keyboard in Android is not a part of the current app hierarchy, but rather belongs to a separate window.
 
+In case of _id_ locators you could try to change the value of the following setting:
+
+1. [disableIdLocatorAutocompletion](#settings-api)
+
+The general resources naming convention for Android apps is `<app_id>:id/<resource_name>`. This should guarantee uniqueness of each identifier accross the user interface. Although, this is only a convention and it is still allowed to have various resource names that do not follow it. If you have gotten one of such applications for automated testing then consider assigning `disableIdLocatorAutocompletion` setting value to `true`, so UiAutomator2 driver does not automatically rewrite supplied id values by adding `<app_id>:id/` prefixes to them.
+
 > **Warning**
 > Default values for settings above have been selected to optimize xpath lookup and page source generation performance.
 > Having these settings always different from their default values may sometimes significantly (especially in case of huge accessbility hierarchies) reduce xpath lookup and page source generation speed.
 
 > **Warning**
 > All items above are settings, not capabilities.
+
+### ClassCastException: java.util.ArrayList$ListItr cannot be cast to org.eclipse.wst.xml.xpath2.processor
+
+This exception happens due to a known bug in the [Eclipse's Psychopath](https://wiki.eclipse.org/PsychoPathXPathProcessor) library used by UiAutomator2 driver to support [XPath2](https://www.w3.org/TR/xpath20/) syntax. The issue has been observed while using `following::` or `preceding::` axes in xpath queries. Unfortunately, this library has not been maintained for quite a while, and there is no good open source alternative to it. The only known workaround would be to forcefully switch the driver's XPath processor to the standard Android's Apache Harmony-based XPath1, which does not have this issue (but also does not support XPath2 syntax). See the Appium issue [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
 
 
 ## Usage Examples

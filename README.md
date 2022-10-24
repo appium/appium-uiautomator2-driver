@@ -1228,7 +1228,7 @@ In case of _id_ locators you could try to change the value of the following sett
 
 1. [disableIdLocatorAutocompletion](#settings-api)
 
-The general resources naming convention for Android apps is `<app_id>:id/<resource_name>`. This should guarantee uniqueness of each identifier accross the user interface. Athough, this is only a convention and it is still allowed to have various resource names that do not follow it. If you have gotten one of such applications for automated testing then consider assigning `disableIdLocatorAutocompletion` setting value to `true`, so UiAutomator2 driver does not automatically rewrite supplied id values by adding `<app_id>:id/` prefixes to them.
+The general resources naming convention for Android apps is `<app_id>:id/<resource_name>`. This should guarantee uniqueness of each identifier accross the user interface. Although, this is only a convention and it is still allowed to have various resource names that do not follow it. If you have gotten one of such applications for automated testing then consider assigning `disableIdLocatorAutocompletion` setting value to `true`, so UiAutomator2 driver does not automatically rewrite supplied id values by adding `<app_id>:id/` prefixes to them.
 
 > **Warning**
 > Default values for settings above have been selected to optimize xpath lookup and page source generation performance.

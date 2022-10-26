@@ -152,7 +152,7 @@ appium:mjpegScreenshotUrl | The URL of a service that provides realtime device s
 
 Capability Name | Description
 --- | ---
-appium:autoWebview | If set to `true` then UiAutomator2 driver will try to switch to the first available web view after the session is started. `false` by default.
+appium:autoWebview | If set to `true` then UiAutomator2 driver will try to switch to the web view with name `WEBVIEW_ + appium:appPackage` after the session is started. For example, if `appium:appPackage` capability is set to `com.mypackage` then `WEBVIEW_com.mypackage` will be used. `false` by default.
 appium:webviewDevtoolsPort | The local port number to use for devtools communication. By default the first free port from 10900..11000 range is selected. Consider setting the custom value if you are running parallel tests.
 appium:ensureWebviewsHavePages | Whether to skip web views that have no pages from being shown in `getContexts` output. The driver uses devtools connection to retrieve the information about existing pages. `true` by default since Appium 1.19.0, `false` if lower than 1.19.0.
 appium:enableWebviewDetailsCollection | Whether to retrieve extended web views information using devtools protocol. Enabling this capability helps to detect the necessary chromedriver version more precisely. `true` by default since Appium 1.22.0, `false` if lower than 1.22.0.

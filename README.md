@@ -1207,6 +1207,13 @@ appium driver run uiautomator2 reset
 
 in order to cleanup the cached UIA2 driver binaries from all connected devices on the current machine.
 
+### Socket Hangup Error
+
+This type of error means the driver is unable to connect to the UiAutomator2 REST server, which is running on the device under test. There might be multiple causes to this issue:
+- The automation session gets unexpectedly deleted if your test code sends the `DELETE /session/<id>` request to the it, also the corresponding session and the server itself are terminated as a result. Sending further commands to the same server would create the error above because it is not listening anymore and must be newly started by the instrumentation first. Such issues usually happen if the session management is not configured properly in the your code, so one starts a new session while an existing one is still running and has not been quit properly, or there is a timeout while waiting for a new command. Fixing session management logic (e.g. make sure each session is being properly created in the test setup section and is terminated in the test teardown) or changing/disabling the commands timeout (check the [newCommandTimeout capability](#other)) might help to address such type of errors.
+- The server has been unexpectedly killed by Android OS itself. There might be several reasons to that. Usually fetching the [logcat](https://developer.android.com/studio/command-line/logcat) output and finding occurrences of `io.appium.uiautomator2.server` traces with `error` or `exception` label might help to figure out what happens. Sometimes it is necessary to turn off some internal phone optimizations, sometimes the server crashes because of an internal UiAutomator framework bug, sometimes because of a bug in the server code itself. Each case should be investigated separately if the search over the internet shows no matches…
+- The connectivity between the phone and the host is unstable. Nothing much to add on this one. Maybe the phone has a defect, or the USB cable is damaged, or the installed Android SDK is out of date…
+
 ### Element(s) Cannot be Found
 
 All element location strategies in UIA2 driver work similarly under the hood except of the xpath one.

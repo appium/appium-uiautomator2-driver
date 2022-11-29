@@ -112,7 +112,7 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^3.0.0",
     "semantic-release": "^19.0.2",
-    "sinon": "^14.0.0",
+    "sinon": "^15.0.0",
     "unzipper": "^0.x",
     "webdriverio": "^7.0.0",
     "xpath": "^0.x"

@@ -40,3 +40,8 @@ Thus exception usually indicates, that the first application activity is not the
 If you've double checked that activity names are correct, but the startup still times out, then try to increase the value of `appWaitDuration` capability. Normally, the default 20 seconds is enough for the most of applications, however, some bigger apps might require more time to start and show the first activity. Please, don't create such apps.
 
 There might be also situations where an activity does not return the control to the calling process at all, so `am start` call blocks forever independently of the value of `appWaitDuration`, thus causing the timeout. In such case setting `appWaitForLaunch` to `false` might help to resolve the issue. Although, by choosing this option, the driver cannot make sure the activity has fully started, so then it is up to the client code to verify the initial UI state is the one that is expected.
+
+
+#### java.util.concurrent.ExecutionException: com.google.firebase.installations.FirebaseInstallationsException
+
+`firebaseinstallations.googleapis.com` sends the apk's certificate information as the header `X-Android-Cert` in its initialization step. Appium UiAutomator2 driver resigins the application under test with the default Appium debug signature. It causes an exception, `java.util.concurrent.ExecutionException: com.google.firebase.installations.FirebaseInstallationsException`, when the application under test starts. To avoid the exception, the session must have `noSign: true` capability to avoid re-signing. [Unblocking Firebase Network Traffic in Modified Android Applications](https://www.thecobraden.com/posts/unblocking_firebase_ids/) explains the cause more.

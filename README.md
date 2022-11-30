@@ -439,9 +439,10 @@ Changes package permissions in runtime.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-permissions | string or Array&lt;string&gt; | yes | The full name of the permission to be changed or a list of permissions. Consider checking [the full list](https://developer.android.com/reference/android/Manifest.permission) of standard Android permission names. If `all` magic string is passed (available since driver version 2.8.0) then the chosen action is going to be applied to all permissions requested/granted by the 'appPackage'. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']` `all`
+permissions | string or Array&lt;string&gt; | yes | The full name of the permission to be changed or a list of permissions. Consider checking [the full list](https://developer.android.com/reference/android/Manifest.permission) of standard Android permission names. If `all` magic string is passed (available since driver version 2.8.0) and `target` equals `pm` (the default value) then the chosen action is going to be applied to all permissions requested/granted by the 'appPackage'. If `target` is set to `appops` (available since v2.11.0) then check [AppOpsManager.java](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/AppOpsManager.java) sources to get the full list of supported appops permission names for the given Android platform. The `all` magic string is unsupported for the `appops` target. | `['android.permission.ACCESS_FINE_LOCATION', 'android.permission.BROADCAST_SMS']` `all` `['READ_SMS', 'ACCESS_NOTIFICATIONS']`
 appPackage | string | no | The application package to set change permissions on. Defaults to the package name under test | com.mycompany.myapp
-action | string | no | Either `grant` (the default action) or `revoke` | grant
+action | string | no | Either `grant` (the default action) or `revoke` if `target` is set to `pm`, otherwise one of: `allow` (default), `deny`, `ignore`, `default`. | allow
+target | string | no | Either `pm` (default) or `appops` (available since v2.11.0). The `appops` one requires *adb_shell* server security option to be enabled | appops
 
 ### mobile: getPermissions
 

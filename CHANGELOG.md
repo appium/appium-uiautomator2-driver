@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.11.0...v2.11.1) (2022-12-01)
+
+
+### Miscellaneous Chores
+
+* update releaserc ([#566](https://github.com/appium/appium-uiautomator2-driver/issues/566)) ([ffb04bd](https://github.com/appium/appium-uiautomator2-driver/commit/ffb04bda088bb9b21e4b179c985245c1c72da577))
+
 # [2.11.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.10.2...v2.11.0) (2022-11-30)
 
 

@@ -115,7 +115,7 @@
     "semantic-release": "^19.0.2",
     "sinon": "^15.0.0",
     "unzipper": "^0.x",
-    "webdriverio": "^7.0.0",
+    "webdriverio": "^8.0.5",
     "xpath": "^0.x"
   }
 }

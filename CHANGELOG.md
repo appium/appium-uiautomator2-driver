@@ -1,3 +1,10 @@
+## [2.12.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.11.1...v2.12.0) (2022-12-08)
+
+
+### Features
+
+* Add forceAppLaunch capability ([#569](https://github.com/appium/appium-uiautomator2-driver/issues/569)) ([8af938e](https://github.com/appium/appium-uiautomator2-driver/commit/8af938e361ed7f2821756fd3466ea97761714104))
+
 ## [2.11.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.11.0...v2.11.1) (2022-12-01)
 
 

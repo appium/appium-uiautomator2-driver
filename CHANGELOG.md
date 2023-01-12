@@ -1,3 +1,10 @@
+## [2.12.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.1...v2.12.2) (2023-01-12)
+
+
+### Bug Fixes
+
+* specify supported non-standard commands in newMethodMap ([8a51004](https://github.com/appium/appium-uiautomator2-driver/commit/8a5100486cc3d39c0a8f0e77b2eb574ce1a01e04))
+
 ## [2.12.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.0...v2.12.1) (2022-12-24)
 
 

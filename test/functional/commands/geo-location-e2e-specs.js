@@ -24,14 +24,14 @@ describe('geo-location -', function () {
 
   it('should set geo location', async function () {
     // If we hit the permission screen, click the 'Continue Button' (sdk >= 28)
-    const continueButtons = await driver.elementsById('com.android.permissioncontroller:id/continue_button');
+    const continueButtons = await driver.$$('id:com.android.permissioncontroller:id/continue_button');
     if (continueButtons.length > 0) {
       await continueButtons[0].click();
     }
 
     // Get rid of the modal window saying that the app was built for an old version
     await B.delay(1000);
-    const okButtons = await driver.elementsById('android:id/button1');
+    const okButtons = await driver.$$('id:android:id/button1');
     if (okButtons.length > 0) {
       await okButtons[0].click();
     }
@@ -39,9 +39,9 @@ describe('geo-location -', function () {
     // Get the text in the app that tells us the latitude and logitude
     const getText = async function () {
       return await retryInterval(10, 1000, async function () {
-        const textViews = await driver.elementsByClassName('android.widget.TextView');
+        const textViews = await driver.$$('android.widget.TextView');
         textViews.length.should.be.at.least(2);
-        return await textViews[1].text();
+        return await textViews[1].getText();
       });
     };
 
@@ -52,7 +52,7 @@ describe('geo-location -', function () {
     text.should.not.include(`Latitude: ${latitude}`);
     text.should.not.include(`Longitude: ${longitude}`);
 
-    await driver.setGeoLocation(latitude, longitude);
+    await driver.setGeoLocation({latitude, longitude});
 
     // wait for the text to change
     await retryInterval(10, 1000, async () => {
@@ -66,5 +66,9 @@ describe('geo-location -', function () {
       text.should.include(`Latitude: ${latitude}`);
       text.should.include(`Longitude: ${longitude}`);
     });
+
+    const loc = await driver.getGeoLocation();
+    loc.latitude.should.equal(latitude);
+    loc.longitude.should.equal(longitude);
   });
 });

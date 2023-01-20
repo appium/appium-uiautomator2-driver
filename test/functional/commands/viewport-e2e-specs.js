@@ -21,7 +21,7 @@ describe('testViewportCommands', function () {
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
-    const {viewportRect, statBarHeight, pixelRatio} = await driver.sessionCapabilities();
+    const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession();
     pixelRatio.should.exist;
     pixelRatio.should.not.equal(0);
     statBarHeight.should.exist;
@@ -34,27 +34,27 @@ describe('testViewportCommands', function () {
   });
 
   it('should get scrollable element', async function () {
-    let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
+    let scrollableEl = await driver.$('//*[@scrollable="true"]');
     scrollableEl.should.exist;
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
-    let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
+    let scrollableEl = await driver.$('//*[@scrollable="true"]');
     let contentSize = await scrollableEl.getAttribute('contentSize');
     contentSize.should.exist;
     JSON.parse(contentSize).scrollableOffset.should.exist;
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
-    let scrollableEl = await driver.elementByXPath('//android.widget.ScrollView');
+    let scrollableEl = await driver.$('//android.widget.ScrollView');
     let contentSize = await scrollableEl.getAttribute('contentSize');
     contentSize.should.exist;
     JSON.parse(contentSize).scrollableOffset.should.exist;
   });
 
   it('should get first element from scrollable element', async function () {
-    let scrollableEl = await driver.elementByXPath('//*[@scrollable="true"]');
-    let element = await scrollableEl.elementByXPath('/*[@firstVisible="true"]');
+    let scrollableEl = await driver.$('//*[@scrollable="true"]');
+    let element = await scrollableEl.$('/*[@firstVisible="true"]');
     element.should.exist;
   });
 
@@ -63,7 +63,7 @@ describe('testViewportCommands', function () {
     if (process.env.CI) {
       return this.skip();
     }
-    const {viewportRect, statBarHeight} = await driver.sessionCapabilities();
+    const {viewportRect, statBarHeight} = await driver.getSession();
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');

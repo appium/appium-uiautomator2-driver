@@ -16,14 +16,14 @@ describe('Find - accessibility ID', function () {
     await deleteSession();
   });
   it('should find an element by name', async function () {
-    await driver.elementByAccessibilityId('Animation').should.eventually.exist;
+    await driver.$('~Animation').elementId.should.eventually.exist;
   });
-  it('should return an array of one element if the `multi` param is true', async function () {
-    let els = await driver.elementsByAccessibilityId('Animation');
+  it('should return an array of one element with findElements', async function () {
+    let els = await driver.$$('~Animation');
     els.should.be.an.instanceof(Array);
     els.should.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    await driver.elementByAccessibilityId("Access'ibility").should.eventually.exist;
+    await driver.$("~Access'ibility").elementId.should.eventually.exist;
   });
 });

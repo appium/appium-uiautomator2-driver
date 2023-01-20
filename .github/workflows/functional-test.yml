@@ -68,6 +68,15 @@ jobs:
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
         target: ${{ matrix.emuTag }}
+    - uses: reactivecircus/android-emulator-runner@v2
+      name: e2e_api${{ matrix.apiLevel }}
+      with:
+        script: npm run e2e-test:commands
+        avd-name: ${{ env.ANDROID_AVD }}
+        sdcard-path-or-size: 1500M
+        api-level: ${{ matrix.apiLevel }}
+        disable-spellchecker: true
+        target: ${{ matrix.emuTag }}
     - name: Save logcat output
       if: ${{ always() }}
       uses: actions/upload-artifact@master

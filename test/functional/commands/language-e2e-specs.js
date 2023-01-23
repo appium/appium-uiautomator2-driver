@@ -16,10 +16,6 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   let adb;
 
   before(async function () {
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
-    }
-
     // restarting doesn't work on Android 7+
     adb = new ADB();
 

@@ -15,17 +15,10 @@ describe('strings', function () {
 
   describe('specific language', function () {
     before(async function () {
-      // Don't run these tests on TestObject. On TO, we don't have access to the .apk
-      // which is necessary for extracting the app strings
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       driver = await initSession(APIDEMOS_CAPS);
     });
     after(async function () {
-      if (!process.env.TESTOBJECT_E2E_TESTS) {
-        await deleteSession();
-      }
+      await deleteSession();
     });
 
     it('should return app strings', async function () {
@@ -43,10 +36,6 @@ describe('strings', function () {
     let initialLocale;
     let adb;
     before(async function () {
-      // Don't test ADB on test object
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       // restarting doesn't work on Android 7+
       adb = new ADB();
       initialLocale = await getLocale(adb);
@@ -74,9 +63,6 @@ describe('strings', function () {
       strings.hello_world.should.equal('Hello, World!');
     });
     it('should return app strings when language/locale set @skip-ci', async function () {
-      if (process.env.TESTOBJECT_E2E_TESTS) {
-        this.skip();
-      }
       const caps = amendCapabilities(APIDEMOS_CAPS, {
         'appium:language': 'fr',
         'appium:locale': 'CA',

@@ -80,7 +80,8 @@
     "prepare": "npm run build",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
     "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.js\"",
-    "e2e-test:commands": "mocha --exit --timeout 10m \"./test/functional/commands\""
+    "e2e-test:commands": "mocha --exit --timeout 10m \"./test/functional/commands\"",
+    "e2e-test:commands:find": "mocha --exit --timeout 10m \"./test/functional/commands/find\""
   },
   "pre-commit": [
     "precommit-msg",

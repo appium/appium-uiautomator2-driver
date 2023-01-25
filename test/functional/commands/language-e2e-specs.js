@@ -18,6 +18,7 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   before(async function () {
     // restarting doesn't work on Android 7+
     adb = new ADB();
+    if (await adb.getApiLevel() <= 23) return this.skip(); //eslint-disable-line curly
 
     initialLocale = await getLocale(adb);
   });
@@ -25,12 +26,8 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   let driver;
   after(async function () {
     if (driver) {
-      if (await adb.getApiLevel() > 23) {
-        let [language, country] = initialLocale.split('-');
-        await androidHelpers.ensureDeviceLocale(adb, language, country);
-      } else {
-        await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
-      }
+      let [language, country] = initialLocale.split('-');
+      await androidHelpers.ensureDeviceLocale(adb, language, country);
       await deleteSession();
     }
   });

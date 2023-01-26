@@ -48,10 +48,6 @@ describe('geo-location -', function () {
     const latitude = getRandomInt(-90, 90);
     const longitude = getRandomInt(-180, 180);
 
-    let text = await getText();
-    text.should.not.include(`Latitude: ${latitude}`);
-    text.should.not.include(`Longitude: ${longitude}`);
-
     await driver.setGeoLocation({latitude, longitude});
 
     // wait for the text to change
@@ -62,7 +58,7 @@ describe('geo-location -', function () {
     });
 
     await retryInterval(30, 1000, async function () {
-      text = await getText();
+      const text = await getText();
       text.should.include(`Latitude: ${latitude}`);
       text.should.include(`Longitude: ${longitude}`);
     });

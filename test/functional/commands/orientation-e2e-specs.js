@@ -53,7 +53,7 @@ describe('apidemo - orientation -', function () {
       await B.delay(3000);
       await driver.getOrientation().should.eventually.become('LANDSCAPE');
     });
-    it('should rotate screen to landscape', async function () {
+    it('should rotate screen to portrait', async function () {
       await driver.setOrientation('LANDSCAPE');
       await B.delay(3000);
       await driver.setOrientation('PORTRAIT');

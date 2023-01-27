@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
-import { APIDEMOS_CAPS } from '../desired';
+import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
 
 
@@ -17,30 +17,30 @@ describe('apidemo - orientation -', function () {
       await deleteSession();
     });
     it('should have portrait orientation if requested', async function () {
-      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
-        appActivity: '.view.TextFields',
-        orientation: 'PORTRAIT',
+      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
+        'appium:appActivity': '.view.TextFields',
+        'appium:orientation': 'PORTRAIT',
       }));
       await driver.getOrientation().should.eventually.eql('PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
-      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
-        appActivity: '.view.TextFields',
-        orientation: 'LANDSCAPE',
+      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
+        'appium:appActivity': '.view.TextFields',
+        'appium:orientation': 'LANDSCAPE',
       }));
       await driver.getOrientation().should.eventually.eql('LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
-      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
-        appActivity: '.view.TextFields',
+      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
+        'appium:appActivity': '.view.TextFields',
       }));
       await driver.getOrientation().should.eventually.eql('PORTRAIT');
     });
   });
   describe('setting -', function () {
     before(async function () {
-      driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {
-        appActivity: '.view.TextFields'
+      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
+        'appium:appActivity': '.view.TextFields'
       }));
     });
     after(async function () {
@@ -53,7 +53,7 @@ describe('apidemo - orientation -', function () {
       await B.delay(3000);
       await driver.getOrientation().should.eventually.become('LANDSCAPE');
     });
-    it('should rotate screen to landscape', async function () {
+    it('should rotate screen to portrait', async function () {
       await driver.setOrientation('LANDSCAPE');
       await B.delay(3000);
       await driver.setOrientation('PORTRAIT');

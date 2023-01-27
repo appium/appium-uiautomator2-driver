@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
 import { initSession, deleteSession } from '../helpers/session';
-import { APIDEMOS_CAPS } from '../desired';
+import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
 import { androidHelpers } from 'appium-android-driver';
 import { getLocale } from '../helpers/helpers';
 
@@ -16,13 +16,9 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   let adb;
 
   before(async function () {
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
-    }
-
     // restarting doesn't work on Android 7+
-    let adb = new ADB();
-    if (await adb.getApiLevel() > 23) return this.skip(); //eslint-disable-line curly
+    adb = new ADB();
+    if (await adb.getApiLevel() <= 23) return this.skip(); //eslint-disable-line curly
 
     initialLocale = await getLocale(adb);
   });
@@ -30,28 +26,24 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   let driver;
   after(async function () {
     if (driver) {
-      if (await adb.getApiLevel() > 23) {
-        let [language, country] = initialLocale.split('-');
-        await androidHelpers.ensureDeviceLocale(driver.adb, language, country);
-      } else {
-        await androidHelpers.ensureDeviceLocale(driver.adb, null, initialLocale);
-      }
+      let [language, country] = initialLocale.split('-');
+      await androidHelpers.ensureDeviceLocale(adb, language, country);
       await deleteSession();
     }
   });
 
   it('should start as FR', async function () {
-    let frCaps = Object.assign({}, APIDEMOS_CAPS, {
-      language: 'fr',
-      locale: 'FR',
+    let frCaps = amendCapabilities(APIDEMOS_CAPS, {
+      'appium:language': 'fr',
+      'appium:locale': 'FR',
     });
-    driver = await initSession(frCaps);
+    const driver = await initSession(frCaps);
     await getLocale(driver.adb).should.eventually.equal('fr-FR');
   });
   it('should start as US', async function () {
-    let usCaps = Object.assign({}, APIDEMOS_CAPS, {
-      language: 'en',
-      locale: 'US',
+    let usCaps = amendCapabilities(APIDEMOS_CAPS, {
+      'appium:language': 'en',
+      'appium:locale': 'US',
     });
     driver = await initSession(usCaps);
     await getLocale(driver.adb).should.eventually.equal('en-US');

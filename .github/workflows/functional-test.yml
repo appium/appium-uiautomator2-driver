@@ -6,6 +6,7 @@ on: [pull_request]
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         include:
         - chromedriverVersion: "74.0.3729.6"
@@ -54,6 +55,8 @@ jobs:
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \
           --relaxed-security \
+          --log-no-colors \
+          --log-timestamp \
           2>&1 > "$cwd/appium.log" &
         popd
       name: Start Appium server
@@ -62,7 +65,9 @@ jobs:
     - uses: reactivecircus/android-emulator-runner@v2
       name: e2e_api${{ matrix.apiLevel }}
       with:
-        script: npm run e2e-test:driver
+        script: |
+          npm run e2e-test:driver
+          npm run e2e-test:commands
         avd-name: ${{ env.ANDROID_AVD }}
         sdcard-path-or-size: 1500M
         api-level: ${{ matrix.apiLevel }}

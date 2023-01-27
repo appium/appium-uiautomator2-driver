@@ -58,7 +58,9 @@ describe('file movement', function () {
       zipStream
         .pipe(unzipper.Parse())
         .on('entry', function (entry) {
-          entryCount++;
+          if (entry.type === 'File') {
+            entryCount++;
+          }
           entry.autodrain();
         })
         .on('close', function () {

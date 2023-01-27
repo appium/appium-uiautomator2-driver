@@ -16,11 +16,10 @@ describe('Find - ID', function () {
     await deleteSession();
   });
   it('should find an element by id', async function () {
-    await driver.elementById('android:id/text1').should.eventually.exist;
+    await driver.$('id=android:id/text1').elementId.should.eventually.exist;
   });
-  it('should return an array of one element if the `multi` param is true', async function () {
-    // TODO: this returns an object instead of an array. Investigate.
-    let els = await driver.elementsById('android:id/text1');
+  it('should return an array of one element with findElements', async function () {
+    let els = await driver.$$('id=android:id/text1');
     els.should.be.an.instanceof(Array);
     els.should.have.length.above(1);
   });

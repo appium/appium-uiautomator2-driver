@@ -2,7 +2,7 @@ import chai from 'chai';
 import B from 'bluebird';
 import path from 'path';
 import chaiAsPromised from 'chai-as-promised';
-import { APIDEMOS_CAPS } from '../../desired';
+import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
 
@@ -13,14 +13,15 @@ const START_IMG = path.resolve(__dirname, '..', '..', 'assets', 'start-button.pn
 const STOP_IMG = path.resolve(__dirname, '..', '..', 'assets', 'stop-button.png');
 const SQUARES_IMG = path.resolve(__dirname, '..', '..', 'assets', 'checkered-squares.png');
 
-describe('Find - Image @skip-ci', function () {
+describe('Find - Image', function () {
   let driver;
 
   before(async function () {
-    driver = await initSession({
-      ...APIDEMOS_CAPS,
-      appActivity: '.view.ChronometerDemo'
+    this.skip();
+    const caps = amendCapabilities(APIDEMOS_CAPS, {
+      'appium:appActivity': '.view.ChronometerDemo',
     });
+    driver = await initSession(caps);
     // use the driver settings that cause the most code paths to be exercised
     await driver.updateSettings({
       fixImageTemplateSize: true,
@@ -33,28 +34,28 @@ describe('Find - Image @skip-ci', function () {
   });
 
   it('should find image elements', async function () {
-    let els = await driver.elementsByImageFile(START_IMG);
+    const els = await driver.$$(START_IMG);
     els.should.have.length(1);
   });
   it('should find an image element', async function () {
-    let el = await driver.elementByImageFile(START_IMG);
-    el.value.should.match(/appium-image-element/);
+    const el = await driver.$(START_IMG);
+    el.getValue().should.match(/appium-image-element/);
   });
   it('should not find an image element that is not matched', async function () {
-    await driver.elementByImageFile(SQUARES_IMG)
+    await driver.$(SQUARES_IMG)
       .should.eventually.be.rejectedWith(/Error response status: 7/);
   });
   it('should find anything with a threshold low enough', async function () {
-    const {imageMatchThreshold} = await driver.settings();
+    const {imageMatchThreshold} = await driver.getSettings();
     await driver.updateSettings({imageMatchThreshold: 0});
     try {
-      await driver.elementByImageFile(SQUARES_IMG).should.eventually.exist;
+      await driver.$(SQUARES_IMG).should.eventually.exist;
     } finally {
       await driver.updateSettings({imageMatchThreshold});
     }
   });
   it('should be able to get basic element properties', async function () {
-    let el = await driver.elementByImageFile(START_IMG);
+    let el = await driver.$(START_IMG);
     await el.isDisplayed().should.eventually.be.true;
     let size = await el.getSize();
     size.width.should.be.above(0);
@@ -68,11 +69,11 @@ describe('Find - Image @skip-ci', function () {
   });
   it('should be able to click an element', async function () {
     // start and stop the chronometer using images, and then verify the time
-    await driver.elementByImageFile(START_IMG).click();
+    await driver.$(START_IMG).click();
     await B.delay(3000);
-    await driver.elementByImageFile(STOP_IMG).click();
-    let readout = await driver.elementByXPath("//*[contains(@text, 'Initial format')]");
-    let text = await readout.text();
+    await driver.$(STOP_IMG).click();
+    let readout = await driver.$("//*[contains(@text, 'Initial format')]");
+    let text = await readout.getText();
     let match = /Initial format: \d\d:(\d\d)/.exec(text);
     let secs = parseInt(match[1], 10);
     secs.should.be.above(2);

@@ -16,7 +16,7 @@ describe('Find - invalid strategy', function () {
     await deleteSession();
   });
   it('should not accept -ios uiautomation locator strategy', async function () {
-    await driver.elementsByIosUIAutomation('.elements()', false)
-      .should.eventually.be.rejectedWith(/not supported/);
+    await chai.expect(driver.$$('ios=.elements()'))
+      .to.eventually.be.rejectedWith(/strategy.*is invalid/);
   });
 });

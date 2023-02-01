@@ -34,10 +34,8 @@ describe('Find - basic', function () {
     els.should.have.length(0);
   });
   it('should fail on empty locator', async function () {
-    // should.eventually.be.rejected dowsn't work here :(
-    await driver.$('')
-      .then(() => { throw 'should fail'; })
-      .catch(() => {});
+    await chai.expect(driver.$(''))
+      .to.eventually.be.rejectedWith(/selector/);
   });
   it('should find a single element by resource-id', async function () {
     const el = await driver.$(`id=android:id/${singleResourceId}`);

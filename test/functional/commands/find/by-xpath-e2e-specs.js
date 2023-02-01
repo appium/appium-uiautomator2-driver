@@ -63,7 +63,7 @@ describe('Find - xpath', function () {
     const elementsWithCompression = await driver.$$(`//*`);
     elementsWithoutCompression.length.should.be.greaterThan(elementsWithCompression.length);
   });
-  it('should find toast message element by text @skip-ci', async function () {
+  it('should find toast message element by text', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.PopupMenu1');
     const popUpEl = await driver.$('~Make a Popup!');
     await popUpEl.waitForDisplayed({ timeout: 5000 });

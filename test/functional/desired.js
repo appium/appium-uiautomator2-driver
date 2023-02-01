@@ -65,7 +65,12 @@ const BROWSER_CAPS = amendCapabilities(GENERIC_CAPS, {
   browserName: 'Chrome',
 });
 
+const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
+  'appium:appPackage': 'com.android.settings',
+  'appium:appActivity': '.Settings',
+});
+
 export {
   GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS, SCROLL_CAPS,
-  amendCapabilities
+  SETTINGS_CAPS, amendCapabilities
 };

@@ -17,6 +17,7 @@ describe('Find - Image', function () {
   let driver;
 
   before(async function () {
+    // TODO: @appium/images-plugin needs to be installed
     this.skip();
     const caps = amendCapabilities(APIDEMOS_CAPS, {
       'appium:appActivity': '.view.ChronometerDemo',

@@ -16,11 +16,9 @@ describe('Find - CSS', function () {
     await deleteSession();
   });
   it('should find an element by id (android resource-id)', async function () {
-    // TODO: check the expected behavior when package is omitted. id in pagesrouce is 'andoird:id/text1' but
-    // the driver prepends a package name like 'io.appium.android.apis:id/text1'.
-    // await driver.$('#text1').elementId.should.eventually.exist;
+    await driver.$('#android\\:id\\/text1').elementId.should.eventually.exist;
     await driver.$('*[id="android:id/text1"]').elementId.should.eventually.exist;
-    // await driver.$('*[resource-id="text1"]').elementId.should.eventually.exist;
+    await driver.$('*[resource-id="android:id/text1"]').elementId.should.eventually.exist;
   });
   it('should find an element by content description', async function () {
     await driver.$('*[description="Animation"]').elementId.should.eventually.exist;

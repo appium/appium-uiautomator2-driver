@@ -1,3 +1,10 @@
+## [2.12.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.3...v2.12.4) (2023-02-16)
+
+
+### Miscellaneous Chores
+
+* remove unused unicodeKeyboard as uia2 ([#581](https://github.com/appium/appium-uiautomator2-driver/issues/581)) ([605383f](https://github.com/appium/appium-uiautomator2-driver/commit/605383f581919ab546e62368937295b48a97521e))
+
 ## [2.12.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.2...v2.12.3) (2023-02-02)
 
 

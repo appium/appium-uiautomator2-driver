@@ -11,16 +11,17 @@ const ALERT_CHECK_INTERVAL = 1000;
 
 let driver;
 
-async function initSession (caps) {
+async function initSession (caps, remoteOpts = {}) {
   // Create the driver
   const host = DEFAULT_HOST;
   const port = DEFAULT_PORT;
-  logger.debug(`Starting session on ${host}:${port}`);
-  driver = await retry(INIT_RETRIES, async (x) => await remote(x), {
+  const opts = Object.assign({}, remoteOpts, {
     hostname: host,
     port,
     capabilities: caps,
   });
+  logger.debug(`Starting session on ${host}:${port}`);
+  driver = await retry(INIT_RETRIES, async (x) => await remote(x), opts);
 
   // In Travis, there is sometimes a popup
   if (process.env.CI) {

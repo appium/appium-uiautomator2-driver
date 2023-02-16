@@ -16,67 +16,70 @@ describe('Find - CSS', function () {
     await deleteSession();
   });
   it('should find an element by id (android resource-id)', async function () {
-    await driver.elementByCss('#text1').should.eventually.exist;
-    await driver.elementByCss('*[id="android:id/text1"]').should.eventually.exist;
-    await driver.elementByCss('*[resource-id="text1"]').should.eventually.exist;
+    await driver.$('#android\\:id\\/text1').elementId.should.eventually.exist;
+    await driver.$('*[id="android:id/text1"]').elementId.should.eventually.exist;
+    await driver.$('*[resource-id="android:id/text1"]').elementId.should.eventually.exist;
   });
   it('should find an element by content description', async function () {
-    await driver.elementByCss('*[description="Animation"]').should.eventually.exist;
+    await driver.$('*[description="Animation"]').elementId.should.eventually.exist;
   });
-  it('should return an array of one element if the `multi` param is true', async function () {
-    let els = await driver.elementsByCss('*[content-desc="Animation"]');
+  it('should return an array with findElements', async function () {
+    let els = await driver.$$('*[content-desc="Animation"]');
     els.should.be.an.instanceof(Array);
     els.should.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    await driver.elementByCss('*[content-description="Access\'ibility"]').should.eventually.exist;
+    await driver.$('*[content-description="Access\'ibility"]').elementId.should.eventually.exist;
   });
   it('should find an element by class name', async function () {
-    let el = await driver.elementByCss('android.widget.TextView');
-    const text = await el.text();
+    let el = await driver.$('android.widget.TextView');
+    const text = await el.getText();
     text.toLowerCase().should.equal('api demos');
   });
   it('should find an element with a chain of attributes and pseudo-classes', async function () {
-    let el = await driver.elementByCss('android.widget.TextView[clickable=true]:nth-child(1)');
-    await el.text().should.eventually.equal('Accessibility');
+    // TODO: webdriver selects 'class name' strategy.
+    // ref. https://github.com/webdriverio/webdriverio/blob/eba541a77dbc42173717e1c106a7c4d3ccb198f5/packages/webdriverio/src/utils/findStrategy.ts#L91-L96
+    this.skip();
+    let el = await driver.$('android.widget.TextView[clickable=true]:nth-child(1)');
+    await el.getText().should.eventually.equal('Accessibility');
   });
   it('should find an element with recursive UiSelectors', async function () {
-    await driver.elementsByCss('*[focused=true] *[clickable=true]')
-      .should.eventually.have.length(1);
+    const els = await driver.$$('*[focused=true] *[clickable=true]');
+    els.should.have.length(1);
   });
   it('should allow multiple selector statements and return the Union of the two sets', async function () {
-    let clickableEls = await driver.elementsByCss('*[clickable]');
+    let clickableEls = await driver.$$('*[clickable]');
     clickableEls.length.should.be.above(0);
-    let notClickableEls = await driver.elementsByCss('*[clickable=false]');
+    let notClickableEls = await driver.$$('*[clickable=false]');
     notClickableEls.length.should.be.above(0);
-    let both = await driver.elementsByCss('*[clickable=true], *[clickable=false]');
+    let both = await driver.$$('*[clickable=true], *[clickable=false]');
     both.should.have.length(clickableEls.length + notClickableEls.length);
   });
   it('should find an element by a non-fully qualified class name using CSS tag name', async function () {
-    const els = await driver.elementsByCss('android.widget.TextView');
+    const els = await driver.$$('android.widget.TextView');
     els.length.should.be.above(0);
   });
   it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
     let selector = 'not.a.class, android.widget.TextView';
-    const els = await driver.elementsByCss(selector);
+    const els = await driver.$$(selector);
     els.length.should.be.above(0);
   });
   it('should find elements using starts with attribute', async function () {
-    await driver.elementByCss('*[description^="Animation"]').should.eventually.exist;
+    await driver.$('*[description^="Animation"]').elementId.should.eventually.exist;
   });
   it('should find elements using ends with attribute', async function () {
-    await driver.elementByCss('*[description$="Animation"]').should.eventually.exist;
+    await driver.$('*[description$="Animation"]').elementId.should.eventually.exist;
   });
   it('should find elements using word match attribute', async function () {
-    await driver.elementByCss('*[description~="Animation"]').should.eventually.exist;
+    await driver.$('*[description~="Animation"]').elementId.should.eventually.exist;
   });
   it('should find elements using wildcard attribute', async function () {
-    await driver.elementByCss('*[description*="Animation"]').should.eventually.exist;
+    await driver.$('*[description*="Animation"]').elementId.should.eventually.exist;
   });
   it('should allow UiScrollable with unicode string', async function () {
-    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.text.Unicode'});
+    await driver.startActivity('io.appium.android.apis', '.text.Unicode');
     let selector = '*[text="عربي"]:instance(0)';
-    let el = await driver.elementByCss(selector);
-    await el.text().should.eventually.equal('عربي');
+    let el = await driver.$(selector);
+    await el.getText().should.eventually.equal('عربي');
   });
 });

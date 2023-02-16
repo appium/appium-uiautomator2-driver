@@ -24,10 +24,7 @@ const defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   appActivity: TEXTFIELD_ACTIVITY
 });
 
-const defaultUnicodeCaps = Object.assign({}, defaultAsciiCaps, {
-  unicodeKeyboard: true,
-  resetKeyboard: true
-});
+const defaultUnicodeCaps = defaultAsciiCaps;
 
 async function ensureUnlocked (driver) {
   // on Travis the device is sometimes not unlocked

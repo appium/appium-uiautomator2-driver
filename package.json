@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "2.12.2",
+  "version": "2.12.3",
   "author": "Appium Contributors",
   "license": "Apache-2.0",
   "repository": {
@@ -58,7 +58,7 @@
     "@babel/runtime": "^7.0.0",
     "appium-adb": "^9.10.14",
     "appium-android-driver": "^5.8.7",
-    "appium-chromedriver": "^5.2.1",
+    "appium-chromedriver": "^5.2.16",
     "appium-uiautomator2-server": "^5.7.2",
     "asyncbox": "^2.3.1",
     "axios": "^1.x",

@@ -12,7 +12,7 @@ const unicodeImeId = 'io.appium.settings/.UnicodeIME';
 describe('apidemo - IME', function () {
   let driver;
   before(async function () {
-    driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {unicodeKeyboard: true, resetKeyboard: true}));
+    driver = await initSession(Object.assign(APIDEMOS_CAPS));
   });
   beforeEach(async function () {
     await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: 'io.appium.android.apis.ApiDemos'});

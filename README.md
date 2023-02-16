@@ -175,6 +175,14 @@ pageLoadStrategy | One of the available page load strategies. See https://www.w3
 appium:chromeOptions | A mapping, that allows to customize chromedriver options. See https://chromedriver.chromium.org/capabilities for the list of available entries.
 appium:chromeLoggingPrefs | Chrome logging preferences mapping. Basically the same as [goog:loggingPrefs](https://newbedev.com/getting-console-log-output-from-chrome-with-selenium-python-api-bindings). It is set to `{"browser": "ALL"}` by default.
 
+### Keyboard
+
+Capability Name | Description
+--- | ---
+appium:unicodeKeyboard | Enable Unicode input in sending values to an element like `element.send_keys("🤖")`. Please use [mobile: type](#mobile-type) to set a unicode string to an focused element directly. `false` by default.
+appium:resetKeyboard | Reset keyboard to its original state after deleting the session. This capability helps the device keyboard preference bring it back to the previously used IME when the session changes the IME for `unicodeKeyboard` capability. `false` by default
+
+
 ### Other
 
 Capability Name | Description

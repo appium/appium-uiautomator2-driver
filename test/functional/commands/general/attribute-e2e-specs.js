@@ -41,18 +41,18 @@ describe('apidemo - attributes', function () {
     (displayed + '').should.equal('true');
   });
   it('should be able to get element location using getLocation', async function () {
-    let location = await animationEl.getLocation();
+    const location = await animationEl.getLocation();
     location.x.should.be.at.least(0);
     location.y.should.be.at.least(0);
   });
   it.skip('should be able to get element location using getLocationInView', async function () {
     // TODO: 'getLocationInView' is not a function error
-    let location = await animationEl.getLocationInView();
+    const location = await animationEl.getLocationInView();
     location.x.should.be.at.least(0);
     location.y.should.be.at.least(0);
   });
   it('should be able to get element size', async function () {
-    let size = await animationEl.getSize();
+    const size = await animationEl.getSize();
     size.width.should.be.at.least(0);
     size.height.should.be.at.least(0);
   });

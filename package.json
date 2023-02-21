@@ -52,6 +52,7 @@
     "lib",
     "build/index.js",
     "build/lib",
+    "scripts",
     "CHANGELOG.md"
   ],
   "dependencies": {

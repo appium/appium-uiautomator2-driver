@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { APIDEMOS_CAPS } from '../../desired';
+import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
 
@@ -10,7 +10,10 @@ chai.use(chaiAsPromised);
 describe('wifi @skip-ci', function () {
   let driver;
   before(async function () {
-    driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {appActivity: '.view.TextFields'}));
+    const caps = amendCapabilities(APIDEMOS_CAPS, {
+      'appium:appActivity': '.view.TextFields',
+    });
+    driver = await initSession(caps);
   });
   after(async function () {
     await deleteSession();

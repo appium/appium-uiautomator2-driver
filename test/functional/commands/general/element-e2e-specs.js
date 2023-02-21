@@ -1,9 +1,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import { APIDEMOS_CAPS } from '../../desired';
+import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 import { retryInterval } from 'asyncbox';
+import { util } from 'appium/support';
 
 
 chai.should();
@@ -11,13 +12,16 @@ chai.use(chaiAsPromised);
 
 const textFieldsActivity = '.view.TextFields';
 
-describe('element', function () {
+describe('apidemo - element', function () {
   let driver;
   let el;
   before(async function () {
-    driver = await initSession(Object.assign({}, APIDEMOS_CAPS, {appActivity: textFieldsActivity}));
+    const caps = amendCapabilities(APIDEMOS_CAPS, {
+      'appium:appActivity': textFieldsActivity,
+    });
+    driver = await initSession(caps);
     el = await retryInterval(5, 1000, async function () {
-      const els = await driver.elementsByClassName('android.widget.EditText');
+      const els = await driver.$$('android.widget.EditText');
       els.should.have.length.at.least(1);
       return _.last(els);
     });
@@ -28,16 +32,16 @@ describe('element', function () {
 
   describe('setValue', function () {
     it('should set the text on the element', async function () {
-      await el.sendKeys('original value');
-      await el.text().should.eventually.equal('original value');
+      await el.setValue('original value');
+      await el.getText().should.eventually.equal('original value');
     });
   });
 
   describe('active', function () {
     it('should active element be equal to clicked element', async function () {
       await el.click();
-      const activeElement = await driver.active();
-      activeElement.value.should.equal(el.value);
+      const activeElement = await driver.getActiveElement();
+      util.unwrapElement(activeElement).should.equal(el.elementId);
     });
   });
 });

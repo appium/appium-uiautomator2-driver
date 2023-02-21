@@ -1,3 +1,10 @@
+## [2.12.5](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.4...v2.12.5) (2023-02-21)
+
+
+### Bug Fixes
+
+* actually publish reset script ([a2bc02f](https://github.com/appium/appium-uiautomator2-driver/commit/a2bc02f8956590e3e02b22d75ca412174e6341f9)), closes [appium/appium#501](https://github.com/appium/appium/issues/501)
+
 ## [2.12.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.3...v2.12.4) (2023-02-16)
 
 

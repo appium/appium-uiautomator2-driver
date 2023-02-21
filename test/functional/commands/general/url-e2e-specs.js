@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
+import { ADB } from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -9,6 +10,11 @@ chai.use(chaiAsPromised);
 describe('setUrl', function () {
   let driver;
   before(async function () {
+    const adb = new ADB();
+    const hasChrome = await adb.isAppInstalled('com.android.chrome');
+    if (!hasChrome) {
+      return this.skip();
+    }
     driver = await initSession(BROWSER_CAPS);
   });
   after(async function () {

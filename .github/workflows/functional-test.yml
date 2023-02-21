@@ -39,7 +39,6 @@ jobs:
         check-latest: true
     - run: |
         npm install -g appium@next
-        npm install --chromedriver_version="${{ matrix.chromedriverVersion }}"
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
     - uses: actions/setup-java@v3
@@ -50,7 +49,7 @@ jobs:
         cwd=$(pwd)
         pushd "$cwd"
         cd ~
-        appium driver install --source=local "$cwd"
+        CHROMEDRIVER_VERSION="${{ matrix.chromedriverVersion }}" appium driver install --source=local "$cwd"
         nohup appium server \
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \

@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - chromedriverVersion: "74.0.3729.6"
+        - chromedriverVersion: "83.0.4103.39"
           apiLevel: 30
           emuTag: google_apis
         - chromedriverVersion: "2.44"

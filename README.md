@@ -418,6 +418,20 @@ Retrieves the information about the device under test, like the device model, se
 
 The extension returns a dictionary whose entries are the device properties. Check https://github.com/appium/appium-uiautomator2-server/blob/master/app/src/main/java/io/appium/uiautomator2/handler/GetDeviceInfo.java to get the full list of returned keys and their corresponding values.
 
+### mobile: getPackages
+
+Retrieves the information about the installed packages with its respective launchable activity.
+
+#### Returned Result
+
+The extension returns a dictionary whose entries are :
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+packageName | String | Package name of the application | com.android.settings
+appName | String | Application name | settings
+packageActivity | String | Launchable activity of the respective package | com.android.settings.Settings
+
 ### mobile: getDeviceTime
 
 Retrieves the current device's timestamp.

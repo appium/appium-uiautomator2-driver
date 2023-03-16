@@ -420,7 +420,7 @@ The extension returns a dictionary whose entries are the device properties. Chec
 
 ### mobile: getPackages
 
-Retrieves the information about the installed packages with its respective launchable activity.
+Retrieves the information about the installed packages with its respective launchable activity. Packages without launchable activity is not added to the returned list.
 
 #### Returned Result
 

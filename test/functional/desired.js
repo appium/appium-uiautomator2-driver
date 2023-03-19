@@ -63,7 +63,6 @@ const GPS_DEMO_CAPS = amendCapabilities(GENERIC_CAPS, {
 
 const BROWSER_CAPS = amendCapabilities(GENERIC_CAPS, {
   browserName: 'Chrome',
-  'appium:noReset': true,
 });
 
 const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {

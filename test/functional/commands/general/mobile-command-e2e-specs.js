@@ -9,16 +9,10 @@ chai.use(chaiAsPromised);
 describe('mobile', function () {
   let driver;
   before(async function () {
-    delete APIDEMOS_CAPS.app;
-    driver = await initSession({
-      ...APIDEMOS_CAPS,
-
-      // For deeplinking to work, it has to run a session in a native
-      // context but it doesn't matter what native app is run so just
-      // run io.appium.settings for simplicity
-      appPackage: 'io.appium.settings',
-      appActivity: '.Settings',
-    });
+    // For deeplinking to work, it has to run a session in a native
+    // context but it doesn't matter what native app is run so just
+    // run io.appium.settings for simplicity
+    driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
     await deleteSession();

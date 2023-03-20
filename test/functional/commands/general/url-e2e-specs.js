@@ -2,19 +2,20 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
+import { ADB } from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
-let caps = Object.assign({}, BROWSER_CAPS);
-
-describe('setUrl @skip-ci', function () {
+describe('setUrl', function () {
+  let driver;
   before(async function () {
-    if (process.env.TESTOBJECT_E2E_TESTS) {
-      this.skip();
+    const adb = new ADB();
+    const hasChrome = await adb.isAppInstalled('com.android.chrome');
+    if (!hasChrome) {
+      return this.skip();
     }
-    driver = await initSession(caps);
+    driver = await initSession(BROWSER_CAPS);
   });
   after(async function () {
     if (driver) {
@@ -23,21 +24,19 @@ describe('setUrl @skip-ci', function () {
   });
 
   it('should be able to start a data uri via setUrl', async function () {
-    if (caps.browserName === 'Chrome') {
-      try {
-        // on some chrome systems, we always get the terms and conditions page
-        let btn = await driver.elementById('com.android.chrome:id/terms_accept');
-        await btn.click();
+    try {
+      // on some chrome systems, we always get the terms and conditions page
+      let btn = await driver.$('id=com.android.chrome:id/terms_accept');
+      await btn.click();
 
-        btn = await driver.elementById('com.android.chrome:id/negative_button');
-        await btn.click();
-      } catch (ign) {}
-    }
+      btn = await driver.$('id=com.android.chrome:id/negative_button');
+      await btn.click();
+    } catch (ign) {}
 
-    await driver.get('http://saucelabs.com');
+    await driver.url('https://autify.com');
 
-    await driver.waitForElementByTagName('title');
-    let el = await driver.elementByTagName('title');
-    await el.getAttribute('innerHTML').should.eventually.include('Sauce Labs');
+    const el = await driver.$('<title />');
+    await el.waitForExist({ timeout: 5000 });
+    await el.getHTML().should.eventually.include('Autify');
   });
 });

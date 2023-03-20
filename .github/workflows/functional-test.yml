@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - chromedriverVersion: "74.0.3729.6"
+        - chromedriverVersion: "83.0.4103.39"
           apiLevel: 30
           emuTag: google_apis
         - chromedriverVersion: "2.44"
@@ -39,7 +39,6 @@ jobs:
         check-latest: true
     - run: |
         npm install -g appium@next
-        npm install --chromedriver_version="${{ matrix.chromedriverVersion }}"
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
     - uses: actions/setup-java@v3
@@ -50,7 +49,7 @@ jobs:
         cwd=$(pwd)
         pushd "$cwd"
         cd ~
-        appium driver install --source=local "$cwd"
+        CHROMEDRIVER_VERSION="${{ matrix.chromedriverVersion }}" appium driver install --source=local "$cwd"
         nohup appium server \
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \
@@ -69,6 +68,7 @@ jobs:
           npm run e2e-test:driver
           npm run e2e-test:commands
           npm run e2e-test:commands:find
+          npm run e2e-test:commands:general
         avd-name: ${{ env.ANDROID_AVD }}
         sdcard-path-or-size: 1500M
         api-level: ${{ matrix.apiLevel }}

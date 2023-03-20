@@ -15,25 +15,31 @@ describe('apidemo - IME', function () {
     driver = await initSession(Object.assign(APIDEMOS_CAPS));
   });
   beforeEach(async function () {
-    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: 'io.appium.android.apis.ApiDemos'});
+    await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.ApiDemos');
   });
   after(async function () {
     await deleteSession();
   });
   it('should get the default (enabled) input method', async function () {
-    await driver.activeIMEEngine().should.eventually.equal(unicodeImeId);
+    const available = await driver.getAvailableEngines();
+    available.should.have.length.at.least(1);
+    const active = await driver.getActiveEngine();
+    available.indexOf(active).should.not.equal(-1);
+    available.indexOf(unicodeImeId).should.not.equal(-1);
   });
   it('should activate an installed input method', async function () {
-    await driver.activateIMEEngine(unicodeImeId).should.not.be.rejected;
+    await driver.activateIME(unicodeImeId).should.eventually.not.be.rejected;
+    const active = await driver.getActiveEngine();
+    active.should.be.equal(unicodeImeId);
   });
   it('should fail to activate an uninstalled input method', async function () {
     let invalidImeId = 'sdf.wer.gdasdfsf/.OsdfEfgd';
-    await driver.activateIMEEngine(invalidImeId).should.eventually.be.rejectedWith(/not available/);
+    await driver.activateIME(invalidImeId).should.eventually.be.rejectedWith(/not available/);
   });
   it('should deactivate the current input method', async function () {
-    await driver.activateIMEEngine(unicodeImeId);
-    await driver.activeIMEEngine().should.eventually.equal(unicodeImeId);
-    await driver.deactivateIMEEngine();
-    await driver.activeIMEEngine().should.eventually.not.equal(unicodeImeId);
+    await driver.activateIME(unicodeImeId);
+    await driver.getActiveEngine().should.eventually.equal(unicodeImeId);
+    await driver.deactivateIME();
+    await driver.getActiveEngine().should.eventually.not.equal(unicodeImeId);
   });
 });

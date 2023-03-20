@@ -9,13 +9,6 @@ import { initSession, deleteSession } from '../../helpers/session';
 chai.should();
 chai.use(chaiAsPromised);
 
-let assertSource = (source) => {
-  source.should.exist;
-  let dom = new DOMParser().parseFromString(source);
-  let nodes = xpath.select('//hierarchy', dom);
-  nodes.length.should.equal(1);
-};
-
 describe('apidemo - source', function () {
   let driver;
   before(async function () {
@@ -24,21 +17,29 @@ describe('apidemo - source', function () {
   after(async function () {
     await deleteSession();
   });
+
+  function assertSource (source) {
+    source.should.exist;
+    const dom = new DOMParser().parseFromString(source);
+    const nodes = xpath.select('//hierarchy', dom);
+    nodes.length.should.equal(1);
+  };
+
   it('should return the page source', async function () {
-    let source = await driver.source();
+    const source = await driver.getPageSource();
     assertSource(source);
   });
   it('should get less source when compression is enabled', async function () {
-    let getSourceWithoutCompression = async () => {
+    const getSourceWithoutCompression = async () => {
       await driver.updateSettings({'ignoreUnimportantViews': false});
-      return await driver.source();
+      return await driver.getPageSource();
     };
-    let getSourceWithCompression = async () => {
+    const getSourceWithCompression = async () => {
       await driver.updateSettings({'ignoreUnimportantViews': true});
-      return await driver.source();
+      return await driver.getPageSource();
     };
-    let sourceWithoutCompression = await getSourceWithoutCompression();
-    let sourceWithCompression = await getSourceWithCompression();
+    const sourceWithoutCompression = await getSourceWithoutCompression();
+    const sourceWithCompression = await getSourceWithCompression();
     sourceWithoutCompression.length.should.be.greaterThan(sourceWithCompression.length);
     await getSourceWithoutCompression().should.eventually.eql(sourceWithoutCompression);
   });

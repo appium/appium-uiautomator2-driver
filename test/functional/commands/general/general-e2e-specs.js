@@ -26,7 +26,7 @@ describe('general', function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.view.SplitTouchView';
 
-      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
+      await driver.startActivity(startAppPackage, startAppActivity);
 
       let newAppPackage = await driver.getCurrentPackage();
       let newAppActivity = await driver.getCurrentActivity();
@@ -38,7 +38,7 @@ describe('general', function () {
       let startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       let startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
 
-      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity, intentCategory: startIntentCategory});
+      await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
 
       let appActivity = await driver.getCurrentActivity();
       appActivity.should.include('HelloWorld');
@@ -46,7 +46,7 @@ describe('general', function () {
     it('should be able to launch activity with dontStopAppOnReset = true', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
-      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
+      await driver.startActivity(startAppPackage, startAppActivity);
 
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentActivity();
@@ -56,7 +56,7 @@ describe('general', function () {
     it('should be able to launch activity with dontStopAppOnReset = false', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
-      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
+      await driver.startActivity(startAppPackage, startAppActivity);
 
       let appPackage = await driver.getCurrentPackage();
       let appActivity = await driver.getCurrentActivity();

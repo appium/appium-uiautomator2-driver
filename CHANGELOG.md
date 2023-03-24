@@ -1,3 +1,10 @@
+## [2.12.7](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.6...v2.12.7) (2023-03-24)
+
+
+### Bug Fixes
+
+* chromedriver version comparison in the chromedriver download ([#587](https://github.com/appium/appium-uiautomator2-driver/issues/587)) ([3aa3c84](https://github.com/appium/appium-uiautomator2-driver/commit/3aa3c848012149d0997b5c0f70e8bcf9daba0328))
+
 ## [2.12.6](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.5...v2.12.6) (2023-02-22)
 
 

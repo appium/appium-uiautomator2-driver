@@ -1,3 +1,10 @@
+## [2.14.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.13.0...v2.14.0) (2023-04-04)
+
+
+### Features
+
+* add shouldTerminateApp capability ([#591](https://github.com/appium/appium-uiautomator2-driver/issues/591)) ([853acb3](https://github.com/appium/appium-uiautomator2-driver/commit/853acb3d9848361a86b9d3246fada138f07434ce))
+
 ## [2.13.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.7...v2.13.0) (2023-04-04)
 
 

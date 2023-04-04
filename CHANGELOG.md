@@ -1,3 +1,10 @@
+## [2.13.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.7...v2.13.0) (2023-04-04)
+
+
+### Features
+
+* Add setConnectivity and getConnectivity extensions ([#590](https://github.com/appium/appium-uiautomator2-driver/issues/590)) ([f281a40](https://github.com/appium/appium-uiautomator2-driver/commit/f281a400c0097abe20fc8a852f244af775b112b1))
+
 ## [2.12.7](https://github.com/appium/appium-uiautomator2-driver/compare/v2.12.6...v2.12.7) (2023-03-24)
 
 

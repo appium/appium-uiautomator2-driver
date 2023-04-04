@@ -998,6 +998,51 @@ formFields | Map&lt;string, string&gt; or Array&lt;Pair&gt; | no | Additional fo
 
 Base64-encoded content of the recorded media file if `remotePath` argument is falsy or an empty string.
 
+### mobile: getConnectivity
+
+Returns connectivity states for different services
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+services | string or string[] | no | One or more services to get the connectivity for. Supported service names are: wifi, data, airplaneMode. If no service names are provided then all supported names are assumed by default. | [wifi, data]
+
+#### Returned Result
+
+A map is returned containing the following possible items (depending on which values have been passed to `services` argument):
+
+Name | Type | Description
+--- | --- | ---
+wifi | boolean | True if wifi is enabled
+data | boolean | True if mobile data connection is enabled
+airplaneMode | boolean | True if Airplane Mode is enabled
+
+### mobile: setConnectivity
+
+Set the connectivity state for different services. At least one valid service name must be provided in arguments.
+Missing values tell the driver to not change the corresponding service's state.
+
+> **Note**
+>
+> Switching Wi-Fi and mobile data states reliably work on emulators for all Android versions.
+> Real devices support proper state switching only since Android 11.
+
+> **Note**
+>
+> UiAutomator2 REST server app is running on the device under test and might be terminated/disconnected by Android
+> thus failing the driver session as a result of using this API. The only way to restore the session would be to quit it
+> after the network state is changed and then reopen it with `noReset` capability being set to `true` when the connectivity
+> is restored.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+wifi | booolean | no | Either to enable or disable Wi-Fi. | false
+data | booolean | no | Either to enable or disable mobile data. | false
+airplaneMode | booolean | no | Either to enable or disable Airplane Mode. | false
+
 
 ## Applications Management
 

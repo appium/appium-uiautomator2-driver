@@ -1044,20 +1044,34 @@ wifi | booolean | no | Either to enable or disable Wi-Fi. | false
 data | booolean | no | Either to enable or disable mobile data. | false
 airplaneMode | booolean | no | Either to enable or disable Airplane Mode. | false
 
+### mobile: getAppStrings
+
+Retrieves string resources for the given app language. An error is thrown if strings cannot be fetched or no strings exist
+for the given language abbreviation. Available since driver version 2.15.0
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+language | string | no | The language abbreviation to fetch app strings mapping for. If no language is provided then strings for the default language on the device under test would be returned | fr
+
+#### Returned Result
+
+App strings map, where keys are resource identifiers.
 
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:
-- Check if app is installed (`POST /appium/device/app_installed`)
-- Install/upgrade app (`POST /appium/device/install_app`)
-- Activate app (`POST /appium/device/activate_app`)
+- Check if app is installed ([mobile: isAppInstalled](#mobile-isappinstalled))
+- Install/upgrade app ([mobile: installApp](#mobile-installapp))
+- Activate app ([mobile: activateApp](#mobile-activateapp))
     - Since UIAutomator2 driver v2.2.0, the server calls `am start`/`am start-activity` to start the application on devices with API level 24+. [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) tool is called on devices below API level 24.
     - UIAutomator2 driver v2.1.2 and lower versions call the `monkey` tool on all devices.
     - The `monkey` tool [turns on auto rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock), so please consider using [mobile: startActivity](#mobile-startactivity) if you would like to keep your current rotation preferences.
-- Uninstall app (`POST /appium/device/remove_app`)
-- Terminate app (`POST /appium/device/terminate_app`)
-- Start app activity (`POST /appium/device/start_activity`)
-- Query the current app state (`POST /appium/device/app_state`)
+- Uninstall app ([mobile: removeApp](#mobile-removeapp))
+- Terminate app ([mobile: terminateApp](#mobile-terminateapp))
+- Start app activity ([mobile: startActivity](#mobile-startactivity))
+- Query the current app state ([mobile: queryAppState](#mobile-queryappstate))
 
 Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
 
@@ -1070,9 +1084,9 @@ Useful links:
 ## Files Management
 
 UiAutomator2 driver supports Appium endpoints for files management:
-- Push file (`POST /appium/device/push_file`)
-- Pull file (`POST /appium/device/pull_file`)
-- Pull folder (`POST /appium/device/pull_folder`)
+- Push file ([mobile: pushFile](#mobile-pushfile))
+- Pull file ([mobile: pullFile](#mobile-pullfile))
+- Pull folder ([mobile: pullFolder](#mobile-pullfolder))
 
 Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
 

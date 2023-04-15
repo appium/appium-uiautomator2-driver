@@ -1,3 +1,10 @@
+## [2.15.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.14.0...v2.15.0) (2023-04-15)
+
+
+### Features
+
+* Add 'mobile: getAppStrings' extension ([#593](https://github.com/appium/appium-uiautomator2-driver/issues/593)) ([0705269](https://github.com/appium/appium-uiautomator2-driver/commit/07052696f9926b24a0343e2ab7aa7656cffc860b))
+
 ## [2.14.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.13.0...v2.14.0) (2023-04-04)
 
 

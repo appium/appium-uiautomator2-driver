@@ -1047,7 +1047,7 @@ airplaneMode | booolean | no | Either to enable or disable Airplane Mode. | fals
 ### mobile: getAppStrings
 
 Retrieves string resources for the given app language. An error is thrown if strings cannot be fetched or no strings exist
-for the given language abbreviation.
+for the given language abbreviation. Available since driver version 2.15.0
 
 #### Arguments
 

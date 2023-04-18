@@ -33,9 +33,9 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm i -g npm
-      name: Update NPM
-    - run: npm install --no-package-lock
+    - run: |
+        npm i -g npm
+        npm ci
       name: Install dev dependencies
     - run: npm run lint
       name: Run linter

@@ -1059,6 +1059,24 @@ language | string | no | The language abbreviation to fetch app strings mapping 
 
 App strings map, where keys are resource identifiers.
 
+### mobile: hideKeyboard
+
+Tries to hide the on-screen keyboard. Throws an exception if the keyboard cannot be hidden.
+Does nothing if the keyboard is already hidden.
+
+#### Returned Result
+
+`true` if the keyboard was successfully hidden or `false` if it was already invisible.
+
+### mobile: isKeyboardShown
+
+Checks if the system on-screen keyboard is visible.
+
+#### Returned Result
+
+`true` if the keyboard is visible
+
+
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:

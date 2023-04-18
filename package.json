@@ -1,5 +1,6 @@
 {
   "name": "appium-uiautomator2-driver",
+  "version": "2.15.0",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "appium",
@@ -7,29 +8,124 @@
     "automated testing",
     "android"
   ],
-  "version": "2.15.0",
-  "author": "Appium Contributors",
-  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/appium/appium-uiautomator2-driver.git"
   },
-  "bugs": {
-    "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
+  "license": "Apache-2.0",
+  "author": "Appium Contributors",
+  "main": "./build/lib/index.js",
+  "directories": {
+    "lib": "lib"
   },
-  "engines": {
-    "node": ">=14",
-    "npm": ">=8"
+  "files": [
+    "lib",
+    "build/lib",
+    "scripts",
+    "CHANGELOG.md"
+  ],
+  "types": "build/lib/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "npm run build -- --clean",
+    "dev": "npm run build -- --watch",
+    "e2e-test:commands": "mocha --exit --timeout 10m \"./test/functional/commands\"",
+    "e2e-test:commands:find": "mocha --exit --timeout 10m \"./test/functional/commands/find\"",
+    "e2e-test:commands:general": "mocha --exit --timeout 10m \"./test/functional/commands/general\"",
+    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.js\"",
+    "lint": "eslint .",
+    "lint:commit": "commitlint",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:staged": "lint-staged",
+    "prepare": "husky install && npm run rebuild",
+    "rebuild": "npm run clean && npm run build",
+    "reset": "node ./scripts/reset.js",
+    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\""
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix"
+    "*.(js|ts)": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "prettier": {
     "bracketSpacing": false,
     "printWidth": 100,
     "singleQuote": true
+  },
+  "dependencies": {
+    "appium-adb": "9.11.1",
+    "appium-android-driver": "5.10.1",
+    "appium-chromedriver": "5.4.0",
+    "appium-uiautomator2-server": "5.8.0",
+    "asyncbox": "2.9.4",
+    "axios": "1.3.5",
+    "bluebird": "3.7.2",
+    "css-selector-parser": "1.4.1",
+    "lodash": "4.17.21",
+    "portscanner": "2.2.0",
+    "source-map-support": "0.5.21",
+    "teen_process": "2.0.2"
+  },
+  "devDependencies": {
+    "@appium/eslint-config-appium": "8.0.3",
+    "@appium/eslint-config-appium-ts": "0.3.1",
+    "@appium/test-support": "3.0.13",
+    "@appium/tsconfig": "0.3.0",
+    "@appium/types": "0.11.0",
+    "@commitlint/cli": "17.6.1",
+    "@commitlint/config-conventional": "17.6.1",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@types/bluebird": "3.5.38",
+    "@types/chai": "4.3.4",
+    "@types/chai-as-promised": "7.1.5",
+    "@types/lodash": "4.14.194",
+    "@types/mocha": "10.0.1",
+    "@types/node": "18.15.11",
+    "@types/portscanner": "2.1.1",
+    "@types/sinon": "10.0.14",
+    "@types/sinon-chai": "3.2.9",
+    "@types/source-map-support": "0.5.6",
+    "@types/teen_process": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "5.59.0",
+    "@typescript-eslint/parser": "5.59.0",
+    "@xmldom/xmldom": "0.8.7",
+    "android-apidemos": "4.1.1",
+    "appium": "2.0.0-beta.64",
+    "chai": "4.3.7",
+    "chai-as-promised": "7.1.1",
+    "conventional-changelog-conventionalcommits": "5.0.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-import-resolver-typescript": "3.5.5",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-mocha": "10.1.0",
+    "eslint-plugin-promise": "6.1.1",
+    "fancy-log": "^2.0.0",
+    "husky": "8.0.3",
+    "lint-staged": "13.2.1",
+    "mocha": "10.2.0",
+    "pngjs": "7.0.0",
+    "prettier": "2.8.7",
+    "rimraf": "5.0.0",
+    "semantic-release": "21.0.1",
+    "sinon": "15.0.3",
+    "sinon-chai": "3.7.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.4",
+    "unzipper": "0.10.11",
+    "webdriverio": "8.8.4",
+    "xpath": "0.0.32"
+  },
+  "peerDependencies": {
+    "appium": "^2.0.0-beta.40"
+  },
+  "engines": {
+    "node": "^14.17.0 || ^16.13.0 || >=18.0.0",
+    "npm": ">=8"
   },
   "appium": {
     "driverName": "uiautomator2",
@@ -41,85 +137,5 @@
     "scripts": {
       "reset": "scripts/reset.js"
     }
-  },
-  "main": "./build/index.js",
-  "bin": {},
-  "directories": {
-    "lib": "lib"
-  },
-  "files": [
-    "index.js",
-    "lib",
-    "build/index.js",
-    "build/lib",
-    "scripts",
-    "CHANGELOG.md"
-  ],
-  "dependencies": {
-    "@babel/runtime": "^7.0.0",
-    "appium-adb": "^9.11.0",
-    "appium-android-driver": "^5.9.0",
-    "appium-chromedriver": "^5.3.1",
-    "appium-uiautomator2-server": "^5.7.2",
-    "asyncbox": "^2.3.1",
-    "axios": "^1.x",
-    "bluebird": "^3.5.1",
-    "css-selector-parser": "^1.4.1",
-    "lodash": "^4.17.4",
-    "portscanner": "^2.2.0",
-    "source-map-support": "^0.x",
-    "teen_process": "^2.0.0"
-  },
-  "scripts": {
-    "build": "rimraf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
-    "reset": "node ./scripts/reset.js",
-    "dev": "npm run build -- --watch",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "precommit-lint": "lint-staged",
-    "prepare": "npm run build",
-    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
-    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.js\"",
-    "e2e-test:commands": "mocha --exit --timeout 10m \"./test/functional/commands\"",
-    "e2e-test:commands:find": "mocha --exit --timeout 10m \"./test/functional/commands/find\"",
-    "e2e-test:commands:general": "mocha --exit --timeout 10m \"./test/functional/commands/general\""
-  },
-  "pre-commit": [
-    "precommit-msg",
-    "precommit-lint"
-  ],
-  "peerDependencies": {
-    "appium": "^2.0.0-beta.40"
-  },
-  "devDependencies": {
-    "@appium/eslint-config-appium": "^8.0.0",
-    "@appium/test-support": "^3.0.0",
-    "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.18.10",
-    "@babel/eslint-parser": "^7.18.9",
-    "@babel/plugin-transform-runtime": "^7.18.10",
-    "@babel/preset-env": "^7.18.10",
-    "@babel/register": "^7.18.9",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/git": "^10.0.1",
-    "@xmldom/xmldom": "^0.x",
-    "android-apidemos": "^4.1.1",
-    "babel-plugin-source-map-support": "^2.2.0",
-    "chai": "^4.1.0",
-    "chai-as-promised": "^7.1.1",
-    "conventional-changelog-conventionalcommits": "^5.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "fancy-log": "^2.0.0",
-    "lint-staged": "^13.0.3",
-    "mocha": "^10.0.0",
-    "pngjs": "^7.0.0",
-    "pre-commit": "^1.2.2",
-    "rimraf": "^5.0.0",
-    "semantic-release": "^20.0.2",
-    "sinon": "^15.0.0",
-    "unzipper": "^0.x",
-    "webdriverio": "^8.0.5",
-    "xpath": "^0.x"
   }
 }

@@ -45,13 +45,12 @@ function deSamsungify (text) {
 }
 
 async function getElement (driver, className) {
-  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000,
-    async () => await driver.elementByClassName(className));
+  return await retryInterval(10, 1000, async () => await driver.$(className));
 }
 
 async function waitForText (element, expectedText) {
-  return await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
-    const text = await element.text();
+  return await retryInterval(10, 1000, async () => {
+    const text = await element.getText();
     if (text !== expectedText) {
       throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);
     }
@@ -59,18 +58,19 @@ async function waitForText (element, expectedText) {
 }
 
 async function runTextEditTest (driver, testText, keys = false) {
-  let el = await getElement(driver, EDITTEXT_CLASS);
-  await el.clear();
+  const el = await getElement(driver, EDITTEXT_CLASS);
+  await el.clearValue();
   await el.click();
 
   if (keys) {
-    await driver.keys([testText]);
+    await driver.sendKeys([testText]);
   } else {
-    await el.sendKeys(testText);
+    // await el.sendKeys(testText);
+    await driver.elementSendKeys(el.elementId, testText);
   }
 
-  await retryInterval(process.env.TESTOBJECT_E2E_TESTS ? 100 : 10, 1000, async () => {
-    let text = await el.text();
+  await retryInterval(10, 1000, async () => {
+    const text = await el.getText();
     deSamsungify(text).should.be.equal(testText);
   });
 
@@ -83,7 +83,7 @@ async function runTextEditTest (driver, testText, keys = false) {
  * removes all text from within the main TextView.
  */
 async function clearKeyEvents (driver) {
-  let el = await getElement(driver, BUTTON_CLASS);
+  const el = await getElement(driver, BUTTON_CLASS);
   await el.click();
 
   // wait a moment for the clearing to occur, lest we too quickly try to enter more text
@@ -91,10 +91,10 @@ async function clearKeyEvents (driver) {
 }
 
 async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
-  let runTest = async function () {
-    await driver.pressKeycode(keyCode, metaState);
-    let el = driver.elementById('io.appium.android.apis:id/text');
-    return await el.text();
+  const runTest = async function () {
+    await driver.pressKeyCode(keyCode, metaState);
+    const el = driver.$('id=io.appium.android.apis:id/text');
+    return await el.getText();
   };
 
   await clearKeyEvents(driver);
@@ -104,7 +104,7 @@ async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
     // the test is flakey... try again
     text = await runTest();
   }
-  for (let expectedText of expectedTextArray) {
+  for (const expectedText of expectedTextArray) {
     text.should.include(expectedText);
   }
 }
@@ -150,28 +150,24 @@ describe('keyboard', function () {
 
       if (!process.env.CI) {
         // sometimes the default ime is not what we are using
-        let engines = await driver.availableIMEEngines();
+        const engines = await driver.getAvailableEngines();
         let selectedEngine = _.first(engines);
-        for (let engine of engines) {
+        for (const engine of engines) {
           // it seems that the latin ime has `android.inputmethod` in its package name
           if (engine.indexOf('android.inputmethod') !== -1) {
             selectedEngine = engine;
           }
         }
-        await driver.activateIMEEngine(selectedEngine);
+        await driver.activateIME(selectedEngine);
       }
 
-      const opts = {
-        appPackage: defaultAsciiCaps.appPackage,
-        appActivity: defaultAsciiCaps.appActivity,
-      };
-      await driver.startActivity(opts);
+      await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
       try {
-        const okBtn = await driver.elementById('android:id/button1');
+        const okBtn = await driver.$('id=android:id/button1');
         console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
         await okBtn.click();
         await ensureUnlocked(driver);
-        await driver.startActivity(opts);
+        await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
       } catch (ign) {}
     });
     after(async function () {
@@ -185,19 +181,15 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els;
       beforeEach(async function () {
-        const opts = {
-          appPackage: defaultAsciiCaps.appPackage,
-          appActivity: defaultAsciiCaps.appActivity,
-        };
-        await driver.startActivity(opts);
+        await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
         els = await retryInterval(10, 1000, async function () {
-          const els = await driver.elementsByClassName(EDITTEXT_CLASS);
+          const els = await driver.$$(EDITTEXT_CLASS);
           els.should.have.length.at.least(1);
           return els;
         });
       });
 
-      for (let test of tests) {
+      for (const test of tests) {
         describe(test.label, function () {
           it('should work with setValue', async function () {
             await runTextEditTest(driver, test.text);
@@ -216,38 +208,36 @@ describe('keyboard', function () {
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';
         let passwordTextField = els[1];
-        let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
-        await passwordTextField.sendKeys(password);
+        let passwordOutput = await driver.$('id=io.appium.android.apis:id/edit1Text');
+        await driver.elementSendKeys(passwordTextField.elementId, password);
         await waitForText(passwordOutput, password);
-        await passwordTextField.clear();
+        await passwordTextField.clearValue();
         await waitForText(passwordOutput, '');
       });
 
       it('should be able to type in length-limited field', async function () {
-        let charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        if (!process.env.TESTOBJECT_E2E_TESTS) {
-          let adb = new ADB();
-          let apiLevel = parseInt(await adb.getApiLevel(), 10);
-          if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
-            // below Android 7.0 (API level 24) typing too many characters in a
-            // length-limited field will either throw a NullPointerException or
-            // crash the app
-            // also can be flakey in CI for SDK < 28
-            return this.skip();
-          }
+        const charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const adb = new ADB();
+        const apiLevel = parseInt(await adb.getApiLevel(), 10);
+        if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
+          // below Android 7.0 (API level 24) typing too many characters in a
+          // length-limited field will either throw a NullPointerException or
+          // crash the app
+          // also can be flakey in CI for SDK < 28
+          return this.skip();
         }
-        let el = els[3];
-        await el.setImmediateValue(charactersToType);
+        const el = els[3];
+        await el.setValue(charactersToType);
 
         // expect first 11 characters (limit of the field) to be in the field
-        let text = await el.text();
+        const text = await el.getText();
         text.should.eql('0123456789a');
       });
     });
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
+        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
         await B.delay(500);
       });
 
@@ -261,10 +251,7 @@ describe('keyboard', function () {
   });
 
   describe('unicode', function () {
-    let adb;
-    if (!process.env.TESTOBJECT_E2E_TESTS) {
-      adb = new ADB();
-    }
+    const adb = new ADB();
     let initialIME;
     let driver;
     before(async function () {
@@ -281,7 +268,7 @@ describe('keyboard', function () {
 
       // make sure the IME has been restored
       if (adb) {
-        let ime = await adb.defaultIME();
+        const ime = await adb.defaultIME();
         ime.should.eql(initialIME);
         ime.should.not.eql('io.appium.settings/.UnicodeIME');
       }
@@ -293,14 +280,11 @@ describe('keyboard', function () {
 
     describe('editing a text field', function () {
       beforeEach(async function () {
-        await driver.startActivity({
-          appPackage: defaultUnicodeCaps.appPackage,
-          appActivity: defaultUnicodeCaps.appActivity,
-        });
+        await driver.startActivity(defaultUnicodeCaps.appPackage, defaultUnicodeCaps.appActivity);
       });
 
-      for (let testSet of [tests, unicodeTests, languageTests]) {
-        for (let test of testSet) {
+      for (const testSet of [tests, unicodeTests, languageTests]) {
+        for (const test of testSet) {
           describe(test.label, function () {
             it('should work with setValue', async function () {
               await runTextEditTest(driver, test.text);
@@ -315,7 +299,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
+        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
       });
 
       it('should be able to send combination keyevents', async function () {

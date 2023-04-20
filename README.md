@@ -922,6 +922,16 @@ Name | Type | Required | Description | Example
 apks | Array&lt;string&gt; | yes | The path to APKs. Each path should be the full path to the apk to be installed, or an URL to a remote location. | `['/path/to/local.apk', 'https://github.com/appium/ruby_lib_core/blob/master/test/functional/app/api.apk.zip?raw=true']`
 options | object | no | Installation options. If you want enable `-g` option, you could specify that `{grantPermissions: true}`. `allowTestPackages` corresponds `-t`, `useSdcard` corresponds `-s`, `replace` corresponds `-r` (`-r` is enabled by default), `partialInstall` corresponds `-p`. | `{grantPermissions: true, partialInstall: true}`
 
+### mobile: lock
+
+Lock the device (and optionally unlock it after a certain amount of time). Only simple (e.g. without a password) locks are supported.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+seconds | number|string | no | The number of seconds after which to unlock the device. Set to `0` or leave it empty to require manual unlock (e.g. do not block and automatically unlock afterwards). | 5
+
 ### mobile: unlock
 
 Unlocks the device if it is locked. Noop if the device's screen is not locked.
@@ -934,6 +944,14 @@ key | string | yes | The unlock key. See the documentation on [appium:unlockKey]
 type | string | yes | The unlock type. See the documentation on [appium:unlockType](#device-locking) capability for more details | password
 strategy | string | no | Unlock strategy. See the documentation on [appium:unlockStrategy](#device-locking) capability for more details | uiautomator
 timeoutMs | number | no | Unlock timeout. See the documentation on [appium:unlockSuccessTimeout](#device-locking) capability for more details | 5000
+
+### mobile: isLocked
+
+Determine whether the device is locked.
+
+#### Returned Result
+
+Either `true` or `false`
 
 ### mobile: refreshGpsCache
 

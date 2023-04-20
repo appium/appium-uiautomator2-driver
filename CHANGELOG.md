@@ -1,3 +1,10 @@
+## [2.17.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.16.0...v2.17.0) (2023-04-20)
+
+
+### Features
+
+* Add mobile extension for pressKey action ([#597](https://github.com/appium/appium-uiautomator2-driver/issues/597)) ([093edec](https://github.com/appium/appium-uiautomator2-driver/commit/093edecacb7750f2d74b9abf6d54e20bbd76c1c1))
+
 ## [2.16.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.15.0...v2.16.0) (2023-04-20)
 
 

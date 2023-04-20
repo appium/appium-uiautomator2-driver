@@ -1,3 +1,10 @@
+## [2.18.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.17.0...v2.18.0) (2023-04-20)
+
+
+### Features
+
+* Add mobile methods for lock and isLocked ([#600](https://github.com/appium/appium-uiautomator2-driver/issues/600)) ([24e90b2](https://github.com/appium/appium-uiautomator2-driver/commit/24e90b217e0e2ab807184c9e28a82e55027e9e65))
+
 ## [2.17.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.16.0...v2.17.0) (2023-04-20)
 
 

@@ -1,3 +1,10 @@
+## [2.16.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.15.0...v2.16.0) (2023-04-20)
+
+
+### Features
+
+* Add mobile extensions for on-screen keyboard ([#594](https://github.com/appium/appium-uiautomator2-driver/issues/594)) ([09e839e](https://github.com/appium/appium-uiautomator2-driver/commit/09e839e7d85b3845de4f6d3fa12896144e01caa2))
+
 ## [2.15.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.14.0...v2.15.0) (2023-04-15)
 
 

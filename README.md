@@ -1012,6 +1012,7 @@ method | string | no | The http multipart upload method name. The 'PUT' one is u
 headers | Map&lt;string, string&gt; | no | Additional headers mapping for multipart http(s) uploads | {'Agent': '007'}
 fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | blob
 formFields | Map&lt;string, string&gt; or Array&lt;Pair&gt; | no | Additional form fields for multipart http(s) uploads. | {'name': 'yolo.mp4'}
+uploadTimeout | number | no | The maximum number of milliseconds to wait until the media file is uploaded to the remote location. 240000 ms by default. | 30000
 
 #### Returned Result
 

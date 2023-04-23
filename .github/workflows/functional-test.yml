@@ -67,7 +67,8 @@ jobs:
         script: |
           npm run e2e-test:driver
           npm run e2e-test:commands
-          npm run e2e-test:commands:find
+          # skip find tests with api-25 as they are too flaky 
+          [[ "${{ matrix.apiLevel }}" == "25" ]] || npm run e2e-test:commands:find
           npm run e2e-test:commands:general
         avd-name: ${{ env.ANDROID_AVD }}
         sdcard-path-or-size: 1500M

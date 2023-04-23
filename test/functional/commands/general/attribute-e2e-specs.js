@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
+import ADB from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,6 +12,10 @@ let animationEl;
 
 describe('apidemo - attributes', function () {
   before(async function () {
+    const adb = new ADB();
+    if (await adb.getApiLevel() === 25) {
+      return this.skip(); // this test is very flaky with API25
+    }
     driver = await initSession(APIDEMOS_CAPS);
     animationEl = await driver.$('~Animation');
     await animationEl.waitForDisplayed({ timeout: 5000 });

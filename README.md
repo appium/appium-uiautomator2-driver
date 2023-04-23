@@ -1106,7 +1106,7 @@ Name | Type | Required | Description | Example
 keycode | number | yes | A valid Android key code. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for the list of available key codes | 0x00000099 (which is KEYCODE_NUMPAD_9)
 metastate | number | no | An integer in which each bit set to 1 represents a pressed meta key. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for more details. | 0x00000010 (which is META_ALT_LEFT_ON)
 flags | number | no | Flags for the particular key event. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for more details. | 0x00000001 (which is FLAG_WOKE_HERE)
-isLongPress | number | no | Whether to emulate long key press. `false` by default. | true
+isLongPress | boolean | no | Whether to emulate long key press. `false` by default. | true
 
 
 ## Applications Management

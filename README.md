@@ -209,6 +209,7 @@ selection-start | Contains the index of the char where the selection starts. Cou
 selection-end | Contains the index of the char where the selection ends. Could be `null` if the element provides no range info | '8'
 selected | Whether the element is selected | 'false'
 text or name | The element's text. It never equals to null | 'my text'
+hint | Element's hint text. On Android versions below Oreo it always equals to `null`. | 'my hint text'
 bounds | The element's visible frame (`[left, top][right, bottom]`) | `[0,0][100,100]`
 displayed | Whether the element is visible to the user | 'true'
 contentSize | The dimensions of the element's content area | `{"left": 0, "top":0, "width": 100, "height": 100, "scrollableOffset": 10, "touchPadding": 0}`

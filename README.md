@@ -1109,6 +1109,17 @@ metastate | number | no | An integer in which each bit set to 1 represents a pre
 flags | number | no | Flags for the particular key event. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for more details. | 0x00000001 (which is FLAG_WOKE_HERE)
 isLongPress | boolean | no | Whether to emulate long key press. `false` by default. | true
 
+### mobile: backgroundApp
+
+Puts the app to the background and waits the given number of seconds. Then restores the app
+if necessary. The call is blocking. Available since driver version 2.19.0
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+seconds | number | no | The amount of seconds to wait between putting the app to background and restoring it. Any negative value means to not restore the app after putting it to background (the default behavior). | 5
+
 
 ## Applications Management
 
@@ -1123,6 +1134,7 @@ UiAutomator2 driver supports Appium endpoints for applications management:
 - Terminate app ([mobile: terminateApp](#mobile-terminateapp))
 - Start app activity ([mobile: startActivity](#mobile-startactivity))
 - Query the current app state ([mobile: queryAppState](#mobile-queryappstate))
+- Background app ([mobile: backgroundApp](#mobile-backgroundapp))
 
 Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
 

@@ -1,3 +1,10 @@
+## [2.19.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.18.0...v2.19.0) (2023-04-25)
+
+
+### Features
+
+* Add mobile wrapper for backgroundApp ([#603](https://github.com/appium/appium-uiautomator2-driver/issues/603)) ([925f775](https://github.com/appium/appium-uiautomator2-driver/commit/925f77598db5a0edd3d253cf0d3477e6ebddbca6))
+
 ## [2.18.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.17.0...v2.18.0) (2023-04-20)
 
 

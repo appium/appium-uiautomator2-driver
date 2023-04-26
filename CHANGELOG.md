@@ -1,3 +1,10 @@
+## [2.20.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.19.0...v2.20.0) (2023-04-26)
+
+
+### Features
+
+* Add mobile wrappers for returning the current package and activity names ([#604](https://github.com/appium/appium-uiautomator2-driver/issues/604)) ([ad9f21a](https://github.com/appium/appium-uiautomator2-driver/commit/ad9f21a3eeedc75346059306de02a64234fd76ad))
+
 ## [2.19.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.18.0...v2.19.0) (2023-04-25)
 
 

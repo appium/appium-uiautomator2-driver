@@ -1120,6 +1120,22 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 seconds | number | no | The amount of seconds to wait between putting the app to background and restoring it. Any negative value means to not restore the app after putting it to background (the default behavior). | 5
 
+### mobile: getCurrentActivity
+
+Returns the name of the currently focused app activity. Available since driver version 2.20
+
+#### Returned Result
+
+The activity class name. Could be `null`
+
+### mobile: getCurrentPackage
+
+Returns the name of the currently focused app package identifier. Available since driver version 2.20
+
+#### Returned Result
+
+The package class name. Could be `null`
+
 
 ## Applications Management
 

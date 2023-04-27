@@ -1136,6 +1136,31 @@ Returns the name of the currently focused app package identifier. Available sinc
 
 The package class name. Could be `null`
 
+### mobile: getDisplayDensity
+
+Returns the display density value measured in DPI. Available since driver version 2.21
+
+#### Returned Result
+
+The actual DPI value as integer number
+
+### mobile: getSystemBars
+
+Returns properties of various system bars. Available since driver version 2.21
+
+#### Returned Result
+
+A dictionary whose entries are:
+- `statusBar`
+- `navigationBar`
+
+Values are dictionaries with the following properties:
+- `visible`: Whether the bar is visible (equals to `false` if the bar is not present in the system info output)
+- `x`: Bar x coordinate (might be zero if the bar is not present in the system info output)
+- `y`: Bar y coordinate (might be zero if the bar is not present in the system info output)
+- `width`: Bar width (might be zero if the bar is not present in the system info output)
+- `height`: Bar height (might be zero if the bar is not present in the system info output)
+
 
 ## Applications Management
 

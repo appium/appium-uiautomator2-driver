@@ -1,3 +1,10 @@
+## [2.21.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.20.0...v2.21.0) (2023-04-27)
+
+
+### Features
+
+* Add mobile wrappers for getDisplayDensity and getSystemBars extensions ([#605](https://github.com/appium/appium-uiautomator2-driver/issues/605)) ([0e8a4cf](https://github.com/appium/appium-uiautomator2-driver/commit/0e8a4cf24540ec44569422c60c50367c3cc69888))
+
 ## [2.20.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.19.0...v2.20.0) (2023-04-26)
 
 

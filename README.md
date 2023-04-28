@@ -1252,7 +1252,7 @@ Sends a text to the given element by replacing its previous content. Available s
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 elementId | string | yes | Hexadecimal identifier of the destination text input | 123456-3456-3435-3453453
-text | string | yes | The text to enter. It could also contain Unicode characters. If the text ends with `\n` then the Enter key press is going to be emulated after it is entered (the line break itself will be cut off from the typed text). | yolo
+text | string | yes | The text to enter. It could also contain Unicode characters. If the text ends with `\\n` (the backslash must be escaped, so the char is NOT translated into `0x0A`) then the Enter key press is going to be emulated after it is entered (the `\\n` substring itself will be cut off from the typed text). | yolo
 
 
 ## Applications Management

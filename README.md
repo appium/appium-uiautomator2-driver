@@ -1205,13 +1205,13 @@ strength | 0 or 1 or 2 or 3 or 4 | yes | One of possible signal strength values,
 
 ### mobile: gsmVoice
 
-Emulate a GSM call to the given phone number. Only works on emulators. Available since driver version 2.22
+Emulate GSM voice state change event. Only works on emulators. Available since driver version 2.22
 
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-state | on or off | yes | Voice state | off
+state | on or off or denied or searching or roaming or home or unregistered | yes | Voice state | off
 
 ### mobile: powerAC
 

@@ -1,3 +1,10 @@
+## [2.22.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.22.0...v2.22.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* Extension name ([4804648](https://github.com/appium/appium-uiautomator2-driver/commit/48046485c9b54108310bbcfe85710f6737b2fe3e))
+
 ## [2.22.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.21.0...v2.22.0) (2023-04-28)
 
 

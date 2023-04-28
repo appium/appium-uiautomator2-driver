@@ -1,3 +1,10 @@
+## [2.22.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.21.0...v2.22.0) (2023-04-28)
+
+
+### Features
+
+* Add more mobile extensions ([#606](https://github.com/appium/appium-uiautomator2-driver/issues/606)) ([55a1e79](https://github.com/appium/appium-uiautomator2-driver/commit/55a1e798ac73c812ad7cc0d8897d330f9d51c2b0))
+
 ## [2.21.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.20.0...v2.21.0) (2023-04-27)
 
 

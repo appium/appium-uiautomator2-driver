@@ -1161,6 +1161,99 @@ Values are dictionaries with the following properties:
 - `width`: Bar width (might be zero if the bar is not present in the system info output)
 - `height`: Bar height (might be zero if the bar is not present in the system info output)
 
+### mobile: fingerprint
+
+Emulate [fingerprint](https://learn.microsoft.com/en-us/xamarin/android/platform/fingerprint-authentication/enrolling-fingerprint) on Android Emulator. Only works on API 23+. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+fingerprintId | number | yes | The value is the id for the finger that was "scanned". It is a unique integer that you assign for each virtual fingerprint. When the app is running you can run this same command each time the emulator prompts you for a fingerprint, you can run the adb command and pass it the fingerprintId to simulate the fingerprint scan. | 1
+
+### mobile: sendSms
+
+Emulate sending an SMS to the given phone number. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+phoneNumber | string | yes | The phone number to send SMS to | 0123456789
+message | string | yes | The SMS message payload | Hello
+
+### mobile: gsmCall
+
+Emulate a GSM call to the given phone number. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+phoneNumber | string | yes | The phone number to call to | 0123456789
+action | call or accept or cancel or hold | yes | One of possible actions to take | accept
+
+### mobile: gsmSignal
+
+Emulate GSM signal strength change event. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+strength | 0 or 1 or 2 or 3 or 4 | yes | One of possible signal strength values, where 4 is the best signal. | 3
+
+### mobile: gsmVoice
+
+Emulate a GSM call to the given phone number. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+state | on or off | yes | Voice state | off
+
+### mobile: powerAC
+
+Emulate AC power state change. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+state | on or off | yes | AC Power state | off
+
+### mobile: powerCapacity
+
+Emulate power capacity change. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+percent | 0 to 100 | yes | Percentage value in range [0, 100] | 50
+
+### mobile: networkSpeed
+
+Emulate different network connection speed modes. Only works on emulators. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+speed | gsm or scsd or gprs or edge or umts or hsdpa or lte or evdo or full | yes | Mobile network speed mode name | edge
+
+### mobile: replaceElementValue
+
+Sends a text to the given element by replacing its previous content. Available since driver version 2.22
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId | string | yes | Hexadecimal identifier of the destination text input | 123456-3456-3435-3453453
+text | string | yes | The text to enter. It could also contain Unicode characters. If the text ends with `\\n` (the backslash must be escaped, so the char is NOT translated into `0x0A`) then the Enter key press is going to be emulated after it is entered (the `\\n` substring itself will be cut off from the typed text). | yolo
+
 
 ## Applications Management
 

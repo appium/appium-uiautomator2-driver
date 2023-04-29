@@ -1254,6 +1254,18 @@ Name | Type | Required | Description | Example
 elementId | string | yes | Hexadecimal identifier of the destination text input | 123456-3456-3435-3453453
 text | string | yes | The text to enter. It could also contain Unicode characters. If the text ends with `\\n` (the backslash must be escaped, so the char is NOT translated into `0x0A`) then the Enter key press is going to be emulated after it is entered (the `\\n` substring itself will be cut off from the typed text). | yolo
 
+### mobile: openNotifications
+
+Opens notifications drawer on the device under test. Does nothing if the drawer is already opened. Available since driver version 2.23
+
+### mobile: toggleGps
+
+Switches GPS setting state. This API only works reliably since Android 12 (API 31). Available since driver version 2.23
+
+### mobile: isGpsEnabled
+
+Returns `true` if GPS is enabled on the device under test. Available since driver version 2.23
+
 
 ## Applications Management
 

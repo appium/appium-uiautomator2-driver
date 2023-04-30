@@ -1,3 +1,10 @@
+## [2.23.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.22.1...v2.23.0) (2023-04-30)
+
+
+### Features
+
+* Add mobile wrappers for GPS and notification helpers ([#608](https://github.com/appium/appium-uiautomator2-driver/issues/608)) ([97c2989](https://github.com/appium/appium-uiautomator2-driver/commit/97c2989bcf469bb45e735237fe91c4797f2403ea))
+
 ## [2.22.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.22.0...v2.22.1) (2023-04-28)
 
 

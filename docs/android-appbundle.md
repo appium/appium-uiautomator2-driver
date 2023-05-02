@@ -62,7 +62,7 @@ Set `fullReset: true` if you would like to test against the app using different 
 
 Appium only installs the minimum set of resources, following the behavior of the appbundle feature. For example, if a device's language is set of English, Appium will only install the `en` resource. The installed apk will have no Japanese resources.
 
-In orfer to force re-install with a different set of language resources, specify `fullreset: true`
+In orfer to force re-install with a different set of language resources, specify `fullReset: true`
 
 ## An example project
 

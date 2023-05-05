@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
-import { PNG } from 'pngjs';
+import sharp from 'sharp';
 import { SCROLL_CAPS } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
 import ADB from 'appium-adb';
@@ -75,13 +75,11 @@ describe('testViewportCommands', function () {
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');
     const viewB64 = Buffer.from(viewScreen, 'base64');
-    const fullImg = new PNG({filterType: 4});
-    await B.promisify(fullImg.parse).call(fullImg, fullB64);
-    const viewImg = new PNG({filterType: 4});
-    await B.promisify(viewImg.parse).call(viewImg, viewB64);
+    const fullImgMeta = await sharp(fullB64).metadata();
+    const viewImgMeta = await sharp(viewB64).metadata();
     viewportRect.top.should.eql(statBarHeight);
-    viewImg.height.should.eql(viewportRect.height);
-    viewImg.width.should.eql(fullImg.width);
-    fullImg.height.should.be.above(viewImg.height);
+    viewImgMeta.height.should.eql(viewportRect.height);
+    viewImgMeta.width.should.eql(fullImgMeta.width);
+    fullImgMeta.height.should.be.above(viewImgMeta.height);
   });
 });

@@ -1266,6 +1266,69 @@ Switches GPS setting state. This API only works reliably since Android 12 (API 3
 
 Returns `true` if GPS is enabled on the device under test. Available since driver version 2.23
 
+### mobile: getPerformanceDataTypes
+
+Fetches the list of supported perfomance data types that could be used as `dataType` argument value to [mobile: getPerformanceData](#mobile-getperformancedata) extension. Available since driver version 2.24
+
+#### Returned Result
+
+List of strings, where each item is data type name.
+
+### mobile: getPerformanceData
+
+Retrieves performance data about the given Android subsystem. The data is parsed from the output of the dumpsys utility. Available since driver version 2.24
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+packageName | string | yes | The name of the package identifier to fetch the data for | com.myapp
+dataType | string | yes | One of supported subsystem names. The full list of supported values is returned by [mobile: getPerformanceDataTypes](#mobile-getperformancedatatypes) extension. | batteryinfo or cpuinfo or memoryinfo or networkinfo
+
+#### Returned Result
+
+The output depends on the selected subsystem. It is organized into a table, where the first row represents column names and the following rows represent the sampled data for each column.
+Example output for different data types:
+
+- batteryinfo:
+```
+[
+  [power],
+  [23]
+]
+```
+- memoryinfo:
+```
+[
+  [totalPrivateDirty, nativePrivateDirty, dalvikPrivateDirty, eglPrivateDirty, glPrivateDirty, totalPss, nativePss, dalvikPss, eglPss, glPss, nativeHeapAllocatedSize, nativeHeapSize],
+  [18360, 8296, 6132, null, null, 42588, 8406, 7024, null, null, 26519, 10344]
+]
+```
+- networkinfo:
+```
+// emulator
+[
+  [bucketStart, activeTime, rxBytes, rxPackets, txBytes, txPackets, operations, bucketDuration],
+  [1478091600000, null, 1099075, 610947, 928, 114362, 769, 0, 3600000],
+  [1478095200000, null, 1306300, 405997, 509, 46359, 370, 0, 3600000]
+]
+// real devices
+[
+  [st, activeTime, rb, rp, tb, tp, op, bucketDuration],
+  [1478088000, null, null, 32115296, 34291, 2956805, 25705, 0, 3600],
+  [1478091600, null, null, 2714683, 11821, 1420564, 12650, 0, 3600],
+  [1478095200, null, null, 10079213, 19962, 2487705, 20015, 0, 3600],
+  [1478098800, null, null, 4444433, 10227, 1430356, 10493, 0, 3600]
+]
+```
+- cpuinfo:
+```
+[
+  [user, kernel],
+  [0.9, 1.3]
+]
+```
+
 
 ## Applications Management
 

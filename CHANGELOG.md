@@ -1,3 +1,10 @@
+## [2.24.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.23.0...v2.24.0) (2023-05-05)
+
+
+### Features
+
+* Add mobile wrapper for performance data collectors ([#613](https://github.com/appium/appium-uiautomator2-driver/issues/613)) ([cfd13f8](https://github.com/appium/appium-uiautomator2-driver/commit/cfd13f8e3d2cec60c0c0379e8336f3a62753cd96))
+
 ## [2.23.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.22.1...v2.23.0) (2023-04-30)
 
 

@@ -3,7 +3,6 @@ import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
 import { SCROLL_CAPS } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
-import ADB from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,13 +10,8 @@ chai.use(chaiAsPromised);
 let driver;
 
 describe('testViewportCommands', function () {
-  const adb = new ADB();
 
   before(async function () {
-    if (await adb.getApiLevel() === 25) {
-      // very flakey with API25
-      return this.skip();
-    }
     driver = await initSession(SCROLL_CAPS);
   });
   after(async function () {

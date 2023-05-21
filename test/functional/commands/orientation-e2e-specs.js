@@ -3,7 +3,6 @@ import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
-import ADB from 'appium-adb';
 
 
 chai.should();
@@ -39,11 +38,7 @@ describe('apidemo - orientation -', function () {
     });
   });
   describe('setting -', function () {
-    const adb = new ADB();
     before(async function () {
-      if (await adb.getApiLevel() === 25) {
-        return this.skip(); // this test is very flaky with API25
-      }
       driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
         'appium:appActivity': '.view.TextFields'
       }));

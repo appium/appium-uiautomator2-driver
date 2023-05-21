@@ -12,15 +12,19 @@ jobs:
         - chromedriverVersion: "113.0.5672.63"
           apiLevel: 32
           emuTag: google_apis
+          arch: x86_64
         - chromedriverVersion: "83.0.4103.39"
           apiLevel: 30
           emuTag: google_apis
+          arch: x86
         - chromedriverVersion: "2.44"
           apiLevel: 28
           emuTag: default
+          arch: x86
         - chromedriverVersion: "2.20"
           apiLevel: 23
           emuTag: default
+          arch: x86
 
     env:
       CI: true
@@ -75,6 +79,7 @@ jobs:
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
         target: ${{ matrix.emuTag }}
+        arch: ${{ matrix.arch }}
     - name: Save logcat output
       if: ${{ always() }}
       uses: actions/upload-artifact@master

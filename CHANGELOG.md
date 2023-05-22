@@ -1,3 +1,10 @@
+## [2.24.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.24.1...v2.24.2) (2023-05-22)
+
+
+### Bug Fixes
+
+* Mobile method name ([896ade4](https://github.com/appium/appium-uiautomator2-driver/commit/896ade4bc74f049dda813a6ed675141919d25437))
+
 ## [2.24.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.24.0...v2.24.1) (2023-05-16)
 
 

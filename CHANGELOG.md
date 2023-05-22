@@ -1,3 +1,10 @@
+## [2.25.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.24.2...v2.25.0) (2023-05-22)
+
+
+### Features
+
+* Add a wrapper over status bar commands ([#615](https://github.com/appium/appium-uiautomator2-driver/issues/615)) ([7ec9f8c](https://github.com/appium/appium-uiautomator2-driver/commit/7ec9f8c3582820ea37322113024d758b8752b3e5))
+
 ## [2.24.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.24.1...v2.24.2) (2023-05-22)
 
 

@@ -1338,7 +1338,7 @@ Performs commands on the system status bar. A thin wrapper over `adb shell cmd s
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 command | string | yes | One of [supported status bar commands](#status-bar-commands). | expandNotifications
-component | string | no | The name of the tile component. It is only required for (add|remove|click)Tile commands. | com.package.name/.service.QuickSettingsTileComponent
+component | string | no | The name of the tile component. It is only required for (add\|remove\|click)Tile commands. | com.package.name/.service.QuickSettingsTileComponent
 
 #### Status Bar Commands
 

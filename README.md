@@ -1329,6 +1329,31 @@ Example output for different data types:
 ]
 ```
 
+### mobile: statusBar
+
+Performs commands on the system status bar. A thin wrapper over `adb shell cmd statusbar` CLI. Works on Android 8 (Oreo) and newer. Available since driver version 2.25
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+command | string | yes | One of [supported status bar commands](#status-bar-commands). | expandNotifications
+component | string | no | The name of the tile component. It is only required for (add\|remove\|click)Tile commands. | com.package.name/.service.QuickSettingsTileComponent
+
+#### Status Bar Commands
+
+- expandNotifications: Open the notifications panel.
+- expandSettings: Open the notifications panel and expand quick settings if present.
+- collapse: Collapse the notifications and settings panel.
+- addTile: Add a TileService of the specified component.
+- removeTile: Remove a TileService of the specified component.
+- clickTile: Click on a TileService of the specified component.
+- getStatusIcons: Returns the list of status bar icons and the order they appear in. Each list item is separated with a new line character.
+
+#### Returned Result
+
+The actual downstream command output. It depends on the selected command and might be empty.
+
 
 ## Applications Management
 

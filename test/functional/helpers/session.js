@@ -23,7 +23,15 @@ async function initSession (caps, remoteOpts = {}) {
   logger.debug(`Starting session on ${host}:${port}`);
   driver = await retry(INIT_RETRIES, async (x) => await remote(x), opts);
 
-  // In Travis, there is sometimes a popup
+  attemptToDismissAlert(caps);
+
+  await driver.setTimeout({implicit: process.env.CI ? 30000 : 5000});
+
+  return driver;
+}
+
+async function attemptToDismissAlert (caps) {
+  // In CI environment, the alert "System UI isn't responding" may appear due to less machine resources.
   if (process.env.CI) {
     for (const btnId of ['android:id/button1', 'android:id/aerr_wait']) {
       let alertFound = false;
@@ -57,10 +65,6 @@ async function initSession (caps, remoteOpts = {}) {
       }
     }
   }
-
-  await driver.setTimeout({implicit: process.env.CI ? 30000 : 5000});
-
-  return driver;
 }
 
 async function deleteSession () {
@@ -69,4 +73,4 @@ async function deleteSession () {
   } catch (ign) {}
 }
 
-export { initSession, deleteSession };
+export { initSession, deleteSession, attemptToDismissAlert };

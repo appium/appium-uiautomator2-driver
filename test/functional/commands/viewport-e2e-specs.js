@@ -2,8 +2,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
 import { SCROLL_CAPS } from '../desired';
-import { initSession, deleteSession } from '../helpers/session';
-import ADB from 'appium-adb';
+import { initSession, deleteSession, attemptToDismissAlert } from '../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,19 +10,20 @@ chai.use(chaiAsPromised);
 let driver;
 
 describe('testViewportCommands', function () {
-  const adb = new ADB();
+
+  const caps = SCROLL_CAPS;
 
   before(async function () {
-    if (await adb.getApiLevel() === 25) {
-      // very flakey with API25
-      return this.skip();
-    }
-    driver = await initSession(SCROLL_CAPS);
+    driver = await initSession(caps);
   });
   after(async function () {
     if (driver) {
       await deleteSession();
     }
+  });
+
+  beforeEach(function () {
+    attemptToDismissAlert(caps);
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {

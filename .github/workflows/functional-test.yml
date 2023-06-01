@@ -9,18 +9,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
+        - chromedriverVersion: "113.0.5672.63"
+          apiLevel: 32
+          emuTag: google_apis
+          arch: x86_64
         - chromedriverVersion: "83.0.4103.39"
           apiLevel: 30
           emuTag: google_apis
+          arch: x86
         - chromedriverVersion: "2.44"
           apiLevel: 28
           emuTag: default
-        - chromedriverVersion: "2.28"
-          apiLevel: 25
-          emuTag: default
+          arch: x86
         - chromedriverVersion: "2.20"
           apiLevel: 23
           emuTag: default
+          arch: x86
 
     env:
       CI: true
@@ -67,8 +71,7 @@ jobs:
         script: |
           npm run e2e-test:driver
           npm run e2e-test:commands
-          # skip find tests with api-25 as they are too flaky 
-          [[ "${{ matrix.apiLevel }}" == "25" ]] || npm run e2e-test:commands:find
+          npm run e2e-test:commands:find
           npm run e2e-test:commands:general
           npm run e2e-test:commands:keyboard
         avd-name: ${{ env.ANDROID_AVD }}
@@ -76,6 +79,9 @@ jobs:
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
         target: ${{ matrix.emuTag }}
+        arch: ${{ matrix.arch }}
+        ram-size: 4096M
+        heap-size: 1024M
     - name: Save logcat output
       if: ${{ always() }}
       uses: actions/upload-artifact@master

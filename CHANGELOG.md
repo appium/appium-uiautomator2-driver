@@ -1,3 +1,10 @@
+## [2.25.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.1...v2.25.2) (2023-06-02)
+
+
+### Miscellaneous Chores
+
+* Bump appium-adb ([30ea8ae](https://github.com/appium/appium-uiautomator2-driver/commit/30ea8ae511e241743b5787cc157467eb87a38b1e))
+
 ## [2.25.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.0...v2.25.1) (2023-05-24)
 
 

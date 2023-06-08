@@ -1,3 +1,10 @@
+## [2.25.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.2...v2.25.3) (2023-06-08)
+
+
+### Miscellaneous Chores
+
+* add logging for mjpeg broadcast request ([#622](https://github.com/appium/appium-uiautomator2-driver/issues/622)) ([da64bf5](https://github.com/appium/appium-uiautomator2-driver/commit/da64bf5ba2ed1ea95a6c2292d9ea557bd8229f4f))
+
 ## [2.25.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.1...v2.25.2) (2023-06-02)
 
 

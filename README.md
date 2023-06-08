@@ -48,7 +48,7 @@ appium:printPageSourceOnFindFailure | Enforces the server to dump the actual XML
 
 Capability Name | Description
 --- | ---
-appium:systemPort | The number of the port the UiAutomator2 server is listening on. By default the first free port from 8200..8299 range is selected. It is recommended to set this value if you are running [parallel tests](#parallel-tests) on the same machine.
+appium:systemPort | The number of the port on the host machine used for the UiAutomator2 server. By default the first free port from 8200..8299 range is selected. It is recommended to set this value if you are running [parallel tests](#parallel-tests) on the same machine.
 appium:skipServerInstallation | Skip the UiAutomator2 Server component installation on the device under test and all the related checks if set to `true`. This could help to speed up the session startup if you know for sure the correct server version is installed on the device. In case the server is not installed or an incorrect version of it is installed then you may get an unexpected error later. `false` by default
 appium:uiautomator2ServerLaunchTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is listening on the device. `30000` ms by default
 appium:uiautomator2ServerInstallTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is installed on the device. `20000` ms by default
@@ -96,7 +96,7 @@ appium:locale | Sets the locale for the app under test. See https://developer.an
 
 Capability Name | Description
 --- | ---
-appium:adbPort | Number of the port where ADB is running. `5037` by default
+appium:adbPort | Number of the port on the host machine where ADB is running. `5037` by default
 appium:remoteAdbHost | Address of the host where ADB is running (the value of `-H` ADB command line option). Unset by default
 appium:adbExecTimeout | Maximum number of milliseconds to wait until single ADB command is executed. `20000` ms by default
 appium:clearDeviceLogsOnStart | If set to `true` then UiAutomator2 deletes all the existing logs in the device buffer before starting a new test
@@ -147,7 +147,7 @@ appium:unlockSuccessTimeout | Maximum number of milliseconds to wait until the d
 
 Capability Name | Description
 --- | ---
-appium:mjpegServerPort | The number of the port UiAutomator2 server starts the MJPEG server on. If not provided then the screenshots broadcasting service on the remote device does not get exposed to a local port (e.g. no adb port forwarding is happening)
+appium:mjpegServerPort | The number of the port on the host machine that UiAutomator2 server starts the MJPEG server on. If not provided then the screenshots broadcasting service on the remote device does not get exposed to a local port (e.g. no adb port forwarding is happening)
 appium:mjpegScreenshotUrl | The URL of a service that provides realtime device screenshots in MJPEG format. If provided then the actual command to retrieve a screenshot will be requesting pictures from this service rather than directly from the server
 
 ### Web Context
@@ -256,7 +256,7 @@ which allows you to avoid possible issues with such sessions silently running/ex
 
 ## Settings API
 
-UiAutomator2 driver supports Appium [Settings API](https://appium.io/docs/en/advanced-concepts/settings/).
+UiAutomator2 driver supports Appium [Settings API](https://appium.io/docs/en/latest/guides/settings/).
 Along with the common settings the following driver-specific settings are currently available:
 
 Name | Type | Description
@@ -278,8 +278,8 @@ shutdownOnPowerDisconnect | boolean | Whether to shutdown the server if the devi
 simpleBoundsCalculation | boolean | Whether to calculate element bounds as absolute values (`true`) or check if the element is covered by other elements and thus partially hidden (`false`, the default behaviour). Setting this setting to `true` helps to improve the performance of XML page source generation, but decreases bounds preciseness. Use with care.
 trackScrollEvents | boolean | Whether to apply scroll events tracking (`true`, the default value), so the server could calculate the value of `contentSize` attribute. Having this setting enabled may add delays to all scrolling actions.
 wakeLockTimeout | long | The timeout in milliseconds of wake lock that UiAutomator2 server acquires by default to prevent the device under test going to sleep while an automated test is running. By default the server acquires the lock for 24 hours. Setting this value to zero forces the server to release the wake lock.
-serverPort | int | The port number to start UiAutomator2 server on. Do not mix this with the `systemPort`, because this port is being acquired on the remote device under test rather than on the host machine. Must be in range 1024..65535. `6790` by default
-mjpegServerPort | int | The port number on the remote device to start MJPEG screenshots broadcaster on. Must be in range 1024..65535. `7810` by default
+serverPort | int | The number of the port on the remote device to start UiAutomator2 server on. Do not mix this with `systemPort`, which is acquired on the host machine. Must be in range 1024..65535. `6790` by default
+mjpegServerPort | int | The number of the port on the remote device to start MJPEG screenshots broadcaster on. Must be in range 1024..65535. `7810` by default
 mjpegServerFramerate | int | The maximum count of screenshots per second taken by the MJPEG screenshots broadcaster. Must be in range 1..60. `10` by default
 mjpegScalingFactor | int | The percentage value used to apply downscaling on the screenshots generated by the MJPEG screenshots broadcaster. Must be in range 1..100. `50` is by default, which means that screenshots are downscaled to the half of their original size keeping their original proportions.
 mjpegServerScreenshotQuality | int | The percentage value used to apply lossy JPEG compression on the screenshots generated by the MJPEG screenshots broadcaster. Must be in range 1..100. `50` is by default, which means that screenshots are compressed to the half of their original quality.

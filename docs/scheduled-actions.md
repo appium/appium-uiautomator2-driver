@@ -61,14 +61,14 @@ The history of executions of the particular action. An error is thrown if no act
 The returned result map has the following items:
 
 Name | Type | Description | Example
---- | --- | --- | --- | ---
+--- | --- | --- | ---
 repeats | number | The number of times this action has been repeated so far. | 1
 stepResults | list&lt;list&lt;map&gt;&gt; | The history of step executions for each action run. Items in this list are sorted by execution timestamp in descending order. The maximum length of the list is limited by `maxHistoryItems` action value | See below
 
 The result of each action step is represented by the map inside each `stepResulsts` array item containing the following items:
 
 Name | Type | Description | Example
---- | --- | --- | --- | ---
+--- | --- | --- | ---
 name | string | The name of the corresponding step. | clickStep
 type | string | One of supported step typed. | gesture
 timestamp | number | The Unix timestamp in milliseconds when the step started its execution. | 1685370112000

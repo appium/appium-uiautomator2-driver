@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Sometimes it is necessary to verify a UI scenario where one has to assert a UI control has appeared on the screen and then perform a decision action on this control. An example of such control might be a notification or any other popup that automatically disappears shortly after being shown. The WebDriver protocol uses HTTP REST API to communicate with clients. This means if you want to assert the existence of the above popup in your test script or perform any action on it then it is necessary to send an HTTP request to the server and receive an answer from it. Furthermore, this is needed for each particular command or assertion you want to perform, e.g. click, find element, get text, etc. The time an HTTP request needs to reach the server and then its response to reach the client is the roundtrip time, and the length of it depends on many factors. For some complex setups the roundtrip duration may even be counted in seconds, which makes it impossible to quickly handle a UI element, because it would already not exist/disappear by the time your next request reaches the server.
+Sometimes it is necessary to verify a UI scenario where one has to assert a UI control has appeared on the screen and then perform a decision action on this control. An example of such control might be a notification or any other popup that automatically disappears shortly after being shown. The WebDriver protocol uses HTTP REST API to communicate with clients. This means if you want to assert the existence of the above popup in your test script or perform any action on it then it is necessary to send an HTTP request to the server and receive an answer from it. Furthermore, this is needed for each particular command or assertion you want to perform, e.g. click, find element, get text, etc. The time an HTTP request needs to reach the server and then its response to reach the client is the roundtrip time, and the length of it depends on many factors. For some complex setups the roundtrip duration may even be counted in seconds, which makes it impossible to quickly handle an UI element, because it would already not exist/disappear by the time your next request reaches the server.
 
 ## Scheduled Actions Concept
 
@@ -30,7 +30,7 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 type | string | yes | One of supported step types: `gesture`, `source`, `screenshot`. | gesture
 name | string | yes | Step name. It must not be unique, but is useful to track the step execution history. | click
-payload | map | yes | Step payload. The payload format depends on the actual step type. | Check the below list
+payload | map | yes | Step payload. The payload format depends on the actual step type. | Check on [Step Payload](#step-payload) below
 
 #### Step Payload
 

@@ -372,6 +372,34 @@ url | string | yes | The URL to start | theapp://login/
 package | string | yes | The name of the package to start the URI with | 'com.mycompany'
 waitForLaunch | boolean | no | If `false` then ADB won't wait for the started activity to return the control. `true` by default | false
 
+### mobile: getLogTypes
+
+Get available log types.
+
+#### Returned Result
+
+The command returns the lis of available log types. e.g. `["logcat", "bugreport", "server"]`
+
+### mobile: getLog
+
+Get logs
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+type | string | yes | The type of log to get | `logcat`
+
+#### Returned Result
+
+Returns the list of logs
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+level | string | The log level | `ALL`
+message | string| The actual log | `06-08 22:06:09.730  8252  8293 D BatteryInfo: time for getStats: 0ms`
+timestamp | number | The log's timestamp | `1686287167888`
+
 ### mobile: startLogsBroadcast
 
 Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected webcoket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.

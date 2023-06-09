@@ -8,6 +8,8 @@ Sometimes it is necessary to verify a UI scenario where one has to assert a UI c
 
 In order to address the problem above we have created the Scheduled Actions concept. The main idea there is to run the action code on the server side in asynchronous manner and only retrieve the detailed execution history if needed. `Action` is this context means emulating a gesture, or taking a screenshot, or taking a xml page source. More actions could be added later. The `scheduled` means after you create an action, or rather describe it in JSON, it is parsed and stored by the server for the further async execution. The client does not have any control over the previously scheduled action and can only unschedule it later or fetch its execution history. All actions are being scheduled on the main UI thread. All scheduled actions are reset automatically upon a new session creation.
 
+This feature is available in the UIA2 driver since version *2.26.0*
+
 ## mobile: scheduleAction
 
 Adds a new action to the list of scheduled actions.

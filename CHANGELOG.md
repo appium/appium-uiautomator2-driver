@@ -1,3 +1,10 @@
+## [2.26.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.3...v2.26.0) (2023-06-11)
+
+
+### Features
+
+* Add extensions for scheduled actions ([#616](https://github.com/appium/appium-uiautomator2-driver/issues/616)) ([3e1c24d](https://github.com/appium/appium-uiautomator2-driver/commit/3e1c24da84d7bc2084b32addad305575c252f43b))
+
 ## [2.25.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.2...v2.25.3) (2023-06-08)
 
 

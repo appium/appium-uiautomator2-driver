@@ -1355,6 +1355,11 @@ component | string | no | The name of the tile component. It is only required fo
 
 The actual downstream command output. It depends on the selected command and might be empty.
 
+### mobile: scheduleAction
+### mobile: unscheduleAction
+### mobile: getActionHistory
+
+These extensions allow to deal with short-living UI elements. Read [the documentation on Scheduled Actions](docs/scheduled-actions.md) for more details and code examples.
 
 ## Applications Management
 

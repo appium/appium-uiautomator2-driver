@@ -21,6 +21,8 @@ Available since Appium v1.19
  * _x_: The x-offset coordinate
  * _y_: The y-offset coordinate
  * _duration_: Click duration in milliseconds. `500` by default. The value must not be negative
+ * _locator_: The map containing [strategy and selector](../README.md#element-location) items to make it possible
+  to click dynamic elements.
 
 #### Usage examples
 
@@ -50,6 +52,8 @@ Available since Appium v1.21
   are parsed as relative offsets from the top left corner of the element.
  * _x_: The x-offset coordinate
  * _y_: The y-offset coordinate
+ * _locator_: The map containing [strategy and selector](../README.md#element-location) items to make it possible
+  to click dynamic elements.
 
 #### Usage examples
 
@@ -84,6 +88,8 @@ is based on the same foundation as W3C does.
   are parsed as relative offsets from the top left corner of the element.
  * _x_: The x-offset coordinate
  * _y_: The y-offset coordinate
+ * _locator_: The map containing [strategy and selector](../README.md#element-location) items to make it possible
+  to click dynamic elements.
 
 #### Usage examples
 

@@ -1,3 +1,10 @@
+## [2.26.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.0...v2.26.1) (2023-06-13)
+
+
+### Bug Fixes
+
+* make releaseActions to a no-op ([#625](https://github.com/appium/appium-uiautomator2-driver/issues/625)) ([740f90a](https://github.com/appium/appium-uiautomator2-driver/commit/740f90ae41ad761de6dfab92ef61b279fcad2cef))
+
 ## [2.26.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.25.3...v2.26.0) (2023-06-11)
 
 

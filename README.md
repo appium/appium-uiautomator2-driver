@@ -89,8 +89,8 @@ appium:enforceAppInstall | If set to `true` then the application under test is a
 Capability Name | Description
 --- | ---
 appium:localeScript | Canonical name of the locale to be set for the app under test, for example `Hans` in `zh-Hans-CN`. See https://developer.android.com/reference/java/util/Locale.html for more details.
-appium:language | Name of the language to extract application strings for. Strings are extracted for the current system language by default. Also sets the language for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. Example: en, ja
-appium:locale | Sets the locale for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. Example: EN, JA
+appium:language | Name of the language to extract application strings for. Strings are extracted for the current system language by default. Also sets the language for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. If `language` is provided then `locale` is also required to be set. The combination of both capability values must be a known locale and should be present in the list of available locales returned by the ICU's [getAvailableULocales()](https://unicode-org.github.io/icu/userguide/locale/#usage-retrieving-locales) method. The full list of supported locales is also dumped into the logcat output on failure. Example: en, ja
+appium:locale | Sets the locale for the app under test. See https://developer.android.com/reference/java/util/Locale.html for more details. If `locale` is provided then `language` is also required to be set. The combination of both capability values must be a known locale and should be present in the list of available locales returned by the ICU's [getAvailableULocales()](https://unicode-org.github.io/icu/userguide/locale/#usage-retrieving-locales) method. The full list of supported locales is also dumped into the logcat output on failure. Example: EN, JA
 
 ### ADB
 

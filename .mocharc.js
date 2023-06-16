@@ -1,4 +1,5 @@
 module.exports = {
-  require: ['@babel/register'],
-  forbidOnly: Boolean(process.env.CI)
+  require: ['ts-node/register'],
+  forbidOnly: Boolean(process.env.CI),
+  color: true,
 };

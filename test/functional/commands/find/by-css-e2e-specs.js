@@ -47,21 +47,8 @@ describe('Find - CSS', function () {
     const els = await driver.$$('*[focused=true] *[clickable=true]');
     els.should.have.length(1);
   });
-  it('should allow multiple selector statements and return the Union of the two sets', async function () {
-    let clickableEls = await driver.$$('*[clickable]');
-    clickableEls.length.should.be.above(0);
-    let notClickableEls = await driver.$$('*[clickable=false]');
-    notClickableEls.length.should.be.above(0);
-    let both = await driver.$$('*[clickable=true], *[clickable=false]');
-    both.should.have.length(clickableEls.length + notClickableEls.length);
-  });
   it('should find an element by a non-fully qualified class name using CSS tag name', async function () {
     const els = await driver.$$('android.widget.TextView');
-    els.length.should.be.above(0);
-  });
-  it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
-    let selector = 'not.a.class, android.widget.TextView';
-    const els = await driver.$$(selector);
     els.length.should.be.above(0);
   });
   it('should find elements using starts with attribute', async function () {

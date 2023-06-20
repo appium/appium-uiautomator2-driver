@@ -1362,6 +1362,25 @@ The actual downstream command output. It depends on the selected command and mig
 
 These extensions allow to deal with short-living UI elements. Read [the documentation on Scheduled Actions](docs/scheduled-actions.md) for more details and code examples.
 
+### mobile: screenshots
+
+Retrieves a screenshot of each display available to Android.
+This functionality is only supported since Android 10.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+displayId | number or string | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. Actual display identifiers could be retrived from the `adb shell dumpsys SurfaceFlinger --display-id` command output. | 1
+
+#### Returns
+
+A dictionary where each key is the diplay identifier and the value has the following keys:
+- `id`: The same display identifier
+- `name`: Display name
+- `isDefault`: Whether this display is the default one
+- `payload`: The actual PNG screenshot data encoded to base64 string
+
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:

@@ -1,3 +1,10 @@
+## [2.27.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.3...v2.27.0) (2023-06-21)
+
+
+### Features
+
+* add the description of setting API snapshotMaxDepth ([#629](https://github.com/appium/appium-uiautomator2-driver/issues/629)) ([c74ad63](https://github.com/appium/appium-uiautomator2-driver/commit/c74ad638af2bddd107bb774c76f2683acb7a8a07))
+
 ## [2.26.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.2...v2.26.3) (2023-06-21)
 
 

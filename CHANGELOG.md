@@ -1,3 +1,10 @@
+## [2.26.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.2...v2.26.3) (2023-06-21)
+
+
+### Bug Fixes
+
+* mobila: lock ([#630](https://github.com/appium/appium-uiautomator2-driver/issues/630)) ([de15791](https://github.com/appium/appium-uiautomator2-driver/commit/de157919d02cafdb85218be957b9b7e390efcd78))
+
 ## [2.26.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.1...v2.26.2) (2023-06-16)
 
 

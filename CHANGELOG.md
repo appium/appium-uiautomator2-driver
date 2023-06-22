@@ -1,3 +1,10 @@
+## [2.28.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.27.0...v2.28.0) (2023-06-22)
+
+
+### Features
+
+* Optimize server packages installation ([#631](https://github.com/appium/appium-uiautomator2-driver/issues/631)) ([ddfceab](https://github.com/appium/appium-uiautomator2-driver/commit/ddfceab31ac64afe67219537f7fe3f8d03bbfb28))
+
 ## [2.27.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.26.3...v2.27.0) (2023-06-21)
 
 

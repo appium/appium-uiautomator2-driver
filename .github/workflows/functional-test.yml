@@ -28,7 +28,6 @@ jobs:
           apiLevel: 23
           emuTag: default
           arch: x86
-      fail-fast: false
 
     env:
       CI: true

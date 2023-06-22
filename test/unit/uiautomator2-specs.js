@@ -31,8 +31,7 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are older than installed version', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mocks.helpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
@@ -55,8 +54,7 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are newer than installed version', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mocks.helpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
@@ -79,8 +77,7 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are the same as installed version', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mocks.helpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
@@ -128,8 +125,7 @@ describe('UiAutomator2', function () {
     });
 
     it('version numbers of new server and server.test are unknown', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mocks.helpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()
@@ -153,8 +149,7 @@ describe('UiAutomator2', function () {
 
 
     it('a server is installed but server.test is not', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mocks.helpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
       mocks.adb.expects('getApplicationInstallState').once()

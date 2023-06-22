@@ -38,7 +38,7 @@ async function attemptToDismissAlert (caps) {
       await retryInterval(ALERT_CHECK_RETRIES, ALERT_CHECK_INTERVAL, async function () {
         let btn;
         try {
-          btn = await driver.$(`#${btnId}`);
+          btn = await driver.$(`id=${btnId}`);
           alertFound = true;
         } catch (ign) {
           // no element found, so just finish

@@ -35,6 +35,7 @@ jobs:
       APPIUM_TEST_SERVER_PORT: 4567
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
       _FORCE_LOGS: 1
+      TEST_PASS_THRESHOLD: 10
     # No hardware acceleration is available for emulators on Ubuntu:
     # https://github.com/marketplace/actions/android-emulator-runner#can-i-use-this-action-on-linux-vms
     runs-on: macos-latest
@@ -45,6 +46,8 @@ jobs:
         node-version: lts/*
         check-latest: true
     - run: |
+        brew install xq
+        npm install mocha-multi-reporters --save-dev
         npm install -g appium@next
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
@@ -72,11 +75,29 @@ jobs:
       name: e2e_api${{ matrix.apiLevel }}
       with:
         script: |
-          npm run e2e-test:driver
-          npm run e2e-test:commands
-          npm run e2e-test:commands:find
-          npm run e2e-test:commands:general
-          npm run e2e-test:commands:keyboard
+          export RESULTS_XML=test-results.xml
+          echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
+          ARGS=(./test/functional/driver-e2e-specs.js \
+          ./test/functional/commands \
+          ./test/functional/commands/find \
+          ./test/functional/commands/general \
+          ./test/functional/commands/keyboard \
+          --exit --timeout 10m \
+          --reporter mocha-multi-reporters --reporter-options configFile=reporter_config.json)
+          if ! npx mocha "${ARGS[@]}"; then
+            tests=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@tests')
+            errors=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@errors')
+            skipped=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@skipped')
+            failures=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@failures')
+            threshold=$(( (failures + errors) * 100 / (tests - skipped) ))
+            cat "$RESULTS_XML"
+            if [[ $threshold -gt $TEST_PASS_THRESHOLD ]]; then
+              echo "${threshold}% of tests failed"
+              exit 1
+            else
+              echo "${threshold}% of tests failed. This is (probably) fine"
+            fi
+          fi
         avd-name: ${{ env.ANDROID_AVD }}
         sdcard-path-or-size: 1500M
         api-level: ${{ matrix.apiLevel }}

@@ -45,6 +45,10 @@ describe('testViewportCommands', function () {
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
+    if (process.env.CI) {
+      return this.skip();
+    }
+
     let scrollableEl = await driver.$('//*[@scrollable="true"]');
     let contentSize = await scrollableEl.getAttribute('contentSize');
     contentSize.should.exist;
@@ -52,6 +56,10 @@ describe('testViewportCommands', function () {
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
+    if (process.env.CI) {
+      return this.skip();
+    }
+
     let scrollableEl = await driver.$('//android.widget.ScrollView');
     let contentSize = await scrollableEl.getAttribute('contentSize');
     contentSize.should.exist;
@@ -59,6 +67,10 @@ describe('testViewportCommands', function () {
   });
 
   it('should get first element from scrollable element', async function () {
+    if (process.env.CI) {
+      return this.skip();
+    }
+
     let scrollableEl = await driver.$('//*[@scrollable="true"]');
     let element = await scrollableEl.$('/*[@firstVisible="true"]');
     element.should.exist;

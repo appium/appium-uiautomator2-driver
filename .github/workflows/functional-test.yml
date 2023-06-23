@@ -35,6 +35,7 @@ jobs:
       APPIUM_TEST_SERVER_PORT: 4567
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
       _FORCE_LOGS: 1
+      TEST_PASS_THRESHOLD: 10
     # No hardware acceleration is available for emulators on Ubuntu:
     # https://github.com/marketplace/actions/android-emulator-runner#can-i-use-this-action-on-linux-vms
     runs-on: macos-latest
@@ -45,6 +46,8 @@ jobs:
         node-version: lts/*
         check-latest: true
     - run: |
+        brew install xq
+        npm install mocha-multi-reporters --save-dev
         npm install -g appium@next
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
@@ -71,12 +74,7 @@ jobs:
     - uses: reactivecircus/android-emulator-runner@v2
       name: e2e_api${{ matrix.apiLevel }}
       with:
-        script: |
-          npm run e2e-test:driver
-          npm run e2e-test:commands
-          npm run e2e-test:commands:find
-          npm run e2e-test:commands:general
-          npm run e2e-test:commands:keyboard
+        script: bash -xe scripts/run-functional-tests.sh
         avd-name: ${{ env.ANDROID_AVD }}
         sdcard-path-or-size: 1500M
         api-level: ${{ matrix.apiLevel }}

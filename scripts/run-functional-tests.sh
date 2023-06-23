@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export RESULTS_XML=test-results.xml
+RESULTS_XML=test-results.xml
 echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
 ARGS=(./test/functional/driver-e2e-specs.js \
 ./test/functional/commands \

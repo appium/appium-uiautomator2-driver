@@ -1,3 +1,10 @@
+## [2.29.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.28.1...v2.29.0) (2023-06-25)
+
+
+### Features
+
+* Allow to take screenshots of multiple Android displays ([#628](https://github.com/appium/appium-uiautomator2-driver/issues/628)) ([3501892](https://github.com/appium/appium-uiautomator2-driver/commit/3501892dcea9fec90dfedb38700888542e3f96f3))
+
 ## [2.28.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.28.0...v2.28.1) (2023-06-23)
 
 

@@ -1,8 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../../lib/driver';
+import {AndroidUiautomator2Driver} from '../../../lib/driver';
 import ADB from 'appium-adb';
-
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -21,7 +20,7 @@ describe('Touch', function () {
           {action: 'moveTo', options: {x: 50, y: 51}},
           {action: 'wait', options: {ms: 5000}},
           {action: 'moveTo', options: {x: -40, y: -41}},
-          {action: 'release', options: {}}
+          {action: 'release', options: {}},
         ];
         let touchStates = await driver.parseTouch(actions, false);
         touchStates.length.should.equal(5);
@@ -30,7 +29,7 @@ describe('Touch', function () {
           {action: 'moveTo', x: 50, y: 51},
           {action: 'wait', x: 50, y: 51},
           {action: 'moveTo', x: -40, y: -41},
-          {action: 'release'}
+          {action: 'release'},
         ];
         let index = 0;
         for (let state of touchStates) {

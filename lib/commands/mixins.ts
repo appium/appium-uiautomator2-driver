@@ -1,8 +1,14 @@
+/**
+ * @module
+ * @privateRemarks These mixins are kind of a mishmash of stuff from `appium-android-driver`, unique things, and stuff from `ExternalDriver`. Ideally, we should be pulling the method definitions right out of `ExternalDriver` whenever possible.  Also note that the mixins contain _more stuff than just commands or execute methods_.
+ */
+
 import type {Element, ExternalDriver, StringRecord} from '@appium/types';
 import type {
   ActionsMixin,
   AlertMixin,
   ElementMixin,
+  ExecuteMixin,
   FindMixin,
   GeneralMixin,
   NetworkMixin,
@@ -11,6 +17,7 @@ import type {
 import type {EmptyObject} from 'type-fest';
 import {AndroidUiautomator2Driver} from '../driver';
 import type * as types from './types';
+import {Uiautomator2ExecuteMethodMap} from '../execute-method-map';
 
 type UIA2Mixin<T = EmptyObject> = ThisType<import('../driver').AndroidUiautomator2Driver> & T;
 
@@ -70,7 +77,7 @@ export type UIA2FindMixin = UIA2Mixin<Pick<FindMixin, 'doFindElementOrEls'>>;
 
 export type UIA2GeneralMixin = UIA2Mixin<
   Pick<
-    GeneralMixin & NetworkMixin & ActionsMixin,
+    GeneralMixin & NetworkMixin & ActionsMixin & ExecuteMixin,
     | 'getPageSource'
     | 'doSendKeys'
     | 'back'
@@ -80,10 +87,11 @@ export type UIA2GeneralMixin = UIA2Mixin<
     | 'setUrl'
     | 'wrapBootstrapDisconnect'
     | 'keyevent'
+    | 'execute'
+    | 'executeMobile'
   >
 > & {
   getClipboard(): Promise<string>;
-  executeMobile(command: string, opts?: StringRecord): Promise<unknown>;
   mobileViewportScreenshot(): Promise<string>;
   mobileViewPortRect(): Promise<types.RelativeRect>;
   mobileDeepLink(opts: types.DeepLinkOpts): Promise<void>;

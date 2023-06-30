@@ -147,7 +147,7 @@ export interface InstallMultipleApksOptions {
   /**
    * The installation options.
    */
-  options: InstallOptions;
+  options?: InstallOptions;
 }
 export interface BackgroundAppOptions {
   /**
@@ -217,11 +217,11 @@ export interface DragOptions {
   /**
    * The x coordinate where the dragging ends
    */
-  endX: number;
+  endX?: number;
   /**
    * The y coordinate where the dragging ends
    */
-  endY: number;
+  endY?: number;
   /**
    * The speed at which to perform this gesture in pixels per second.
    * The value must not be negative.

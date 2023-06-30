@@ -64,7 +64,7 @@
   "dependencies": {
     "appium-adb": "^9.13.1",
     "appium-android-driver": "^5.14.0-alpha.3",
-    "appium-chromedriver": "^5.3.1",
+    "appium-chromedriver": "^5.5.1",
     "appium-uiautomator2-server": "^5.12.2",
     "asyncbox": "^2.3.1",
     "axios": "^1.x",
@@ -72,7 +72,7 @@
     "css-selector-parser": "^2.2.3",
     "lodash": "^4.17.4",
     "portscanner": "^2.2.0",
-    "source-map-support": "^0.x",
+    "source-map-support": "^0.5.21",
     "teen_process": "^2.0.0",
     "type-fest": "^3.12.0"
   },

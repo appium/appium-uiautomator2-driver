@@ -20,8 +20,8 @@ import os from 'node:os';
 import path from 'node:path';
 import {checkPortStatus, findAPortNotInUse} from 'portscanner';
 import type {ExecError} from 'teen_process';
-
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints';
+import {executeMethodMap} from './execute-method-map';
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import uiautomator2Helpers from './helpers';
 import {newMethodMap} from './method-map';
@@ -174,6 +174,8 @@ class AndroidUiautomator2Driver
     >
 {
   static newMethodMap = newMethodMap;
+
+  static executeMethodMap = executeMethodMap;
 
   uiautomator2?: UiAutomator2Server;
 

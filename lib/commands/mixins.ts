@@ -10,7 +10,6 @@ import type {
 } from 'appium-android-driver';
 import type {EmptyObject} from 'type-fest';
 import {AndroidUiautomator2Driver} from '../driver';
-import type {MobileCommandsMapping} from './general';
 import type * as types from './types';
 
 type UIA2Mixin<T = EmptyObject> = ThisType<import('../driver').AndroidUiautomator2Driver> & T;

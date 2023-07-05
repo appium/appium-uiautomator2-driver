@@ -54,6 +54,6 @@ export interface Uiautomator2SessionCaps
 
 export type Uiautomator2CreateResult = [string, Uiautomator2SessionCaps];
 
-export interface UIautomator2Settings extends AndroidSettings {
+export interface Uiautomator2Settings extends AndroidSettings {
   allowInvisibleElements: boolean;
 }

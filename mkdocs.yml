@@ -1,0 +1,10 @@
+INHERIT: ./node_modules/@appium/docutils/base-mkdocs.yml
+docs_dir: docs
+site_dir: site
+site_name: appium-uiautomator2-driver
+repo_url: git+https://github.com/appium/appium-uiautomator2-driver.git
+repo_name: appium/appium-uiautomator2-driver
+site_description: UiAutomator2 integration for Appium
+nav:
+  - Reference:
+      - reference/commands/appium-uiautomator2-driver.md

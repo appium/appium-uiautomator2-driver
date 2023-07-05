@@ -77,7 +77,7 @@
     "type-fest": "^3.12.0"
   },
   "devDependencies": {
-    "@appium/docutils": "^0.4.2",
+    "@appium/docutils": "^0.4.4",
     "@appium/eslint-config-appium": "^8.0.3",
     "@appium/eslint-config-appium-ts": "^0.3.1",
     "@appium/support": "^4.0.1",

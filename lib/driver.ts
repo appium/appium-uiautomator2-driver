@@ -26,7 +26,7 @@ import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import uiautomator2Helpers from './helpers';
 import {newMethodMap} from './method-map';
 import type {
-  UIautomator2Settings,
+  Uiautomator2Settings,
   Uiautomator2CreateResult,
   Uiautomator2DeviceDetails,
   Uiautomator2DeviceInfo,
@@ -163,13 +163,13 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
 const MEMOIZED_FUNCTIONS = ['getStatusBarHeight', 'getDevicePixelRatio'] as const;
 
 class AndroidUiautomator2Driver
-  extends AndroidDriver<UIautomator2Settings, Uiautomator2CreateResult>
+  extends AndroidDriver<Uiautomator2Settings, Uiautomator2CreateResult>
   implements
     ExternalDriver<
       Uiautomator2Constraints,
       string,
       StringRecord,
-      UIautomator2Settings,
+      Uiautomator2Settings,
       Uiautomator2CreateResult
     >
 {
@@ -931,7 +931,7 @@ class AndroidUiautomator2Driver
     return helpers.isChromeBrowser(this.opts.browserName);
   }
 
-  async updateSettings(settings: UIautomator2Settings) {
+  async updateSettings(settings: Uiautomator2Settings) {
     await this.settings.update(settings);
     await this.uiautomator2!.jwproxy.command('/appium/settings', 'POST', {settings});
   }
@@ -941,7 +941,7 @@ class AndroidUiautomator2Driver
     const serverSettings = (await this.uiautomator2!.jwproxy.command(
       '/appium/settings',
       'GET'
-    )) as Partial<UIautomator2Settings>;
+    )) as Partial<Uiautomator2Settings>;
     return {...driverSettings, ...serverSettings};
   }
 }

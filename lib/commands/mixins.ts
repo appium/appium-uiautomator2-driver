@@ -17,7 +17,6 @@ import type {
 import type {EmptyObject} from 'type-fest';
 import {AndroidUiautomator2Driver} from '../driver';
 import type * as types from './types';
-import {Uiautomator2ExecuteMethodMap} from '../execute-method-map';
 
 type UIA2Mixin<T = EmptyObject> = ThisType<import('../driver').AndroidUiautomator2Driver> & T;
 

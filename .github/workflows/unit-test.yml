@@ -2,42 +2,41 @@ name: Unit Tests
 
 on: [pull_request, push]
 
-
 jobs:
   prepare_matrix:
     runs-on: ubuntu-latest
     outputs:
       versions: ${{ steps.generate-matrix.outputs.versions }}
     steps:
-    - name: Generate Node.js versions matrix
-      id: generate-matrix
-      run: |
-        sudo apt-get install -y lynx
-        lynx -dump https://endoflife.date/nodejs | grep -E -o '[0-9]+[( a-zA-Z]+LTS\)' | grep -E -o '([0-9]+)' > eol.list
-        cat eol.list
-        lts1=$(cat eol.list | head -1)
-        lts2=$(cat eol.list | head -2 | tail -1)
-        lts3=$(cat eol.list | head -3 | tail -1)
-        VERSIONS="[$lts1, $lts2, $lts3]"
-        echo "versions=${VERSIONS}" >> "$GITHUB_OUTPUT"
+      - name: Generate Node.js versions matrix
+        id: generate-matrix
+        run: |
+          sudo apt-get install -y lynx
+          lynx -dump https://endoflife.date/nodejs | grep -E -o '[0-9]+[( a-zA-Z]+LTS\)' | grep -E -o '([0-9]+)' > eol.list
+          cat eol.list
+          lts1=$(cat eol.list | head -1)
+          lts2=$(cat eol.list | head -2 | tail -1)
+          lts3=$(cat eol.list | head -3 | tail -1)
+          VERSIONS="[$lts1, $lts2, $lts3]"
+          echo "versions=${VERSIONS}" >> "$GITHUB_OUTPUT"
 
-  test:
+  unit-test:
     needs:
-    - prepare_matrix
+      - prepare_matrix
     strategy:
       matrix:
         node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g npm
-      name: Update NPM
-    - run: npm install --no-package-lock
-      name: Install dev dependencies
-    - run: npm run lint
-      name: Run linter
-    - run: npm run test
-      name: Run unit tests
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g npm
+        name: Update NPM
+      - run: npm install --no-package-lock
+        name: Install dev dependencies
+      - run: npm run lint
+        name: Run linter
+      - run: npm run test
+        name: Run unit tests

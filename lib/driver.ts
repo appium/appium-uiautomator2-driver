@@ -228,7 +228,10 @@ class AndroidUiautomator2Driver
   }
 
   override validateDesiredCaps(caps: any): caps is Uiautomator2DriverCaps {
-    return super.validateDesiredCaps(caps) && androidHelpers.validateDesiredCaps(caps);
+    return (
+      BaseDriver.prototype.validateDesiredCaps.call(this, caps) &&
+      androidHelpers.validateDesiredCaps(caps)
+    );
   }
 
   override async createSession(
@@ -329,7 +332,7 @@ class AndroidUiautomator2Driver
   }
 
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
-    const sessionData = await super.getSession();
+    const sessionData = await BaseDriver.prototype.getSession.call(this);
     this.log.debug('Getting session details from server to mix in');
     const uia2Data = (await this.uiautomator2!.jwproxy.command('/', 'GET', {})) as any;
     return {...sessionData, ...uia2Data};

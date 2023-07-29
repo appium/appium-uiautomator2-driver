@@ -1,3 +1,10 @@
+## [2.29.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.2...v2.29.3) (2023-07-29)
+
+
+### Miscellaneous Chores
+
+* Bump chromedriver ([4ec1624](https://github.com/appium/appium-uiautomator2-driver/commit/4ec162400ac02a9ed4720608f0d11d239e9aa9d7))
+
 ## [2.29.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.1...v2.29.2) (2023-07-03)
 
 

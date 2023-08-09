@@ -1,3 +1,10 @@
+## [2.29.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.3...v2.29.4) (2023-08-09)
+
+
+### Miscellaneous Chores
+
+* Disable app capability presence validation ([#641](https://github.com/appium/appium-uiautomator2-driver/issues/641)) ([7c78543](https://github.com/appium/appium-uiautomator2-driver/commit/7c7854360c142fa8dc846795a13f62203b572b02))
+
 ## [2.29.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.2...v2.29.3) (2023-07-29)
 
 

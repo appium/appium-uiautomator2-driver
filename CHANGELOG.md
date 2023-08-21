@@ -1,3 +1,10 @@
+## [2.29.5](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.4...v2.29.5) (2023-08-21)
+
+
+### Bug Fixes
+
+* upgrade appium-chromedriver to latest ([ecfecbf](https://github.com/appium/appium-uiautomator2-driver/commit/ecfecbf75dce2f037a4344bed065fb538be64cda))
+
 ## [2.29.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.3...v2.29.4) (2023-08-09)
 
 

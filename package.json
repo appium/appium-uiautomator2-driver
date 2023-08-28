@@ -110,7 +110,7 @@
     "babel-plugin-source-map-support": "^2.2.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
-    "conventional-changelog-conventionalcommits": "^6.0.0",
+    "conventional-changelog-conventionalcommits": "^7.0.1",
     "eslint-config-prettier": "^8.5.0",
     "fancy-log": "^2.0.0",
     "lint-staged": "^14.0.0",

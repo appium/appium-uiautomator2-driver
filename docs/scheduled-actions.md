@@ -19,7 +19,7 @@ Adds a new action to the list of scheduled actions.
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 name | string | yes | The unique name of the action. | popupHandlingAction
-steps | string[] | yes | One or more action steps to execute. Steps are executed in sequential order. All steps are executed even if any of them fails. The execution is considered failed if at least one step fails. | Check [Action Steps](#action-steps)
+steps | ActionStep[] | yes | One or more action steps to execute. Steps are executed in sequential order. All steps are executed even if any of them fails. The execution is considered failed if at least one step fails. | Check [Action Steps](#action-steps)
 maxPass | number | no | If set to a number greater than zero then the action will stop rescheduling itself after it passes the desired number of times | 1
 maxFail | number | no | If set to a number greater than zero then the action will stop rescheduling itself after it fails the desired number of times | 1
 times | number | no | How many times the action must be executed itself. 1 by default | 10

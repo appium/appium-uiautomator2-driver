@@ -1,3 +1,10 @@
+## [2.29.6](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.5...v2.29.6) (2023-09-07)
+
+
+### Bug Fixes
+
+* Add missing command accessors ([#652](https://github.com/appium/appium-uiautomator2-driver/issues/652)) ([8e39019](https://github.com/appium/appium-uiautomator2-driver/commit/8e39019f869f9ec520ffe5cf886aa46fe2be487e))
+
 ## [2.29.5](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.4...v2.29.5) (2023-08-21)
 
 

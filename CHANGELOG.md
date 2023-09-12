@@ -1,3 +1,10 @@
+## [2.29.7](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.6...v2.29.7) (2023-09-12)
+
+
+### Miscellaneous Chores
+
+* Bump modules ([fcb6a3a](https://github.com/appium/appium-uiautomator2-driver/commit/fcb6a3ac19cd8f685a82cb8288879d74368e7f5e))
+
 ## [2.29.6](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.5...v2.29.6) (2023-09-07)
 
 

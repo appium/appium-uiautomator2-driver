@@ -27,6 +27,9 @@ export type UIA2ActionsMixin = UIA2Mixin<
   >
 > & {
   mobilePressKey(opts: types.PressKeyOptions): Promise<void>;
+  mobileScheduleAction(opts?: StringRecord): Promise<unknown>;
+  mobileGetActionHistory(opts?: types.ActionArgs): Promise<types.ActionResult>;
+  mobileUnscheduleAction(opts?: types.ActionArgs): Promise<unknown>;
 };
 
 export type UIA2AlertMixin = UIA2Mixin<

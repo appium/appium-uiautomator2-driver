@@ -1,3 +1,45 @@
+## [2.29.8](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.7...v2.29.8) (2023-09-14)
+
+
+### Miscellaneous Chores
+
+* Bump android driver ([a69ca17](https://github.com/appium/appium-uiautomator2-driver/commit/a69ca17842d315751af5cf25b1589148a3d41e2a))
+
+## [2.29.7](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.6...v2.29.7) (2023-09-12)
+
+
+### Miscellaneous Chores
+
+* Bump modules ([fcb6a3a](https://github.com/appium/appium-uiautomator2-driver/commit/fcb6a3ac19cd8f685a82cb8288879d74368e7f5e))
+
+## [2.29.6](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.5...v2.29.6) (2023-09-07)
+
+
+### Bug Fixes
+
+* Add missing command accessors ([#652](https://github.com/appium/appium-uiautomator2-driver/issues/652)) ([8e39019](https://github.com/appium/appium-uiautomator2-driver/commit/8e39019f869f9ec520ffe5cf886aa46fe2be487e))
+
+## [2.29.5](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.4...v2.29.5) (2023-08-21)
+
+
+### Bug Fixes
+
+* upgrade appium-chromedriver to latest ([ecfecbf](https://github.com/appium/appium-uiautomator2-driver/commit/ecfecbf75dce2f037a4344bed065fb538be64cda))
+
+## [2.29.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.3...v2.29.4) (2023-08-09)
+
+
+### Miscellaneous Chores
+
+* Disable app capability presence validation ([#641](https://github.com/appium/appium-uiautomator2-driver/issues/641)) ([7c78543](https://github.com/appium/appium-uiautomator2-driver/commit/7c7854360c142fa8dc846795a13f62203b572b02))
+
+## [2.29.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.2...v2.29.3) (2023-07-29)
+
+
+### Miscellaneous Chores
+
+* Bump chromedriver ([4ec1624](https://github.com/appium/appium-uiautomator2-driver/commit/4ec162400ac02a9ed4720608f0d11d239e9aa9d7))
+
 ## [2.29.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.1...v2.29.2) (2023-07-03)
 
 

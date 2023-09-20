@@ -547,6 +547,27 @@ export const executeMethodMap = {
       optional: ['displayId'],
     },
   },
+
+  'mobile: scheduleAction': {
+    command: 'mobileScheduleAction',
+    params: {
+      optional: ['opts'],
+    },
+  },
+
+  'mobile: getActionHistory': {
+    command: 'mobileGetActionHistory',
+    params: {
+      optional: ['opts'],
+    },
+  },
+
+  'mobile: unscheduleAction': {
+    command: 'mobileUnscheduleAction',
+    params: {
+      optional: ['opts'],
+    },
+  },
 } as const;
 
 export type Uiautomator2ExecuteMethodMap = typeof executeMethodMap;

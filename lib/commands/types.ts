@@ -1,4 +1,4 @@
-import {Rect} from '@appium/types';
+import {Rect, StringRecord} from '@appium/types';
 
 /**
  * Represents options for pressing a key on an Android device.
@@ -461,4 +461,13 @@ export interface ScreenshotsOpts {
    * If no matches were found then an error is thrown.
    */
   displayId?: number | string;
+}
+
+export interface ActionResult {
+  repeats: number;
+  stepResults: StringRecord[][];
+}
+
+export interface ActionArgs {
+  name: string;
 }

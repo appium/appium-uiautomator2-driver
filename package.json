@@ -1,6 +1,5 @@
 {
   "name": "appium-uiautomator2-driver",
-  "version": "2.29.2",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "appium",
@@ -8,10 +7,10 @@
     "automated testing",
     "android"
   ],
+  "version": "2.29.9",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
-  "version": "2.29.8",
   "author": "Appium Contributors",
   "license": "Apache-2.0",
   "repository": {

@@ -1,3 +1,10 @@
+## [2.29.9](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.8...v2.29.9) (2023-09-21)
+
+
+### Bug Fixes
+
+* check if the instrumentation process stops by sending a request ([#655](https://github.com/appium/appium-uiautomator2-driver/issues/655)) ([d42950a](https://github.com/appium/appium-uiautomator2-driver/commit/d42950acb44ad8458932f4617cf110825dab8737))
+
 ## [2.29.8](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.7...v2.29.8) (2023-09-14)
 
 

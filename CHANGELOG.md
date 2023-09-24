@@ -1,3 +1,10 @@
+## [2.29.10](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.9...v2.29.10) (2023-09-24)
+
+
+### Bug Fixes
+
+* release package ([#658](https://github.com/appium/appium-uiautomator2-driver/issues/658)) ([ef483e3](https://github.com/appium/appium-uiautomator2-driver/commit/ef483e34ec9a23c3b63ab76d849b25403435a58e))
+
 ## [2.29.9](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.8...v2.29.9) (2023-09-21)
 
 

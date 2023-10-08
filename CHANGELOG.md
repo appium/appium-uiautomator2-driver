@@ -1,3 +1,10 @@
+## [2.29.11](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.10...v2.29.11) (2023-10-08)
+
+
+### Miscellaneous Chores
+
+* Bump appium-adb ([92e9884](https://github.com/appium/appium-uiautomator2-driver/commit/92e98841a2bb5c6dfd7924d55a82bb65194c8b11))
+
 ## [2.29.10](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.9...v2.29.10) (2023-09-24)
 
 

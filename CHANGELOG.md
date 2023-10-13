@@ -1,3 +1,10 @@
+## [2.30.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.11...v2.30.0) (2023-10-13)
+
+
+### Features
+
+* add all the types ([#635](https://github.com/appium/appium-uiautomator2-driver/issues/635)) ([623f49b](https://github.com/appium/appium-uiautomator2-driver/commit/623f49ba363bcfd930021fb5fa7cfe030b5683fb))
+
 ## [2.29.11](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.10...v2.29.11) (2023-10-08)
 
 

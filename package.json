@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "2.29.11",
+  "version": "2.30.0",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
@@ -17,8 +17,6 @@
     "type": "git",
     "url": "https://github.com/appium/appium-uiautomator2-driver.git"
   },
-  "license": "Apache-2.0",
-  "author": "Appium Contributors",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "bin": {},

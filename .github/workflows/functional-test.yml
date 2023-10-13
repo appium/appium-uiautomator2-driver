@@ -48,7 +48,7 @@ jobs:
     - run: |
         brew install xq
         npm install mocha-multi-reporters --save-dev
-        npm install -g appium@next
+        npm install -g appium
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
     - uses: actions/setup-java@v3

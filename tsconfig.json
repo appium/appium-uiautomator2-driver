@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@appium/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "build",
+    "strict": false,
+    "checkJs": true,
+    "types": ["node", "mocha", "sinon-chai", "chai-as-promised"]
+  },
+  "include": ["lib", "index.js"]
+}

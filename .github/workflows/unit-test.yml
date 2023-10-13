@@ -2,7 +2,6 @@ name: Unit Tests
 
 on: [pull_request, push]
 
-
 jobs:
   prepare_matrix:
     runs-on: ubuntu-latest
@@ -13,9 +12,9 @@ jobs:
       id: generate-matrix
       run: echo "versions=$(curl -s https://endoflife.date/api/nodejs.json | jq -c '[[.[] | select(.lts != false)][:3] | .[].cycle | tonumber]')" >> "$GITHUB_OUTPUT"
 
-  test:
+  unit-test:
     needs:
-    - prepare_matrix
+      - prepare_matrix
     strategy:
       matrix:
         node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}

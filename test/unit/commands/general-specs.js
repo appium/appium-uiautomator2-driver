@@ -1,75 +1,93 @@
+// @ts-check
+
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
-import AndroidUiautomator2Driver from '../../../lib/driver';
+import {AndroidUiautomator2Driver} from '../../../lib/driver';
 import ADB from 'appium-adb';
+import sinonChai from 'sinon-chai';
 
-let driver;
-let sandbox = sinon.createSandbox();
-chai.should();
-chai.use(chaiAsPromised);
+const {expect} = chai;
+chai.use(chaiAsPromised).use(sinonChai);
 
 describe('General', function () {
-  describe('getWindowRect', function () {
-    beforeEach(function () {
-      driver = new AndroidUiautomator2Driver();
-    });
-    afterEach(function () {
-      sandbox.restore();
-    });
+  /** @type {AndroidUiautomator2Driver} */
+  let driver;
+  /** @type {import('sinon').SinonSandbox} */
+  let sandbox;
 
+  beforeEach(function () {
+    sandbox = sinon.createSandbox();
+    driver = new AndroidUiautomator2Driver();
+  });
+
+  afterEach(function () {
+    sandbox.restore();
+  });
+
+  describe('getWindowRect', function () {
     it('should get window size', async function () {
-      sandbox.stub(driver, 'getWindowSize')
-          .withArgs().returns({width: 300, height: 400});
+      sandbox.stub(driver, 'getWindowSize').resolves({width: 300, height: 400});
       const result = await driver.getWindowRect();
-      result.width.should.be.equal(300);
-      result.height.should.be.equal(400);
-      result.x.should.be.equal(0);
-      result.y.should.be.equal(0);
-    });
-    it('should raise error on non-existent mobile command', async function () {
-      await driver.executeMobile('fruta', {}).should.eventually.be.rejectedWith('Unknown mobile command "fruta"');
-    });
-    it('should accept sensorSet on emulator', async function () {
-      sandbox.stub(driver, 'isEmulator').returns(true);
-      let stub = sandbox.stub(driver, 'sensorSet');
-      await driver.executeMobile('sensorSet', { sensorType: 'acceleration', value: '0:9.77631:0.812349' });
-      stub.calledOnce.should.equal(true);
-      stub.calledWithExactly({ sensorType: 'acceleration', value: '0:9.77631:0.812349' });
+      expect(result).to.eql({
+        width: 300,
+        height: 400,
+        x: 0,
+        y: 0,
+      });
     });
   });
 
-  describe('mobileInstallMultipleApks', function () {
-    let adb = new ADB();
+  it('should raise error on non-existent mobile command', async function () {
+    await expect(driver.executeMobile('mobile: fruta', {})).to.be.rejectedWith(
+      /Unknown mobile command "mobile: fruta"/
+    );
+  });
+
+  describe('mobile: sensorSet', function () {
+    // note: this test does not depend on whether or not isEmulator returns
+    // true, because the "am I an emulator?" check happens in the sensorSet
+    // implementation, which is stubbed out.
+    it('should call sensorSet', async function () {
+      sandbox.stub(driver, 'sensorSet');
+      await driver.executeMobile('mobile: sensorSet', {
+        sensorType: 'acceleration',
+        value: '0:9.77631:0.812349',
+      });
+      expect(driver.sensorSet).to.have.been.calledOnceWithExactly({
+        sensorType: 'acceleration',
+        value: '0:9.77631:0.812349',
+      });
+    });
+  });
+
+  describe('mobile: installMultipleApks', function () {
+    /** @type {ADB} */
+    let adb;
 
     beforeEach(function () {
+      adb = new ADB();
       driver = new AndroidUiautomator2Driver();
       driver.adb = adb;
-      driver.helpers = {
-        configureApp: () => {}
-      };
-    });
-    afterEach(function () {
-      sandbox.restore();
+      sandbox.stub(driver.helpers, 'configureApp').resolves('/path/to/test/apk.apk');
+      sandbox.stub(adb, 'installMultipleApks');
     });
 
     it('should call mobileInstallMultipleApks', async function () {
-      sandbox.stub(driver.helpers, 'configureApp')
-          .returns(['/path/to/test/apk.apk']);
-      sandbox.stub(driver.adb, 'installMultipleApks')
-          .withArgs().returns();
-      await driver.executeMobile('installMultipleApks',
-        {apks: ['/path/to/test/apk.apk']});
+      await driver.executeMobile('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
+      expect(adb.installMultipleApks).to.have.been.calledOnceWith(['/path/to/test/apk.apk']);
     });
 
-    it('should raise error if no apks were given', async function () {
-      await driver.executeMobile('installMultipleApks', {apks: []})
-        .should.eventually.be.rejectedWith('No apks are given to install');
+    it('should reject if no apks were given', async function () {
+      await expect(
+        driver.executeMobile('mobile: installMultipleApks', {apks: []})
+      ).to.be.rejectedWith('No apks are given to install');
     });
 
-    it('should raise error if no apks were given', async function () {
-      await driver.executeMobile('installMultipleApks', {})
-        .should.eventually.be.rejectedWith('No apks are given to install');
+    it('should reject if no apks were given', async function () {
+      await expect(driver.executeMobile('mobile: installMultipleApks')).to.be.rejectedWith(
+        'No apks are given to install'
+      );
     });
   });
 });

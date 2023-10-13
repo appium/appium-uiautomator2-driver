@@ -1,21 +1,24 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
-import { SCROLL_CAPS } from '../desired';
-import { initSession, deleteSession, attemptToDismissAlert } from '../helpers/session';
+import {SCROLL_CAPS} from '../desired';
+import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
 
-let driver;
+const {expect} = chai;
 
 describe('testViewportCommands', function () {
+  /** @type {import('../../../lib/driver').AndroidUiautomator2Driver} */
+  let driver;
 
   const caps = SCROLL_CAPS;
 
   before(async function () {
     driver = await initSession(caps);
   });
+
   after(async function () {
     if (driver) {
       await deleteSession();
@@ -28,20 +31,14 @@ describe('testViewportCommands', function () {
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
     const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession();
-    pixelRatio.should.exist;
-    pixelRatio.should.not.equal(0);
-    statBarHeight.should.exist;
-    statBarHeight.should.not.equal(0);
-    viewportRect.should.exist;
-    viewportRect.left.should.exist;
-    viewportRect.top.should.exist;
-    viewportRect.width.should.exist;
-    viewportRect.height.should.exist;
+
+    expect(pixelRatio).not.to.be.empty;
+    expect(statBarHeight).to.be.greaterThan(0);
+    expect(viewportRect).to.have.keys(['left', 'top', 'width', 'height']);
   });
 
   it('should get scrollable element', async function () {
-    let scrollableEl = await driver.$('//*[@scrollable="true"]');
-    scrollableEl.should.exist;
+    await expect(driver.$('//*[@scrollable="true"]')).to.eventually.exist;
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
@@ -51,8 +48,8 @@ describe('testViewportCommands', function () {
 
     let scrollableEl = await driver.$('//*[@scrollable="true"]');
     let contentSize = await scrollableEl.getAttribute('contentSize');
-    contentSize.should.exist;
-    JSON.parse(contentSize).scrollableOffset.should.exist;
+    expect(contentSize).to.exist;
+    expect(JSON.parse(contentSize).scrollableOffset).to.exist;
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
@@ -62,8 +59,8 @@ describe('testViewportCommands', function () {
 
     let scrollableEl = await driver.$('//android.widget.ScrollView');
     let contentSize = await scrollableEl.getAttribute('contentSize');
-    contentSize.should.exist;
-    JSON.parse(contentSize).scrollableOffset.should.exist;
+    expect(contentSize).to.exist;
+    expect(JSON.parse(contentSize).scrollableOffset).to.exist;
   });
 
   it('should get first element from scrollable element', async function () {
@@ -72,8 +69,7 @@ describe('testViewportCommands', function () {
     }
 
     let scrollableEl = await driver.$('//*[@scrollable="true"]');
-    let element = await scrollableEl.$('/*[@firstVisible="true"]');
-    element.should.exist;
+    expect(await scrollableEl.$('/*[@firstVisible="true"]')).to.eventually.exist;
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {

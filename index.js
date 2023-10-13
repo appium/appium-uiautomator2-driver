@@ -1,6 +1,8 @@
-// transpile:main
+import {install} from 'source-map-support';
 
-import { AndroidUiautomator2Driver } from './lib/driver';
+install();
 
-export { AndroidUiautomator2Driver };
+import {AndroidUiautomator2Driver} from './lib/driver';
+
+export {AndroidUiautomator2Driver};
 export default AndroidUiautomator2Driver;

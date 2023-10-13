@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import path from 'path';
+import {API_DEMOS_APK_PATH} from 'android-apidemos';
 
 const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
 const ADB_EXEC_TIMEOUT = process.env.CI ? 60000 : 20000;
 
-function deepFreeze (object) {
+function deepFreeze(object) {
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
     const value = object[name];
@@ -17,7 +18,7 @@ function deepFreeze (object) {
   return Object.freeze(object);
 }
 
-function amendCapabilities (baseCaps, ...newCaps) {
+function amendCapabilities(baseCaps, ...newCaps) {
   return deepFreeze({
     alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
     firstMatch: [{}],
@@ -34,11 +35,9 @@ const GENERIC_CAPS = deepFreeze({
     'appium:automationName': 'uiautomator2',
     'appium:adbExecTimeout': ADB_EXEC_TIMEOUT,
     'appium:ignoreHiddenApiPolicyError': true,
-  }
+  },
 });
 
-
-const { API_DEMOS_APK_PATH } = require('android-apidemos');
 // http://www.impressive-artworx.de/tutorials/android/gps_tutorial_1.zip
 const gpsDemoApp = path.resolve(__dirname, 'assets', 'gpsDemo-debug.apk');
 
@@ -71,6 +70,11 @@ const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
 });
 
 export {
-  GENERIC_CAPS, APIDEMOS_CAPS, GPS_DEMO_CAPS, BROWSER_CAPS, SCROLL_CAPS,
-  SETTINGS_CAPS, amendCapabilities
+  GENERIC_CAPS,
+  APIDEMOS_CAPS,
+  GPS_DEMO_CAPS,
+  BROWSER_CAPS,
+  SCROLL_CAPS,
+  SETTINGS_CAPS,
+  amendCapabilities,
 };

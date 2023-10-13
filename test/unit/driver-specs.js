@@ -1,17 +1,17 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import AndroidUiautomator2Driver from '../../lib/driver';
+import {AndroidUiautomator2Driver} from '../../lib/driver';
 import sinon from 'sinon';
 import path from 'path';
 import B from 'bluebird';
-import { ADB } from 'appium-adb';
+import {ADB} from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
 let sandbox = sinon.createSandbox();
 
-function defaultStub (driver) {
-  sinon.stub(driver, 'fillDeviceDetails');
+function defaultStub(driver) {
+  sinon.stub(driver, 'getDeviceInfoFromUia2');
 }
 
 describe('driver.js', function () {
@@ -27,29 +27,27 @@ describe('driver.js', function () {
     it('should throw an error if app can not be found', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
-      await driver.createSession(null, null, {
-        firstMatch: [{}],
-        alwaysMatch: {
-          'appium:app': 'foo.apk'
-        }
-      }).should.be.rejectedWith('does not exist or is not accessible');
+      await driver
+        .createSession(null, null, {
+          firstMatch: [{}],
+          alwaysMatch: {
+            'appium:app': 'foo.apk',
+          },
+        })
+        .should.be.rejectedWith('does not exist or is not accessible');
     });
 
     it('should set sessionId', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
-      sinon.mock(driver).expects('checkAppPresent')
-          .once()
-          .returns(B.resolve());
-      sinon.mock(driver).expects('startUiAutomator2Session')
-          .once()
-          .returns(B.resolve());
+      sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+      sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
         alwaysMatch: {
           'appium:cap': 'foo',
           browserName: 'chrome',
-        }
+        },
       });
       driver.sessionId.should.exist;
       driver.caps.cap.should.equal('foo');
@@ -58,15 +56,13 @@ describe('driver.js', function () {
     it('should set the default context', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
-      sinon.mock(driver).expects('checkAppPresent')
-          .returns(B.resolve());
-      sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(B.resolve());
+      sinon.mock(driver).expects('checkAppPresent').returns(B.resolve());
+      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
         alwaysMatch: {
-          browserName: 'chrome'
-        }
+          browserName: 'chrome',
+        },
       });
       driver.curContext.should.equal('NATIVE_APP');
     });
@@ -77,14 +73,12 @@ describe('driver.js', function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
       let app = path.resolve('.');
-      sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(B.resolve());
-      sinon.mock(driver.helpers).expects('configureApp')
-          .returns(app);
+      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sinon.mock(driver.helpers).expects('configureApp').returns(app);
 
       await driver.createSession(null, null, {
         firstMatch: [{}],
-        alwaysMatch: {'appium:app': app}
+        alwaysMatch: {'appium:app': app},
       });
 
       await driver.checkAppPresent(); // should not error
@@ -98,16 +92,13 @@ describe('driver.js', function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
       let app = path.resolve('asdfasdf');
-      sinon.mock(driver).expects('checkAppPresent')
-          .returns(B.resolve());
-      sinon.mock(driver).expects('startUiAutomator2Session')
-          .returns(B.resolve());
-      sinon.mock(driver.helpers).expects('configureApp')
-          .returns(app);
+      sinon.mock(driver).expects('checkAppPresent').returns(B.resolve());
+      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sinon.mock(driver.helpers).expects('configureApp').returns(app);
 
       await driver.createSession(null, null, {
         firstMatch: [{}],
-        alwaysMatch: {'appium:app': app}
+        alwaysMatch: {'appium:app': app},
       });
 
       driver.checkAppPresent.restore();
@@ -152,16 +143,13 @@ describe('driver.js', function () {
       });
       describe('nativeWebScreenshot', function () {
         let proxyAvoidList;
-        let nativeWebScreenshotFilter = (item) => item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
+        let nativeWebScreenshotFilter = (item) =>
+          item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
           defaultStub(driver);
-          sinon.mock(driver).expects('checkAppPresent')
-              .once()
-              .returns(B.resolve());
-          sinon.mock(driver).expects('startUiAutomator2Session')
-              .once()
-              .returns(B.resolve());
+          sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+          sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
         });
 
         describe('on webview mode', function () {
@@ -175,8 +163,8 @@ describe('driver.js', function () {
                 platformName: 'Android',
                 'appium:deviceName': 'device',
                 browserName: 'chrome',
-                'appium:nativeWebScreenshot': false
-              }
+                'appium:nativeWebScreenshot': false,
+              },
             });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.be.empty;
@@ -188,8 +176,8 @@ describe('driver.js', function () {
                 platformName: 'Android',
                 'appium:deviceName': 'device',
                 browserName: 'chrome',
-                'appium:nativeWebScreenshot': true
-              }
+                'appium:nativeWebScreenshot': true,
+              },
             });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
@@ -205,8 +193,8 @@ describe('driver.js', function () {
                 platformName: 'Android',
                 'appium:deviceName': 'device',
                 browserName: 'chrome',
-                'appium:nativeWebScreenshot': true
-              }
+                'appium:nativeWebScreenshot': true,
+              },
             });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
@@ -220,8 +208,8 @@ describe('driver.js', function () {
                 platformName: 'Android',
                 'appium:deviceName': 'device',
                 browserName: 'chrome',
-                'appium:nativeWebScreenshot': false
-              }
+                'appium:nativeWebScreenshot': false,
+              },
             });
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             proxyAvoidList.should.not.be.empty;
@@ -251,7 +239,11 @@ describe('driver.js', function () {
       defaultStub(driver);
       driver.uiautomator2 = {jwproxy: {command: () => {}}};
       let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
-      await driver.doFindElementOrEls({strategy: 'xpath', selector: '/*[@firstVisible="true"]', context: 'foo'});
+      await driver.doFindElementOrEls({
+        strategy: 'xpath',
+        selector: '/*[@firstVisible="true"]',
+        context: 'foo',
+      });
       proxySpy.firstCall.args.should.eql([`/appium/element/foo/first_visible`, 'GET', {}]);
     });
   });
@@ -262,12 +254,20 @@ describe('driver.js', function () {
       defaultStub(driver);
       driver.uiautomator2 = {jwproxy: {command: () => {}}};
       let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
-      await driver.doFindElementOrEls({strategy: 'xpath', selector: '//*[@scrollable="true"]', context: 'foo'});
-      proxySpy.firstCall.args.should.eql(['/element', 'POST', {
+      await driver.doFindElementOrEls({
+        strategy: 'xpath',
+        selector: '//*[@scrollable="true"]',
         context: 'foo',
-        strategy: '-android uiautomator',
-        selector: 'new UiSelector().scrollable(true)',
-      }]);
+      });
+      proxySpy.firstCall.args.should.eql([
+        '/element',
+        'POST',
+        {
+          context: 'foo',
+          strategy: '-android uiautomator',
+          selector: 'new UiSelector().scrollable(true)',
+        },
+      ]);
     });
   });
 

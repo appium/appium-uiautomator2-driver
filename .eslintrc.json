@@ -1,10 +1,19 @@
 {
-  "extends": "@appium/eslint-config-appium",
+  "extends": ["@appium/eslint-config-appium-ts"],
   "overrides": [
     {
       "files": "test/**/*.js",
       "rules": {
         "func-names": "off"
+      }
+    },
+    {
+      "files": ["./**/scripts/**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      },
+      "parserOptions": {
+        "sourceType": "script"
       }
     }
   ]

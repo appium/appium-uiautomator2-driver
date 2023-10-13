@@ -1,10 +1,9 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { DOMParser } from '@xmldom/xmldom';
+import {DOMParser} from '@xmldom/xmldom';
 import xpath from 'xpath';
-import { APIDEMOS_CAPS } from '../../desired';
-import { initSession, deleteSession } from '../../helpers/session';
-
+import {APIDEMOS_CAPS} from '../../desired';
+import {initSession, deleteSession} from '../../helpers/session';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -18,12 +17,12 @@ describe('apidemo - source', function () {
     await deleteSession();
   });
 
-  function assertSource (source) {
+  function assertSource(source) {
     source.should.exist;
     const dom = new DOMParser().parseFromString(source);
     const nodes = xpath.select('//hierarchy', dom);
     nodes.length.should.equal(1);
-  };
+  }
 
   it('should return the page source', async function () {
     const source = await driver.getPageSource();
@@ -31,11 +30,11 @@ describe('apidemo - source', function () {
   });
   it('should get less source when compression is enabled', async function () {
     const getSourceWithoutCompression = async () => {
-      await driver.updateSettings({'ignoreUnimportantViews': false});
+      await driver.updateSettings({ignoreUnimportantViews: false});
       return await driver.getPageSource();
     };
     const getSourceWithCompression = async () => {
-      await driver.updateSettings({'ignoreUnimportantViews': true});
+      await driver.updateSettings({ignoreUnimportantViews: true});
       return await driver.getPageSource();
     };
     const sourceWithoutCompression = await getSourceWithoutCompression();

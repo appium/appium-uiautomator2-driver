@@ -451,7 +451,18 @@ class AndroidUiautomator2Driver
     if (apiLevel >= 28) {
       // Android P
       this.log.info('Relaxing hidden api policy');
-      await this.adb.setHiddenApiPolicy('1', !!this.opts.ignoreHiddenApiPolicyError);
+      try {
+        await this.adb.setHiddenApiPolicy('1', !!this.opts.ignoreHiddenApiPolicyError);
+      } catch (err) {
+        this.log.errorAndThrow(
+          'Hidden API policy (https://developer.android.com/guide/app-compatibility/restrictions-non-sdk-interfaces) cannot be enabled. ' +
+            'This might be happening because the device under test is not configured properly. ' +
+            'Please check https://github.com/appium/appium/issues/13802 for more details. ' +
+            'You could also set the "appium:ignoreHiddenApiPolicyError" capability to true in order to ' +
+            'ignore this error, which might later lead to unexpected crashes or behavior of ' +
+            `the automation server. Original error: ${err.message}`
+        );
+      }
     }
 
     // check if we have to enable/disable gps before running the application

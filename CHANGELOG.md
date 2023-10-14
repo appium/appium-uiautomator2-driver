@@ -1,3 +1,10 @@
+## [2.31.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.30.0...v2.31.0) (2023-10-14)
+
+
+### Features
+
+* Bump android driver to v7 ([#662](https://github.com/appium/appium-uiautomator2-driver/issues/662)) ([a54bc4a](https://github.com/appium/appium-uiautomator2-driver/commit/a54bc4a2d45bed3ddd0f632048f928b76609e0b2))
+
 ## [2.30.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.11...v2.30.0) (2023-10-13)
 
 

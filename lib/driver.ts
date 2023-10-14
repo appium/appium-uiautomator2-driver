@@ -27,7 +27,6 @@ import uiautomator2Helpers from './helpers';
 import {newMethodMap} from './method-map';
 import type {
   Uiautomator2Settings,
-  Uiautomator2CreateResult,
   Uiautomator2DeviceDetails,
   Uiautomator2DeviceInfo,
   Uiautomator2DriverCaps,
@@ -163,14 +162,12 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
 const MEMOIZED_FUNCTIONS = ['getStatusBarHeight', 'getDevicePixelRatio'] as const;
 
 class AndroidUiautomator2Driver
-  extends AndroidDriver<Uiautomator2Settings, Uiautomator2CreateResult>
+  extends AndroidDriver
   implements
     ExternalDriver<
       Uiautomator2Constraints,
       string,
-      StringRecord,
-      Uiautomator2Settings,
-      Uiautomator2CreateResult
+      StringRecord
     >
 {
   static newMethodMap = newMethodMap;
@@ -236,12 +233,12 @@ class AndroidUiautomator2Driver
     );
   }
 
-  override async createSession(
+  async createSession(
     w3cCaps1: W3CUiautomator2DriverCaps,
     w3cCaps2?: W3CUiautomator2DriverCaps,
     w3cCaps3?: W3CUiautomator2DriverCaps,
     driverData?: DriverData[]
-  ): Promise<Uiautomator2CreateResult> {
+  ): Promise<any> {
     try {
       // TODO handle otherSessionData for multiple sessions
       const [sessionId, caps] = (await BaseDriver.prototype.createSession.call(
@@ -340,11 +337,7 @@ class AndroidUiautomator2Driver
     return {...sessionData, ...uia2Data};
   }
 
-  override isEmulator() {
-    return helpers.isEmulator(this.adb, this.opts);
-  }
-
-  override setAvdFromCapabilities(caps: Uiautomator2StartSessionOpts) {
+  setAvdFromCapabilities(caps: Uiautomator2StartSessionOpts) {
     if (this.opts.avd) {
       this.log.info('avd name defined, ignoring device name and platform version');
     } else {
@@ -737,7 +730,7 @@ class AndroidUiautomator2Driver
     });
   }
 
-  override async deleteSession() {
+  async deleteSession() {
     this.log.debug('Deleting UiAutomator2 session');
 
     const screenRecordingStopTasks = [
@@ -871,7 +864,7 @@ class AndroidUiautomator2Driver
     await BaseDriver.prototype.deleteSession.call(this);
   }
 
-  override async checkAppPresent() {
+  async checkAppPresent() {
     this.log.debug('Checking whether app is actually present');
     if (!(await fs.exists(this.opts.app))) {
       this.log.errorAndThrow(`Could not find app apk at '${this.opts.app}'`);
@@ -879,36 +872,24 @@ class AndroidUiautomator2Driver
     }
   }
 
-  override async onSettingsUpdate() {
+  async onSettingsUpdate() {
     // intentionally do nothing here, since commands.updateSettings proxies
     // settings to the uiauto2 server already
   }
 
-  // Need to override android-driver's version of this since we don't actually
-  // have a bootstrap; instead we just restart adb and re-forward the UiAutomator2
-  // port
-  override async wrapBootstrapDisconnect(wrapped: () => Promise<void>) {
-    await wrapped();
-    this.adb!.restart();
-    await this.allocateSystemPort();
-    await this.allocateMjpegServerPort();
-  }
-
-  override proxyActive(sessionId: string) {
-    BaseDriver.prototype.proxyActive.call(this, sessionId);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  proxyActive(sessionId: string) {
     // we always have an active proxy to the UiAutomator2 server
     return true;
   }
 
-  override canProxy(sessionId: string) {
-    BaseDriver.prototype.canProxy.call(this, sessionId);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  canProxy(sessionId: string) {
     // we can always proxy to the uiautomator2 server
     return true;
   }
 
-  override getProxyAvoidList() {
+  getProxyAvoidList() {
     // we are maintaining two sets of NO_PROXY lists, one for chromedriver(CHROME_NO_PROXY)
     // and one for uiautomator2(NO_PROXY), based on current context will return related NO_PROXY list
     if (util.hasValue(this.chromedriver)) {
@@ -927,10 +908,6 @@ class AndroidUiautomator2Driver
     return this.jwpProxyAvoid;
   }
 
-  get isChromeSession() {
-    return helpers.isChromeBrowser(this.opts.browserName);
-  }
-
   async updateSettings(settings: Uiautomator2Settings) {
     await this.settings.update(settings);
     await this.uiautomator2!.jwproxy.command('/appium/settings', 'POST', {settings});
@@ -942,7 +919,7 @@ class AndroidUiautomator2Driver
       '/appium/settings',
       'GET'
     )) as Partial<Uiautomator2Settings>;
-    return {...driverSettings, ...serverSettings};
+    return {...driverSettings, ...serverSettings} as any;
   }
 }
 

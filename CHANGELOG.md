@@ -1,3 +1,10 @@
+## [2.31.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.0...v2.31.1) (2023-10-14)
+
+
+### Miscellaneous Chores
+
+* add error log for this.adb.setHiddenApiPolicy error ([#656](https://github.com/appium/appium-uiautomator2-driver/issues/656)) ([5c076c5](https://github.com/appium/appium-uiautomator2-driver/commit/5c076c5c4ffb565a4d8f44f8f0595e2b19c2e99c))
+
 ## [2.31.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.30.0...v2.31.0) (2023-10-14)
 
 

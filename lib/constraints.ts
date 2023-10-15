@@ -2,13 +2,6 @@ import {Constraints} from '@appium/types';
 import {commonCapConstraints} from 'appium-android-driver';
 
 const UIAUTOMATOR2_CONSTRAINTS = {
-  app: {
-    presence: true,
-    isString: true,
-  },
-  automationName: {
-    isString: true,
-  },
   launchTimeout: {
     isNumber: true,
   },

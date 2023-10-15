@@ -877,7 +877,7 @@ class AndroidUiautomator2Driver
 
   async checkAppPresent() {
     this.log.debug('Checking whether app is actually present');
-    if (!(await fs.exists(this.opts.app))) {
+    if (!this.opts.app || !(await fs.exists(this.opts.app))) {
       this.log.errorAndThrow(`Could not find app apk at '${this.opts.app}'`);
       throw new Error(); // unreachable
     }

@@ -1,3 +1,10 @@
+## [2.31.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.2...v2.31.3) (2023-10-15)
+
+
+### Bug Fixes
+
+* Make app not required ([#664](https://github.com/appium/appium-uiautomator2-driver/issues/664)) ([636391e](https://github.com/appium/appium-uiautomator2-driver/commit/636391e53313f6c612a87beacfb15d7fdd1fa439))
+
 ## [2.31.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.1...v2.31.2) (2023-10-15)
 
 

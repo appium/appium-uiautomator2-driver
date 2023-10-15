@@ -1,3 +1,24 @@
+## [2.31.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.1...v2.31.2) (2023-10-15)
+
+
+### Miscellaneous Chores
+
+* bump css-selector-parser to v3 ([#663](https://github.com/appium/appium-uiautomator2-driver/issues/663)) ([179670e](https://github.com/appium/appium-uiautomator2-driver/commit/179670e152c6c01c88183f539902220b775ff0c4))
+
+## [2.31.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.0...v2.31.1) (2023-10-14)
+
+
+### Miscellaneous Chores
+
+* add error log for this.adb.setHiddenApiPolicy error ([#656](https://github.com/appium/appium-uiautomator2-driver/issues/656)) ([5c076c5](https://github.com/appium/appium-uiautomator2-driver/commit/5c076c5c4ffb565a4d8f44f8f0595e2b19c2e99c))
+
+## [2.31.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.30.0...v2.31.0) (2023-10-14)
+
+
+### Features
+
+* Bump android driver to v7 ([#662](https://github.com/appium/appium-uiautomator2-driver/issues/662)) ([a54bc4a](https://github.com/appium/appium-uiautomator2-driver/commit/a54bc4a2d45bed3ddd0f632048f928b76609e0b2))
+
 ## [2.30.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.29.11...v2.30.0) (2023-10-13)
 
 

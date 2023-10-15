@@ -1,6 +1,9 @@
 /**
  * @module
- * @privateRemarks These mixins are kind of a mishmash of stuff from `appium-android-driver`, unique things, and stuff from `ExternalDriver`. Ideally, we should be pulling the method definitions right out of `ExternalDriver` whenever possible.  Also note that the mixins contain _more stuff than just commands or execute methods_.
+ * @privateRemarks These mixins are kind of a mishmash of stuff from `appium-android-driver`,
+ * @privateRemarks unique things, and stuff from `ExternalDriver`. Ideally, we should be pulling the method
+ * @privateRemarks definitions right out of `ExternalDriver` whenever possible.  Also note that the mixins
+ * @privateRemarks contain _more stuff than just commands or execute methods_.
  */
 
 import type {Element, ExternalDriver, StringRecord} from '@appium/types';
@@ -87,7 +90,6 @@ export type UIA2GeneralMixin = UIA2Mixin<
     | 'getWindowSize'
     | 'getWindowRect'
     | 'setUrl'
-    | 'wrapBootstrapDisconnect'
     | 'keyevent'
     | 'execute'
     | 'executeMobile'

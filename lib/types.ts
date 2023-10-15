@@ -1,5 +1,4 @@
 import type {DriverCaps, DriverOpts, W3CDriverCaps} from '@appium/types';
-import type {AndroidSettings} from 'appium-android-driver';
 import type {EmptyObject} from 'type-fest';
 import type {RelativeRect} from './commands/types';
 import type {Uiautomator2Constraints} from './constraints';
@@ -52,8 +51,7 @@ export interface Uiautomator2SessionCaps
     Uiautomator2DeviceInfo,
     Uiautomator2DeviceDetails {}
 
-export type Uiautomator2CreateResult = [string, Uiautomator2SessionCaps];
-
-export interface Uiautomator2Settings extends AndroidSettings {
+export interface Uiautomator2Settings {
+  ignoreUnimportantViews: boolean;
   allowInvisibleElements: boolean;
 }

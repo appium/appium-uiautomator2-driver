@@ -1,3 +1,10 @@
+## [2.31.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.1...v2.31.2) (2023-10-15)
+
+
+### Miscellaneous Chores
+
+* bump css-selector-parser to v3 ([#663](https://github.com/appium/appium-uiautomator2-driver/issues/663)) ([179670e](https://github.com/appium/appium-uiautomator2-driver/commit/179670e152c6c01c88183f539902220b775ff0c4))
+
 ## [2.31.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.0...v2.31.1) (2023-10-14)
 
 

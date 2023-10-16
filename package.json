@@ -74,7 +74,7 @@
     "portscanner": "^2.2.0",
     "source-map-support": "^0.x",
     "teen_process": "^2.0.0",
-    "type-fest": "^3.12.0"
+    "type-fest": "^4.4.0"
   },
   "devDependencies": {
     "@appium/docutils": "^0.4.4",

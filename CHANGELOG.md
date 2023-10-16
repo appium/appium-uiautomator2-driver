@@ -1,3 +1,10 @@
+## [2.31.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.3...v2.31.4) (2023-10-16)
+
+
+### Miscellaneous Chores
+
+* Normalize execute script names ([#672](https://github.com/appium/appium-uiautomator2-driver/issues/672)) ([ca1d6e9](https://github.com/appium/appium-uiautomator2-driver/commit/ca1d6e94c058cc9ae8511c7b45e4f0c577b83de8))
+
 ## [2.31.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.2...v2.31.3) (2023-10-15)
 
 

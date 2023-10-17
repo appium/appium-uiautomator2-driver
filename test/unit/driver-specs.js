@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 let sandbox = sinon.createSandbox();
 
 function defaultStub(driver) {
-  sinon.stub(driver, 'getDeviceInfoFromUia2');
+  sinon.stub(driver, 'getDeviceDetails');
 }
 
 describe('driver.js', function () {

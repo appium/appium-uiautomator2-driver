@@ -9,15 +9,6 @@ export type Uiautomator2DriverCaps = DriverCaps<Uiautomator2Constraints>;
 
 export type W3CUiautomator2DriverCaps = W3CDriverCaps<Uiautomator2Constraints>;
 
-export interface Uiautomator2DeviceInfo {
-  deviceApiLevel: number;
-  deviceScreenSize: string;
-  deviceScreenDensity: string;
-  deviceModel: string;
-  deviceManufacturer: string;
-  platformVersion: string;
-}
-
 export interface Uiautomator2SessionInfo {
   deviceName: string;
   deviceUDID: string;
@@ -27,6 +18,12 @@ export interface Uiautomator2DeviceDetails {
   pixelRatio: string;
   statBarHeight: number;
   viewportRect: RelativeRect;
+  deviceApiLevel: number;
+  deviceScreenSize: string;
+  deviceScreenDensity: string;
+  deviceModel: string;
+  deviceManufacturer: string;
+  platformVersion: string;
 }
 
 export interface Uiautomator2ServerInfo {
@@ -48,8 +45,7 @@ export interface Uiautomator2StartSessionOpts
 export interface Uiautomator2SessionCaps
   extends Uiautomator2ServerInfo,
     Uiautomator2SessionInfo,
-    Uiautomator2DeviceInfo,
-    Uiautomator2DeviceDetails {}
+    Partial<Uiautomator2DeviceDetails> {}
 
 export interface Uiautomator2Settings {
   ignoreUnimportantViews: boolean;

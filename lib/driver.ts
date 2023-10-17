@@ -25,10 +25,10 @@ import {executeMethodMap} from './execute-method-map';
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import uiautomator2Helpers from './helpers';
 import {newMethodMap} from './method-map';
+import type { EmptyObject } from 'type-fest';
 import type {
   Uiautomator2Settings,
   Uiautomator2DeviceDetails,
-  Uiautomator2DeviceInfo,
   Uiautomator2DriverCaps,
   Uiautomator2DriverOpts,
   Uiautomator2SessionCaps,
@@ -278,11 +278,6 @@ class AndroidUiautomator2Driver
         this.log.info(`Chrome-type package and activity are ${pkg} and ${activity}`);
       }
 
-      // @ts-expect-error FIXME: missing CLI option?
-      if (this.opts.reboot) {
-        this.setAvdFromCapabilities(startSessionOpts);
-      }
-
       if (this.opts.app) {
         // find and copy, or download and unzip an app url or path
         this.opts.app = await this.helpers.configureApp(this.opts.app, [
@@ -317,12 +312,29 @@ class AndroidUiautomator2Driver
   }
 
   async getDeviceDetails(): Promise<Uiautomator2DeviceDetails> {
-    const [pixelRatio, statBarHeight, viewportRect] = await B.all([
+    const [
+      pixelRatio,
+      statBarHeight,
+      viewportRect,
+      {apiVersion, platformVersion, manufacturer, model, realDisplaySize, displayDensity},
+    ] = await B.all([
       this.getDevicePixelRatio(),
       this.getStatusBarHeight(),
       this.getViewPortRect(),
+      this.mobileGetDeviceInfo(),
     ]);
-    return {pixelRatio, statBarHeight, viewportRect};
+
+    return {
+      pixelRatio,
+      statBarHeight,
+      viewportRect,
+      deviceApiLevel: _.parseInt(apiVersion),
+      platformVersion,
+      deviceManufacturer: manufacturer,
+      deviceModel: model,
+      deviceScreenSize: realDisplaySize,
+      deviceScreenDensity: displayDensity,
+    };
   }
 
   override get driverData() {
@@ -335,27 +347,6 @@ class AndroidUiautomator2Driver
     this.log.debug('Getting session details from server to mix in');
     const uia2Data = (await this.uiautomator2!.jwproxy.command('/', 'GET', {})) as any;
     return {...sessionData, ...uia2Data};
-  }
-
-  setAvdFromCapabilities(caps: Uiautomator2StartSessionOpts) {
-    if (this.opts.avd) {
-      this.log.info('avd name defined, ignoring device name and platform version');
-    } else {
-      if (!caps.deviceName) {
-        this.log.errorAndThrow(
-          'avd or deviceName should be specified when reboot option is enables'
-        );
-        throw new Error(); // unreachable
-      }
-      if (!caps.platformVersion) {
-        this.log.errorAndThrow(
-          'avd or platformVersion should be specified when reboot option is enabled'
-        );
-        throw new Error(); // unreachable
-      }
-      const avdDevice = caps.deviceName.replace(/[^a-zA-Z0-9_.]/g, '-');
-      this.opts.avd = `${avdDevice}__${caps.platformVersion}`;
-    }
   }
 
   async allocateSystemPort() {
@@ -534,11 +525,18 @@ class AndroidUiautomator2Driver
 
     // launch UiAutomator2 and wait till its online and we have a session
     await uiautomator2.startSession(capsWithSessionInfo);
+    // now that everything has started successfully, turn on proxying so all
+    // subsequent session requests go straight to/from uiautomator2
+    this.jwpProxyActive = true;
 
-    const capsWithSessionAndDeviceInfo = {
-      ...capsWithSessionInfo,
-      ...(await this.getDeviceInfoFromUia2()),
-    };
+    const deviceInfoPromise: Promise<Uiautomator2DeviceDetails|EmptyObject> = (async () => {
+      try {
+        return await this.getDeviceDetails();
+      } catch (e) {
+        this.log.warn(`Cannot fetch device details. Original error: ${e.message}`);
+        return {};
+      }
+    })();
 
     // Unlock the device after the session is started.
     if (!this.opts.skipUnlock) {
@@ -570,24 +568,7 @@ class AndroidUiautomator2Driver
       await retryInterval(timeout / 500, 500, this.setContext.bind(this), viewName);
     }
 
-    // now that everything has started successfully, turn on proxying so all
-    // subsequent session requests go straight to/from uiautomator2
-    this.jwpProxyActive = true;
-
-    return {...capsWithSessionAndDeviceInfo, ...(await this.getDeviceDetails())};
-  }
-
-  async getDeviceInfoFromUia2(): Promise<Uiautomator2DeviceInfo> {
-    const {apiVersion, platformVersion, manufacturer, model, realDisplaySize, displayDensity} =
-      await this.mobileGetDeviceInfo();
-    return {
-      deviceApiLevel: _.parseInt(apiVersion),
-      platformVersion,
-      deviceManufacturer: manufacturer,
-      deviceModel: model,
-      deviceScreenSize: realDisplaySize,
-      deviceScreenDensity: displayDensity,
-    };
+    return {...capsWithSessionInfo, ...(await deviceInfoPromise)};
   }
 
   async initUiAutomator2Server() {
@@ -855,17 +836,6 @@ class AndroidUiautomator2Driver
         // Android P
         this.log.info('Restoring hidden api policy to the device default configuration');
         await this.adb.setDefaultHiddenApiPolicy(!!this.opts.ignoreHiddenApiPolicyError);
-      }
-
-      // @ts-expect-error unknown option
-      if (this.opts.reboot) {
-        const avdName = this.opts.avd!.replace('@', '');
-        this.log.debug(`Closing emulator '${avdName}'`);
-        try {
-          await this.adb.killEmulator(avdName);
-        } catch (err) {
-          this.log.warn(`Unable to close emulator: ${(err as Error).message}`);
-        }
       }
     }
     if (this.mjpegStream) {

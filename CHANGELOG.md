@@ -1,3 +1,10 @@
+## [2.32.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.4...v2.32.0) (2023-10-17)
+
+
+### Features
+
+* Add 'mobile: deviceidle' extension ([#673](https://github.com/appium/appium-uiautomator2-driver/issues/673)) ([5c59c10](https://github.com/appium/appium-uiautomator2-driver/commit/5c59c10488a216c3c526c9a1c3326a9aea6d31de))
+
 ## [2.31.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.31.3...v2.31.4) (2023-10-16)
 
 

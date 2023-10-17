@@ -381,6 +381,19 @@ Starts Android logcat broadcast websocket on the same host and port where Appium
 
 Stops the previously started logcat broadcasting websocket server. This method will return immediately if no server is running. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
 
+### mobile: deviceidle
+
+This is a wrapper to 'adb shell dumpsys deviceidle' interface.
+Read [Diving Into Android 'M' Doze](https://www.protechtraining.com/blog/post/diving-into-android-m-doze-875) for more details.
+This API only exists since Android 6.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+action | whitelistAdd or whitelistRemove | yes | The name of the action to perform | whitelistAdd
+packages | string or string[] | yes | One or more package names to perfom the above action on | 'com.mycompany'
+
 ### mobile: acceptAlert
 
 Tries to accept an Android alert. This method might not always be reliable as there is no single standard for how Android alerts should look like within the Accessibility representation.

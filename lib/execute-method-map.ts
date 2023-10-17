@@ -112,6 +112,14 @@ export const executeMethodMap = {
     command: 'mobileStopLogsBroadcast',
   },
 
+  'mobile: deviceidle': {
+    command: 'mobileDeviceidle',
+    params: {
+      required: ['action'],
+      optional: ['packages'],
+    },
+  },
+
   'mobile: acceptAlert': {
     command: 'mobileAcceptAlert',
     params: {

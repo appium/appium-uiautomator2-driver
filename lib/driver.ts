@@ -174,7 +174,7 @@ class AndroidUiautomator2Driver
 
   static executeMethodMap = executeMethodMap;
 
-  uiautomator2?: UiAutomator2Server;
+  uiautomator2: UiAutomator2Server;
 
   /**
    * @privateRemarks moved from `this.opts`
@@ -668,7 +668,7 @@ class AndroidUiautomator2Driver
       ) {
         if (
           !this.opts.noSign &&
-          !(await this.adb!.checkApkCert(this.opts.app, this.opts.appPackage, {
+          !(await this.adb!.checkApkCert(this.opts.app, this.opts.appPackage!, {
             requireDefaultCert: false,
           }))
         ) {
@@ -764,22 +764,20 @@ class AndroidUiautomator2Driver
 
     await androidHelpers.removeAllSessionWebSocketHandlers(this.server, this.sessionId);
 
-    if (this.uiautomator2) {
-      try {
-        await this.stopChromedriverProxies();
-      } catch (err) {
-        this.log.warn(`Unable to stop ChromeDriver proxies: ${(err as Error).message}`);
-      }
-      if (this.jwpProxyActive) {
-        try {
-          await this.uiautomator2.deleteSession();
-        } catch (err) {
-          this.log.warn(`Unable to proxy deleteSession to UiAutomator2: ${(err as Error).message}`);
-        }
-      }
-      this.uiautomator2 = undefined;
+    try {
+      await this.stopChromedriverProxies();
+    } catch (err) {
+      this.log.warn(`Unable to stop ChromeDriver proxies: ${(err as Error).message}`);
     }
-    this.jwpProxyActive = false;
+
+    if (this.jwpProxyActive) {
+      try {
+        await this.uiautomator2.deleteSession();
+      } catch (err) {
+        this.log.warn(`Unable to proxy deleteSession to UiAutomator2: ${(err as Error).message}`);
+      }
+      this.jwpProxyActive = false;
+    }
 
     if (this.adb) {
       await B.all(

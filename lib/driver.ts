@@ -686,14 +686,6 @@ class AndroidUiautomator2Driver
         `and waiting for '${appWaitPackage}/${appWaitActivity}'`
     );
 
-    if (this.caps.androidCoverage) {
-      this.log.info(
-        `androidCoverage is configured. ` +
-          ` Starting instrumentation of '${this.caps.androidCoverage}'...`
-      );
-      await this.adb!.androidCoverage(this.caps.androidCoverage, appWaitPackage!, appWaitActivity!);
-      return;
-    }
     if (
       this.opts.noReset &&
       !this.opts.forceAppLaunch &&
@@ -771,21 +763,6 @@ class AndroidUiautomator2Driver
         })
       );
 
-      if (this.caps.androidCoverage) {
-        this.log.info('Shutting down the adb process of instrumentation...');
-        await this.adb.endAndroidCoverage();
-        // Use this broadcast intent to notify it's time to dump coverage to file
-        if (this.caps.androidCoverageEndIntent) {
-          this.log.info(
-            `Sending intent broadcast '${this.caps.androidCoverageEndIntent}' at the end of instrumenting.`
-          );
-          await this.adb.broadcast(this.caps.androidCoverageEndIntent);
-        } else {
-          this.log.warn(
-            'No androidCoverageEndIntent is configured in caps. Possibly you cannot get coverage file.'
-          );
-        }
-      }
       if (this.opts.appPackage) {
         if (
           !this.isChromeSession &&

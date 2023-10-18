@@ -1,3 +1,10 @@
+## [2.32.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.1...v2.32.2) (2023-10-18)
+
+
+### Miscellaneous Chores
+
+* Remove the obsolete coverage-related stuff ([#677](https://github.com/appium/appium-uiautomator2-driver/issues/677)) ([977816e](https://github.com/appium/appium-uiautomator2-driver/commit/977816e6eaed4780a91225178d0d98aa8fa5c5b5))
+
 ## [2.32.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.0...v2.32.1) (2023-10-17)
 
 

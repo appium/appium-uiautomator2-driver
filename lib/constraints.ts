@@ -26,9 +26,6 @@ const UIAUTOMATOR2_CONSTRAINTS = {
   skipServerInstallation: {
     isBoolean: true,
   },
-  androidCoverageEndIntent: {
-    isString: true,
-  },
   disableSuppressAccessibilityService: {
     isBoolean: true,
   },

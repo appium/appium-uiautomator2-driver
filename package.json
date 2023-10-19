@@ -83,7 +83,7 @@
     "@appium/support": "^4.0.1",
     "@appium/test-support": "^3.0.0",
     "@appium/tsconfig": "^0.3.0",
-    "@appium/types": "^0.13.0",
+    "@appium/types": "^0.14.0",
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
     "@semantic-release/changelog": "^6.0.1",

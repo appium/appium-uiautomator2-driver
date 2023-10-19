@@ -1,3 +1,10 @@
+## [2.32.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.2...v2.32.3) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* Always use latest types ([19754b2](https://github.com/appium/appium-uiautomator2-driver/commit/19754b2b0043b03df729e588a62eec0e571557b3))
+
 ## [2.32.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.1...v2.32.2) (2023-10-18)
 
 

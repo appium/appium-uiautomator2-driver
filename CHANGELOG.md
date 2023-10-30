@@ -1,3 +1,10 @@
+## [2.33.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.3...v2.33.0) (2023-10-30)
+
+
+### Features
+
+* Add hideKeyboard capability ([#686](https://github.com/appium/appium-uiautomator2-driver/issues/686)) ([708f41c](https://github.com/appium/appium-uiautomator2-driver/commit/708f41c087f64f32a022dd34715dc68b4004a852))
+
 ## [2.32.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.2...v2.32.3) (2023-10-19)
 
 

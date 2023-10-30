@@ -183,6 +183,8 @@ class AndroidUiautomator2Driver
 
   _hasSystemPortInCaps: boolean | undefined;
 
+  _originalIme: string | null;
+
   mjpegStream?: mjpeg.MJpegStream;
 
   override caps: Uiautomator2DriverCaps;
@@ -210,6 +212,7 @@ class AndroidUiautomator2Driver
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
     this.apkStrings = {}; // map of language -> strings obj
+    this._originalIme = null;
 
     this.settings = new DeviceSettings(
       {ignoreUnimportantViews: false, allowInvisibleElements: false},
@@ -485,7 +488,9 @@ class AndroidUiautomator2Driver
     };
 
     // start an avd, set the language/locale, pick an emulator, etc...
-    // TODO with multiple devices we'll need to parameterize this
+    if (this.opts.hideKeyboard) {
+      this._originalIme = await this.adb.defaultIME();
+    }
     await helpers.initDevice(this.adb, this.opts);
 
     // Prepare the device by forwarding the UiAutomator2 port
@@ -790,6 +795,13 @@ class AndroidUiautomator2Driver
       if (this._wasWindowAnimationDisabled) {
         this.log.info('Restoring window animation state');
         await this.adb.setAnimationState(true);
+      }
+      if (this._originalIme) {
+        try {
+          await this.adb.setIME(this._originalIme);
+        } catch (e) {
+          this.log.warn(`Cannot restore the original IME: ${e.message}`);
+        }
       }
       await this.adb.stopLogcat();
       try {

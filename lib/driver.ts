@@ -176,12 +176,7 @@ class AndroidUiautomator2Driver
 
   uiautomator2: UiAutomator2Server;
 
-  /**
-   * @privateRemarks moved from `this.opts`
-   */
   systemPort: number | undefined;
-
-  _hasSystemPortInCaps: boolean | undefined;
 
   _originalIme: string | null;
 
@@ -368,8 +363,8 @@ class AndroidUiautomator2Driver
       await this.adb!.forwardPort(localPort, DEVICE_PORT);
     };
 
-    if (this.systemPort) {
-      this._hasSystemPortInCaps = true;
+    if (this.opts.systemPort) {
+      this.systemPort = this.opts.systemPort;
       return await forwardPort(this.systemPort);
     }
 
@@ -395,7 +390,9 @@ class AndroidUiautomator2Driver
       return;
     }
 
-    if (this._hasSystemPortInCaps) {
+    if (this.opts.systemPort) {
+      // We assume if the systemPort is provided manually then it must be unique,
+      // so there is no need for the explicit synchronization
       await this.adb.removePortForward(this.systemPort);
     } else {
       await DEVICE_PORT_ALLOCATION_GUARD(

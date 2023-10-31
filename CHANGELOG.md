@@ -1,3 +1,10 @@
+## [2.33.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.33.0...v2.33.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* Properly read systemPort value from capabilities ([#689](https://github.com/appium/appium-uiautomator2-driver/issues/689)) ([cfaccb5](https://github.com/appium/appium-uiautomator2-driver/commit/cfaccb528c8a42c4185ca88c2dafbcbbc4ee80c2))
+
 ## [2.33.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.32.3...v2.33.0) (2023-10-30)
 
 

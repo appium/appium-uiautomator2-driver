@@ -532,18 +532,6 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 action | string | yes | The name or an integer code of the editor action to be executed. The following action names are supported: `normal, unspecified, none, go, search, send, next, done, previous`. Read [EditorInfo](https://developer.android.com/reference/android/view/inputmethod/EditorInfo) for more details on this topic. | search
 
-#### Examples
-
-```java
-// Java
-driver.executeScript("mobile: performEditorAction", ImmutableMap.of("action", "Go"));
-```
-
-```python
-# Python
-driver.execute_script('mobile: performEditorAction', {'action': 'previous'})
-```
-
 ### mobile: startScreenStreaming
 
 Starts device screen broadcast by creating MJPEG server. Multiple calls to this method have no effect unless the previous streaming session is stopped. This method only works if the `adb_screen_streaming` feature is enabled on the server side. It is also required that [GStreamer](https://gstreamer.freedesktop.org/) with `gst-plugins-base`, `gst-plugins-good` and `gst-plugins-bad` packages are installed and available in PATH on the server machine.

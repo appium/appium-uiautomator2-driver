@@ -562,16 +562,27 @@ export const executeMethodMap = {
       optional: ['opts'],
     },
   },
-
   'mobile: getActionHistory': {
     command: 'mobileGetActionHistory',
     params: {
       optional: ['opts'],
     },
   },
-
   'mobile: unscheduleAction': {
     command: 'mobileUnscheduleAction',
+    params: {
+      optional: ['opts'],
+    },
+  },
+
+  'mobile: getUiMode': {
+    command: 'mobileGetUiMode',
+    params: {
+      optional: ['opts'],
+    },
+  },
+  'mobile: setUiMode': {
+    command: 'mobileSetUiMode',
     params: {
       optional: ['opts'],
     },

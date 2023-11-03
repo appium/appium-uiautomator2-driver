@@ -1,3 +1,10 @@
+## [2.34.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.33.1...v2.34.0) (2023-11-03)
+
+
+### Features
+
+* Add support of UiModeManager service commands ([#691](https://github.com/appium/appium-uiautomator2-driver/issues/691)) ([89303f0](https://github.com/appium/appium-uiautomator2-driver/commit/89303f0e77dc7bbc6c7a3e685efd3ecb63370c94))
+
 ## [2.33.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.33.0...v2.33.1) (2023-10-31)
 
 

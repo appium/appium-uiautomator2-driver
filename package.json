@@ -96,7 +96,7 @@
     "@types/node": "^20.2.3",
     "@types/portscanner": "^2.1.1",
     "@types/semver": "^7.5.0",
-    "@types/sinon": "^10.0.15",
+    "@types/sinon": "^17.0.0",
     "@types/sinon-chai": "^3.2.9",
     "@types/source-map-support": "^0.x",
     "@types/teen_process": "^2.0.0",

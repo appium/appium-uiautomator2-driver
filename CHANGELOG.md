@@ -1,3 +1,10 @@
+## [2.34.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.34.0...v2.34.1) (2023-11-08)
+
+
+### Miscellaneous Chores
+
+* use omit to prune dev and peer ([#693](https://github.com/appium/appium-uiautomator2-driver/issues/693)) ([712cfce](https://github.com/appium/appium-uiautomator2-driver/commit/712cfce64767ae0d0785da49248f9d35bcf15015))
+
 ## [2.34.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.33.1...v2.34.0) (2023-11-03)
 
 

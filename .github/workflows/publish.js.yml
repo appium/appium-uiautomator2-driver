@@ -15,19 +15,18 @@ jobs:
       with:
         node-version: lts/*
         check-latest: true
-    - run: npm install
+    - run: npm install --no-package-lock
       name: Install dependencies
     - run: npm run test
       name: Run NPM Test
     - run: |
-        rm -rf package-lock.json
+        rm -rf package-lock.json node_modules
         # Remove dev and peer dependencies from node_modules
-        npm prune --omit=dev --omit=peer
-        rm -rf node_modules/appium
+        npm prune --omit=dev --omit=peer --no-package-lock
       name: Remove dev dependencies and appium peer dependencies
-    - run: npm shrinkwrap
+    - run: npm shrinkwrap --omit=dev --omit=peer
       name: Create shrinkwrap
-    - run: npm install --only=dev
+    - run: npm install --only=dev --no-package-lock
       name: Install dev dependencies for the release
     - run: npx semantic-release
       env:

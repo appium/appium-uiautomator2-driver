@@ -1,3 +1,10 @@
+## [2.34.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.34.1...v2.34.2) (2023-12-02)
+
+
+### Miscellaneous Chores
+
+* update publish.js.yml ([#696](https://github.com/appium/appium-uiautomator2-driver/issues/696)) ([2af984f](https://github.com/appium/appium-uiautomator2-driver/commit/2af984f3d5d289c25d0b4a694f8a057db068c48a))
+
 ## [2.34.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.34.0...v2.34.1) (2023-11-08)
 
 

@@ -1314,7 +1314,7 @@ Returns `true` if GPS is enabled on the device under test. Available since drive
 
 ### mobile: getPerformanceDataTypes
 
-Fetches the list of supported perfomance data types that could be used as `dataType` argument value to [mobile: getPerformanceData](#mobile-getperformancedata) extension. Available since driver version 2.24
+Fetches the list of supported performance data types that could be used as `dataType` argument value to [mobile: getPerformanceData](#mobile-getperformancedata) extension. Available since driver version 2.24
 
 #### Returned Result
 
@@ -1518,7 +1518,7 @@ The following endpoints are used to control the current context:
 - GET `/session/:sessionId/contexts`: To retrieve the list of available context names
 - [mobile: getContexts](#mobile-getcontexts)
 
-By default the driver starts in the native context, which means that most of REST API commands are being
+By default, the driver starts in the native context, which means that most of REST API commands are being
 forwarded to the downstream [appium-uiautomator2-server](https://github.com/appium/appium-uiautomator2-server).
 This server is running on the device under test, and trasforms API commands to appropriate low-level UiAutomator framework calls. There is always only one native context, although multiple web contexts are possible.
 Each web context could contain zero or more pages/windows. It is possible to start UIA2 driver session in web context by default by setting the `browserName` capability value or by enabling the `appium:autoWebview` capability.
@@ -1527,7 +1527,7 @@ Web context(s) could be detected if a browser or a web view is active on the dev
 a web one then UIA2 driver spins up a Chromedriver instance for it and forwards most of the commands
 to that Chromedriver instance. Note that web views must be properly configured and
 debuggable in order to connect to them or get their names in the list of available contexts.
-The availablity of a particular web view could be easily verified by using
+The availability of a particular web view could be easily verified by using
 [Chrome Remote Debugger](https://developer.chrome.com/docs/devtools/remote-debugging/).
 You could switch between different contexts (and windows in them) at any time during the session.
 
@@ -1613,7 +1613,7 @@ There is a possibility to automatically download the necessary chromedriver(s) i
 When UIA2 driver is installed it automatically downloads Chromedriver, so there is a possibility
 of network or other issues leading to an installation failure.
 
-By default Chromedriver is retrieved from `https://chromedriver.storage.googleapis.com/`.
+By default, Chromedriver is retrieved from `https://chromedriver.storage.googleapis.com/`.
 To use a mirror of the above URL change the value of `CHROMEDRIVER_CDNURL` environemnt variable:
 
 ```bash
@@ -1645,11 +1645,11 @@ The history of W3C support in Chromedriver is available for reading at
 
 ### Activity Startup
 
-If you experince issues with application activities being not found or not starting then consider checking [How To Troubleshoot Activities Startup](docs/activity-startup.md) article.
+If you experience issues with application activities being not found or not starting then consider checking [How To Troubleshoot Activities Startup](docs/activity-startup.md) article.
 
 ### Poor Elements Interaction Performance
 
-If you observe automated tests need at least 10 seconds or more to locate/interact with a single element then consider changing the default value for [waitForIdleTimeout setting](#settings-api). By default, UiAutomator framework (and all other Accessiblity-based frameworks) always waits for the accessibility event stream to become idle before interacting with it (the default timeout there is 10000ms). This is needed to make sure all animations/transitions are finished before you, for example, interact with an element by clicking it. In case the application under test constantly runs some background animations or hogs the accessibility event stream in some other way these waits may significatly slow down the automation flow.
+If you observe automated tests need at least 10 seconds or more to locate/interact with a single element then consider changing the default value for [waitForIdleTimeout setting](#settings-api). By default, UiAutomator framework (and all other Accessibility-based frameworks) always waits for the accessibility event stream to become idle before interacting with it (the default timeout there is 10000ms). This is needed to make sure all animations/transitions are finished before you, for example, interact with an element by clicking it. In case the application under test constantly runs some background animations or hogs the accessibility event stream in some other way these waits may significantly slow down the automation flow.
 
 Setting the value of `waitForIdleTimeout` to zero `0` ms should completely disable any waits, and enforce interactions to happen immediately ignoring the accessibility event stream state. The downside of that would be that all interactions are never going to be delayed, so clicks and other actions might happen at wrong places of the application UI. That is why is it important to check the app under test first and fix its source to get rid of activities hogging the event loop. Sometimes it makes sence to disable animations completely for the app build under test, which could speed up your flows significantly in some situations.
 
@@ -1669,7 +1669,7 @@ in order to cleanup the cached UIA2 driver binaries from all connected devices o
 ### Socket Hangup Error
 
 This type of error means the driver is unable to connect to the UiAutomator2 REST server, which is running on the device under test. There might be multiple causes to this issue:
-- The automation session gets unexpectedly deleted if your test code sends the `DELETE /session/<id>` request to the it, also the corresponding session and the server itself are terminated as a result. Sending further commands to the same server would create the error above because it is not listening anymore and must be newly started by the instrumentation first. Such issues usually happen if the session management is not configured properly in the your code, so one starts a new session while an existing one is still running and has not been quit properly, or there is a timeout while waiting for a new command. Fixing session management logic (e.g. make sure each session is being properly created in the test setup section and is terminated in the test teardown) or changing/disabling the commands timeout (check the [newCommandTimeout capability](#other)) might help to address such type of errors.
+- The automation session gets unexpectedly deleted if your test code sends the `DELETE /session/<id>` request to it, also the corresponding session and the server itself are terminated as a result. Sending further commands to the same server would create the error above because it is not listening anymore and must be newly started by the instrumentation first. Such issues usually happen if the session management is not configured properly in your code, so one starts a new session while an existing one is still running and has not been quit properly, or there is a timeout while waiting for a new command. Fixing session management logic (e.g. make sure each session is being properly created in the test setup section and is terminated in the test teardown) or changing/disabling the commands' timeout (check the [newCommandTimeout capability](#other)) might help to address such type of errors.
 - The server has been unexpectedly killed by Android OS itself. There might be several reasons to that. Usually fetching the [logcat](https://developer.android.com/studio/command-line/logcat) output and finding occurrences of `io.appium.uiautomator2.server` traces with `error` or `exception` label might help to figure out what happens. Sometimes it is necessary to turn off some internal phone optimizations, sometimes the server crashes because of an internal UiAutomator framework bug, sometimes because of a bug in the server code itself. Each case should be investigated separately if the search over the internet shows no matches…
 - The connectivity between the phone and the host is unstable. Nothing much to add on this one. Maybe the phone has a defect, or the USB cable is damaged, or the installed Android SDK is out of date…
 
@@ -1688,7 +1688,7 @@ In case of _xpath_ locators you could try to change values of the following sett
 3. [enableMultiWindows](#settings-api)
 
 By default, the first setting is set to `false`, which hides
-elements that are not visible from the the page source and from the xpath location. Changing the setting value
+elements that are not visible from the page source and from the xpath location. Changing the setting value
 to `true` would add such invisible elements to the page source and make them locatable.
 
 The second one is enabled by default (e.g. `true`). By disabling it the page source could receive more elements

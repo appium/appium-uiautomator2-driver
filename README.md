@@ -932,7 +932,7 @@ Retrieves a webviews mapping based on CDP endpoints
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-waitForWebviewMs | number | no | Tells UiAutomator2 driver for how long (in milliseconds) to wait for web view(s) to appear since UiAutomator2 driver v2.53.0. `0`ms by default, then UiAutomator2 driver checks the WebView(s) availability once. | 10000
+waitForWebviewMs | number | no | Tells UiAutomator2 driver for how long (in milliseconds) to wait for web view(s) to appear since UiAutomator2 driver v2.53.0. Chrome process running on the device under test could fail to create `chrome_devtools_remote`, then the chromedriver raised `failed to connect to socket 'localabstract:chrome_devtools_remote'` error to UiAutomator2 driver. It could cause no WebViews found result, althought a couple of retrial succeeds in finding webview(s). This issue tends to occur Chrome v115 and over so far. [issues#19251](https://github.com/appium/appium/issues/19251) has more detail logs. `0`ms by default, then UiAutomator2 driver checks the WebView(s) availability once. | 10000
 
 #### Returned Result
 

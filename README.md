@@ -932,7 +932,7 @@ Retrieves a webviews mapping based on CDP endpoints
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-waitForWebviewMs | number | no | Tells UiAutomator2 driver for how long (in milliseconds) to wait for web view(s) to appear. `0`ms by default, then UiAutomator2 driver checks the WebView(s) availability once. | 10000
+waitForWebviewMs | number | no | Tells UiAutomator2 driver for how long (in milliseconds) to wait for web view(s) to appear since UiAutomator2 driver v2.53.0. `0`ms by default, then UiAutomator2 driver checks the WebView(s) availability once. | 10000
 
 #### Returned Result
 

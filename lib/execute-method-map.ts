@@ -370,6 +370,9 @@ export const executeMethodMap = {
 
   'mobile: getContexts': {
     command: 'mobileGetContexts',
+    params: {
+      optional: ['waitForWebviewMs'],
+    },
   },
 
   'mobile: getAppStrings': {

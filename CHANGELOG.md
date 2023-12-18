@@ -1,3 +1,10 @@
+## [2.35.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.34.2...v2.35.0) (2023-12-18)
+
+
+### Features
+
+* let mobile: getContexts gives waitForWebviewMs ([#699](https://github.com/appium/appium-uiautomator2-driver/issues/699)) ([c0f90cf](https://github.com/appium/appium-uiautomator2-driver/commit/c0f90cfd8c01d3852fbc3786c6458290441f18ae))
+
 ## [2.34.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.34.1...v2.34.2) (2023-12-02)
 
 

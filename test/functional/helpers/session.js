@@ -6,7 +6,7 @@ import { retry, retryInterval } from 'asyncbox';
 
 const INIT_RETRIES = process.env.CI ? 2 : 1;
 const ALERT_CHECK_RETRIES = 5;
-const ALERT_CHECK_INTERVAL = 1000;
+const ALERT_CHECK_INTERVAL = 500;
 
 
 let driver;

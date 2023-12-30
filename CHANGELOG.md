@@ -1,3 +1,10 @@
+## [2.37.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.36.0...v2.37.0) (2023-12-30)
+
+
+### Features
+
+* bump the server's targetSdkVersion from 32 to 33 ([#705](https://github.com/appium/appium-uiautomator2-driver/issues/705)) ([8fda76d](https://github.com/appium/appium-uiautomator2-driver/commit/8fda76d2900d63b51b08c0e3aa912bb11ee8992d))
+
 ## [2.36.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.35.0...v2.36.0) (2023-12-26)
 
 

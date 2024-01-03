@@ -65,7 +65,7 @@
     "appium-adb": "^11.0.1",
     "appium-android-driver": "^7.4.0",
     "appium-chromedriver": "^5.6.5",
-    "appium-uiautomator2-server": "^5.15.0",
+    "appium-uiautomator2-server": "^5.15.3",
     "asyncbox": "^3.0.0",
     "axios": "^1.x",
     "bluebird": "^3.5.1",

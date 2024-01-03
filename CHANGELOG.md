@@ -1,3 +1,10 @@
+## [2.37.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.37.0...v2.37.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* minor fixes for upcoming androidx.test.uiautomator:uiautomator:2.3.0 ([#708](https://github.com/appium/appium-uiautomator2-driver/issues/708)) ([166ab62](https://github.com/appium/appium-uiautomator2-driver/commit/166ab623e99b02e06b423d1737814896ee685cba))
+
 ## [2.37.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.36.0...v2.37.0) (2023-12-30)
 
 

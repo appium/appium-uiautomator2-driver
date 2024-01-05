@@ -1,3 +1,10 @@
+## [2.38.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.37.1...v2.38.0) (2024-01-05)
+
+
+### Features
+
+* Bump the server version ([#710](https://github.com/appium/appium-uiautomator2-driver/issues/710)) ([4ee3b7e](https://github.com/appium/appium-uiautomator2-driver/commit/4ee3b7eeac77fa53d3e437bc311e31a1d057176e))
+
 ## [2.37.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.37.0...v2.37.1) (2024-01-03)
 
 

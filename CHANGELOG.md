@@ -1,3 +1,10 @@
+## [2.39.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.38.0...v2.39.0) (2024-01-05)
+
+
+### Features
+
+* Add doctor checks ([#711](https://github.com/appium/appium-uiautomator2-driver/issues/711)) ([0e6c8fe](https://github.com/appium/appium-uiautomator2-driver/commit/0e6c8fed60345125f8ca78d70bb8e934cd50a6bc))
+
 ## [2.38.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.37.1...v2.38.0) (2024-01-05)
 
 

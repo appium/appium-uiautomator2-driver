@@ -61,13 +61,12 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
-    - run: appium driver doctor uiautomator2
-      name: Run doctor checks
     - run: |
         cwd=$(pwd)
         pushd "$cwd"
         cd ~
         CHROMEDRIVER_VERSION="${{ matrix.chromedriverVersion }}" appium driver install --source=local "$cwd"
+        appium driver doctor uiautomator2
         nohup appium server \
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \

@@ -61,6 +61,8 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
+    - run: appium driver doctor uiautomator2
+      name: Run doctor checks
     - run: |
         cwd=$(pwd)
         pushd "$cwd"

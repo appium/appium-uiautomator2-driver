@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "appium-adb": "^11.0.1",
-    "appium-android-driver": "^7.4.0",
+    "appium-android-driver": "^7.5.1",
     "appium-chromedriver": "^5.6.5",
     "appium-uiautomator2-server": "^6.0.0",
     "asyncbox": "^3.0.0",
@@ -80,7 +80,7 @@
     "@appium/docutils": "^1.0.1",
     "@appium/eslint-config-appium": "^8.0.3",
     "@appium/eslint-config-appium-ts": "^0.x",
-    "@appium/support": "^4.0.1",
+    "@appium/support": "^4.2.0",
     "@appium/test-support": "^3.0.0",
     "@appium/tsconfig": "^0.x",
     "@appium/types": "^0.x",
@@ -132,7 +132,7 @@
     "xpath": "^0.x"
   },
   "peerDependencies": {
-    "appium": "^2.0.0"
+    "appium": "^2.4.1"
   },
   "engines": {
     "node": ">=14",
@@ -147,6 +147,11 @@
     "mainClass": "AndroidUiautomator2Driver",
     "scripts": {
       "reset": "scripts/reset.js"
+    },
+    "doctor": {
+      "checks": [
+        "./build/lib/doctor/checks.js"
+      ]
     }
   },
   "typedoc": {

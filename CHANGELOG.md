@@ -1,3 +1,10 @@
+## [2.40.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.39.0...v2.40.0) (2024-01-07)
+
+
+### Features
+
+* update io.appium.settings to use newer location deps ([#712](https://github.com/appium/appium-uiautomator2-driver/issues/712)) ([0d595aa](https://github.com/appium/appium-uiautomator2-driver/commit/0d595aac2bbadd3756a9ff58f7906ea57da078f1))
+
 ## [2.39.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.38.0...v2.39.0) (2024-01-05)
 
 

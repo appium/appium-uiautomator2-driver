@@ -1,3 +1,10 @@
+## [2.40.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.0...v2.40.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* io.appium.settings process check as the foreground service check ([#713](https://github.com/appium/appium-uiautomator2-driver/issues/713)) ([4fcdd7b](https://github.com/appium/appium-uiautomator2-driver/commit/4fcdd7b4f96f8fae7f658340c5e228fb85c210cf))
+
 ## [2.40.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.39.0...v2.40.0) (2024-01-07)
 
 

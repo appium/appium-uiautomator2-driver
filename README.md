@@ -1465,6 +1465,19 @@ The actual mode value. Supported values for different UI modes are:
 - `night`: yes,no,auto,custom_schedule,custom_bedtime
 - `car`: yes,no
 
+### mobile: sendTrimMemory
+
+Simulates the [onTrimMemory()](https://developer.android.com/reference/android/content/ComponentCallbacks2#onTrimMemory(int)) event for the given package, which allows to verify the app functinality under different RAM-related circumstances.
+Read [Manage your app's memory](https://developer.android.com/topic/performance/memory) for more details.
+Available since driver version 2.41
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+pkg | string | yes | The package name to send the `trimMemory` event to. | com.my.company
+level | 'COMPLETE' or 'MODERATE' or 'BACKGROUND' or 'UI_HIDDEN' or 'RUNNING_CRITICAL' or 'RUNNING_LOW' or 'RUNNING_MODERATE' | yes | The actual memory trim level to simulate | RUNNING_CRITICAL
+
 
 ## Applications Management
 

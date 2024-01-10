@@ -1,3 +1,10 @@
+## [2.40.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.1...v2.40.2) (2024-01-10)
+
+
+### Miscellaneous Chores
+
+* Bump server version ([48b6914](https://github.com/appium/appium-uiautomator2-driver/commit/48b691423db1100787ee033a225a7f5211906f8a))
+
 ## [2.40.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.0...v2.40.1) (2024-01-10)
 
 

@@ -596,7 +596,8 @@ export const executeMethodMap = {
     params: {
       optional: ['opts'],
     }
-  }
+  },
+
 } as const;
 
 export type Uiautomator2ExecuteMethodMap = typeof executeMethodMap;

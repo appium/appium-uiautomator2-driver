@@ -10,7 +10,8 @@ import type {
   StringRecord,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT} from 'appium-adb';
-import AndroidDriver, {SETTINGS_HELPER_PKG_ID, androidHelpers} from 'appium-android-driver';
+import AndroidDriver, {androidHelpers} from 'appium-android-driver';
+import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {BaseDriver, DeviceSettings} from 'appium/driver';
 import {fs, mjpeg, util} from 'appium/support';
 import {retryInterval} from 'asyncbox';
@@ -509,7 +510,7 @@ class AndroidUiautomator2Driver
       // `--no-window-animation` works over Android 8 to disable all of animations
       if (await this.adb.isAnimationOn()) {
         this.log.info('Disabling animation via io.appium.settings');
-        await this.adb.setAnimationState(false);
+        await this.settingsApp.setAnimationState(false);
         this._wasWindowAnimationDisabled = true;
       } else {
         this.log.info('Window animation is already disabled');
@@ -603,7 +604,7 @@ class AndroidUiautomator2Driver
       await this.uiautomator2.installServerApk(this.opts.uiautomator2ServerInstallTimeout);
       try {
         await this.adb!.addToDeviceIdleWhitelist(
-          SETTINGS_HELPER_PKG_ID,
+          SETTINGS_HELPER_ID,
           SERVER_PACKAGE_ID,
           SERVER_TEST_PACKAGE_ID
         );
@@ -625,7 +626,7 @@ class AndroidUiautomator2Driver
       await helpers.uninstallOtherPackages(
         this.adb!,
         helpers.parseArray(this.opts.uninstallOtherPackages),
-        [SETTINGS_HELPER_PKG_ID, SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID]
+        [SETTINGS_HELPER_ID, SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID]
       );
     }
 
@@ -791,7 +792,7 @@ class AndroidUiautomator2Driver
       // This value can be true if test target device is <= 26
       if (this._wasWindowAnimationDisabled) {
         this.log.info('Restoring window animation state');
-        await this.adb.setAnimationState(true);
+        await this.settingsApp.setAnimationState(true);
       }
       if (this._originalIme) {
         try {

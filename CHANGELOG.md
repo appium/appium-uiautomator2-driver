@@ -1,3 +1,10 @@
+## [2.41.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.2...v2.41.0) (2024-01-11)
+
+
+### Features
+
+* Document the helper method to simulate the low-memory event ([#714](https://github.com/appium/appium-uiautomator2-driver/issues/714)) ([d9c9863](https://github.com/appium/appium-uiautomator2-driver/commit/d9c98638296c4d770f9e50d86ec6775cd4b00c2a))
+
 ## [2.40.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.1...v2.40.2) (2024-01-10)
 
 

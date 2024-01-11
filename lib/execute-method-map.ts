@@ -590,6 +590,14 @@ export const executeMethodMap = {
       optional: ['opts'],
     },
   },
+
+  'mobile: sendTrimMemory': {
+    command: 'mobileSendTrimMemory',
+    params: {
+      optional: ['opts'],
+    }
+  },
+
 } as const;
 
 export type Uiautomator2ExecuteMethodMap = typeof executeMethodMap;

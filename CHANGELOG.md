@@ -1,3 +1,10 @@
+## [2.42.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.41.0...v2.42.0) (2024-01-12)
+
+
+### Features
+
+* Use APIs imported from the io.appium.settings package ([#715](https://github.com/appium/appium-uiautomator2-driver/issues/715)) ([f55625a](https://github.com/appium/appium-uiautomator2-driver/commit/f55625a32afc174cec6d92178ef15bcc0bb0d79f))
+
 ## [2.41.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.40.2...v2.41.0) (2024-01-11)
 
 

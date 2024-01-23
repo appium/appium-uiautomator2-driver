@@ -1,3 +1,10 @@
+## [2.42.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.42.1...v2.42.2) (2024-01-23)
+
+
+### Bug Fixes
+
+* bump appium android driver to 7.8.3 (for getContexts) ([#718](https://github.com/appium/appium-uiautomator2-driver/issues/718)) ([1bd9358](https://github.com/appium/appium-uiautomator2-driver/commit/1bd9358566a902dcd7062e0f0667a724cc1a1c26))
+
 ## [2.42.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.42.0...v2.42.1) (2024-01-14)
 
 

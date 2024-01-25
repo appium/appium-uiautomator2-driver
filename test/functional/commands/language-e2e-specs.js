@@ -3,7 +3,6 @@ import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
 import { initSession, deleteSession } from '../helpers/session';
 import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
-import { androidHelpers } from 'appium-android-driver';
 import { getLocale } from '../helpers/helpers';
 
 
@@ -13,6 +12,7 @@ chai.use(chaiAsPromised);
 // Skip ci since the command restart emulator when the test device's API is 22-.
 describe('Localization - locale @skip-ci @skip-real-device', function () {
   let initialLocale;
+  /** @type {ADB} */
   let adb;
 
   before(async function () {
@@ -26,9 +26,10 @@ describe('Localization - locale @skip-ci @skip-real-device', function () {
   let driver;
   after(async function () {
     if (driver) {
-      let [language, country] = initialLocale.split('-');
-      await androidHelpers.ensureDeviceLocale(adb, language, country);
+      const [language, country] = initialLocale.split('-');
+      const isLocaleOk = await adb.ensureCurrentLocale(language, country);
       await deleteSession();
+      isLocaleOk.should.be.true;
     }
   });
 

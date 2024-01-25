@@ -4,7 +4,6 @@ import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
 import ADB from 'appium-adb';
 import { initSession, deleteSession } from '../helpers/session';
 import { getLocale } from '../helpers/helpers';
-import { androidHelpers } from 'appium-android-driver';
 
 
 chai.should();
@@ -34,6 +33,7 @@ describe('strings', function () {
 
   describe('device language', function () {
     let initialLocale;
+    /** @type {ADB} */
     let adb;
     before(async function () {
       // restarting doesn't work on Android 7+
@@ -42,17 +42,10 @@ describe('strings', function () {
     });
     afterEach(async function () {
       if (driver) {
-        if (await adb.getApiLevel() > 23) {
-          let [language, country] = initialLocale.split('-');
-          await androidHelpers.ensureDeviceLocale(adb, language, country);
-        } else {
-          // This method is flakey in CI
-          if (!process.env.CI) {
-            await androidHelpers.ensureDeviceLocale(adb, null, initialLocale);
-          }
-        }
-
+        const [language, country] = initialLocale.split('-');
+        const isLocaleOk = await adb.ensureCurrentLocale(language, country);
         await deleteSession();
+        isLocaleOk.should.be.true;
       }
     });
 

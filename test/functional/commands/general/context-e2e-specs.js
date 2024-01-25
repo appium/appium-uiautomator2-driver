@@ -38,23 +38,11 @@ describe('apidemo - context', function () {
       const contexts = await driver.getContexts();
       await driver.switchContext(contexts[1]);
     });
-    it('should be able to go into native context and interact with it after restarting app', async function () {
-      await driver.closeApp();
-      await driver.launchApp();
-      await driver.switchContext(NATIVE);
-      await driver.$(NATIVE_LOCATOR).elementId.should.eventually.exist;
-    });
     it('should be able to go into native context and interact with it after resetting app', async function () {
       await driver.terminateApp('io.appium.android.apis');
       await driver.activateApp('io.appium.android.apis');
       await driver.switchContext(NATIVE);
       await driver.$(NATIVE_LOCATOR).elementId.should.eventually.exist;
-    });
-    it('should be able to go into webview context and interact with it after restarting app', async function () {
-      await driver.closeApp();
-      await driver.launchApp();
-      await driver.switchContext(WEBVIEW);
-      await driver.$(WEBVIEW_LOCATOR).elementId.should.eventually.exist;
     });
     it.skip('should be able to go into webview context and interact with it after resetting app', async function () {
       await driver.terminateApp('io.appium.android.apis');

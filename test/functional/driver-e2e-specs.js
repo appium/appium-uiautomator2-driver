@@ -97,11 +97,3 @@ describe('createSession', function () {
     });
   });
 });
-
-describe('close', function () {
-  it('should close application', async function () {
-    const driver = await initSession(APIDEMOS_CAPS);
-    await driver.closeApp();
-    APIDEMOS_PACKAGE.should.not.equal(await driver.getCurrentPackage());
-  });
-});

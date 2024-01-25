@@ -1,3 +1,10 @@
+## [2.43.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.42.2...v2.43.0) (2024-01-25)
+
+
+### Features
+
+* Update android-driver ([#720](https://github.com/appium/appium-uiautomator2-driver/issues/720)) ([f352359](https://github.com/appium/appium-uiautomator2-driver/commit/f35235970904fd89f736b4fdd9a8635858719edb))
+
 ## [2.42.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.42.1...v2.42.2) (2024-01-23)
 
 

@@ -32,10 +32,7 @@ describe('createSession', function () {
 
   describe('default adb port', function () {
     afterEach(async function () {
-      if (driver) {
-        await deleteSession();
-      }
-      driver = null;
+      await deleteSession();
     });
 
     it('should start android session focusing on default pkg and act', async function () {
@@ -78,10 +75,7 @@ describe('createSession', function () {
       await killAndPrepareServer(DEFAULT_ADB_PORT, adbPort);
     });
     afterEach(async function () {
-      if (driver) {
-        await deleteSession();
-      }
-      driver = null;
+      await deleteSession();
 
       await killAndPrepareServer(adbPort, DEFAULT_ADB_PORT);
     });

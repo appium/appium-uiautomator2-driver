@@ -55,7 +55,6 @@ import {
   mobileBackgroundApp,
 } from './commands/app-management';
 import {
-  getStrings,
   mobileGetAppStrings,
 } from './commands/app-strings';
 import {
@@ -315,7 +314,6 @@ class AndroidUiautomator2Driver
     this.desiredCapConstraints = _.cloneDeep(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
-    this.apkStrings = {}; // map of language -> strings obj
     this._originalIme = null;
 
     this.settings = new DeviceSettings(
@@ -1000,7 +998,6 @@ class AndroidUiautomator2Driver
   mobileInstallMultipleApks = mobileInstallMultipleApks;
   mobileBackgroundApp = mobileBackgroundApp;
 
-  getStrings = getStrings;
   mobileGetAppStrings = mobileGetAppStrings;
 
   mobileGetBatteryInfo = mobileGetBatteryInfo;

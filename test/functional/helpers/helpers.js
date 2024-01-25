@@ -1,10 +1,5 @@
 import { exec } from 'teen_process';
 
-
-async function getLocale (adb) {
-    return await adb.getDeviceLocale();
-}
-
 async function isArmEmu () {
   const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(' ')];
   const serialCmd = ['adb', ['get-serialno']];
@@ -15,4 +10,4 @@ async function isArmEmu () {
   }
 }
 
-export { getLocale, isArmEmu };
+export { isArmEmu };

@@ -11,6 +11,12 @@ const ALERT_CHECK_INTERVAL = 1000;
 
 let driver;
 
+/**
+ *
+ * @param {import('@appium/types').StringRecord} caps
+ * @param {import('@appium/types').StringRecord} [remoteOpts={}]
+ * @returns {Promise<import('webdriverio').Browser>}
+ */
 async function initSession (caps, remoteOpts = {}) {
   // Create the driver
   const host = DEFAULT_HOST;
@@ -71,6 +77,7 @@ async function deleteSession () {
   try {
     await driver.deleteSession();
   } catch (ign) {}
+  driver = null;
 }
 
 export { initSession, deleteSession, attemptToDismissAlert };

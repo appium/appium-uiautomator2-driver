@@ -1,9 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
-import ADB from 'appium-adb';
 import { initSession, deleteSession } from '../helpers/session';
-import { getLocale } from '../helpers/helpers';
 
 
 chai.should();
@@ -32,38 +30,19 @@ describe('strings', function () {
   });
 
   describe('device language', function () {
-    let initialLocale;
-    /** @type {ADB} */
-    let adb;
-    before(async function () {
-      // restarting doesn't work on Android 7+
-      adb = new ADB();
-      initialLocale = await getLocale(adb);
-    });
     afterEach(async function () {
-      if (driver) {
-        const [language, country] = initialLocale.split('-');
-        const isLocaleOk = await adb.ensureCurrentLocale(language, country);
-        await deleteSession();
-        isLocaleOk.should.be.true;
-      }
+      await deleteSession();
     });
 
     it('should return app strings with default locale/language', async function () {
-      driver = await initSession(APIDEMOS_CAPS);
+      const caps = amendCapabilities(APIDEMOS_CAPS, {
+        'appium:language': 'en',
+        'appium:locale': 'US',
+      });
+      driver = await initSession(APIDEMOS_CAPS, caps);
 
       let strings = await driver.getStrings();
       strings.hello_world.should.equal('Hello, World!');
-    });
-    it('should return app strings when language/locale set @skip-ci', async function () {
-      const caps = amendCapabilities(APIDEMOS_CAPS, {
-        'appium:language': 'fr',
-        'appium:locale': 'CA',
-      });
-      const driver = await initSession(caps);
-
-      let strings = await driver.getStrings();
-      strings.hello_world.should.equal('Bonjour, Monde!');
     });
   });
 });

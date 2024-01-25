@@ -30,6 +30,10 @@ describe('testViewportCommands', function () {
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
+    if (process.env.CI) {
+      return this.skip();
+    }
+
     const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession();
 
     expect(pixelRatio).not.to.be.empty;

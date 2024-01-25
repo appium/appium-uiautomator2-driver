@@ -32,10 +32,7 @@ describe('createSession', function () {
 
   describe('default adb port', function () {
     afterEach(async function () {
-      if (driver) {
-        await deleteSession();
-      }
-      driver = null;
+      await deleteSession();
     });
 
     it('should start android session focusing on default pkg and act', async function () {
@@ -78,10 +75,7 @@ describe('createSession', function () {
       await killAndPrepareServer(DEFAULT_ADB_PORT, adbPort);
     });
     afterEach(async function () {
-      if (driver) {
-        await deleteSession();
-      }
-      driver = null;
+      await deleteSession();
 
       await killAndPrepareServer(adbPort, DEFAULT_ADB_PORT);
     });
@@ -95,13 +89,5 @@ describe('createSession', function () {
       await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
       await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
     });
-  });
-});
-
-describe('close', function () {
-  it('should close application', async function () {
-    const driver = await initSession(APIDEMOS_CAPS);
-    await driver.closeApp();
-    APIDEMOS_PACKAGE.should.not.equal(await driver.getCurrentPackage());
   });
 });

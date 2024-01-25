@@ -10,7 +10,7 @@ import type {
   StringRecord,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT} from 'appium-adb';
-import AndroidDriver, {androidHelpers} from 'appium-android-driver';
+import AndroidDriver, {utils} from 'appium-android-driver';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {BaseDriver, DeviceSettings} from 'appium/driver';
 import {fs, mjpeg, util} from 'appium/support';
@@ -24,8 +24,8 @@ import type {ExecError} from 'teen_process';
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints';
 import {executeMethodMap} from './execute-method-map';
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
-import uiautomator2Helpers from './helpers';
 import {newMethodMap} from './method-map';
+import { signApp } from './helpers';
 import type { EmptyObject } from 'type-fest';
 import type {
   Uiautomator2Settings,
@@ -38,8 +38,115 @@ import type {
   W3CUiautomator2DriverCaps,
 } from './types';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server} from './uiautomator2';
-
-const helpers = {...uiautomator2Helpers, ...androidHelpers};
+import {
+  mobileGetActionHistory,
+  mobileScheduleAction,
+  mobileUnscheduleAction,
+} from './commands/actions';
+import {
+  getAlertText,
+  mobileAcceptAlert,
+  mobileDismissAlert,
+  postAcceptAlert,
+  postDismissAlert,
+} from './commands/alert';
+import {
+  mobileInstallMultipleApks,
+  mobileBackgroundApp,
+} from './commands/app-management';
+import {
+  mobileGetAppStrings,
+} from './commands/app-strings';
+import {
+  mobileGetBatteryInfo,
+} from './commands/battery';
+import {
+  active,
+  getAttribute,
+  elementEnabled,
+  elementDisplayed,
+  elementSelected,
+  getName,
+  getLocation,
+  getSize,
+  getElementRect,
+  getElementScreenshot,
+  getText,
+  setValueImmediate,
+  doSetElementValue,
+  click,
+  clear,
+  mobileReplaceElementValue,
+} from './commands/element';
+import {
+  execute,
+  executeMobile,
+} from './commands/execute';
+import {
+  doFindElementOrEls,
+} from './commands/find';
+import {
+  mobileClickGesture,
+  mobileDoubleClickGesture,
+  mobileDragGesture,
+  mobileFlingGesture,
+  mobileLongClickGesture,
+  mobilePinchCloseGesture,
+  mobilePinchOpenGesture,
+  mobileScroll,
+  mobileScrollBackTo,
+  mobileScrollGesture,
+  mobileSwipeGesture,
+} from './commands/gestures';
+import {
+  pressKeyCode,
+  longPressKeyCode,
+  mobilePressKey,
+  mobileType,
+  doSendKeys,
+  keyevent,
+} from './commands/keyboard';
+import {
+  getPageSource,
+  getOrientation,
+  setOrientation,
+  getClipboard,
+  openNotifications,
+  suspendChromedriverProxy,
+  mobileGetDeviceInfo,
+} from './commands/misc';
+import {
+  setUrl,
+  mobileDeepLink,
+  back,
+} from './commands/navigation';
+import {
+  mobileScreenshots,
+  mobileViewportScreenshot,
+  getScreenshot,
+  getViewportScreenshot,
+} from './commands/screenshot';
+import {
+  doSwipe,
+  doDrag,
+  touchDown,
+  touchLongClick,
+  touchMove,
+  touchUp,
+  tap,
+  doPerformMultiAction,
+  performActions,
+  releaseActions,
+} from './commands/touch';
+import {
+  getStatusBarHeight,
+  getDevicePixelRatio,
+  getDisplayDensity,
+  getViewPortRect,
+  getWindowRect,
+  getWindowSize,
+  mobileViewPortRect,
+} from './commands/viewport';
 
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device
@@ -207,7 +314,6 @@ class AndroidUiautomator2Driver
     this.desiredCapConstraints = _.cloneDeep(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
-    this.apkStrings = {}; // map of language -> strings obj
     this._originalIme = null;
 
     this.settings = new DeviceSettings(
@@ -226,10 +332,7 @@ class AndroidUiautomator2Driver
   }
 
   override validateDesiredCaps(caps: any): caps is Uiautomator2DriverCaps {
-    return (
-      BaseDriver.prototype.validateDesiredCaps.call(this, caps) &&
-      androidHelpers.validateDesiredCaps(caps)
-    );
+    return super.validateDesiredCaps(caps);
   }
 
   async createSession(
@@ -271,7 +374,7 @@ class AndroidUiautomator2Driver
 
       if (this.isChromeSession) {
         this.log.info("We're going to run a Chrome-based session");
-        const {pkg, activity} = helpers.getChromePkg(this.opts.browserName!);
+        const {pkg, activity} = utils.getChromePkg(this.opts.browserName!);
         this.opts.appPackage = this.caps.appPackage = pkg;
         this.opts.appActivity = this.caps.appActivity = activity;
         this.log.info(`Chrome-type package and activity are ${pkg} and ${activity}`);
@@ -354,7 +457,7 @@ class AndroidUiautomator2Driver
         `Forwarding UiAutomator2 Server port ${DEVICE_PORT} to local port ${localPort}`
       );
       if ((await checkPortStatus(localPort, LOCALHOST_IP4)) === 'open') {
-        this.log.errorAndThrow(
+        throw this.log.errorAndThrow(
           `UiAutomator2 Server cannot start because the local port #${localPort} is busy. ` +
             `Make sure the port you provide via 'systemPort' capability is not occupied. ` +
             `This situation might often be a result of an inaccurate sessions management, e.g. ` +
@@ -374,13 +477,12 @@ class AndroidUiautomator2Driver
       try {
         this.systemPort = await findAPortNotInUse(startPort, endPort);
       } catch (e) {
-        this.log.errorAndThrow(
+        throw this.log.errorAndThrow(
           `Cannot find any free port in range ${startPort}..${endPort}}. ` +
             `Please set the available port number by providing the systemPort capability or ` +
             `double check the processes that are locking ports within this range and terminate ` +
             `these which are not needed anymore`
         );
-        throw new Error(); // unreachable
       }
       await forwardPort(this.systemPort);
     });
@@ -422,14 +524,14 @@ class AndroidUiautomator2Driver
     caps: Uiautomator2StartSessionOpts
   ): Promise<Uiautomator2SessionCaps> {
     // get device udid for this session
-    const {udid, emPort} = await helpers.getDeviceInfoFromCaps(this.opts);
+    const {udid, emPort} = await this.getDeviceInfoFromCaps();
     this.opts.udid = udid;
     // @ts-expect-error do not put random stuff on opts
     this.opts.emPort = emPort;
 
     // now that we know our java version and device info, we can create our
     // ADB instance
-    this.adb = await androidHelpers.createADB(this.opts);
+    this.adb = await this.createADB();
 
     const apiLevel = await this.adb.getApiLevel();
 
@@ -470,7 +572,7 @@ class AndroidUiautomator2Driver
     }
 
     // get appPackage et al from manifest if necessary
-    const appInfo = await helpers.getLaunchInfo(this.adb, this.opts);
+    const appInfo = await this.getLaunchInfo();
     // and get it onto our 'opts' object so we use it from now on
     this.opts = {...this.opts, ...(appInfo ?? {})};
 
@@ -489,7 +591,7 @@ class AndroidUiautomator2Driver
     if (this.opts.hideKeyboard) {
       this._originalIme = await this.adb.defaultIME();
     }
-    await helpers.initDevice(this.adb, this.opts);
+    await this.initDevice();
 
     // Prepare the device by forwarding the UiAutomator2 port
     // This call mutates this.systemPort if it is not set explicitly
@@ -544,7 +646,7 @@ class AndroidUiautomator2Driver
     // Unlock the device after the session is started.
     if (!this.opts.skipUnlock) {
       // unlock the device to prepare it for testing
-      await helpers.unlock(this as any, this.adb, this.caps);
+      await this.unlock();
     } else {
       this.log.debug(`'skipUnlock' capability set, so skipping device unlock`);
     }
@@ -623,9 +725,8 @@ class AndroidUiautomator2Driver
   async initAUT() {
     // Uninstall any uninstallOtherPackages which were specified in caps
     if (this.opts.uninstallOtherPackages) {
-      await helpers.uninstallOtherPackages(
-        this.adb!,
-        helpers.parseArray(this.opts.uninstallOtherPackages),
+      await this.uninstallOtherPackages(
+        utils.parseArray(this.opts.uninstallOtherPackages),
         [SETTINGS_HELPER_ID, SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID]
       );
     }
@@ -634,15 +735,14 @@ class AndroidUiautomator2Driver
     if (this.opts.otherApps) {
       let otherApps;
       try {
-        otherApps = helpers.parseArray(this.opts.otherApps);
+        otherApps = utils.parseArray(this.opts.otherApps);
       } catch (e) {
-        this.log.errorAndThrow(`Could not parse "otherApps" capability: ${(e as Error).message}`);
-        throw new Error(); // unrechable
+        throw this.log.errorAndThrow(`Could not parse "otherApps" capability: ${(e as Error).message}`);
       }
       otherApps = await B.all(
         otherApps.map((app) => this.helpers.configureApp(app, [APK_EXTENSION, APKS_EXTENSION]))
       );
-      await helpers.installOtherApks(otherApps, this.adb!, this.opts);
+      await this.installOtherApks(otherApps);
     }
 
     if (this.opts.app) {
@@ -656,12 +756,12 @@ class AndroidUiautomator2Driver
             requireDefaultCert: false,
           }))
         ) {
-          await helpers.signApp(this.adb!, this.opts.app);
+          await signApp(this.adb!, this.opts.app);
         }
         if (!this.opts.skipUninstall) {
           await this.adb!.uninstallApk(this.opts.appPackage!);
         }
-        await helpers.installApk(this.adb!, this.opts);
+        await this.installAUT();
       } else {
         this.log.debug(
           'noReset has been requested and the app is already installed. Doing nothing'
@@ -669,13 +769,13 @@ class AndroidUiautomator2Driver
       }
     } else {
       if (this.opts.fullReset) {
-        this.log.errorAndThrow(
+        throw this.log.errorAndThrow(
           'Full reset requires an app capability, use fastReset if app is not provided'
         );
       }
       this.log.debug('No app capability. Assuming it is already on the device');
       if (this.opts.fastReset && this.opts.appPackage) {
-        await helpers.resetApp(this.adb!, this.opts);
+        await this.resetAUT();
       }
     }
   }
@@ -737,8 +837,6 @@ class AndroidUiautomator2Driver
         }
       },
     ];
-
-    await androidHelpers.removeAllSessionWebSocketHandlers(this.server, this.sessionId);
 
     try {
       await this.stopChromedriverProxies();
@@ -827,14 +925,13 @@ class AndroidUiautomator2Driver
       this.log.info('Closing MJPEG stream');
       this.mjpegStream.stop();
     }
-    await BaseDriver.prototype.deleteSession.call(this);
+    await super.deleteSession();
   }
 
   async checkAppPresent() {
     this.log.debug('Checking whether app is actually present');
     if (!this.opts.app || !(await fs.exists(this.opts.app))) {
-      this.log.errorAndThrow(`Could not find app apk at '${this.opts.app}'`);
-      throw new Error(); // unreachable
+      throw this.log.errorAndThrow(`Could not find app apk at '${this.opts.app}'`);
     }
   }
 
@@ -887,8 +984,100 @@ class AndroidUiautomator2Driver
     )) as Partial<Uiautomator2Settings>;
     return {...driverSettings, ...serverSettings} as any;
   }
-}
 
-import './commands';
+  mobileGetActionHistory = mobileGetActionHistory;
+  mobileScheduleAction = mobileScheduleAction;
+  mobileUnscheduleAction = mobileUnscheduleAction;
+
+  getAlertText = getAlertText;
+  mobileAcceptAlert = mobileAcceptAlert;
+  mobileDismissAlert = mobileDismissAlert;
+  postAcceptAlert = postAcceptAlert;
+  postDismissAlert = postDismissAlert;
+
+  mobileInstallMultipleApks = mobileInstallMultipleApks;
+  mobileBackgroundApp = mobileBackgroundApp;
+
+  mobileGetAppStrings = mobileGetAppStrings;
+
+  mobileGetBatteryInfo = mobileGetBatteryInfo;
+
+  active = active;
+  getAttribute = getAttribute;
+  elementEnabled = elementEnabled;
+  elementDisplayed = elementDisplayed;
+  elementSelected = elementSelected;
+  getName = getName;
+  getLocation = getLocation;
+  getSize = getSize;
+  getElementRect = getElementRect;
+  getElementScreenshot = getElementScreenshot;
+  getText = getText;
+  setValueImmediate = setValueImmediate;
+  doSetElementValue = doSetElementValue;
+  click = click;
+  clear = clear;
+  mobileReplaceElementValue = mobileReplaceElementValue;
+
+  execute = execute;
+  executeMobile = executeMobile;
+
+  doFindElementOrEls = doFindElementOrEls;
+
+  mobileClickGesture = mobileClickGesture;
+  mobileDoubleClickGesture = mobileDoubleClickGesture;
+  mobileDragGesture = mobileDragGesture;
+  mobileFlingGesture = mobileFlingGesture;
+  mobileLongClickGesture = mobileLongClickGesture;
+  mobilePinchCloseGesture = mobilePinchCloseGesture;
+  mobilePinchOpenGesture = mobilePinchOpenGesture;
+  mobileScroll = mobileScroll;
+  mobileScrollBackTo = mobileScrollBackTo;
+  mobileScrollGesture = mobileScrollGesture;
+  mobileSwipeGesture = mobileSwipeGesture;
+
+  pressKeyCode = pressKeyCode;
+  longPressKeyCode = longPressKeyCode;
+  mobilePressKey = mobilePressKey;
+  mobileType = mobileType;
+  doSendKeys = doSendKeys;
+  keyevent = keyevent;
+
+  getPageSource = getPageSource;
+  getOrientation = getOrientation;
+  setOrientation = setOrientation;
+  getClipboard = getClipboard;
+  openNotifications = openNotifications;
+  suspendChromedriverProxy = suspendChromedriverProxy;
+  mobileGetDeviceInfo = mobileGetDeviceInfo;
+
+  setUrl = setUrl;
+  mobileDeepLink = mobileDeepLink;
+  back = back;
+
+  mobileScreenshots = mobileScreenshots;
+  mobileViewportScreenshot = mobileViewportScreenshot;
+  getScreenshot = getScreenshot;
+  getViewportScreenshot = getViewportScreenshot;
+
+  doSwipe = doSwipe;
+  doDrag = doDrag;
+  touchDown = touchDown;
+  touchLongClick = touchLongClick;
+  touchMove = touchMove;
+  touchUp = touchUp;
+  tap = tap;
+  doPerformMultiAction = doPerformMultiAction;
+  performActions = performActions;
+  releaseActions = releaseActions;
+
+  getStatusBarHeight = getStatusBarHeight;
+  getDevicePixelRatio = getDevicePixelRatio;
+  getDisplayDensity = getDisplayDensity;
+  getViewPortRect = getViewPortRect;
+  getWindowRect = getWindowRect;
+  getWindowSize = getWindowSize;
+  mobileViewPortRect = mobileViewPortRect;
+}
 
 export {AndroidUiautomator2Driver};

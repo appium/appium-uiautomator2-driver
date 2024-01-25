@@ -1,14 +1,4 @@
 import { exec } from 'teen_process';
-import ADB from 'appium-adb';
-
-
-async function getLocale (adb = new ADB()) {
-  if (await adb.getApiLevel() < 23) {
-    return await adb.getDeviceCountry();
-  } else {
-    return await adb.getDeviceLocale();
-  }
-}
 
 async function isArmEmu () {
   const archCmd = ['adb', 'shell getprop ro.product.cpu.abi'.split(' ')];
@@ -20,4 +10,4 @@ async function isArmEmu () {
   }
 }
 
-export { getLocale, isArmEmu };
+export { isArmEmu };

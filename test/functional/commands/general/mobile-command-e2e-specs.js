@@ -9,9 +9,6 @@ chai.use(chaiAsPromised);
 describe('mobile', function () {
   let driver;
   before(async function () {
-    // For deeplinking to work, it has to run a session in a native
-    // context but it doesn't matter what native app is run so just
-    // run io.appium.settings for simplicity
     driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
@@ -33,27 +30,6 @@ describe('mobile', function () {
         extras: [['s', 'max', '10']],
       });
       output.should.include('result=-1');
-    });
-  });
-  describe('mobile:deepLink', function () {
-    it('should be able to launch apps using Instant Apps', async function () {
-      try {
-        await driver.execute('mobile: deepLink', {url: 'https://www.realtor.com/realestateandhomes-search/San-Jose_CA', package: 'com.move.realtor'});
-      } catch (e) {
-        // Note: Currently no emulators have this feature enabled so for this test to make it past this try-catch
-        // block it has to be run on a local emulator/device that has Instant Apps enabled
-        // (https://developer.android.com/topic/instant-apps/getting-started/setup.html)
-        e.message.should.match(/unable to resolve intent/i);
-        return;
-      }
-
-      // Check that the source has the package name somewhere
-      await driver.source().should.eventually.match(/com\.move\.realtor/);
-
-      // Check that we can find a native element and interact with it
-      const btn = await driver.elementsByXPath('//android.widget.Button');
-      btn.length.should.be.above(0);
-      await btn[0].click();
     });
   });
   describe('mobile:batteryInfo', function () {

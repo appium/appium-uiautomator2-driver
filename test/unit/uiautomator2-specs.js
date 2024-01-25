@@ -5,7 +5,7 @@ import { withMocks } from '@appium/test-support';
 import {
   UiAutomator2Server, INSTRUMENTATION_TARGET, SERVER_TEST_PACKAGE_ID
 } from '../../lib/uiautomator2';
-import helpers from '../../lib/helpers';
+import * as helpers from '../../lib/helpers';
 import log from '../../lib/logger';
 
 chai.should();

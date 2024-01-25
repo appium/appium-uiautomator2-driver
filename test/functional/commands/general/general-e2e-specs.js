@@ -2,9 +2,20 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
+import { waitForCondition } from 'asyncbox';
 
 chai.should();
 chai.use(chaiAsPromised);
+
+async function expectPackageAndActivity(driver, pkg, activity, timeoutMs = 5000) {
+  await waitForCondition(async () =>
+    (await driver.getCurrentPackage() === pkg)
+    && (await driver.getCurrentActivity() === activity), {
+      waitMs: timeoutMs,
+      intervalMs: 300,
+    }
+  );
+}
 
 describe('general', function () {
 
@@ -28,10 +39,7 @@ describe('general', function () {
 
       await driver.startActivity(startAppPackage, startAppActivity);
 
-      let newAppPackage = await driver.getCurrentPackage();
-      let newAppActivity = await driver.getCurrentActivity();
-      newAppPackage.should.equal(startAppPackage);
-      newAppActivity.should.equal(startAppActivity);
+      await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
     it('should be able to launch activity with custom intent parameter category', async function () {
       let startAppPackage = 'io.appium.android.apis';
@@ -40,28 +48,21 @@ describe('general', function () {
 
       await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
 
-      let appActivity = await driver.getCurrentActivity();
-      appActivity.should.include('HelloWorld');
+      await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
     it('should be able to launch activity with dontStopAppOnReset = true', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity(startAppPackage, startAppActivity);
 
-      let appPackage = await driver.getCurrentPackage();
-      let appActivity = await driver.getCurrentActivity();
-      appPackage.should.equal(startAppPackage);
-      appActivity.should.equal(startAppActivity);
+      await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
     it('should be able to launch activity with dontStopAppOnReset = false', async function () {
       let startAppPackage = 'io.appium.android.apis';
       let startAppActivity = '.os.MorseCode';
       await driver.startActivity(startAppPackage, startAppActivity);
 
-      let appPackage = await driver.getCurrentPackage();
-      let appActivity = await driver.getCurrentActivity();
-      appPackage.should.equal(startAppPackage);
-      appActivity.should.equal(startAppActivity);
+      await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
   });
 });

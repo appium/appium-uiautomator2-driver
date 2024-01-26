@@ -1,3 +1,10 @@
+## [2.43.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.0...v2.43.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* createADB ([#724](https://github.com/appium/appium-uiautomator2-driver/issues/724)) ([fef068a](https://github.com/appium/appium-uiautomator2-driver/commit/fef068a4c5d4513223c1f9e3a5f1ba53c32adec6))
+
 ## [2.43.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.42.2...v2.43.0) (2024-01-25)
 
 

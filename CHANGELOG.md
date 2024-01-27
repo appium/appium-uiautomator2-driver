@@ -1,3 +1,10 @@
+## [2.43.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.1...v2.43.2) (2024-01-27)
+
+
+### Miscellaneous Chores
+
+* Remove husky and commitlint ([#726](https://github.com/appium/appium-uiautomator2-driver/issues/726)) ([e9147ee](https://github.com/appium/appium-uiautomator2-driver/commit/e9147ee98d8e751414cd8c3c3a9986256e66641a))
+
 ## [2.43.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.0...v2.43.1) (2024-01-26)
 
 

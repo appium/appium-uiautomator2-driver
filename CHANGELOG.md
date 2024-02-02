@@ -1,3 +1,10 @@
+## [2.44.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.4...v2.44.0) (2024-02-02)
+
+
+### Features
+
+* Paralellize session setup steps ([#729](https://github.com/appium/appium-uiautomator2-driver/issues/729)) ([b11356f](https://github.com/appium/appium-uiautomator2-driver/commit/b11356fa075aa71003bc363df050286ee738f4b8))
+
 ## [2.43.4](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.3...v2.43.4) (2024-01-30)
 
 

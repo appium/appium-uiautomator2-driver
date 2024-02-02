@@ -520,129 +520,103 @@ class AndroidUiautomator2Driver
     }
   }
 
-  async startUiAutomator2Session(
-    caps: Uiautomator2StartSessionOpts
-  ): Promise<Uiautomator2SessionCaps> {
-    // get device udid for this session
-    const {udid, emPort} = await this.getDeviceInfoFromCaps();
-    this.opts.udid = udid;
-    // @ts-expect-error do not put random stuff on opts
-    this.opts.emPort = emPort;
-
-    // now that we know our java version and device info, we can create our
-    // ADB instance
-    this.adb = await this.createADB();
-
+  async performSessionPreExecSetup(): Promise<StringRecord|undefined> {
     const apiLevel = await this.adb.getApiLevel();
-
     if (apiLevel < 21) {
-      this.log.errorAndThrow(
+      throw this.log.errorAndThrow(
         'UIAutomator2 is only supported since Android 5.0 (Lollipop). ' +
           'You could still use other supported backends in order to automate older Android versions.'
       );
     }
 
+    const preflightPromises: Promise<any>[] = [];
     if (apiLevel >= 28) {
       // Android P
-      this.log.info('Relaxing hidden api policy');
-      try {
-        await this.adb.setHiddenApiPolicy('1', !!this.opts.ignoreHiddenApiPolicyError);
-      } catch (err) {
-        this.log.errorAndThrow(
-          'Hidden API policy (https://developer.android.com/guide/app-compatibility/restrictions-non-sdk-interfaces) cannot be enabled. ' +
-            'This might be happening because the device under test is not configured properly. ' +
-            'Please check https://github.com/appium/appium/issues/13802 for more details. ' +
-            'You could also set the "appium:ignoreHiddenApiPolicyError" capability to true in order to ' +
-            'ignore this error, which might later lead to unexpected crashes or behavior of ' +
-            `the automation server. Original error: ${err.message}`
-        );
-      }
+      preflightPromises.push((async () => {
+        this.log.info('Relaxing hidden api policy');
+        try {
+          await this.adb.setHiddenApiPolicy('1', !!this.opts.ignoreHiddenApiPolicyError);
+        } catch (err) {
+          throw this.log.errorAndThrow(
+            'Hidden API policy (https://developer.android.com/guide/app-compatibility/restrictions-non-sdk-interfaces) cannot be enabled. ' +
+              'This might be happening because the device under test is not configured properly. ' +
+              'Please check https://github.com/appium/appium/issues/13802 for more details. ' +
+              'You could also set the "appium:ignoreHiddenApiPolicyError" capability to true in order to ' +
+              'ignore this error, which might later lead to unexpected crashes or behavior of ' +
+              `the automation server. Original error: ${err.message}`
+          );
+        }
+      })());
     }
-
-    // check if we have to enable/disable gps before running the application
     if (util.hasValue(this.opts.gpsEnabled)) {
-      if (this.isEmulator()) {
+      preflightPromises.push((async () => {
         this.log.info(
           `Trying to ${this.opts.gpsEnabled ? 'enable' : 'disable'} gps location provider`
         );
-        await this.adb.toggleGPSLocationProvider(this.opts.gpsEnabled);
-      } else {
-        this.log.warn(`Sorry! 'gpsEnabled' capability is only available for emulators`);
-      }
+        await this.adb.toggleGPSLocationProvider(Boolean(this.opts.gpsEnabled));
+      })());
     }
-
-    // get appPackage et al from manifest if necessary
-    const appInfo = await this.getLaunchInfo();
-    // and get it onto our 'opts' object so we use it from now on
-    this.opts = {...this.opts, ...(appInfo ?? {})};
-
-    // set actual device name, udid, platform version, screen size, screen density, model and manufacturer details
-    const sessionInfo: Uiautomator2SessionInfo = {
-      deviceName: this.adb.curDeviceId!,
-      deviceUDID: this.opts.udid!,
-    };
-
-    const capsWithSessionInfo = {
-      ...caps,
-      ...sessionInfo,
-    };
-
-    // start an avd, set the language/locale, pick an emulator, etc...
     if (this.opts.hideKeyboard) {
-      this._originalIme = await this.adb.defaultIME();
+      preflightPromises.push((async () => {
+        this._originalIme = await this.adb.defaultIME();
+      })());
     }
-    await this.initDevice();
+    let appInfo;
+    preflightPromises.push((async () => {
+      // get appPackage et al from manifest if necessary
+      appInfo = await this.getLaunchInfo();
+    })());
+    // start settings app, set the language/locale, start logcat etc...
+    preflightPromises.push(this.initDevice());
 
-    // Prepare the device by forwarding the UiAutomator2 port
-    // This call mutates this.systemPort if it is not set explicitly
-    await this.allocateSystemPort();
+    await B.all(preflightPromises);
 
-    // Prepare the device by forwarding the UiAutomator2 MJPEG server port (if
-    // applicable)
-    await this.allocateMjpegServerPort();
+    this.opts = {...this.opts, ...(appInfo ?? {})};
+    return appInfo;
+  }
 
-    // set up the modified UiAutomator2 server etc
-    const uiautomator2 = await this.initUiAutomator2Server();
+  async performSessionExecution(capsWithSessionInfo: StringRecord): Promise<void> {
+    await B.all([
+      // Prepare the device by forwarding the UiAutomator2 port
+      // This call mutates this.systemPort if it is not set explicitly
+      this.allocateSystemPort(),
+      // Prepare the device by forwarding the UiAutomator2 MJPEG server port (if
+      // applicable)
+      this.allocateMjpegServerPort(),
+    ]);
 
-    // Should be after installing io.appium.settings in helpers.initDevice
-    if (this.opts.disableWindowAnimation && (await this.adb.getApiLevel()) < 26) {
-      // API level 26 is Android 8.0.
-      // Granting android.permission.SET_ANIMATION_SCALE is necessary to handle animations under API level 26
-      // Read https://github.com/appium/appium/pull/11640#issuecomment-438260477
-      // `--no-window-animation` works over Android 8 to disable all of animations
-      if (await this.adb.isAnimationOn()) {
-        this.log.info('Disabling animation via io.appium.settings');
-        await this.settingsApp.setAnimationState(false);
-        this._wasWindowAnimationDisabled = true;
-      } else {
-        this.log.info('Window animation is already disabled');
-      }
-    }
-
-    // set up app under test
-    // prepare our actual AUT, get it on the device, etc...
-    await this.initAUT();
-
-    // Adding AUT package name in the capabilities if package name not exist in caps
-    if (!capsWithSessionInfo.appPackage && appInfo) {
-      capsWithSessionInfo.appPackage = appInfo.appPackage;
-    }
+    const [uiautomator2,] = await B.all([
+      // set up the modified UiAutomator2 server etc
+      this.initUiAutomator2Server(),
+      (async () => {
+        // Should be after installing io.appium.settings
+        if (this.opts.disableWindowAnimation && await this.adb.getApiLevel() < 26) {
+          // API level 26 is Android 8.0.
+          // Granting android.permission.SET_ANIMATION_SCALE is necessary to handle animations under API level 26
+          // Read https://github.com/appium/appium/pull/11640#issuecomment-438260477
+          // `--no-window-animation` works over Android 8 to disable all of animations
+          if (await this.adb.isAnimationOn()) {
+            this.log.info('Disabling animation via io.appium.settings');
+            await this.settingsApp.setAnimationState(false);
+            this._wasWindowAnimationDisabled = true;
+          } else {
+            this.log.info('Window animation is already disabled');
+          }
+        }
+      })(),
+      // set up app under test
+      // prepare our actual AUT, get it on the device, etc...
+      this.initAUT(),
+    ]);
 
     // launch UiAutomator2 and wait till its online and we have a session
     await uiautomator2.startSession(capsWithSessionInfo);
     // now that everything has started successfully, turn on proxying so all
     // subsequent session requests go straight to/from uiautomator2
     this.jwpProxyActive = true;
+  }
 
-    const deviceInfoPromise: Promise<Uiautomator2DeviceDetails|EmptyObject> = (async () => {
-      try {
-        return await this.getDeviceDetails();
-      } catch (e) {
-        this.log.warn(`Cannot fetch device details. Original error: ${e.message}`);
-        return {};
-      }
-    })();
-
+  async performSessionPostExecSetup(): Promise<void> {
     // Unlock the device after the session is started.
     if (!this.opts.skipUnlock) {
       // unlock the device to prepare it for testing
@@ -672,6 +646,48 @@ class AndroidUiautomator2Driver
       this.log.info(`Setting auto webview to context '${viewName}' with timeout ${timeout}ms`);
       await retryInterval(timeout / 500, 500, this.setContext.bind(this), viewName);
     }
+  }
+
+  async startUiAutomator2Session(
+    caps: Uiautomator2StartSessionOpts
+  ): Promise<Uiautomator2SessionCaps> {
+    // get device udid for this session
+    const {udid, emPort} = await this.getDeviceInfoFromCaps();
+    this.opts.udid = udid;
+    // @ts-expect-error do not put random stuff on opts
+    this.opts.emPort = emPort;
+
+    // now that we know our java version and device info, we can create our
+    // ADB instance
+    this.adb = await this.createADB();
+
+    const appInfo = await this.performSessionPreExecSetup();
+    // set actual device name, udid, platform version, screen size, screen density, model and manufacturer details
+    const sessionInfo: Uiautomator2SessionInfo = {
+      deviceName: this.adb.curDeviceId!,
+      deviceUDID: this.opts.udid!,
+    };
+    const capsWithSessionInfo = {
+      ...caps,
+      ...sessionInfo,
+    };
+    // Adding AUT package name in the capabilities if package name not exist in caps
+    if (!capsWithSessionInfo.appPackage && appInfo) {
+      capsWithSessionInfo.appPackage = appInfo.appPackage;
+    }
+
+    await this.performSessionExecution(capsWithSessionInfo);
+
+    const deviceInfoPromise: Promise<Uiautomator2DeviceDetails|EmptyObject> = (async () => {
+      try {
+        return await this.getDeviceDetails();
+      } catch (e) {
+        this.log.warn(`Cannot fetch device details. Original error: ${e.message}`);
+        return {};
+      }
+    })();
+
+    await this.performSessionPostExecSetup();
 
     return {...capsWithSessionInfo, ...(await deviceInfoPromise)};
   }

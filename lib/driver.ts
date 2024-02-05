@@ -374,7 +374,15 @@ class AndroidUiautomator2Driver
 
       if (this.isChromeSession) {
         this.log.info("We're going to run a Chrome-based session");
-        const {pkg, activity} = utils.getChromePkg(this.opts.browserName!);
+        const {pkg, activity: defaultActivity} = utils.getChromePkg(this.opts.browserName!);
+        let activity: string = defaultActivity;
+        if (await this.adb.getApiLevel() >= 24) {
+          try {
+            activity = await this.adb.resolveLaunchableActivity(pkg);
+          } catch (e) {
+            this.log.warn(`Using the default ${pkg} activity ${activity}. Original error: ${e.message}`);
+          }
+        }
         this.opts.appPackage = this.caps.appPackage = pkg;
         this.opts.appActivity = this.caps.appActivity = activity;
         this.log.info(`Chrome-type package and activity are ${pkg} and ${activity}`);

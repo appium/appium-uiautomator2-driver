@@ -1,3 +1,10 @@
+## [2.44.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.0...v2.44.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* fix mobile: screenshots for WDIO ([#731](https://github.com/appium/appium-uiautomator2-driver/issues/731)) ([ac28c0c](https://github.com/appium/appium-uiautomator2-driver/commit/ac28c0cde3716dd684e088b4d12ca823b4316aaf))
+
 ## [2.44.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.43.4...v2.44.0) (2024-02-02)
 
 

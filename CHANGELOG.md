@@ -1,3 +1,10 @@
+## [2.44.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.1...v2.44.2) (2024-02-06)
+
+
+### Bug Fixes
+
+* Detect the browser activity dynamically ([#730](https://github.com/appium/appium-uiautomator2-driver/issues/730)) ([9cc4116](https://github.com/appium/appium-uiautomator2-driver/commit/9cc4116759f0e8d4975c92a6667660bea38609d9))
+
 ## [2.44.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.0...v2.44.1) (2024-02-06)
 
 

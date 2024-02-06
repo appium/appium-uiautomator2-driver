@@ -40,7 +40,9 @@ describe('driver.js', function () {
     it('should set sessionId', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
+      driver.adb = new ADB();
       sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+      sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
@@ -56,6 +58,8 @@ describe('driver.js', function () {
     it('should set the default context', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
+      driver.adb = new ADB();
+      sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       sinon.mock(driver).expects('checkAppPresent').returns(B.resolve());
       sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
       await driver.createSession(null, null, {
@@ -148,7 +152,9 @@ describe('driver.js', function () {
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
           defaultStub(driver);
+          driver.adb = new ADB();
           sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+          sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
           sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
         });
 

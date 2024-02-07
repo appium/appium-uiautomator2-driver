@@ -372,6 +372,16 @@ class AndroidUiautomator2Driver
       };
       _.defaults(this.opts, defaultOpts);
 
+      this.opts.adbPort = this.opts.adbPort || DEFAULT_ADB_PORT;
+      // get device udid for this session
+      const {udid, emPort} = await this.getDeviceInfoFromCaps();
+      this.opts.udid = udid;
+      // @ts-expect-error do not put random stuff on opts
+      this.opts.emPort = emPort;
+      // now that we know our java version and device info, we can create our
+      // ADB instance
+      this.adb = await this.createADB();
+
       if (this.isChromeSession) {
         this.log.info(`We're going to run a Chrome-based session`);
         const {pkg, activity: defaultActivity} = utils.getChromePkg(this.opts.browserName!);
@@ -405,7 +415,6 @@ class AndroidUiautomator2Driver
             'without the target application'
         );
       }
-      this.opts.adbPort = this.opts.adbPort || DEFAULT_ADB_PORT;
 
       const result = await this.startUiAutomator2Session(startSessionOpts);
 
@@ -659,16 +668,6 @@ class AndroidUiautomator2Driver
   async startUiAutomator2Session(
     caps: Uiautomator2StartSessionOpts
   ): Promise<Uiautomator2SessionCaps> {
-    // get device udid for this session
-    const {udid, emPort} = await this.getDeviceInfoFromCaps();
-    this.opts.udid = udid;
-    // @ts-expect-error do not put random stuff on opts
-    this.opts.emPort = emPort;
-
-    // now that we know our java version and device info, we can create our
-    // ADB instance
-    this.adb = await this.createADB();
-
     const appInfo = await this.performSessionPreExecSetup();
     // set actual device name, udid, platform version, screen size, screen density, model and manufacturer details
     const sessionInfo: Uiautomator2SessionInfo = {

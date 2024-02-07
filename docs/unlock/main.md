@@ -67,20 +67,21 @@ value for this particular unlock type, for example `729854163`.
 
 ##### Example
 
-Lets say you have a device that is locked with a pattern  as the image below and you want to run a test over that device.
+Lets say you have a device that is locked with a pattern similar to the one on the image below,
+and you want to run a test over that device.
 
 <img src="./screen1.png" />
 
-We treat the pattern pins as the numbers of a phone dial. So in this case the *unlockKey* would be `729854163`
+We treat the pattern pins similarly to numbers on a digital phone dial. So, in this case the *unlockKey* is `729854163`
 
 <img src="./screen2.png" />
 
-And the capabilities would be:
+and capabilities are:
 
 ```json
 {
-  "unlockType": "pattern",
-  "unlockKey": "729854163"
+  "appium:unlockType": "pattern",
+  "appium:unlockKey": "729854163"
 }
 ```
 

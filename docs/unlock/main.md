@@ -1,7 +1,7 @@
 # Unlock
 
-UiAutomator2 driver allows to deal with the Android lock screen using various APIs.
-This article describes the available APIs and their options.
+UiAutomator2 driver allows dealing with the Android lock screen using various APIs.
+This article describes available APIs and their options.
 
 ## Unlock On Session Startup
 
@@ -48,7 +48,7 @@ This capability supports the following possible values:
 
 #### pin
 
-Assumes the the device is protected with a PIN code. Expects the `appium:unlockKey` to contain a valid pin consisting
+Assumes the device is protected with a PIN code. Expects the `appium:unlockKey` to contain a valid pin consisting
 of digits in range 0-9, for example `1111`.
 
 #### pinWithKeyEvent
@@ -57,17 +57,17 @@ Same as [pin](#pin), but uses ADB instead of UiAutomator framework to enter the 
 
 #### password
 
-Assumes the the device is protected with a password. Expects the `appium:unlockKey` to contain a valid password consisting
+Assumes the device is protected with a password. Expects the `appium:unlockKey` to contain a valid password consisting
 of latin characters, for example `abcd1234`.
 
 #### pattern
 
-Assumes the the device is protected with a secret pattern. Check the example below for more details on the `appium:unlockKey`
+Assumes the device is protected with a secret pattern. Check the example below for more details on the `appium:unlockKey`
 value for this particular unlock type.
 
 ##### Example
 
-Lets say you have a device that is locked with a pattern similar to the one on the image below,
+Let say you have a device that is locked with a pattern similar to the one on the image below,
 and you want to run a test over that device.
 
 <img src="./screen1.png" />

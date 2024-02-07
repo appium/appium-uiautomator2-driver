@@ -1,3 +1,10 @@
+## [2.44.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.2...v2.44.3) (2024-02-07)
+
+
+### Bug Fixes
+
+* Init adb as the first step upon session creation ([#733](https://github.com/appium/appium-uiautomator2-driver/issues/733)) ([fbe80e9](https://github.com/appium/appium-uiautomator2-driver/commit/fbe80e9df51b84da115184ebe1974760cdd47d67))
+
 ## [2.44.2](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.1...v2.44.2) (2024-02-06)
 
 

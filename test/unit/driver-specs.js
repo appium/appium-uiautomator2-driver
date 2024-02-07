@@ -8,13 +8,24 @@ import {ADB} from 'appium-adb';
 
 chai.should();
 chai.use(chaiAsPromised);
-let sandbox = sinon.createSandbox();
+const sandbox = sinon.createSandbox();
 
 function defaultStub(driver) {
-  sinon.stub(driver, 'getDeviceDetails');
+  sandbox.stub(driver, 'getDeviceDetails');
+  const adb = new ADB();
+  sandbox.stub(driver, 'createADB').returns(Promise.resolve(adb));
+  sandbox.mock(driver).expects('getDeviceInfoFromCaps').once().returns(Promise.resolve({
+    udid: '123',
+    emPort: false
+  }));
+  return adb;
 }
 
 describe('driver.js', function () {
+  this.afterEach(function() {
+    sandbox.restore();
+  });
+
   describe('constructor', function () {
     it('calls BaseDriver constructor with opts', function () {
       let driver = new AndroidUiautomator2Driver({foo: 'bar'});
@@ -26,7 +37,8 @@ describe('driver.js', function () {
   describe('createSession', function () {
     it('should throw an error if app can not be found', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      defaultStub(driver);
+      const adb = defaultStub(driver);
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       await driver
         .createSession(null, null, {
           firstMatch: [{}],
@@ -39,11 +51,10 @@ describe('driver.js', function () {
 
     it('should set sessionId', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      defaultStub(driver);
-      driver.adb = new ADB();
-      sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-      sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-      sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
+      const adb = defaultStub(driver);
+      sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
+      sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
         alwaysMatch: {
@@ -57,11 +68,10 @@ describe('driver.js', function () {
 
     it('should set the default context', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      defaultStub(driver);
-      driver.adb = new ADB();
-      sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-      sinon.mock(driver).expects('checkAppPresent').returns(B.resolve());
-      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      const adb = defaultStub(driver);
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
+      sandbox.mock(driver).expects('checkAppPresent').returns(B.resolve());
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
         alwaysMatch: {
@@ -77,8 +87,8 @@ describe('driver.js', function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
       let app = path.resolve('.');
-      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
-      sinon.mock(driver.helpers).expects('configureApp').returns(app);
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sandbox.mock(driver.helpers).expects('configureApp').returns(app);
 
       await driver.createSession(null, null, {
         firstMatch: [{}],
@@ -96,9 +106,9 @@ describe('driver.js', function () {
       let driver = new AndroidUiautomator2Driver({}, false);
       defaultStub(driver);
       let app = path.resolve('asdfasdf');
-      sinon.mock(driver).expects('checkAppPresent').returns(B.resolve());
-      sinon.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
-      sinon.mock(driver.helpers).expects('configureApp').returns(app);
+      sandbox.mock(driver).expects('checkAppPresent').returns(B.resolve());
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sandbox.mock(driver.helpers).expects('configureApp').returns(app);
 
       await driver.createSession(null, null, {
         firstMatch: [{}],
@@ -151,11 +161,10 @@ describe('driver.js', function () {
           item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
-          defaultStub(driver);
-          driver.adb = new ADB();
-          sinon.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-          sinon.stub(driver.adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-          sinon.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
+          const adb = defaultStub(driver);
+          sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
+          sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
+          sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
         });
 
         describe('on webview mode', function () {
@@ -244,7 +253,7 @@ describe('driver.js', function () {
     it('should trap and proxy to special uia2 server endpoint', async function () {
       defaultStub(driver);
       driver.uiautomator2 = {jwproxy: {command: () => {}}};
-      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      let proxySpy = sandbox.stub(driver.uiautomator2.jwproxy, 'command');
       await driver.doFindElementOrEls({
         strategy: 'xpath',
         selector: '/*[@firstVisible="true"]',
@@ -259,7 +268,7 @@ describe('driver.js', function () {
     it('should trap and rewrite as uiautomator locator', async function () {
       defaultStub(driver);
       driver.uiautomator2 = {jwproxy: {command: () => {}}};
-      let proxySpy = sinon.stub(driver.uiautomator2.jwproxy, 'command');
+      let proxySpy = sandbox.stub(driver.uiautomator2.jwproxy, 'command');
       await driver.doFindElementOrEls({
         strategy: 'xpath',
         selector: '//*[@scrollable="true"]',

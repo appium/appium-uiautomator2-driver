@@ -63,7 +63,7 @@ of latin characters, for example `abcd1234`.
 #### pattern
 
 Assumes the the device is protected with a secret pattern. Check the example below for more details on the `appium:unlockKey`
-value for this particular unlock type, for example `729854163`.
+value for this particular unlock type.
 
 ##### Example
 

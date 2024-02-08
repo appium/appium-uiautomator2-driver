@@ -773,6 +773,8 @@ The call is ignored if the app is not installed.
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 appId | string | yes | The identifier of the application package to be removed | `my.app.id`
+timeout | number | no | The count of milliseconds to wait until the app is terminated. 20000ms by default. | 1500, 0
+keepData | boolean | no | Set to true in order to keep the application data and cache folders after uninstall. | true
 
 #### Returned Result
 
@@ -812,6 +814,7 @@ allowTestPackages | boolean | no | Set to true in order to allow test packages i
 useSdcard | boolean | no | Set to true to install the app on sdcard instead of the device memory. false by default | true
 grantPermissions | boolean | no | Set to true in order to grant all the permissions requested in the application's manifest automatically after the installation is completed under Android 6+. The targetSdkVersion in the application manifest must be greater or equal to 23 and the Android version on the device under test must be greater or equal to Android 6 (API level 23) to grant permissions. Applications whose targetSdkVersion is lower than or equal to 22 must be reisntalled to grant permissions for Android 6+ devices. false by default | true
 replace | boolean | no | Set it to false if you don't want the application to be upgraded/reinstalled if it is already present on the device, but throw an error instead. true by default | false
+checkVersion | boolean | no | Set to true, in order to skip the application installation if the device under test has greater or equal to the application version. | true
 
 ### mobile: clearApp
 

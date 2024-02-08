@@ -278,7 +278,7 @@ export const executeMethodMap = {
     command: 'mobileInstallApp',
     params: {
       required: ['appPath'],
-      optional: ['timeout', 'keepData'],
+      optional: ['timeout', 'allowTestPackages', 'useSdcard', 'grantPermissions', 'replace', 'checkVersion'],
     },
   },
   'mobile: clearApp': {

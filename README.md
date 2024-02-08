@@ -803,6 +803,7 @@ True if the app has been successfully terminated.
 ### mobile: installApp
 
 Installs the given application package to the device under test.
+It might raise the `INSTALL_FAILED_VERSION_DOWNGRADE` error if the installation was a version downgrade.
 
 #### Arguments
 
@@ -814,7 +815,7 @@ allowTestPackages | boolean | no | Set to true in order to allow test packages i
 useSdcard | boolean | no | Set to true to install the app on sdcard instead of the device memory. false by default | true
 grantPermissions | boolean | no | Set to true in order to grant all the permissions requested in the application's manifest automatically after the installation is completed under Android 6+. The targetSdkVersion in the application manifest must be greater or equal to 23 and the Android version on the device under test must be greater or equal to Android 6 (API level 23) to grant permissions. Applications whose targetSdkVersion is lower than or equal to 22 must be reisntalled to grant permissions for Android 6+ devices. false by default | true
 replace | boolean | no | Set it to false if you don't want the application to be upgraded/reinstalled if it is already present on the device, but throw an error instead. true by default | false
-checkVersion | boolean | no | Set to true, in order to skip the application installation if the device under test has greater or equal to the application version. | true
+checkVersion | boolean | no | Set to true, in order to skip the application installation if the device under test has a greater or equal to the application version. It may help to avoid `INSTALL_FAILED_VERSION_DOWNGRADE` error and unnecessary installation. | true
 
 ### mobile: clearApp
 

@@ -1,3 +1,10 @@
+## [2.45.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.45.0...v2.45.1) (2024-02-10)
+
+
+### Bug Fixes
+
+* Argument type for performActions API ([#735](https://github.com/appium/appium-uiautomator2-driver/issues/735)) ([d0e7c2f](https://github.com/appium/appium-uiautomator2-driver/commit/d0e7c2f9859de4382cd35366915b1b4a3af34514))
+
 ## [2.45.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.3...v2.45.0) (2024-02-08)
 
 

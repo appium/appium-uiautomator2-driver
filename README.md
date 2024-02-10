@@ -1434,7 +1434,7 @@ displayId | number or string | no | Display identifier to take a screenshot for.
 
 #### Returns
 
-A dictionary where each key is the diplay identifier and the value has the following keys:
+A dictionary where each key is the display identifier and the value has the following keys:
 - `id`: The same display identifier
 - `name`: Display name
 - `isDefault`: Whether this display is the default one

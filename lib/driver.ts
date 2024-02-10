@@ -42,6 +42,8 @@ import {
   mobileGetActionHistory,
   mobileScheduleAction,
   mobileUnscheduleAction,
+  performActions,
+  releaseActions,
 } from './commands/actions';
 import {
   getAlertText,
@@ -127,18 +129,6 @@ import {
   getViewportScreenshot,
 } from './commands/screenshot';
 import {
-  doSwipe,
-  doDrag,
-  touchDown,
-  touchLongClick,
-  touchMove,
-  touchUp,
-  tap,
-  doPerformMultiAction,
-  performActions,
-  releaseActions,
-} from './commands/touch';
-import {
   getStatusBarHeight,
   getDevicePixelRatio,
   getDisplayDensity,
@@ -222,8 +212,6 @@ const NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/location')],
   ['POST', new RegExp('^/session/[^/]+/network_connection')],
   ['POST', new RegExp('^/session/[^/]+/timeouts')],
-  ['POST', new RegExp('^/session/[^/]+/touch/multi/perform')],
-  ['POST', new RegExp('^/session/[^/]+/touch/perform')],
   ['POST', new RegExp('^/session/[^/]+/url')],
 
   // MJSONWP commands
@@ -250,8 +238,6 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/appium')],
   ['POST', new RegExp('^/session/[^/]+/context')],
   ['POST', new RegExp('^/session/[^/]+/orientation')],
-  ['POST', new RegExp('^/session/[^/]+/touch/multi/perform')],
-  ['POST', new RegExp('^/session/[^/]+/touch/perform')],
 
   // this is needed to make the mobile: commands working in web context
   ['POST', new RegExp('^/session/[^/]+/execute$')],
@@ -1011,6 +997,8 @@ class AndroidUiautomator2Driver
   mobileGetActionHistory = mobileGetActionHistory;
   mobileScheduleAction = mobileScheduleAction;
   mobileUnscheduleAction = mobileUnscheduleAction;
+  performActions = performActions;
+  releaseActions = releaseActions;
 
   getAlertText = getAlertText;
   mobileAcceptAlert = mobileAcceptAlert;
@@ -1082,17 +1070,6 @@ class AndroidUiautomator2Driver
   mobileViewportScreenshot = mobileViewportScreenshot;
   getScreenshot = getScreenshot;
   getViewportScreenshot = getViewportScreenshot;
-
-  doSwipe = doSwipe;
-  doDrag = doDrag;
-  touchDown = touchDown;
-  touchLongClick = touchLongClick;
-  touchMove = touchMove;
-  touchUp = touchUp;
-  tap = tap;
-  doPerformMultiAction = doPerformMultiAction;
-  performActions = performActions;
-  releaseActions = releaseActions;
 
   getStatusBarHeight = getStatusBarHeight;
   getDevicePixelRatio = getDevicePixelRatio;

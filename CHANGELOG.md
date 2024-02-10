@@ -1,3 +1,23 @@
+## [3.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.45.1...v3.0.0) (2024-02-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removed obsolete MJSONWP touch route handlers. Use W3C actions or gesture shortcuts instead:
+
+- doSwipe
+- doDrag
+- touchDown
+- touchLongClick
+- touchMove
+- touchUp
+- tap
+- doPerformMultiAction
+
+### Features
+
+* Removed obsolete MJSONWP touch actions ([#738](https://github.com/appium/appium-uiautomator2-driver/issues/738)) ([520fe26](https://github.com/appium/appium-uiautomator2-driver/commit/520fe262c70883ba18aa01b2a34873516fbc8557))
+
 ## [2.45.1](https://github.com/appium/appium-uiautomator2-driver/compare/v2.45.0...v2.45.1) (2024-02-10)
 
 

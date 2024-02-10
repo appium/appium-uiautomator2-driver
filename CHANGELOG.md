@@ -1,3 +1,10 @@
+## [2.45.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.3...v2.45.0) (2024-02-08)
+
+
+### Features
+
+* add checkVersion option for mobile:installApp ([#736](https://github.com/appium/appium-uiautomator2-driver/issues/736)) ([95d46f4](https://github.com/appium/appium-uiautomator2-driver/commit/95d46f47cb738a6087da2d5262c0c7b6af1fedd1))
+
 ## [2.44.3](https://github.com/appium/appium-uiautomator2-driver/compare/v2.44.2...v2.44.3) (2024-02-07)
 
 

@@ -562,7 +562,9 @@ Stop the previously started screen streaming. If no screen streaming server has 
 
 ### mobile: getNotifications
 
-Retrieves Android notifications via Appium Settings helper. Appium Settings app itself must be *manually* granted to access notifications under device Settings in order to make this feature working. Appium Settings helper keeps all the active notifications plus notifications that appeared while it was running in the internal buffer, but no more than 100 items altogether. Newly appeared notifications are always added to the head of the notifications array. The `isRemoved` flag is set to `true` for notifications that have been removed.
+Retrieves Android notifications via Appium Settings helper. Appium Settings app itself must be *manually* granted to access notifications under device Settings in order to make this feature working. Different vendors [might](https://github.com/appium/io.appium.settings/issues/147#issue-2130780990) require more than just the normal Notification permissions at the usual Apps menu. Try to look in places like Privacy menus if you are getting zero items retrieved while expecting some results.
+
+Appium Settings helper keeps all the active notifications plus notifications that appeared while it was running in the internal buffer, but no more than 100 items altogether. Newly appeared notifications are always added to the head of the notifications array. The `isRemoved` flag is set to `true` for notifications that have been removed.
 See https://developer.android.com/reference/android/service/notification/StatusBarNotification and https://developer.android.com/reference/android/app/Notification.html for more information on available notification properties and their values.
 
 #### Returned Result

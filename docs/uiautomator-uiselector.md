@@ -1,7 +1,7 @@
 ## Guide on UiAutomator Locator Types
 
-UIA2 driver enables elements lookup using [UiSelector](http://developer.android.com/reference/android/support/test/uiautomator/UiSelector.html).
-[UiScrollable](http://developer.android.com/reference/android/support/test/uiautomator/UiScrollable.html)
+UIA2 driver enables elements lookup using [UiSelector](https://developer.android.com/reference/androidx/test/uiautomator/UiSelector).
+[UiScrollable](https://developer.android.com/reference/androidx/test/uiautomator/UiScrollable)
 is also supported.
 Both locator types are supported natively by Google's [UiAutomator](https://developer.android.com/training/testing/other-components/ui-automator) framework for Android. With these locators you could create flexible ways to reference complicated element paths, and their performance is very close to native.
 

@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.0...v3.0.1) (2024-02-23)
+
+
+### Miscellaneous Chores
+
+* bump uia2 server that has androidx.test.uiautomator:uiautomator:2.3.0 ([#744](https://github.com/appium/appium-uiautomator2-driver/issues/744)) ([56dab5d](https://github.com/appium/appium-uiautomator2-driver/commit/56dab5d4081bf9ca64b8736be636c5210965dc34))
+
 ## [3.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v2.45.1...v3.0.0) (2024-02-10)
 
 

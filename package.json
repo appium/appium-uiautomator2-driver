@@ -95,7 +95,7 @@
     "@types/teen_process": "^2.0.0",
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
+    "@typescript-eslint/parser": "^7.1.1",
     "@xmldom/xmldom": "^0.x",
     "android-apidemos": "^4.1.1",
     "appium": "^2.0.0-rc.3",

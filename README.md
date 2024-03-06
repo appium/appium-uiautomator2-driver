@@ -32,7 +32,7 @@ On top of standard Appium requirements UiAutomator2 driver also expects the foll
 
 Since driver version 2.39.0 you can automate the validation for the most of the above
 requirements as well as various optional ones needed by driver extensions by running the
-`appium driver doctor uiatomator2` server command.
+`appium driver doctor uiautomator2` server command.
 
 ## Capabilities
 

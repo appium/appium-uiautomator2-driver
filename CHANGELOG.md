@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.1...v3.0.2) (2024-03-07)
+
+
+### Miscellaneous Chores
+
+* bump typescript ([b6f4cec](https://github.com/appium/appium-uiautomator2-driver/commit/b6f4cec5e95ef0d8196ad3134784c9e85cd0363c))
+
 ## [3.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.0...v3.0.1) (2024-02-23)
 
 

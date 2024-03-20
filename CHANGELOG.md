@@ -1,3 +1,10 @@
+## [3.0.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.3...v3.0.4) (2024-03-20)
+
+
+### Bug Fixes
+
+* Skip chromedriver proxy suspend if the proxy is not initialized yet ([#754](https://github.com/appium/appium-uiautomator2-driver/issues/754)) ([a6d9146](https://github.com/appium/appium-uiautomator2-driver/commit/a6d91468dc409bfdac017695ca4fb52a600d15a5))
+
 ## [3.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.2...v3.0.3) (2024-03-18)
 
 

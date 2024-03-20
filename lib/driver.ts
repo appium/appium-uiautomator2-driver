@@ -1059,7 +1059,7 @@ class AndroidUiautomator2Driver
   setOrientation = setOrientation;
   getClipboard = getClipboard;
   openNotifications = openNotifications;
-  suspendChromedriverProxy = suspendChromedriverProxy;
+  suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
 
   setUrl = setUrl;

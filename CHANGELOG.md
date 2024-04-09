@@ -1,3 +1,10 @@
+## [3.0.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.6...v3.0.7) (2024-04-09)
+
+
+### Miscellaneous Chores
+
+* Skip signature checks of server packages ([#759](https://github.com/appium/appium-uiautomator2-driver/issues/759)) ([6e43272](https://github.com/appium/appium-uiautomator2-driver/commit/6e4327213d8519f6a0768c2b0516ea01638a70b3))
+
 ## [3.0.6](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.5...v3.0.6) (2024-04-08)
 
 

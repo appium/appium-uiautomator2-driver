@@ -94,8 +94,6 @@
     "@types/source-map-support": "^0.x",
     "@types/teen_process": "^2.0.0",
     "@types/ws": "^8.5.4",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
     "android-apidemos": "^4.1.1",
     "appium": "^2.0.0-rc.3",

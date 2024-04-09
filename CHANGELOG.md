@@ -1,3 +1,10 @@
+## [3.0.8](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.7...v3.0.8) (2024-04-09)
+
+
+### Miscellaneous Chores
+
+* Remove extra imports ([11aea03](https://github.com/appium/appium-uiautomator2-driver/commit/11aea03218fcb2e59e07bfcff25ddca86846a36f))
+
 ## [3.0.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.6...v3.0.7) (2024-04-09)
 
 

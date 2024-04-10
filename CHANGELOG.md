@@ -1,3 +1,10 @@
+## [3.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.8...v3.1.0) (2024-04-10)
+
+
+### Features
+
+* Add the support of `timeZone` capability ([#761](https://github.com/appium/appium-uiautomator2-driver/issues/761)) ([f2039d3](https://github.com/appium/appium-uiautomator2-driver/commit/f2039d30c0df22f4720b285c9ca262e2d3f9d24f))
+
 ## [3.0.8](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.7...v3.0.8) (2024-04-09)
 
 

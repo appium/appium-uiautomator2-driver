@@ -323,6 +323,6 @@ boolean canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("m
 can_scroll_more = driver.execute_script('mobile: scrollGesture', {
     'left': 100, 'top': 100, 'width': 200, 'height': 200,
     'direction': 'down',
-    'percent': 3.0
+    'percent': 1.0
 })
 ```

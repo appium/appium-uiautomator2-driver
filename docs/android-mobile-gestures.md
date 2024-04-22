@@ -314,7 +314,7 @@ The returned value is a boolean one and equals to `true` if the object can still
 boolean canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("mobile: scrollGesture", ImmutableMap.of(
     "left", 100, "top", 100, "width", 200, "height", 200,
     "direction", "down",
-    "percent", 3.0
+    "percent", 1.0
 ));
 ```
 

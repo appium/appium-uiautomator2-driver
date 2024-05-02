@@ -52,15 +52,14 @@ jobs:
         node-version: lts/*
         check-latest: true
     - run: |
-        brew install xq
         npm install mocha-multi-reporters --save-dev
         npm install -g appium
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
-    - uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '11'
+    # - uses: actions/setup-java@v3
+    #   with:
+    #     distribution: 'temurin'
+    #     java-version: '11'
     - run: |
         cwd=$(pwd)
         pushd "$cwd"

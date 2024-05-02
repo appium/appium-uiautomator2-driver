@@ -52,6 +52,7 @@ jobs:
         node-version: lts/*
         check-latest: true
     - run: |
+        apt-get install xq
         npm install mocha-multi-reporters --save-dev
         npm install -g appium
         npm install --no-save mjpeg-consumer

@@ -598,6 +598,12 @@ export const executeMethodMap = {
     }
   },
 
+  'mobile: injectEmulatorCameraImage': {
+    command: 'mobileInjectEmulatorCameraImage',
+    params: {
+      optional: ['opts'],
+    }
+  }
 } as const;
 
 export type Uiautomator2ExecuteMethodMap = typeof executeMethodMap;

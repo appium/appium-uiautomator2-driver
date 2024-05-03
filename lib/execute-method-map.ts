@@ -599,7 +599,7 @@ export const executeMethodMap = {
   },
 
   'mobile: injectEmulatorCameraImage': {
-    comamnd: 'mobileInjectEmulatorCameraImage',
+    command: 'mobileInjectEmulatorCameraImage',
     params: {
       optional: ['opts'],
     }

@@ -61,12 +61,19 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
+    - name: Enable KVM group perms
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
     - run: |
         cwd=$(pwd)
         pushd "$cwd"
         cd ~
         CHROMEDRIVER_VERSION="${{ matrix.chromedriverVersion }}" appium driver install --source=local "$cwd"
-        # appium driver doctor uiautomator2
+        appium driver doctor uiautomator2
         nohup appium server \
           --port=$APPIUM_TEST_SERVER_PORT \
           --address=$APPIUM_TEST_SERVER_HOST \
@@ -76,11 +83,6 @@ jobs:
           2>&1 > "$cwd/appium.log" &
         popd
       name: Start Appium server
-    - name: Enable KVM group perms
-      run: |
-        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-        sudo udevadm control --reload-rules
-        sudo udevadm trigger --name-match=kvm
     - run: nohup adb logcat > logcat.log &
       name: Capture logcat
     - uses: reactivecircus/android-emulator-runner@v2

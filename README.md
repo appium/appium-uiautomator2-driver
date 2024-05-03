@@ -1485,6 +1485,22 @@ Name | Type | Required | Description | Example
 pkg | string | yes | The package name to send the `trimMemory` event to. | com.my.company
 level | 'COMPLETE' or 'MODERATE' or 'BACKGROUND' or 'UI_HIDDEN' or 'RUNNING_CRITICAL' or 'RUNNING_LOW' or 'RUNNING_MODERATE' | yes | The actual memory trim level to simulate | RUNNING_CRITICAL
 
+### mobile: injectEmulatorCameraImage
+
+Simulates an image injection into the VirtualScene emulator camera background.
+This feature only works on Android emulators.
+It might be necessary to restart the camera client app after calling this extension
+for the first time as it modifies global emulator's virtual scene settings.
+All the further calls should seamlessly change the foreground picture to the supplied one.
+This extension could, for example, be useful if you need to verify QR codes scanning
+by the application under test.
+Available since driver version 3.2.0
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+payload | string | yes | A valid base64-encoded .PNG image payload. Other image formats are not supported. This image will be shown on the virtual scene foreground as soon as you open a camera client app. | iVBORw0KGgoAAAANSUh...
 
 ## Applications Management
 

@@ -68,6 +68,14 @@ jobs:
         sudo udevadm trigger --name-match=kvm
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
+    - name: AVD cache
+      uses: actions/cache@v3
+      id: avd-cache
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-${{ matrix.apiLevel }}
     - run: |
         cwd=$(pwd)
         pushd "$cwd"
@@ -90,6 +98,7 @@ jobs:
       with:
         script: bash -xe scripts/run-functional-tests.sh
         avd-name: ${{ env.ANDROID_AVD }}
+        force-avd-creation: false
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
         disable-animations: true

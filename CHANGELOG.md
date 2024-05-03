@@ -1,3 +1,10 @@
+## [3.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.1.0...v3.2.0) (2024-05-03)
+
+
+### Features
+
+* Add `mobile: injectEmulatorCameraImage` extension ([#772](https://github.com/appium/appium-uiautomator2-driver/issues/772)) ([768a629](https://github.com/appium/appium-uiautomator2-driver/commit/768a629b1d24e7c96ffc28c9068f4bfe5a2393b4))
+
 ## [3.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.0.8...v3.1.0) (2024-04-10)
 
 

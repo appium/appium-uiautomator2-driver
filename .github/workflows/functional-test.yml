@@ -80,10 +80,14 @@ jobs:
       if: steps.avd-cache.outputs.cache-hit != 'true'
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: ${{ matrix.api-level }}
+        avd-name: ${{ env.ANDROID_AVD }}
         force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-        disable-animations: false
+        api-level: ${{ matrix.apiLevel }}
+        disable-spellchecker: true
+        target: ${{ matrix.emuTag }}
+        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+        arch: ${{ matrix.arch }}
+        disable-animations: true
         script: echo "Generated AVD snapshot for caching."
     - run: |
         cwd=$(pwd)
@@ -111,6 +115,7 @@ jobs:
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
         disable-animations: true
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
         target: ${{ matrix.emuTag }}
         arch: ${{ matrix.arch }}
     - name: Save logcat output

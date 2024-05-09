@@ -1,3 +1,10 @@
+## [3.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.2.0...v3.3.0) (2024-05-09)
+
+
+### Features
+
+* add user option for mobile: isAppInstalled ([#778](https://github.com/appium/appium-uiautomator2-driver/issues/778)) ([2a0e9a5](https://github.com/appium/appium-uiautomator2-driver/commit/2a0e9a5d98a0f14bb69914136df24ff2c7633c02))
+
 ## [3.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.1.0...v3.2.0) (2024-05-03)
 
 

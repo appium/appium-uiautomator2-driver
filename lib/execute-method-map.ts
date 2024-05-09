@@ -247,7 +247,6 @@ export const executeMethodMap = {
     params: {
       required: ['appId'],
       optional: ['user'],
-
     },
   },
   'mobile: queryAppState': {

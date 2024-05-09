@@ -731,6 +731,7 @@ Verify whether an application is installed on the device under test.
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 appId | string | yes | The identifier of the application package to be checked | `my.app.id`
+user | number or string | no | The user ID for which the package is installed.. The `current` user is used by default | 1006
 
 #### Returned Result
 

@@ -22,7 +22,6 @@ import path from 'node:path';
 import {checkPortStatus, findAPortNotInUse} from 'portscanner';
 import type {ExecError} from 'teen_process';
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints';
-import {executeMethodMap} from './execute-method-map';
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import {newMethodMap} from './method-map';
 import { signApp } from './helpers';
@@ -81,8 +80,8 @@ import {
   mobileReplaceElementValue,
 } from './commands/element';
 import {
-  execute,
   executeMobile,
+  mobileCommandsMapping,
 } from './commands/execute';
 import {
   doFindElementOrEls,
@@ -265,8 +264,6 @@ class AndroidUiautomator2Driver
     >
 {
   static newMethodMap = newMethodMap;
-
-  static executeMethodMap = executeMethodMap;
 
   uiautomator2: UiAutomator2Server;
 
@@ -1030,8 +1027,8 @@ class AndroidUiautomator2Driver
   clear = clear;
   mobileReplaceElementValue = mobileReplaceElementValue;
 
-  execute = execute;
   executeMobile = executeMobile;
+  mobileCommandsMapping = mobileCommandsMapping;
 
   doFindElementOrEls = doFindElementOrEls;
 

@@ -1,3 +1,10 @@
+## [3.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.3.0...v3.4.0) (2024-05-11)
+
+
+### Features
+
+* Add helpers to control bluetooth and nfc adapters ([#779](https://github.com/appium/appium-uiautomator2-driver/issues/779)) ([a9403ff](https://github.com/appium/appium-uiautomator2-driver/commit/a9403ffcd58560be6af0f8c80b302cf750789a98))
+
 ## [3.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.2.0...v3.3.0) (2024-05-09)
 
 

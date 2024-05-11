@@ -604,7 +604,21 @@ export const executeMethodMap = {
     params: {
       optional: ['opts'],
     }
-  }
+  },
+
+  'mobile: bluetooth': {
+    command: 'mobileBluetooth',
+    params: {
+      optional: ['opts'],
+    }
+  },
+
+  'mobile: nfc': {
+    command: 'mobileNfc',
+    params: {
+      optional: ['opts'],
+    }
+  },
 } as const;
 
 export type Uiautomator2ExecuteMethodMap = typeof executeMethodMap;

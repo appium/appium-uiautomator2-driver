@@ -1503,6 +1503,30 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 payload | string | yes | A valid base64-encoded .PNG image payload. Other image formats are not supported. This image will be shown on the virtual scene foreground as soon as you open a camera client app. | iVBORw0KGgoAAAANSUh...
 
+### mobile: bluetooth
+
+Allows to control the bluetooth adapter in the device under test.
+An error is thrown if the device has no default bluetooth adapter.
+Available since driver version 3.4.0
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+action | string | yes | The action to execute on the bluetooth adapter. The following actions are supported: `enable`, `disable`, `unpairAll`. Calling the same action more than once is a noop. | disable
+
+### mobile: nfc
+
+Allows to control the NFC adapter in the device under test.
+An error is thrown if the device has no default NFC adapter.
+Available since driver version 3.4.0
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+action | string | yes | The action to execute on the NFC adapter. The following actions are supported: `enable`, `disable`. Calling the same action more than once is a noop. | disable
+
 ## Applications Management
 
 UiAutomator2 driver supports Appium endpoints for applications management:

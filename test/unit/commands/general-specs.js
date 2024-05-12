@@ -11,7 +11,6 @@ const {expect} = chai;
 chai.use(chaiAsPromised).use(sinonChai);
 
 describe('General', function () {
-  /** @type {AndroidUiautomator2Driver} */
   let driver;
   /** @type {import('sinon').SinonSandbox} */
   let sandbox;
@@ -39,8 +38,8 @@ describe('General', function () {
   });
 
   it('should raise error on non-existent mobile command', async function () {
-    await expect(driver.executeMobile('mobile: fruta', {})).to.be.rejectedWith(
-      /Unknown mobile command "mobile: fruta"/
+    await expect(driver.execute('mobile: fruta', {})).to.be.rejectedWith(
+      /Unknown mobile command "fruta"/
     );
   });
 
@@ -50,7 +49,7 @@ describe('General', function () {
     // implementation, which is stubbed out.
     it('should call sensorSet', async function () {
       sandbox.stub(driver, 'sensorSet');
-      await driver.executeMobile('mobile: sensorSet', {
+      await driver.execute('mobile: sensorSet', {
         sensorType: 'acceleration',
         value: '0:9.77631:0.812349',
       });
@@ -74,18 +73,18 @@ describe('General', function () {
     });
 
     it('should call mobileInstallMultipleApks', async function () {
-      await driver.executeMobile('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
+      await driver.execute('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
       expect(adb.installMultipleApks).to.have.been.calledOnceWith(['/path/to/test/apk.apk']);
     });
 
     it('should reject if no apks were given', async function () {
       await expect(
-        driver.executeMobile('mobile: installMultipleApks', {apks: []})
+        driver.execute('mobile: installMultipleApks', {apks: []})
       ).to.be.rejectedWith('No apks are given to install');
     });
 
     it('should reject if no apks were given', async function () {
-      await expect(driver.executeMobile('mobile: installMultipleApks')).to.be.rejectedWith(
+      await expect(driver.execute('mobile: installMultipleApks')).to.be.rejectedWith(
         'No apks are given to install'
       );
     });

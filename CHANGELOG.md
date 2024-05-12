@@ -1,3 +1,10 @@
+## [3.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.4.0...v3.5.0) (2024-05-12)
+
+
+### Features
+
+* Align the implementation of execute method map with other android drivers ([#780](https://github.com/appium/appium-uiautomator2-driver/issues/780)) ([d376a9b](https://github.com/appium/appium-uiautomator2-driver/commit/d376a9b344c2138fe89403640733dd489e965606))
+
 ## [3.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.3.0...v3.4.0) (2024-05-11)
 
 

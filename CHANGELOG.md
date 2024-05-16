@@ -1,3 +1,10 @@
+## [3.5.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.0...v3.5.1) (2024-05-16)
+
+
+### Miscellaneous Chores
+
+* Update dev dependencies ([4224eaa](https://github.com/appium/appium-uiautomator2-driver/commit/4224eaab352a43bef0bbc5e50942c3d1af340cd7))
+
 ## [3.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.4.0...v3.5.0) (2024-05-12)
 
 

@@ -1,3 +1,10 @@
+## [3.5.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.1...v3.5.2) (2024-05-21)
+
+
+### Bug Fixes
+
+* bring mobile: backgroundApp back ([#783](https://github.com/appium/appium-uiautomator2-driver/issues/783)) ([fcd7033](https://github.com/appium/appium-uiautomator2-driver/commit/fcd70333c5a94c3210f38d01039d2577d24f7b99))
+
 ## [3.5.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.0...v3.5.1) (2024-05-16)
 
 

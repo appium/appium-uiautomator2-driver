@@ -58,7 +58,7 @@ appium:skipServerInstallation | Skip the UiAutomator2 Server component installat
 appium:uiautomator2ServerLaunchTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is listening on the device. `30000` ms by default
 appium:uiautomator2ServerInstallTimeout | The maximum number of milliseconds to wait util UiAutomator2Server is installed on the device. `20000` ms by default
 appium:uiautomator2ServerReadTimeout | The maximum number of milliseconds to wait for a HTTP response from UiAutomator2Server. Only values greater than zero are accepted. If the given value is too low then expect driver commands to fail with `timeout of Xms exceeded` error. `240000` ms by default
-appium:disableWindowAnimation | Whether to disable window animations when starting the instrumentation process. `false` by default
+appium:disableWindowAnimation | Whether to disable window animations when starting the instrumentation process. The animation scale will be restored automatically after the instrumentation process ends for API level 26 and higher. The animation scale could remain if the session ends unexpectedly for API level 25 and lower. `false` by default
 appium:skipDeviceInitialization | If set to `true` then device startup checks (whether it is ready and whether Settings app is installed) will be canceled on session creation. Could speed up the session creation if you know what you are doing. `false` by default
 
 ### App

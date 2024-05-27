@@ -1785,6 +1785,26 @@ The general resources naming convention for Android apps is `<app_id>:id/<resour
 
 This exception happens due to a known bug in the [Eclipse's Psychopath](https://wiki.eclipse.org/PsychoPathXPathProcessor) library used by UiAutomator2 driver to support [XPath2](https://www.w3.org/TR/xpath20/) syntax. The issue has been observed while using `following::` or `preceding::` axes in xpath queries. Unfortunately, this library has not been maintained for quite a while, and there is no good open source alternative to it. The only known workaround would be to forcefully switch the driver's XPath processor to the standard Android's Apache Harmony-based XPath1, which does not have this issue (but also does not support XPath2 syntax). See the Appium issue [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
 
+### window/tab hanlding in WEBVIEW context implemented by chrome custom tabs
+
+[Chrome custom tabs](https://developer.chrome.com/docs/android/custom-tabs/) could have its own window handlings as same as regular Selenium Web automation.
+
+Appium lets you switch the context from `NATIVE_APP` to `WEBVIEW_xyz`, for example, to interact with the WEBVIEW contents over chromedriver. Then, if the WEBVIEW was chrome custom tabs implementation, the WEBVIEW context may require you to switch the window handler properly to interact with contents in a handler.
+It is worth to try out this idea if `chrome://inspect` or [mobile: getContexts](#mobile-getcontexts) shows you available pages more than availale contexts.
+
+```ruby
+# Ruby
+# Change the context to WebView (Attach to a chromedriver session)
+driver.set_context('WEBVIEW_XYZ')
+ 
+# Get available tabs/windows in the chrome instance
+driver.window_handles
+ 
+# Change the tab/window in the "chrome" instance
+driver.switch_to.window('a window_handle name')
+
+# interact with the tab/window
+```
 
 ## Usage Examples
 

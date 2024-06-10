@@ -1,3 +1,9 @@
+## [3.5.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.2...v3.5.3) (2024-06-10)
+
+### Miscellaneous Chores
+
+* use latest io.appium.settings ([#789](https://github.com/appium/appium-uiautomator2-driver/issues/789)) ([13104ba](https://github.com/appium/appium-uiautomator2-driver/commit/13104ba69d55def1540c782425e62bac9050f8fa))
+
 ## [3.5.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.1...v3.5.2) (2024-05-21)
 
 

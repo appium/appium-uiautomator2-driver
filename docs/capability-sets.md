@@ -112,7 +112,7 @@ the app identified by `appium:appPackage` is already preinstalled and must not b
   "platformName": "Android",
   "appium:automationName": "uiautomator2",
   "appium:platformVersion": "<Android_Version>",
-  "appium:udid": "<Phone_ID>",
+  "appium:udid": "<Phone_ID>"
 }
 ```
 

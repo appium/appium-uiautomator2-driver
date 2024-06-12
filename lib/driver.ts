@@ -947,18 +947,18 @@ class AndroidUiautomator2Driver
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  proxyActive(sessionId: string) {
+  proxyActive(sessionId: string): boolean {
     // we always have an active proxy to the UiAutomator2 server
     return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  canProxy(sessionId: string) {
+  canProxy(sessionId: string): boolean {
     // we can always proxy to the uiautomator2 server
     return true;
   }
 
-  getProxyAvoidList() {
+  getProxyAvoidList(): RouteMatcher[] {
     // we are maintaining two sets of NO_PROXY lists, one for chromedriver(CHROME_NO_PROXY)
     // and one for uiautomator2(NO_PROXY), based on current context will return related NO_PROXY list
     if (util.hasValue(this.chromedriver)) {

@@ -75,7 +75,7 @@
     "@appium/docutils": "^1.0.1",
     "@appium/eslint-config-appium": "^8.0.3",
     "@appium/eslint-config-appium-ts": "^0.x",
-    "@appium/support": "^4.2.0",
+    "@appium/support": "^5.0.3",
     "@appium/test-support": "^3.0.0",
     "@appium/tsconfig": "^0.x",
     "@appium/types": "^0.x",

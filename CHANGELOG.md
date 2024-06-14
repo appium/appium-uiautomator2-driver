@@ -1,3 +1,9 @@
+## [3.5.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.3...v3.5.4) (2024-06-14)
+
+### Bug Fixes
+
+* Add a workaround for wrong adb exit code on service stop ([#794](https://github.com/appium/appium-uiautomator2-driver/issues/794)) ([31e79ab](https://github.com/appium/appium-uiautomator2-driver/commit/31e79ab059700c2b09297a705ac3b03268ec6b84))
+
 ## [3.5.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.2...v3.5.3) (2024-06-10)
 
 ### Miscellaneous Chores

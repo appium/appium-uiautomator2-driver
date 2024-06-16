@@ -1,3 +1,9 @@
+## [3.5.5](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.4...v3.5.5) (2024-06-16)
+
+### Miscellaneous Chores
+
+* bump server version ([8e6ec16](https://github.com/appium/appium-uiautomator2-driver/commit/8e6ec166ce99d65bee84182c5fee1a326460d71f))
+
 ## [3.5.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.3...v3.5.4) (2024-06-14)
 
 ### Bug Fixes

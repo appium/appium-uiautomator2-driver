@@ -12,27 +12,29 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('UiAutomator2', function () {
+  let uiautomator2;
   const adb = new ADB();
+  const serverApk = {
+    'appPath': 'path/to/appium-uiautomator2-server.apk',
+    'appId': 'io.appium.uiautomator2.server'
+  };
+  const serverTestApk = {
+    'appPath': 'path/to/appium-uiautomator2-server-test.apk',
+    'appId': 'io.appium.uiautomator2.server.test'
+  };
+
+  const defaultUIA2ServerOptions = {
+    tmpDir: 'tmp',
+    systemPort: 4724,
+    host: 'localhost',
+    devicePort: 6790,
+    disableWindowAnimation: false
+  };
 
   describe('shouldUninstallServerPackages', function () {
-    let uiautomator2;
-    const serverApk = {
-      'appPath': 'path/to/appium-uiautomator2-server.apk',
-      'appId': 'io.appium.uiautomator2.server'
-    };
-    const serverTestApk = {
-      'appPath': 'path/to/appium-uiautomator2-server-test.apk',
-      'appId': 'io.appium.uiautomator2.server.test'
-    };
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
-        adb,
-        tmpDir: 'tmp',
-        systemPort: 4724,
-        host: 'localhost',
-        devicePort: 6790,
-        disableWindowAnimation: false,
-        disableSuppressAccessibilityService: false
+        adb, ...defaultUIA2ServerOptions
       });
     });
     it('with newer servers are installed', function () {
@@ -102,24 +104,9 @@ describe('UiAutomator2', function () {
   });
 
   describe('shouldInstall', function () {
-    let uiautomator2;
-    const serverApk = {
-      'appPath': 'path/to/appium-uiautomator2-server.apk',
-      'appId': 'io.appium.uiautomator2.server'
-    };
-    const serverTestApk = {
-      'appPath': 'path/to/appium-uiautomator2-server-test.apk',
-      'appId': 'io.appium.uiautomator2.server.test'
-    };
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
-        adb,
-        tmpDir: 'tmp',
-        systemPort: 4724,
-        host: 'localhost',
-        devicePort: 6790,
-        disableWindowAnimation: false,
-        disableSuppressAccessibilityService: false
+        adb, ...defaultUIA2ServerOptions
       });
     });
     it('with newer servers are installed', function () {
@@ -190,16 +177,9 @@ describe('UiAutomator2', function () {
   });
 
   describe('installServerApk', withMocks({adb, helpers}, (mocks) => {
-    let uiautomator2;
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
-        adb,
-        tmpDir: 'tmp',
-        systemPort: 4724,
-        host: 'localhost',
-        devicePort: 6790,
-        disableWindowAnimation: false,
-        disableSuppressAccessibilityService: false
+        adb, ...defaultUIA2ServerOptions
       });
     });
     afterEach(function () {

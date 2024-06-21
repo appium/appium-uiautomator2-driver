@@ -22,7 +22,6 @@ describe('UiAutomator2', function () {
     'appPath': 'path/to/appium-uiautomator2-server-test.apk',
     'appId': 'io.appium.uiautomator2.server.test'
   };
-
   const defaultUIA2ServerOptions = {
     tmpDir: 'tmp',
     systemPort: 4724,

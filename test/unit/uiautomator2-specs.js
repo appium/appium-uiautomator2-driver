@@ -101,7 +101,7 @@ describe('UiAutomator2', function () {
     });
   });
 
-  describe('canInstallServerPackages', function () {
+  describe('shouldInstall', function () {
     let uiautomator2;
     const serverApk = {
       'appPath': 'path/to/appium-uiautomator2-server.apk',
@@ -123,7 +123,7 @@ describe('UiAutomator2', function () {
       });
     });
     it('with newer servers are installed', function () {
-      uiautomator2.canInstallServerPackages([
+      uiautomator2.shouldInstall([
         {
           'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
           ...serverApk
@@ -137,7 +137,7 @@ describe('UiAutomator2', function () {
     }),
     it('with newer server is installed but the other could be old one', function () {
       // Then, enforce to uninstall all apks
-      uiautomator2.canInstallServerPackages([
+      uiautomator2.shouldInstall([
         {
           'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
           ...serverApk
@@ -149,7 +149,7 @@ describe('UiAutomator2', function () {
       ]).should.eql(true);
     }),
     it('with newer server is installed', function () {
-      uiautomator2.canInstallServerPackages([
+      uiautomator2.shouldInstall([
         {
           'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
           ...serverApk
@@ -162,7 +162,7 @@ describe('UiAutomator2', function () {
     }),
     it('with older servers are installed', function () {
       // then, installing newer serves are sufficient.
-      uiautomator2.canInstallServerPackages([
+      uiautomator2.shouldInstall([
         {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverApk
@@ -174,7 +174,7 @@ describe('UiAutomator2', function () {
       ]).should.eql(true);
     }),
     it('with no server are installed', function () {
-      uiautomator2.canInstallServerPackages([
+      uiautomator2.shouldInstall([
         {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
           'appPath': 'path/to/appium-uiautomator2-server.apk',

@@ -47,7 +47,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(true);
+      ]).should.be.true;
     }),
     it('with newer server is installed but the other could be old one', function () {
       // Then, enforce to uninstall all apks
@@ -60,7 +60,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(true);
+      ]).should.be.true;
     }),
     it('with newer server is installed', function () {
       uiautomator2.shouldUninstallServerPackages([
@@ -72,7 +72,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(false);
+      ]).should.be.false;
     }),
     it('with older servers are installed', function () {
       // then, installing newer serves are sufficient.
@@ -85,7 +85,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(false);
+      ]).should.be.false;
     }),
     it('with no server are installed', function () {
       uiautomator2.shouldUninstallServerPackages([
@@ -97,7 +97,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(false);
+      ]).should.be.false;
     });
   });
 
@@ -118,7 +118,7 @@ describe('UiAutomator2', function () {
           ...serverTestApk
         }
       // since installation may fail
-      ]).should.eql(false);
+      ]).should.be.false;
     }),
     it('with newer server is installed but the other could be old one', function () {
       // Then, enforce to uninstall all apks
@@ -131,7 +131,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(true);
+      ]).should.be.true;
     }),
     it('with newer server is installed', function () {
       uiautomator2.shouldInstallServerPackages([
@@ -143,7 +143,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(false);
+      ]).should.be.false;
     }),
     it('with older servers are installed', function () {
       // then, installing newer serves are sufficient.
@@ -156,7 +156,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(true);
+      ]).should.be.true;
     }),
     it('with no server are installed', function () {
       uiautomator2.shouldInstallServerPackages([
@@ -168,7 +168,7 @@ describe('UiAutomator2', function () {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
           ...serverTestApk
         }
-      ]).should.eql(true);
+      ]).should.be.true;
     });
   });
 

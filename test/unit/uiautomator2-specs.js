@@ -91,26 +91,24 @@ describe('UiAutomator2', function () {
       uiautomator2.shouldUninstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          'appPath': 'path/to/appium-uiautomator2-server.apk',
-          'appId': 'io.appium.uiautomator2.server'
+          ...serverApk
         },
         {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          'appPath': 'path/to/appium-uiautomator2-server-test.apk',
-          'appId': 'io.appium.uiautomator2.server.test'
+          ...serverTestApk
         }
       ]).should.eql(false);
     });
   });
 
-  describe('shouldInstall', function () {
+  describe('shouldInstallServerPackages', function () {
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
         adb, ...defaultUIA2ServerOptions
       });
     });
     it('with newer servers are installed', function () {
-      uiautomator2.shouldInstall([
+      uiautomator2.shouldInstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
           ...serverApk
@@ -124,7 +122,7 @@ describe('UiAutomator2', function () {
     }),
     it('with newer server is installed but the other could be old one', function () {
       // Then, enforce to uninstall all apks
-      uiautomator2.shouldInstall([
+      uiautomator2.shouldInstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
           ...serverApk
@@ -136,7 +134,7 @@ describe('UiAutomator2', function () {
       ]).should.eql(true);
     }),
     it('with newer server is installed', function () {
-      uiautomator2.shouldInstall([
+      uiautomator2.shouldInstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
           ...serverApk
@@ -149,7 +147,7 @@ describe('UiAutomator2', function () {
     }),
     it('with older servers are installed', function () {
       // then, installing newer serves are sufficient.
-      uiautomator2.shouldInstall([
+      uiautomator2.shouldInstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
           ...serverApk
@@ -161,16 +159,14 @@ describe('UiAutomator2', function () {
       ]).should.eql(true);
     }),
     it('with no server are installed', function () {
-      uiautomator2.shouldInstall([
+      uiautomator2.shouldInstallServerPackages([
         {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          'appPath': 'path/to/appium-uiautomator2-server.apk',
-          'appId': 'io.appium.uiautomator2.server'
+          ...serverApk
         },
         {
           'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          'appPath': 'path/to/appium-uiautomator2-server-test.apk',
-          'appId': 'io.appium.uiautomator2.server.test'
+          ...serverTestApk
         }
       ]).should.eql(true);
     });

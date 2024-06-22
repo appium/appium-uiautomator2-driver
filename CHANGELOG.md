@@ -1,3 +1,9 @@
+## [3.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.7...v3.6.0) (2024-06-22)
+
+### Features
+
+* Document injectedImageProperties capability ([#798](https://github.com/appium/appium-uiautomator2-driver/issues/798)) ([48e3255](https://github.com/appium/appium-uiautomator2-driver/commit/48e3255eff9c3c0a6cd075f2a279ed1937664844))
+
 ## [3.5.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.6...v3.5.7) (2024-06-22)
 
 ### Bug Fixes

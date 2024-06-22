@@ -127,6 +127,8 @@ appium:avdEnv | Mapping of emulator [environment variables](https://developer.an
 appium:networkSpeed | Sets the desired network speed limit for the emulator. It is only applied if the emulator is not running before the test starts. See emulator [command line arguments](https://developer.android.com/studio/run/emulator-commandline) description for more details.
 appium:gpsEnabled | Sets whether to enable (`true`) or disable (`false`) GPS service in the Emulator. Unset by default, which means to not change the current value
 appium:isHeadless | If set to `true` then emulator starts in headless mode (e.g. no UI is shown). It is only applied if the emulator is not running before the test starts. `false` by default.
+appium:injectedImageProperties | Allows adjusting of injected image properties, like size, position or rotation. The image itself is expected to be injected by [mobile: injectEmulatorCameraImage](#mobile-injectemulatorcameraimage) extension. It is also mandatory to provide this capability if you are going to use the injection feature on a newly created/resetted emulator as it __enforces emulator restart__, so it could properly reload the modified image properties. The value itself is a map, where possible keys are `size`, `position` and `rotation`. All of them are optional. If any of values is not provided then the following defaults are used: `{size: {scaleX: 1, scaleY: 1}, position: {0, 0, -1.5}, rotation: {0, 0, 0}}`. The `size` value contains scale multipliers for X and Y axes. The `position` contains normalized coefficients for X/Y/Z axes, where `0` means it should be centered in the viewport.
+Values in the `rotation` are measured in degrees respectively for X, Y and Z axis. Available since the driver version 3.6.0.
 
 ### App Signing
 
@@ -1489,10 +1491,8 @@ level | 'COMPLETE' or 'MODERATE' or 'BACKGROUND' or 'UI_HIDDEN' or 'RUNNING_CRIT
 ### mobile: injectEmulatorCameraImage
 
 Simulates an image injection into the VirtualScene emulator camera background.
-This feature only works on Android emulators.
-It might be necessary to restart the camera client app after calling this extension
-for the first time as it modifies global emulator's virtual scene settings.
-All the further calls should seamlessly change the foreground picture to the supplied one.
+Calls to this extension should seamlessly change the foreground picture
+in the VirtualScene emulator camera view to the supplied one.
 This extension could, for example, be useful if you need to verify QR codes scanning
 by the application under test.
 Available since driver version 3.2.0
@@ -1502,6 +1502,33 @@ Available since driver version 3.2.0
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 payload | string | yes | A valid base64-encoded .PNG image payload. Other image formats are not supported. This image will be shown on the virtual scene foreground as soon as you open a camera client app. | iVBORw0KGgoAAAANSUh...
+
+#### Required Preconditions
+
+This feature only works on Android emulators.
+It is mandatory to provide a value (it could also be an empty map to use defaults) to
+the [appium:injectedImageProperties capability](#emulator-android-virtual-device)
+in order to prepare the emulator for image injection if this extension is used
+on a newly created or resetted device.
+There is also a possiblity to perform a manual configuration of the necessary preconditions
+if you don't want to restart the emulator on session startup. For that replace the content
+of the `Toren1BD.posters` file located in `$ANDROID_HOME/emulator/resources` folder with the
+following text:
+```
+poster wall
+size 2 2
+position -0.807 0.320 5.316
+rotation 0 -150 0
+default poster.png
+
+poster table
+size 1 1
+position 0 0 -1.5
+rotation 0 0 0
+```
+Save the changed file and re(start) the emulator to pick up the changes.
+You may also customize values for different image properties under `poster table` in the above
+text snippet.
 
 ### mobile: bluetooth
 
@@ -1796,10 +1823,10 @@ It is worth to try out this idea if `chrome://inspect` or [mobile: getContexts](
 # Ruby
 # Change the context to WebView (Attach to a chromedriver session)
 driver.set_context('WEBVIEW_XYZ')
- 
+
 # Get available tabs/windows in the chrome instance
 driver.window_handles
- 
+
 # Change the tab/window in the "chrome" instance
 driver.switch_to.window('a window_handle name')
 

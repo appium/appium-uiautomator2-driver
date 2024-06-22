@@ -1,3 +1,9 @@
+## [3.5.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.6...v3.5.7) (2024-06-22)
+
+### Bug Fixes
+
+* uninstall installed uia2 servers if they were greater than on-going session ([#796](https://github.com/appium/appium-uiautomator2-driver/issues/796)) ([62b9056](https://github.com/appium/appium-uiautomator2-driver/commit/62b9056f4002d42d16a469709e03f43af6aec5a5))
+
 ## [3.5.6](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.5...v3.5.6) (2024-06-18)
 
 ### Miscellaneous Chores

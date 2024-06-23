@@ -1,14 +1,9 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import ADB from 'appium-adb';
 import { APIDEMOS_CAPS, amendCapabilities } from './desired';
 import { initSession, deleteSession } from './helpers/session';
 import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
@@ -29,6 +24,15 @@ async function killAndPrepareServer (oldPort, newPort) {
 
 describe('createSession', function () {
   let driver;
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
 
   describe('default adb port', function () {
     afterEach(async function () {

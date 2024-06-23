@@ -1,16 +1,20 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import {DOMParser} from '@xmldom/xmldom';
 import xpath from 'xpath';
 import {APIDEMOS_CAPS} from '../../desired';
 import {initSession, deleteSession} from '../../helpers/session';
 
-chai.should();
-chai.use(chaiAsPromised);
 
 describe('apidemo - source', function () {
   let driver;
+  let chai;
+
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {

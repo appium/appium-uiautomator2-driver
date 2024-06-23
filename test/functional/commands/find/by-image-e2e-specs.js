@@ -1,13 +1,8 @@
-import chai from 'chai';
 import B from 'bluebird';
 import path from 'path';
-import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const START_IMG = path.resolve(__dirname, '..', '..', 'assets', 'start-button.png');
 const STOP_IMG = path.resolve(__dirname, '..', '..', 'assets', 'stop-button.png');
@@ -15,8 +10,15 @@ const SQUARES_IMG = path.resolve(__dirname, '..', '..', 'assets', 'checkered-squ
 
 describe('Find - Image', function () {
   let driver;
+  let chai;
 
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     // TODO: @appium/images-plugin needs to be installed
     this.skip();
     const caps = amendCapabilities(APIDEMOS_CAPS, {

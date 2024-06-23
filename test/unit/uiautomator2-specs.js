@@ -1,5 +1,3 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { ADB } from 'appium-adb';
 import { withMocks } from '@appium/test-support';
 import {
@@ -8,11 +6,11 @@ import {
 import * as helpers from '../../lib/helpers';
 import log from '../../lib/logger';
 
-chai.should();
-chai.use(chaiAsPromised);
 
 describe('UiAutomator2', function () {
   let uiautomator2;
+  let chai;
+
   const adb = new ADB();
   const serverApk = {
     'appPath': 'path/to/appium-uiautomator2-server.apk',
@@ -29,6 +27,14 @@ describe('UiAutomator2', function () {
     devicePort: 6790,
     disableWindowAnimation: false
   };
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
 
   describe('shouldUninstallServerPackages', function () {
     beforeEach(function () {

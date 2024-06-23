@@ -1,13 +1,9 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import {AndroidUiautomator2Driver} from '../../lib/driver';
 import sinon from 'sinon';
 import path from 'path';
 import B from 'bluebird';
 import {ADB} from 'appium-adb';
 
-chai.should();
-chai.use(chaiAsPromised);
 const sandbox = sinon.createSandbox();
 
 function defaultStub(driver) {
@@ -22,6 +18,16 @@ function defaultStub(driver) {
 }
 
 describe('driver.js', function () {
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   this.afterEach(function() {
     sandbox.restore();
   });

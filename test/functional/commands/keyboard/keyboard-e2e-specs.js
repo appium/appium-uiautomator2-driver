@@ -1,15 +1,9 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 import ADB from 'appium-adb';
-
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
@@ -143,6 +137,15 @@ const languageTests = [
 ];
 
 describe('keyboard', function () {
+  let chai;
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   describe('ascii', function () {
     let driver;
     before(async function () {

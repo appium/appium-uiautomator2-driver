@@ -1,16 +1,19 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
-chai.should();
-chai.use(chaiAsPromised);
-
-let driver;
-let animationEl;
 
 describe('apidemo - attributes', function () {
+  let chai;
+  let driver;
+  let animationEl;
+
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     driver = await initSession(APIDEMOS_CAPS);
     animationEl = await driver.$('~Animation');
     await animationEl.waitForDisplayed({ timeout: 5000 });

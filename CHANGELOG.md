@@ -1,3 +1,9 @@
+## [3.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.6.0...v3.6.1) (2024-06-23)
+
+### Miscellaneous Chores
+
+* Bump chai and chai-as-promised ([#799](https://github.com/appium/appium-uiautomator2-driver/issues/799)) ([35734db](https://github.com/appium/appium-uiautomator2-driver/commit/35734db0225b5d4af3d2aa72c2160149c94b954b))
+
 ## [3.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.5.7...v3.6.0) (2024-06-22)
 
 ### Features

@@ -1,15 +1,17 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
 
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('wifi @skip-ci', function () {
   let driver;
+  let chai;
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     const caps = amendCapabilities(APIDEMOS_CAPS, {
       'appium:appActivity': '.view.TextFields',
     });

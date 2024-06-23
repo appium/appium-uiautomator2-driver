@@ -1,16 +1,18 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { initSession, deleteSession } from '../../helpers/session';
 import { SETTINGS_CAPS } from '../../desired';
 
 
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('Find - android ui elements', function () {
   let driver;
+  let chai;
 
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     driver = await initSession(SETTINGS_CAPS);
   });
   after(async function () {

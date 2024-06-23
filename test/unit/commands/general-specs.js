@@ -1,19 +1,28 @@
 // @ts-check
 
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import {AndroidUiautomator2Driver} from '../../../lib/driver';
 import ADB from 'appium-adb';
 import sinonChai from 'sinon-chai';
 
-const {expect} = chai;
-chai.use(chaiAsPromised).use(sinonChai);
 
 describe('General', function () {
   let driver;
   /** @type {import('sinon').SinonSandbox} */
   let sandbox;
+  let chai;
+  let expect;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+    chai.use(sinonChai);
+
+    expect = chai.expect;
+  });
 
   beforeEach(function () {
     sandbox = sinon.createSandbox();

@@ -1,5 +1,3 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
@@ -7,15 +5,20 @@ import { retryInterval } from 'asyncbox';
 import { util } from 'appium/support';
 
 
-chai.should();
-chai.use(chaiAsPromised);
-
 const textFieldsActivity = '.view.TextFields';
 
 describe('apidemo - element', function () {
   let driver;
   let el;
+  let chai;
+
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     const caps = amendCapabilities(APIDEMOS_CAPS, {
       'appium:appActivity': textFieldsActivity,
     });

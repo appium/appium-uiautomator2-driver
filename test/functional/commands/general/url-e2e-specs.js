@@ -1,15 +1,19 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { BROWSER_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 import { ADB } from 'appium-adb';
 
-chai.should();
-chai.use(chaiAsPromised);
 
 describe('setUrl', function () {
   let driver;
+  let chai;
+
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     const adb = new ADB();
     const hasChrome = await adb.isAppInstalled('com.android.chrome');
     if (!hasChrome) {

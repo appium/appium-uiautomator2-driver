@@ -1,5 +1,3 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { retryInterval } from 'asyncbox';
 import { GPS_DEMO_CAPS } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
@@ -7,11 +5,18 @@ import B from 'bluebird';
 import ADB from 'appium-adb';
 
 
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('geo-location -', function () {
   let driver;
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   beforeEach(async function () {
     const adb = new ADB();
     if (await adb.getApiLevel() >= 30) {

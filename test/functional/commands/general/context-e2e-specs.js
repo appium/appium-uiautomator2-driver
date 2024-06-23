@@ -1,18 +1,22 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
-
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const WEBVIEW = 'WEBVIEW_io.appium.android.apis';
 const NATIVE = 'NATIVE_APP';
 const NATIVE_LOCATOR = "//*[@class='android.widget.TextView']";
 const WEBVIEW_LOCATOR = "//*[text()='This page is a Selenium sandbox']";
 
+
 describe('apidemo - context', function () {
+  let chai;
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   describe('general', function () {
     let driver;
     before(async function () {

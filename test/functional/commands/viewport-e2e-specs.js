@@ -1,21 +1,24 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
 import {SCROLL_CAPS} from '../desired';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
 
-chai.should();
-chai.use(chaiAsPromised);
-
-const {expect} = chai;
 
 describe('testViewportCommands', function () {
   /** @type {import('../../../lib/driver').AndroidUiautomator2Driver} */
   let driver;
+  let chai;
+  let expect;
 
   const caps = SCROLL_CAPS;
 
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+    expect = chai.expect;
+
     driver = await initSession(caps);
   });
 

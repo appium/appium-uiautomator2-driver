@@ -1,19 +1,22 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
 
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const atv = 'android.widget.TextView';
 const f = 'android.widget.FrameLayout';
 
 describe('Find - xpath', function () {
   let driver;
+  let chai;
+
   before(async function () {
     driver = await initSession(APIDEMOS_CAPS);
+
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
   });
   after(async function () {
     await deleteSession();

@@ -1340,6 +1340,26 @@ Fetches the list of supported performance data types that could be used as `data
 
 List of strings, where each item is data type name.
 
+### mobile: getClipboard
+
+Retrieves the plaintext content of the device's clipboard. Available since driver version 3.7
+
+#### Returned Result
+
+Base64-encoded content of the clipboard or an empty string if the clipboard is empty.
+
+### mobile: setClipboard
+
+Allows to set the plain text content of the device's clipboard. Available since driver version 3.7
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+content | string | yes | Base64-encoded clipboard payload. | YXBwaXVt
+contentType | string | no | The only supported and the default value is `plaintext` | plaintext
+lable | string | no | Optinal label to identify the current clipboard payload. | yolo
+
 ### mobile: getPerformanceData
 
 Retrieves performance data about the given Android subsystem. The data is parsed from the output of the dumpsys utility. Available since driver version 2.24
@@ -1598,6 +1618,8 @@ Useful links:
 UiAutomator2 driver supports Appium endpoints for clipboard management:
 - Set clipboard content (`POST /appium/device/set_clipboard'`)
 - Get clipboard content (`POST /appium/device/get_clipboard`)
+- [mobile: getClipboard](#mobile-getclipboard)
+- [mobile: setClipboard](#mobile-setclipboard)
 
 Useful links:
 - https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/clipboard.py

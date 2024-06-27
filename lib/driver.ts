@@ -62,6 +62,12 @@ import {
   mobileGetBatteryInfo,
 } from './commands/battery';
 import {
+  getClipboard,
+  mobileGetClipboard,
+  setClipboard,
+  mobileSetClipboard,
+} from './commands/clipboard';
+import {
   active,
   getAttribute,
   elementEnabled,
@@ -111,7 +117,6 @@ import {
   getPageSource,
   getOrientation,
   setOrientation,
-  getClipboard,
   openNotifications,
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
@@ -1054,10 +1059,14 @@ class AndroidUiautomator2Driver
   getPageSource = getPageSource;
   getOrientation = getOrientation;
   setOrientation = setOrientation;
-  getClipboard = getClipboard;
   openNotifications = openNotifications;
   suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
+
+  getClipboard = getClipboard;
+  mobileGetClipboard = mobileGetClipboard;
+  setClipboard = setClipboard;
+  mobileSetClipboard = mobileSetClipboard;
 
   setUrl = setUrl;
   mobileDeepLink = mobileDeepLink;

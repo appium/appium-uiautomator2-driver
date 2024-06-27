@@ -1,3 +1,9 @@
+## [3.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.6.1...v3.7.0) (2024-06-27)
+
+### Features
+
+* Add mobile: wrappers for clipboard APIs ([#800](https://github.com/appium/appium-uiautomator2-driver/issues/800)) ([7789b1d](https://github.com/appium/appium-uiautomator2-driver/commit/7789b1d4636c4ade8a6f28e759acccdfb25b53f8))
+
 ## [3.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.6.0...v3.6.1) (2024-06-23)
 
 ### Miscellaneous Chores

@@ -471,3 +471,18 @@ export interface ActionResult {
 export interface ActionArgs {
   name: string;
 }
+
+export interface SetClipboardOpts {
+  /**
+   * Base64-encoded clipboard payload
+   */
+  content: string;
+  /**
+   * Only a single content type is supported, which is 'plaintext'
+   */
+  contentType?: 'plaintext';
+  /**
+   * Optinal label to identify the current clipboard payload
+   */
+  label?: string;
+}

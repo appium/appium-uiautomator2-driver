@@ -1,3 +1,9 @@
+## [3.7.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.0...v3.7.1) (2024-07-03)
+
+### Bug Fixes
+
+* Update instrumentation process handling logic ([#801](https://github.com/appium/appium-uiautomator2-driver/issues/801)) ([75da896](https://github.com/appium/appium-uiautomator2-driver/commit/75da896701399420b4880a71d0d28db59fa5d322))
+
 ## [3.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.6.1...v3.7.0) (2024-06-27)
 
 ### Features

@@ -1840,8 +1840,12 @@ This exception happens due to a known bug in the [Eclipse's Psychopath](https://
 
 The UiAutomator2 driver provides multiple options for touch gestures automation.
 For simple gestures, like swipe, scroll or pinch use the corresponding
-[gesture shortcuts](#mobile-gesture-commands). For more complicated gestures
+[gesture shortcuts](#mobile-gesture-commands). 
+You may also use [UiScrollable-based UiAutomator locators](./docs/uiautomator-uiselector.md) 
+to automate various scrolling behaviours.
+For more complicated gestures
 consider using [W3C actions](https://w3c.github.io/webdriver/#actions).
+
 
 Make sure you don't use deprecated JWP touch actions APIs. They have been
 removed from the UIA2 driver since version 3.
@@ -1872,6 +1876,7 @@ Check the below tutorials for more details on how to build reliable action chain
 
 - [Automating Complex Gestures with the W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api)
 - [Swiping your way through Appium by Wim Selles #AppiumConf2021](https://www.youtube.com/watch?v=oAJ7jwMNFVU)
+- [Guide on UiAutomator Locator Types](./docs/uiautomator-uiselector.md)
 - [Low-Level Insights on Android Input Events](./docs/actions.md)
 
 ### window/tab hanlding in WEBVIEW context implemented by chrome custom tabs

@@ -1855,7 +1855,7 @@ meassures might be applied:
   and check the velocity of the gesture. It also works for multi-touch gestures. Compare the trace
   to how the same gesture is usually done manually and apply the necessary updates to your code.
 - Check the device [logcat](https://developer.android.com/studio/debug/logcat) output for possible
-  error messages. Usually a single gesture consists of hunders of atomic steps. If any of these steps
+  error messages. Usually a single gesture consists of hundreds of atomic steps. If any of these steps
   receives incorrect/unsupported parameters then the whole gesture might fail. The log has details
   about each step being executed and arguments passed to it.
 - Make sure the gesture has valid coordinates and respects pauses between pointer state changes.

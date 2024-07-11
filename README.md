@@ -1836,6 +1836,39 @@ The general resources naming convention for Android apps is `<app_id>:id/<resour
 
 This exception happens due to a known bug in the [Eclipse's Psychopath](https://wiki.eclipse.org/PsychoPathXPathProcessor) library used by UiAutomator2 driver to support [XPath2](https://www.w3.org/TR/xpath20/) syntax. The issue has been observed while using `following::` or `preceding::` axes in xpath queries. Unfortunately, this library has not been maintained for quite a while, and there is no good open source alternative to it. The only known workaround would be to forcefully switch the driver's XPath processor to the standard Android's Apache Harmony-based XPath1, which does not have this issue (but also does not support XPath2 syntax). See the Appium issue [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
 
+### A gesture, like scroll or swipe, does not have any effect/It is unlear how to do it
+
+The UiAutomator2 driver provides multiple options for touch gestures automation.
+For simple gestures, like swipe, scroll or pinch use the corresponding
+[gesture shortcuts](#mobile-gesture-commands). For more complicated gestures
+consider using [W3C actions](https://w3c.github.io/webdriver/#actions).
+
+Make sure you don't use deprecated JWP touch actions APIs. They have been
+removed from the UIA2 driver since version 3.
+
+If the action code in the client source looks good and satisfies the above requirements,
+but its execution still does not deliver the expected result then the following debugging
+meassures might be applied:
+
+- Enable `Show taps` and `Pointer location` Developer options in the device Settings. After running
+  your automation code with the above options enabled you would be able to see the exact pointer trace path
+  and check the velocity of the gesture. It also works for multi-touch gestures. Compare the trace
+  to how the same gesture is usually done manually and apply the necessary updates to your code.
+- Check the device [logcat](https://developer.android.com/studio/debug/logcat) output for possible
+  error messages. Usually a single gesture consists of hunders of atomic steps. If any of these steps
+  receives incorrect/unsupported parameters then the whole gesture might fail. The log has details
+  about each step being executed and arguments passed to it.
+- Make sure the gesture has valid coordinates and respects pauses between pointer state changes.
+  For example, it is always mandatory to provide a valid element or valid `absolute` coordinates
+  to any gesture at the beginning. Android only registers
+  a long touch/click if the pointer has been depressed for longer than 500ms. For shorter actions
+  a simple click is registered instead.
+
+Check the below tutorials for more details on how to build reliable action chains:
+
+- [Automating Complex Gestures with the W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api)
+- [Swiping your way through Appium by Wim Selles #AppiumConf2021](https://www.youtube.com/watch?v=oAJ7jwMNFVU)
+
 ### window/tab hanlding in WEBVIEW context implemented by chrome custom tabs
 
 [Chrome custom tabs](https://developer.chrome.com/docs/android/custom-tabs/) could have its own window handlings as same as regular Selenium Web automation.

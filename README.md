@@ -1863,6 +1863,10 @@ meassures might be applied:
   to any gesture at the beginning. Android only registers
   a long touch/click if the pointer has been depressed for longer than 500ms. For shorter actions
   a simple click is registered instead.
+- Do not mix webview and native elements in actions arguments. It simply won't work. Native
+  actions could only consume native elements. A single possibility to perform a native action
+  on a web element would be to traslate its coordinates into the native context and pass these
+  coordinates as native action arguments.
 
 Check the below tutorials for more details on how to build reliable action chains:
 

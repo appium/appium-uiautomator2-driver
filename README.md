@@ -1872,6 +1872,7 @@ Check the below tutorials for more details on how to build reliable action chain
 
 - [Automating Complex Gestures with the W3C Actions API](https://appiumpro.com/editions/29-automating-complex-gestures-with-the-w3c-actions-api)
 - [Swiping your way through Appium by Wim Selles #AppiumConf2021](https://www.youtube.com/watch?v=oAJ7jwMNFVU)
+- [Low-Level Insights on Android Input Events](./docs/actions.md)
 
 ### window/tab hanlding in WEBVIEW context implemented by chrome custom tabs
 

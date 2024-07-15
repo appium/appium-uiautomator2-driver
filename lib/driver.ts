@@ -910,7 +910,6 @@ class AndroidUiautomator2Driver
           this.log.warn(`Cannot restore the original IME: ${e.message}`);
         }
       }
-      await this.adb.stopLogcat();
       try {
         await this.releaseSystemPort();
       } catch (error) {

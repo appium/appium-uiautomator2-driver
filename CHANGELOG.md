@@ -1,3 +1,9 @@
+## [3.7.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.3...v3.7.4) (2024-07-23)
+
+### Bug Fixes
+
+* stop uia2 process as well in cleanupAutomationLeftovers ([#807](https://github.com/appium/appium-uiautomator2-driver/issues/807)) ([69abc42](https://github.com/appium/appium-uiautomator2-driver/commit/69abc425ff36359ac7b58bead82ece0e0fdd1ab3))
+
 ## [3.7.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.2...v3.7.3) (2024-07-15)
 
 ### Miscellaneous Chores

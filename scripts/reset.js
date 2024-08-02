@@ -1,6 +1,8 @@
 const { ADB } = require('appium-adb');
 const B = require('bluebird');
-const log = require('fancy-log');
+const {logger} = require('appium/support');
+
+const log = logger.getLogger('UIA2Reset');
 
 const SERVER_PKGS = [
   'io.appium.uiautomator2.server',

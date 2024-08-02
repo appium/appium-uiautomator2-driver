@@ -1,3 +1,9 @@
+## [3.7.5](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.4...v3.7.5) (2024-08-02)
+
+### Miscellaneous Chores
+
+* Replace fancy-log dependency with appium logger ([#809](https://github.com/appium/appium-uiautomator2-driver/issues/809)) ([8ec7aa7](https://github.com/appium/appium-uiautomator2-driver/commit/8ec7aa7eff586a0b3ee898bb20dbded8ed44bc34))
+
 ## [3.7.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.3...v3.7.4) (2024-07-23)
 
 ### Bug Fixes

@@ -1,3 +1,9 @@
+## [3.7.6](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.5...v3.7.6) (2024-08-06)
+
+### Miscellaneous Chores
+
+* Bump adb ([36b265e](https://github.com/appium/appium-uiautomator2-driver/commit/36b265e9a39cf089936a145e7fc251a23423fbdb))
+
 ## [3.7.5](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.4...v3.7.5) (2024-08-02)
 
 ### Miscellaneous Chores

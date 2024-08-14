@@ -1,3 +1,9 @@
+## [3.7.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.6...v3.7.7) (2024-08-14)
+
+### Bug Fixes
+
+* apply the latest io.appium.settings ([a1dfde4](https://github.com/appium/appium-uiautomator2-driver/commit/a1dfde4b3d9ffcfcdd89caa0e9382231970359bb))
+
 ## [3.7.6](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.5...v3.7.6) (2024-08-06)
 
 ### Miscellaneous Chores

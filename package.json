@@ -64,7 +64,7 @@
     "axios": "^1.6.5",
     "bluebird": "^3.5.1",
     "css-selector-parser": "^3.0.0",
-    "io.appium.settings": "^5.12.0",
+    "io.appium.settings": "^5.12.11",
     "lodash": "^4.17.4",
     "portscanner": "^2.2.0",
     "source-map-support": "^0.x",

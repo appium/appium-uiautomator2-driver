@@ -279,6 +279,17 @@ Available since Appium v1.19
 ));
 ```
 
+```python
+# Python
+driver.execute_script('mobile: swipeGesture', {
+    'left': 100,
+    'top': 100,
+    'width': 200,
+    'height': 200,
+    'direction': direction, 'percent': 0.75
+})
+```
+
 
 ### mobile: scrollGesture
 

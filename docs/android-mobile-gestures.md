@@ -106,7 +106,7 @@ driver.execute_script('mobile: clickGesture', {'x': 100, 'y': 100})
 ```
 
 ```javascript
-// Javascript - Mocha
+// Javascript - @wdio
 await driver.executeScript('mobile: clickGesture', [{x: 100, y: 100}]);
 ```
 
@@ -177,7 +177,7 @@ boolean canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("m
 ```
 
 ```javascript
-// Javascript - Mocha
+// Javascript - @wdio
 await driver.executeScript('mobile: flingGesture', [{
     elementId: element.elementId,
     direction: 'right',

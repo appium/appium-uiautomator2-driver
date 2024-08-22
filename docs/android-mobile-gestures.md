@@ -105,6 +105,10 @@ driver.executeScript("mobile: clickGesture", ImmutableMap.of(
 driver.execute_script('mobile: clickGesture', {'x': 100, 'y': 100})
 ```
 
+```javascript
+// Javascript
+await driver.executeScript('mobile: clickGesture', [{x: 100, y: 100}]);
+```
 
 ### mobile: dragGesture
 
@@ -170,6 +174,15 @@ boolean canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("m
     "direction", "down",
     "speed", 500
 ));
+```
+
+```javascript
+// Javascript
+await driver.executeScript('mobile: flingGesture', [{
+        elementId: element.elementId,
+        direction: 'right',
+        speed: 500,
+}]);
 ```
 
 

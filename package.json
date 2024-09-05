@@ -104,7 +104,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.4.2",
     "unzipper": "^0.x",
-    "webdriverio": "^8.0.5",
+    "webdriverio": "^9.0.8",
     "xpath": "^0.x"
   },
   "peerDependencies": {

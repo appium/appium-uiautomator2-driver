@@ -1,4 +1,4 @@
-import {DOMParser} from '@xmldom/xmldom';
+import {DOMParser, XMLDom} from '@xmldom/xmldom';
 import xpath from 'xpath';
 import {APIDEMOS_CAPS} from '../../desired';
 import {initSession, deleteSession} from '../../helpers/session';
@@ -23,7 +23,7 @@ describe('apidemo - source', function () {
 
   function assertSource(source) {
     source.should.exist;
-    const dom = new DOMParser().parseFromString(source);
+    const dom = new DOMParser().parseFromString(source, XMLDom.MIME_TYPE.XML_TEXT);
     const nodes = xpath.select('//hierarchy', dom);
     nodes.length.should.equal(1);
   }

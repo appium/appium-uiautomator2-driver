@@ -1,3 +1,9 @@
+## [3.8.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.11...v3.8.0) (2024-09-17)
+
+### Features
+
+* Bump appium-chromedriver ([#828](https://github.com/appium/appium-uiautomator2-driver/issues/828)) ([653b140](https://github.com/appium/appium-uiautomator2-driver/commit/653b140b639c03ea8573efc2d3fe0662f60df681))
+
 ## [3.7.11](https://github.com/appium/appium-uiautomator2-driver/compare/v3.7.10...v3.7.11) (2024-09-13)
 
 ### Miscellaneous Chores

@@ -1751,7 +1751,7 @@ section of appium-chromedriver README for more details on how to customize the d
 
 It may also be necessary to adjust network proxy and firewall settings for the above to work.
 
-Ig you use a UIA2 driver below version 3.8.0, and you
+If you use a UIA2 driver below version 3.8.0, and you
 would like skip the automated download of Chromedriver upon driver install, do it by
 defining the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable:
 

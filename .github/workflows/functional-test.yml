@@ -97,7 +97,6 @@ jobs:
           --relaxed-security \
           --log-no-colors \
           --log-timestamp \
-          --allow-insecure chromedriver_autodownload \
           2>&1 > "$cwd/appium.log" &
         popd
       name: Start Appium server

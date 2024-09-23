@@ -1035,6 +1035,37 @@ Determine whether the device is locked.
 
 Either `true` or `false`
 
+### mobile: setGeolocation
+
+Sets emulated geolocation coordinates on the device under test.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+latitude | number | yes | [Latitude](https://en.wikipedia.org/wiki/Latitude) value | 32.456
+longitude | number | yes | [longitude](https://en.wikipedia.org/wiki/Longitude) value | 32.456
+altitude | number | no | [Altitude](https://en.wikipedia.org/wiki/Altitude) value. Zero by default | 5.678
+
+### mobile: getGeolocation
+
+Retrieves current geolocation coordinates from the device under test. If coordinates are mocked/emulated
+then these coordinates would be returned.
+
+#### Returned Result
+
+A map with the following entries:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+latitude | number | [Latitude](https://en.wikipedia.org/wiki/Latitude) value | 32.456
+longitude | number | [longitude](https://en.wikipedia.org/wiki/Longitude) value | 32.456
+altitude | number | [Altitude](https://en.wikipedia.org/wiki/Altitude) value | 5.678
+
+### mobile: resetGeolocation
+
+Resets mocked geolocation provider to the default/system one. Only works for real devices.
+
 ### mobile: refreshGpsCache
 
 Sends a request to refresh the GPS cache on the device under test.

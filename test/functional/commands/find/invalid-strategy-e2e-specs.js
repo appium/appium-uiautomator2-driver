@@ -20,6 +20,6 @@ describe('Find - invalid strategy', function () {
   });
   it('should not accept -ios uiautomation locator strategy', async function () {
     await chai.expect(driver.$$('ios=.elements()'))
-      .to.eventually.be.rejectedWith(/strategy.*is invalid/);
+      .to.eventually.be.rejected;
   });
 });

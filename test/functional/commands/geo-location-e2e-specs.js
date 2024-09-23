@@ -60,7 +60,7 @@ describe('geo-location -', function () {
     const latitude = getRandomInt(-90, 90);
     const longitude = getRandomInt(-180, 180);
 
-    await driver.setGeoLocation({latitude, longitude});
+    await driver.executeScript('mobile: setGeolocation', [{latitude, longitude}]);
 
     // wait for the text to change
     await retryInterval(10, 1000, async () => {
@@ -79,7 +79,7 @@ describe('geo-location -', function () {
       text.should.include(`Longitude: ${longitude}`);
     });
 
-    const loc = await driver.getGeoLocation();
+    const loc = await driver.executeScript('mobile: getGeolocation');
     loc.latitude.should.equal(latitude);
     loc.longitude.should.equal(longitude);
   });

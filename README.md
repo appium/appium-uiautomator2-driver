@@ -243,7 +243,7 @@ xpath | For elements lookup Xpath strategy the driver uses the same XML tree tha
 > using them or plan to use them in the future.
 
 
-# BiDi Protocol Support
+## BiDi Protocol Support
 
 UIAutomator2 driver has partial support of the [BiDi Protocol](https://w3c.github.io/webdriver-bidi/) since version 3.7.10. Check the [Supported BiDi Commands And Events](./docs/bidi.md) document for more details.
 

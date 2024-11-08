@@ -883,7 +883,7 @@ The actual stdout of the downstream `am` command.
 The example command below generates `shell am start-activity -W -n io.appium.android.apis/io.appium.android.apis.ApiDemos -S -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000'` which is called in a new session request.
 If you replace `'io.appium.android.apis/io.appium.android.apis.ApiDemos'` with your expcted launchable activity, it will be the alternative method to start the activity in session.
 
-Please check [how appium adds flags](https://github.com/appium/appium-android-driver/blob/master/lib/commands/intent.js) for more details if you'd like to build a specific intent arguments.
+Please check [how appium adds flags](https://github.com/appium/appium-android-driver/blob/master/lib/commands/intent.js) for more details to understand how Appium builds flags.
 
 ```ruby
 # Ruby

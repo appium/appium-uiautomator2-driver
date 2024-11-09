@@ -878,6 +878,25 @@ flags | string | no | Intent startup-specific flags as a hexadecimal string. Che
 
 The actual stdout of the downstream `am` command.
 
+#### Example
+
+Use the code snippet below to represent the following shell command: `shell am start-activity -W -n io.appium.android.apis/io.appium.android.apis.ApiDemos -S -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000'`, which is usually similar to what is called in a new session request.
+If you replace `'io.appium.android.apis/io.appium.android.apis.ApiDemos'` with your expected launchable activity, it would be the alternative method to start the activity in session.
+
+Please check [how appium adds flags](https://github.com/appium/appium-android-driver/blob/master/lib/commands/intent.js) for more details to understand how Appium builds flags.
+
+```ruby
+# Ruby
+driver.execute_script 'mobile: startActivity', {
+    wait: true,
+    stop: true,
+    action: 'android.intent.action.MAIN',
+    component: 'io.appium.android.apis/io.appium.android.apis.ApiDemos',
+    categories: ['android.intent.category.LAUNCHER'],
+    flags: '0x10200000'
+}
+```
+
 ### mobile: startService
 
 Starts the given service intent. Invokes `am startservice` or `am start-service` command under the hood.

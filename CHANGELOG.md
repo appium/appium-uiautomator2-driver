@@ -1,3 +1,9 @@
+## [3.8.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.1...v3.8.2) (2024-11-11)
+
+### Miscellaneous Chores
+
+* bump adb to include supporting activities with unicode chars ([#836](https://github.com/appium/appium-uiautomator2-driver/issues/836)) ([c36962e](https://github.com/appium/appium-uiautomator2-driver/commit/c36962ebc135a1d8f761aa4e1a9bada3488408c0))
+
 ## [3.8.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.0...v3.8.1) (2024-10-31)
 
 ### Miscellaneous Chores

@@ -1,3 +1,9 @@
+## [3.8.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.2...v3.8.3) (2024-11-14)
+
+### Miscellaneous Chores
+
+* Bump android driver ([728270f](https://github.com/appium/appium-uiautomator2-driver/commit/728270f90f6f82e37edb831a4b7e3832a5ea43eb))
+
 ## [3.8.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.1...v3.8.2) (2024-11-11)
 
 ### Miscellaneous Chores

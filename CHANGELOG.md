@@ -1,3 +1,9 @@
+## [3.9.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.3...v3.9.0) (2024-11-18)
+
+### Features
+
+* Add a BiDi event upon context change ([#838](https://github.com/appium/appium-uiautomator2-driver/issues/838)) ([fabbc8d](https://github.com/appium/appium-uiautomator2-driver/commit/fabbc8dad628fe0c9d776a542180711d836ff3be))
+
 ## [3.8.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.8.2...v3.8.3) (2024-11-14)
 
 ### Miscellaneous Chores

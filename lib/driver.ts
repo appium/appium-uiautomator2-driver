@@ -651,6 +651,11 @@ class AndroidUiautomator2Driver
       this.log.info(`Setting auto webview to context '${viewName}' with timeout ${timeout}ms`);
       await retryInterval(timeout / 500, 500, this.setContext.bind(this), viewName);
     }
+
+    // We would like to notify about the initial context setting
+    if (await this.getCurrentContext() === this.defaultContextName()) {
+      await this.notifyBiDiContextChange();
+    }
   }
 
   async startUiAutomator2Session(

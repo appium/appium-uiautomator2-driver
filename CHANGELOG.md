@@ -1,3 +1,9 @@
+## [3.9.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.1...v3.9.2) (2024-12-09)
+
+### Miscellaneous Chores
+
+* allow compatibility with appium 3 beta ([471e156](https://github.com/appium/appium-uiautomator2-driver/commit/471e156b9b537465b6a0d49cd92c0431be57fd64))
+
 ## [3.9.1](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.0...v3.9.1) (2024-11-27)
 
 ### Miscellaneous Chores

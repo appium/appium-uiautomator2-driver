@@ -93,7 +93,7 @@ export interface DeepLinkOpts {
   /**
    * The name of the package to start the URI with.
    */
-  package: string;
+  package?: string;
   /**
    * If `false` then adb won't wait for the started activity to return the control.
    * @defaultValue true

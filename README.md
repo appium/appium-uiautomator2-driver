@@ -431,7 +431,7 @@ Start URI that may take users directly to the specific content in the app. Read 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 url | string | yes | The URL to start | theapp://login/
-package | string | no | The name of the package to start the URI with | 'com.mycompany'
+package | string | no | The name of the package to start the URI with. This argument was required previously but became optional since version 3.9.3 | 'com.mycompany'
 waitForLaunch | boolean | no | If `false` then ADB won't wait for the started activity to return the control. `true` by default | false
 
 ### mobile: startLogsBroadcast

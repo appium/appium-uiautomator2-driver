@@ -1,3 +1,9 @@
+## [3.9.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.2...v3.9.3) (2024-12-11)
+
+### Bug Fixes
+
+* Make package parameter of deep link command optional ([#847](https://github.com/appium/appium-uiautomator2-driver/issues/847)) ([ddc7477](https://github.com/appium/appium-uiautomator2-driver/commit/ddc7477b6c62b93469364ed433b88cbdbb91e4b7))
+
 ## [3.9.2](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.1...v3.9.2) (2024-12-09)
 
 ### Miscellaneous Chores

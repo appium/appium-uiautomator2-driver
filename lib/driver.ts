@@ -462,7 +462,7 @@ class AndroidUiautomator2Driver
         `Forwarding UiAutomator2 Server port ${DEVICE_PORT} to local port ${localPort}`
       );
       if ((await checkPortStatus(localPort, LOCALHOST_IP4)) === 'open') {
-        throw this.log.errorAndThrow(
+        throw this.log.errorWithException(
           `UiAutomator2 Server cannot start because the local port #${localPort} is busy. ` +
             `Make sure the port you provide via 'systemPort' capability is not occupied. ` +
             `This situation might often be a result of an inaccurate sessions management, e.g. ` +
@@ -482,7 +482,7 @@ class AndroidUiautomator2Driver
       try {
         this.systemPort = await findAPortNotInUse(startPort, endPort);
       } catch (e) {
-        throw this.log.errorAndThrow(
+        throw this.log.errorWithException(
           `Cannot find any free port in range ${startPort}..${endPort}}. ` +
             `Please set the available port number by providing the systemPort capability or ` +
             `double check the processes that are locking ports within this range and terminate ` +
@@ -528,7 +528,7 @@ class AndroidUiautomator2Driver
   async performSessionPreExecSetup(): Promise<StringRecord|undefined> {
     const apiLevel = await this.adb.getApiLevel();
     if (apiLevel < 21) {
-      throw this.log.errorAndThrow(
+      throw this.log.errorWithException(
         'UIAutomator2 is only supported since Android 5.0 (Lollipop). ' +
           'You could still use other supported backends in order to automate older Android versions.'
       );
@@ -542,7 +542,7 @@ class AndroidUiautomator2Driver
         try {
           await this.adb.setHiddenApiPolicy('1', !!this.opts.ignoreHiddenApiPolicyError);
         } catch (err) {
-          throw this.log.errorAndThrow(
+          throw this.log.errorWithException(
             'Hidden API policy (https://developer.android.com/guide/app-compatibility/restrictions-non-sdk-interfaces) cannot be enabled. ' +
               'This might be happening because the device under test is not configured properly. ' +
               'Please check https://github.com/appium/appium/issues/13802 for more details. ' +
@@ -697,13 +697,10 @@ class AndroidUiautomator2Driver
     const uiautomator2Opts = {
       // @ts-expect-error FIXME: maybe `address` instead of `host`?
       host: this.opts.remoteAdbHost || this.opts.host || LOCALHOST_IP4,
-      systemPort: this.systemPort,
+      systemPort: this.systemPort as number,
       devicePort: DEVICE_PORT,
       adb: this.adb,
-      apk: this.opts.app,
-      tmpDir: this.opts.tmpDir,
-      appPackage: this.opts.appPackage,
-      appActivity: this.opts.appActivity,
+      tmpDir: this.opts.tmpDir as string,
       disableWindowAnimation: !!this.opts.disableWindowAnimation,
       disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
       readTimeout: this.opts.uiautomator2ServerReadTimeout,
@@ -753,7 +750,9 @@ class AndroidUiautomator2Driver
       try {
         otherApps = utils.parseArray(this.opts.otherApps);
       } catch (e) {
-        throw this.log.errorAndThrow(`Could not parse "otherApps" capability: ${(e as Error).message}`);
+        throw this.log.errorWithException(
+          `Could not parse "otherApps" capability: ${(e as Error).message}`
+        );
       }
       otherApps = await B.all(
         otherApps.map((app) => this.helpers.configureApp(app, [APK_EXTENSION, APKS_EXTENSION]))
@@ -785,7 +784,7 @@ class AndroidUiautomator2Driver
       }
     } else {
       if (this.opts.fullReset) {
-        throw this.log.errorAndThrow(
+        throw this.log.errorWithException(
           'Full reset requires an app capability, use fastReset if app is not provided'
         );
       }
@@ -946,7 +945,7 @@ class AndroidUiautomator2Driver
   async checkAppPresent() {
     this.log.debug('Checking whether app is actually present');
     if (!this.opts.app || !(await fs.exists(this.opts.app))) {
-      throw this.log.errorAndThrow(`Could not find app apk at '${this.opts.app}'`);
+      throw this.log.errorWithException(`Could not find app apk at '${this.opts.app}'`);
     }
   }
 

@@ -1,3 +1,9 @@
+## [3.9.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.3...v3.9.4) (2024-12-13)
+
+### Miscellaneous Chores
+
+* Replace occurrences of the deprecated errorAndThrow API ([#849](https://github.com/appium/appium-uiautomator2-driver/issues/849)) ([c562ca5](https://github.com/appium/appium-uiautomator2-driver/commit/c562ca58897e4df84e78a199b40a552b5659e026))
+
 ## [3.9.3](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.2...v3.9.3) (2024-12-11)
 
 ### Bug Fixes

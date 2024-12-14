@@ -1,3 +1,9 @@
+## [3.9.5](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.4...v3.9.5) (2024-12-14)
+
+### Miscellaneous Chores
+
+* Tune contextUpdated event generation ([#850](https://github.com/appium/appium-uiautomator2-driver/issues/850)) ([324d094](https://github.com/appium/appium-uiautomator2-driver/commit/324d0940767e201e4675f31c2fbca0d34ed7da22))
+
 ## [3.9.4](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.3...v3.9.4) (2024-12-13)
 
 ### Miscellaneous Chores

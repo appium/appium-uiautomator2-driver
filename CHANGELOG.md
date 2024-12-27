@@ -1,3 +1,9 @@
+## [3.9.6](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.5...v3.9.6) (2024-12-27)
+
+### Bug Fixes
+
+* Tune retrieval of package launch info ([#853](https://github.com/appium/appium-uiautomator2-driver/issues/853)) ([90a68b1](https://github.com/appium/appium-uiautomator2-driver/commit/90a68b1d9cba41c28b198a4ee9aa4fa55379acb3))
+
 ## [3.9.5](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.4...v3.9.5) (2024-12-14)
 
 ### Miscellaneous Chores

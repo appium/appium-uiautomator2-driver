@@ -671,9 +671,13 @@ class AndroidUiautomator2Driver
       ...caps,
       ...sessionInfo,
     };
-    // Adding AUT package name in the capabilities if package name not exist in caps
-    if (!capsWithSessionInfo.appPackage && appInfo) {
-      capsWithSessionInfo.appPackage = appInfo.appPackage;
+    // Adding AUT info in the capabilities if it does not exist in caps
+    if (appInfo) {
+      for (const capName of ['appPackage', 'appActivity']) {
+        if (!capsWithSessionInfo[capName] && appInfo[capName]) {
+          capsWithSessionInfo[capName] = appInfo[capName];
+        }
+      }
     }
 
     await this.performSessionExecution(capsWithSessionInfo);

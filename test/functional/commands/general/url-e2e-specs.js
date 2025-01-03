@@ -35,7 +35,7 @@ describe('setUrl', function () {
 
       btn = await driver.$('id=com.android.chrome:id/negative_button');
       await btn.click();
-    } catch (ign) {}
+    } catch {}
 
     await driver.url('https://autify.com');
 

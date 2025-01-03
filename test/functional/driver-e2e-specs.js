@@ -1,4 +1,4 @@
-import ADB from 'appium-adb';
+import { ADB } from 'appium-adb';
 import { APIDEMOS_CAPS, amendCapabilities } from './desired';
 import { initSession, deleteSession } from './helpers/session';
 import B from 'bluebird';

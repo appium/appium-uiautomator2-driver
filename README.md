@@ -2018,7 +2018,7 @@ def test_edit_text(driver):
 
 ```
 npm install appium-uiautomator2-driver
-npm run watch
+npm run dev
 ```
 
 Unit tests:
@@ -2030,5 +2030,9 @@ npm run test
 Functional tests:
 
 ```
-npm run e2e-test
+npm run e2e-test:commands
+npm run e2e-test:commands:find
+npm run e2e-test:commands:general
+npm run e2e-test:commands:keyboard
+npm run e2e-test:driver
 ```

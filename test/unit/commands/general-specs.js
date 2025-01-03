@@ -2,7 +2,7 @@
 
 import sinon from 'sinon';
 import {AndroidUiautomator2Driver} from '../../../lib/driver';
-import ADB from 'appium-adb';
+import { ADB } from 'appium-adb';
 
 
 describe('General', function () {
@@ -100,7 +100,7 @@ describe('General', function () {
       ).to.be.rejectedWith('No apks are given to install');
     });
 
-    it('should reject if no apks were given', async function () {
+    it('should reject with default args', async function () {
       await expect(driver.execute('mobile: installMultipleApks')).to.be.rejectedWith(
         'No apks are given to install'
       );

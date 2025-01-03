@@ -3,7 +3,7 @@ import B from 'bluebird';
 import { retryInterval } from 'asyncbox';
 import { APIDEMOS_CAPS } from '../../desired';
 import { initSession, deleteSession } from '../../helpers/session';
-import ADB from 'appium-adb';
+import { ADB } from 'appium-adb';
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
@@ -171,7 +171,7 @@ describe('keyboard', function () {
         await okBtn.click();
         await ensureUnlocked(driver);
         await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
-      } catch (ign) {}
+      } catch {}
     });
     after(async function () {
       await deleteSession();

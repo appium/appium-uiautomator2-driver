@@ -10,7 +10,7 @@ import type {
   StringRecord,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT} from 'appium-adb';
-import AndroidDriver, {utils} from 'appium-android-driver';
+import {AndroidDriver, utils} from 'appium-android-driver';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {BaseDriver, DeviceSettings} from 'appium/driver';
 import {fs, mjpeg, util} from 'appium/support';
@@ -481,7 +481,7 @@ class AndroidUiautomator2Driver
       const [startPort, endPort] = DEVICE_PORT_RANGE;
       try {
         this.systemPort = await findAPortNotInUse(startPort, endPort);
-      } catch (e) {
+      } catch {
         throw this.log.errorWithException(
           `Cannot find any free port in range ${startPort}..${endPort}}. ` +
             `Please set the available port number by providing the systemPort capability or ` +
@@ -878,7 +878,7 @@ class AndroidUiautomator2Driver
           (async () => {
             try {
               await task();
-            } catch (ign) {}
+            } catch {}
           })();
         })
       );

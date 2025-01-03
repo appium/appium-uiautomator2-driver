@@ -29,11 +29,11 @@ describe('Find - uiautomator', function () {
     els.length.should.be.above(8);
     els.length.should.be.below(14);
   });
-  it('should find elements without prepending "new UiSelector()"', async function () {
+  it('should find elements without prepending "new UiSelector()" relative', async function () {
     const els = await driver.$$('android=.clickable(true)');
     els.should.have.length.at.least(8);
   });
-  it('should find elements without prepending "new UiSelector()"', async function () {
+  it('should find elements without prepending "new UiSelector()" absolute', async function () {
     const els = await driver.$$('android=clickable(true)');
     els.should.have.length.at.least(8);
   });
@@ -75,7 +75,7 @@ describe('Find - uiautomator', function () {
     els.should.have.length(0);
     await driver.setTimeout({ implicit: 20000 }); // restore implicit wait
   });
-  it('should allow multiple selector statements and return the Union of the two sets', async function () {
+  it('should allow multiple selector statements and return the Union of the two sets containing non clickable elements', async function () {
     const clickableEls = await driver.$$('android=new UiSelector().clickable(true)');
     clickableEls.length.should.be.above(0);
     const notClickableEls = await driver.$$('android=new UiSelector().clickable(false)');

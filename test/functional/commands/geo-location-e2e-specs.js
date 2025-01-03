@@ -2,7 +2,7 @@ import { retryInterval } from 'asyncbox';
 import { GPS_DEMO_CAPS } from '../desired';
 import { initSession, deleteSession } from '../helpers/session';
 import B from 'bluebird';
-import ADB from 'appium-adb';
+import { ADB } from 'appium-adb';
 
 
 describe('geo-location -', function () {

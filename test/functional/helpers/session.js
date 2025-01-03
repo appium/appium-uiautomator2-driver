@@ -46,7 +46,7 @@ async function attemptToDismissAlert (caps) {
         try {
           btn = await driver.$(`id=${btnId}`);
           alertFound = true;
-        } catch (ign) {
+        } catch {
           // no element found, so just finish
           return;
         }
@@ -76,7 +76,7 @@ async function attemptToDismissAlert (caps) {
 async function deleteSession () {
   try {
     await driver.deleteSession();
-  } catch (ign) {}
+  } catch {}
   driver = null;
 }
 

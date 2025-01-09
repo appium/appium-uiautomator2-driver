@@ -804,7 +804,7 @@ class AndroidUiautomator2Driver
     const appWaitPackage = this.opts.appWaitPackage || this.opts.appPackage;
     const appWaitActivity = this.opts.appWaitActivity || this.opts.appActivity;
     this.log.info(
-      `Starting '${this.opts.appPackage}/${this.opts.appActivity} ` +
+      `Starting '${this.opts.appPackage}/${this.opts.appActivity}' ` +
         `and waiting for '${appWaitPackage}/${appWaitActivity}'`
     );
 

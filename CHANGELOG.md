@@ -1,3 +1,10 @@
+## [3.9.8](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.7...v3.9.8) (2025-01-09)
+
+### Miscellaneous Chores
+
+* Add closing log quote ([2398564](https://github.com/appium/appium-uiautomator2-driver/commit/2398564421a8a05490cf077b8f32b8f6ddfb5f32))
+* Bump adb ([#857](https://github.com/appium/appium-uiautomator2-driver/issues/857)) ([b443c0a](https://github.com/appium/appium-uiautomator2-driver/commit/b443c0ac13930ea9a0f9008a07538632bbb6e81f))
+
 ## [3.9.7](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.6...v3.9.7) (2025-01-05)
 
 ### Miscellaneous Chores

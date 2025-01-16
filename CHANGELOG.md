@@ -1,3 +1,9 @@
+## [3.9.9](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.8...v3.9.9) (2025-01-16)
+
+### Miscellaneous Chores
+
+* bump io.appium.settings to include the broad cast receiver update ([#858](https://github.com/appium/appium-uiautomator2-driver/issues/858)) ([bd8cfe7](https://github.com/appium/appium-uiautomator2-driver/commit/bd8cfe77da8ab3f47a80af7550c0f8ebb9abb695))
+
 ## [3.9.8](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.7...v3.9.8) (2025-01-09)
 
 ### Miscellaneous Chores

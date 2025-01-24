@@ -1,3 +1,9 @@
+## [3.10.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.9...v3.10.0) (2025-01-24)
+
+### Features
+
+* bump appium-adb to handle screenState=SCREEN_STATE_OFF as locked ([#861](https://github.com/appium/appium-uiautomator2-driver/issues/861)) ([fdd362a](https://github.com/appium/appium-uiautomator2-driver/commit/fdd362a8087c66aa6a0825bb18865a43e2ee5288))
+
 ## [3.9.9](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.8...v3.9.9) (2025-01-16)
 
 ### Miscellaneous Chores

@@ -1,3 +1,66 @@
+## [4.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.10.0...v4.0.0) (2025-02-01)
+
+### ⚠ BREAKING CHANGES
+
+* The following methods and properties were **removed**:
+- mobileSetClipboard -> replaced by setClipboard
+- mobileGetClipboard -> replaced by getClipboard
+- executeMobile -> replaced by execute (the` script` argument must also be changed to start with `mobile: `)
+- mobileCommandsMapping -> replaced by executeMethodsMap
+- mobileGetAppStrings -> replaced by getStrings
+* The following methods were **changed**:
+- mobileDragGesture
+- mobileFlingGesture
+- mobileDoubleClickGesture
+- mobileClickGesture
+- mobilePinchOpenGesture
+- mobilePinchCloseGesture
+- mobileSwipeGesture
+- mobileScrollGesture
+- mobileScrollBackTo
+- mobileScroll
+- mobileDeepLink
+- mobileAcceptAlert
+- mobileDismissAlert
+- mobileType
+- mobileReplaceElementValue
+- mobileInstallMultipleApks
+- mobileBackgroundApp
+- mobilePressKey
+- mobileScreenshots
+- mobileScheduleAction
+- mobileUnscheduleAction
+- mobileGetActionHistory
+* The following obsolete type definitions were **removed**:
+- DragOptions
+- FlingOptions
+- ClickOptions
+- LongClickOptions
+- PinchOptions
+- SwipeOptions
+- ScrollGestureOptions
+- ScrollElementToElementOpts
+- ScrollOptions
+- DeepLinkOpts
+- AcceptAlertOptions
+- DismissAlertOptions
+- TypingOptions
+- ReplaceValueOptions
+- InstallMultipleApksOptions
+- BackgroundAppOptions
+- PressKeyOptions
+- ScreenshotsOpts
+- ActionArgs
+- SetClipboardOpts
+- GetAppStringsOptions
+
+
+Based on https://github.com/appium/appium-android-driver/pull/982
+
+### Features
+
+* Add support of executeMethodMap ([#863](https://github.com/appium/appium-uiautomator2-driver/issues/863)) ([4c45c3a](https://github.com/appium/appium-uiautomator2-driver/commit/4c45c3a85a574cb4d207ab827ce98421812d99f2))
+
 ## [3.10.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.9.9...v3.10.0) (2025-01-24)
 
 ### Features

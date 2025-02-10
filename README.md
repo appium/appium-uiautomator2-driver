@@ -238,7 +238,7 @@ max-text-length | The maximum text length for the editable text element. Availab
 content-invalid | If the content of this element is invalid. For example, a date is not well-formed. | 'true'
 error | The error text of the element. | 'text string'
 pane-title | Title of the pane represented by this element. Available for API 28+ | 'text string'
-extras | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
+actions | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
 
 
 ## Element Location

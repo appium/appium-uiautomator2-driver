@@ -221,24 +221,24 @@ hint | Element's hint text. On Android versions below Oreo it always equals to `
 bounds | The element's visible frame (`[left, top][right, bottom]`) | `[0,0][100,100]`
 displayed | Whether the element is visible to the user | 'true'
 contentSize | The dimensions of the element's content area | `{"left": 0, "top":0, "width": 100, "height": 100, "scrollableOffset": 10, "touchPadding": 0}`
-extras | The result of [getExtras](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getExtras()). The value includes all key-value pairs as `key=value` separated by a semicolon (`;`). If the value is empty, then only key part ending with the equal sign will be present. | Part of extras in chrome browser:<br> `AccessibilityNodeInfo.roleDescription=;`<br>`AccessibilityNodeInfo.chromeRole=rootWebArea;`<br> `ACTION_ARGUMENT_HTML_ELEMENT_STRING_VALUES=`<br> `ARTICLE,BLOCKQUOTE,BUTTON,CHECKBOX`
+extras | The result of [getExtras](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getExtras()). The value includes all key-value pairs as `key=value` separated by a semicolon (`;`). If the value is empty, then only key part ending with the equal sign will be present. Available only if `includeExtrasInPageSource` setting is turned on. | Part of extras in chrome browser:<br> `AccessibilityNodeInfo.roleDescription=;`<br>`AccessibilityNodeInfo.chromeRole=rootWebArea;`<br> `ACTION_ARGUMENT_HTML_ELEMENT_STRING_VALUES=`<br> `ARTICLE,BLOCKQUOTE,BUTTON,CHECKBOX`
 a11y-important | Whether the element originates from a view considered important for accessibility. Available for API 24+ | 'true'
 screen-reader-focusable | Whether the element is explicitly marked as a focusable unit by a screen reader. Available for API 28+ | 'true'
-input-type | Bitmask, input type of the editable text element, defined by [InputType](https://developer.android.com/reference/android/text/InputType) | '1'
+input-type | Bitmask, input type of the editable text element, defined by [InputType](https://developer.android.com/reference/android/text/InputType). Available only for text input fields. | '1'
 drawing-order | The drawing position of the view corresponding to this element relative to its siblings. Available for API 24+ | '3'
 showing-hint | Whether the element's text represents a hint for the user to enter text. Available for API 26+ | 'true'
 text-entry-key | Whether the element represents a text entry key that is part of a keyboard or keypad. Available for API 29+ | 'true'
-multiline | If the element is a multi line editable text | 'true'
+multiline | If the element is a multi line editable text. Available only for text input fields. | 'true'
 dismissable | If the element can be dismissed | 'true'
 a11y-focused | Whether this element is accessibility focused | 'true'
 heading | Whether element represents a heading. Available for API 28+ | 'true'
 live-region | Bitmask, live region mode value for the element, like '1' for [ACCESSIBILITY_LIVE_REGION_POLITE](https://developer.android.com/reference/android/view/View#ACCESSIBILITY_LIVE_REGION_POLITE) | '1'
 context-clickable | Whether this element is context clickable. Available for API 23+ | 'true'
-max-text-length | The maximum text length for the editable text element | '300'
+max-text-length | The maximum text length for the editable text element. Available only for text input fields. | '300'
 content-invalid | If the content of this element is invalid. For example, a date is not well-formed. | 'true'
 error | The error text of the element. | 'text string'
 pane-title | Title of the pane represented by this element. Available for API 28+ | 'text string'
-extras | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()) | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
+extras | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
 
 
 ## Element Location

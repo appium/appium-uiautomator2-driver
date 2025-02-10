@@ -1,3 +1,9 @@
+## [4.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.0...v4.0.1) (2025-02-10)
+
+### Miscellaneous Chores
+
+* docs for the new fields from AccessibilityNodeInfo ([#862](https://github.com/appium/appium-uiautomator2-driver/issues/862)) ([815c247](https://github.com/appium/appium-uiautomator2-driver/commit/815c247000e03cceac683e7a4122156e3ea5e2ea))
+
 ## [4.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v3.10.0...v4.0.0) (2025-02-01)
 
 ### ⚠ BREAKING CHANGES

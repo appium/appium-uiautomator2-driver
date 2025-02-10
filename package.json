@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "3.10.0",
+  "version": "4.0.0",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "appium-adb": "^12.12.0",
-    "appium-android-driver": "^9.15.0",
+    "appium-android-driver": "^10.1.0",
     "appium-uiautomator2-server": "^7.2.0",
     "asyncbox": "^3.0.0",
     "axios": "^1.6.5",

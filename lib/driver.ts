@@ -56,16 +56,11 @@ import {
   mobileBackgroundApp,
 } from './commands/app-management';
 import {
-  mobileGetAppStrings,
-} from './commands/app-strings';
-import {
   mobileGetBatteryInfo,
 } from './commands/battery';
 import {
   getClipboard,
-  mobileGetClipboard,
   setClipboard,
-  mobileSetClipboard,
 } from './commands/clipboard';
 import {
   active,
@@ -85,10 +80,6 @@ import {
   clear,
   mobileReplaceElementValue,
 } from './commands/element';
-import {
-  executeMobile,
-  mobileCommandsMapping,
-} from './commands/execute';
 import {
   doFindElementOrEls,
 } from './commands/find';
@@ -141,6 +132,7 @@ import {
   getWindowSize,
   mobileViewPortRect,
 } from './commands/viewport';
+import { executeMethodMap } from './execute-method-map';
 
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device
@@ -269,6 +261,7 @@ class AndroidUiautomator2Driver
     >
 {
   static newMethodMap = newMethodMap;
+  static executeMethodMap = executeMethodMap;
 
   uiautomator2: UiAutomator2Server;
 
@@ -1018,8 +1011,6 @@ class AndroidUiautomator2Driver
   mobileInstallMultipleApks = mobileInstallMultipleApks;
   mobileBackgroundApp = mobileBackgroundApp;
 
-  mobileGetAppStrings = mobileGetAppStrings;
-
   mobileGetBatteryInfo = mobileGetBatteryInfo;
 
   active = active;
@@ -1038,9 +1029,6 @@ class AndroidUiautomator2Driver
   click = click;
   clear = clear;
   mobileReplaceElementValue = mobileReplaceElementValue;
-
-  executeMobile = executeMobile;
-  mobileCommandsMapping = mobileCommandsMapping;
 
   doFindElementOrEls = doFindElementOrEls;
 
@@ -1071,9 +1059,7 @@ class AndroidUiautomator2Driver
   mobileGetDeviceInfo = mobileGetDeviceInfo;
 
   getClipboard = getClipboard;
-  mobileGetClipboard = mobileGetClipboard;
   setClipboard = setClipboard;
-  mobileSetClipboard = mobileSetClipboard;
 
   setUrl = setUrl;
   mobileDeepLink = mobileDeepLink;

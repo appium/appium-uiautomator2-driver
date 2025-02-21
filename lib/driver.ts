@@ -701,6 +701,7 @@ class AndroidUiautomator2Driver
       disableWindowAnimation: !!this.opts.disableWindowAnimation,
       disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
       readTimeout: this.opts.uiautomator2ServerReadTimeout,
+      basePath: this.basePath,
     };
     // now that we have package and activity, we can create an instance of
     // uiautomator2 with the appropriate options

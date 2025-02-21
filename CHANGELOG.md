@@ -1,3 +1,9 @@
+## [4.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.1...v4.0.2) (2025-02-21)
+
+### Bug Fixes
+
+* Add base path to proxy options ([#865](https://github.com/appium/appium-uiautomator2-driver/issues/865)) ([30a6ac3](https://github.com/appium/appium-uiautomator2-driver/commit/30a6ac3656b3ae28a07f4e6465fd630de88c16ca))
+
 ## [4.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.0...v4.0.1) (2025-02-10)
 
 ### Miscellaneous Chores

@@ -1,3 +1,9 @@
+## [4.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.2...v4.0.3) (2025-02-22)
+
+### Miscellaneous Chores
+
+* Bumo android driver ([b28baaa](https://github.com/appium/appium-uiautomator2-driver/commit/b28baaa668b27d0496dad26cb69991be3b632e3f))
+
 ## [4.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.1...v4.0.2) (2025-02-21)
 
 ### Bug Fixes

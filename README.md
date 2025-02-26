@@ -1083,6 +1083,10 @@ Name | Type | Required | Description | Example
 latitude | number | yes | [Latitude](https://en.wikipedia.org/wiki/Latitude) value | 32.456
 longitude | number | yes | [longitude](https://en.wikipedia.org/wiki/Longitude) value | 32.456
 altitude | number | no | [Altitude](https://en.wikipedia.org/wiki/Altitude) value. Zero by default | 5.678
+satellites | number | no | Number of satellites being tracked (1-12). Available for emulators. | 2
+speed | number | no | [Set the speed](https://developer.android.com/reference/android/location/Location#setSpeed(float)) in meters per second. Valid value is `0.0` or greater. | 30.0
+bearing | number | no | [Set the bearing](https://developer.android.com/reference/android/location/Location#setBearing(float)) at the time of this location, in degrees. Available for real devices. Valid values should be in range `[0, 360)`. | 10
+accuracy | number | no | [Set the horizontal accuracy](https://developer.android.com/reference/android/location/Location#setAccuracy(float)) in meters of this location. Available for real devices. Valid value is `0.0` or greater. | 10.0
 
 ### mobile: getGeolocation
 

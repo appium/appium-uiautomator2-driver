@@ -1,3 +1,9 @@
+## [4.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.3...v4.1.0) (2025-02-26)
+
+### Features
+
+* add more params in mobile: setGeolocation ([#867](https://github.com/appium/appium-uiautomator2-driver/issues/867)) ([8ead690](https://github.com/appium/appium-uiautomator2-driver/commit/8ead690dc9e8da1571604c4aba146644d6a1c2ab))
+
 ## [4.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.2...v4.0.3) (2025-02-22)
 
 ### Miscellaneous Chores

@@ -1,3 +1,9 @@
+## [4.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.0...v4.1.1) (2025-03-10)
+
+### Miscellaneous Chores
+
+* bump io.appium.settings ([#870](https://github.com/appium/appium-uiautomator2-driver/issues/870)) ([3a999e7](https://github.com/appium/appium-uiautomator2-driver/commit/3a999e79ec610f1f3a28bcdb8bebb42ace093ce1))
+
 ## [4.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.0.3...v4.1.0) (2025-02-26)
 
 ### Features

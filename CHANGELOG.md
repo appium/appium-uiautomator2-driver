@@ -1,3 +1,9 @@
+## [4.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.1...v4.1.2) (2025-03-14)
+
+### Bug Fixes
+
+* the return value of getConnectivity to follow the description ([e36a3cd](https://github.com/appium/appium-uiautomator2-driver/commit/e36a3cd2368459be44a0be76553b0024ba0ce060))
+
 ## [4.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.0...v4.1.1) (2025-03-10)
 
 ### Miscellaneous Chores

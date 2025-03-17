@@ -1,3 +1,9 @@
+## [4.1.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.2...v4.1.3) (2025-03-17)
+
+### Miscellaneous Chores
+
+* remove duplicated mobile: backgroundApp definition from uia2 ([#871](https://github.com/appium/appium-uiautomator2-driver/issues/871)) ([1602c51](https://github.com/appium/appium-uiautomator2-driver/commit/1602c51d94084556fb3b1f2c2bba9e2605d7927a))
+
 ## [4.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.1...v4.1.2) (2025-03-14)
 
 ### Bug Fixes

@@ -214,13 +214,6 @@ export const executeMethodMap = {
     }
   },
 
-  'mobile: backgroundApp': {
-    command: 'mobileBackgroundApp',
-    params: {
-      optional: ['seconds'],
-    }
-  },
-
   'mobile: pressKey': {
     command: 'mobilePressKey',
     params: {

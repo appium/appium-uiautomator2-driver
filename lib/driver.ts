@@ -53,7 +53,6 @@ import {
 } from './commands/alert';
 import {
   mobileInstallMultipleApks,
-  mobileBackgroundApp,
 } from './commands/app-management';
 import {
   mobileGetBatteryInfo,
@@ -1010,7 +1009,6 @@ class AndroidUiautomator2Driver
   postDismissAlert = postDismissAlert;
 
   mobileInstallMultipleApks = mobileInstallMultipleApks;
-  mobileBackgroundApp = mobileBackgroundApp;
 
   mobileGetBatteryInfo = mobileGetBatteryInfo;
 

@@ -1,3 +1,9 @@
+## [4.1.4](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.3...v4.1.4) (2025-03-20)
+
+### Bug Fixes
+
+* Explicitly wait for the server shutdown before killing it forcefully ([#873](https://github.com/appium/appium-uiautomator2-driver/issues/873)) ([d3f50ef](https://github.com/appium/appium-uiautomator2-driver/commit/d3f50efc8d5b73451a1d105b5b684b67d7857326))
+
 ## [4.1.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.2...v4.1.3) (2025-03-17)
 
 ### Miscellaneous Chores

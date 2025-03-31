@@ -218,11 +218,11 @@ const NO_PROXY: RouteMatcher[] = [
   // For Selenium v4 (W3C does not have this route)
   ['GET', new RegExp('^/session/[^/]+/se/log/types')],
   ['GET', new RegExp('^/session/[^/]+/window/rect')],
-  ['POST', new RegExp('^/session/[^/]+/window/new')],
   ['POST', new RegExp('^/session/[^/]+/execute/async')],
   ['POST', new RegExp('^/session/[^/]+/execute/sync')],
   // For Selenium v4 (W3C does not have this route)
   ['POST', new RegExp('^/session/[^/]+/se/log')],
+  ['POST', new RegExp('^/session/[^/]+/window/new')],
 ];
 
 // This is a set of methods and paths that we never want to proxy to Chromedriver.

@@ -217,8 +217,8 @@ const NO_PROXY: RouteMatcher[] = [
   // W3C commands
   // For Selenium v4 (W3C does not have this route)
   ['GET', new RegExp('^/session/[^/]+/se/log/types')],
-  ['POST', new RegExp('^/session/[^/]+/window/new')],
   ['GET', new RegExp('^/session/[^/]+/window/rect')],
+  ['POST', new RegExp('^/session/[^/]+/window/new')],
   ['POST', new RegExp('^/session/[^/]+/execute/async')],
   ['POST', new RegExp('^/session/[^/]+/execute/sync')],
   // For Selenium v4 (W3C does not have this route)

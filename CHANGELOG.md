@@ -1,3 +1,9 @@
+## [4.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.5...v4.2.0) (2025-04-08)
+
+### Features
+
+* document the new currentDisplayId setting ([#882](https://github.com/appium/appium-uiautomator2-driver/issues/882)) ([cbb8d93](https://github.com/appium/appium-uiautomator2-driver/commit/cbb8d9305aba36bb5decc03445d596cfb095d6fa))
+
 ## [4.1.5](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.4...v4.1.5) (2025-03-21)
 
 ### Miscellaneous Chores

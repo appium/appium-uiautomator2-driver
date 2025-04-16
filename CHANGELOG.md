@@ -1,3 +1,9 @@
+## [4.2.1](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.0...v4.2.1) (2025-04-16)
+
+### Bug Fixes
+
+* Update deprecated constant usage ([#885](https://github.com/appium/appium-uiautomator2-driver/issues/885)) ([9719cb5](https://github.com/appium/appium-uiautomator2-driver/commit/9719cb5bcffb55f0fd805eadfabf8804dad5c533))
+
 ## [4.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.1.5...v4.2.0) (2025-04-08)
 
 ### Features

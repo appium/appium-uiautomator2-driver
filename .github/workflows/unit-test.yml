@@ -29,8 +29,8 @@ jobs:
         node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install --no-package-lock

@@ -6,6 +6,7 @@ export const newMethodMap = {
     POST: {
       command: 'getClipboard',
       payloadParams: {optional: ['contentType']},
+      deprecated: true
     },
   },
 } as const;

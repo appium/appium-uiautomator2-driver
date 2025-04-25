@@ -1,3 +1,9 @@
+## [4.2.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.2...v4.2.3) (2025-04-25)
+
+### Miscellaneous Chores
+
+* add deprecated: true for get clipboard ([#887](https://github.com/appium/appium-uiautomator2-driver/issues/887)) ([19c6417](https://github.com/appium/appium-uiautomator2-driver/commit/19c6417ccfc336899d09d6bdf9b4532ad625babe))
+
 ## [4.2.2](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.1...v4.2.2) (2025-04-23)
 
 ### Miscellaneous Chores

@@ -107,7 +107,7 @@
     "xpath": "^0.x"
   },
   "peerDependencies": {
-    "appium": "^3.0.0-beta.0"
+    "appium": "^3.0.0-beta.1"
   },
   "engines": {
     "node": ">=14",

@@ -110,8 +110,8 @@
     "appium": "^3.0.0-beta.1"
   },
   "engines": {
-    "node": ">=14",
-    "npm": ">=8"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "appium": {
     "driverName": "uiautomator2",

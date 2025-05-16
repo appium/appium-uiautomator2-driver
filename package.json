@@ -132,5 +132,9 @@
   },
   "typedoc": {
     "entryPoint": "index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta"
   }
 }

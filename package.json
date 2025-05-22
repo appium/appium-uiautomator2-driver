@@ -93,7 +93,7 @@
     "appium": "^2.0.0-rc.3",
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
     "mocha": "^11.0.1",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.0",

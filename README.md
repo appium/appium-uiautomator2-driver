@@ -1893,6 +1893,7 @@ In case of _xpath_ locators you could try to change values of the following sett
 1. [allowInvisibleElements](#settings-api)
 2. [ignoreUnimportantViews](#settings-api)
 3. [enableMultiWindows](#settings-api)
+4. [snapshotMaxDepth](#settings-api)
 
 By default, the first setting is set to `false`, which hides
 elements that are not visible from the page source and from the xpath location. Changing the setting value
@@ -1902,6 +1903,12 @@ The second one is enabled by default (e.g. `true`). By disabling it the page sou
 that are normally hidden, because of their unimportance.
 
 The third setting being set to `true` extends the page source by adding the actual content of other windows that are currently present on the device's screen. For example, the on-screen keyboard in Android is not a part of the current app hierarchy, but rather belongs to a separate window.
+
+It only makes sense to change the default value of the `snapshotMaxDepth` setting if the application under test
+has deeply nested elements in the page tree hierarchy (e.g. more than 70 levels), and the destination element
+is suspected to be a part of these deeply nested views. Increasing the value of this
+setting will reduce the performance of xPath searches and page tree retrievals, so be careful while assigning too
+high values to it.
 
 In case of _id_ locators you could try to change the value of the following setting:
 

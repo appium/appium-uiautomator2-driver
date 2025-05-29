@@ -69,4 +69,4 @@ of the information are Android OS sources themselves. Consider visiting the foll
 - https://android.googlesource.com/platform/frameworks/uiautomator/+/refs/heads/master
 - https://github.com/appium/appium-uiautomator2-server/tree/master/app/src/main/java/io/appium/uiautomator2/utils/w3c
 - https://github.com/appium/appium-uiautomator2-server/tree/master/app/src/test/java/io/appium/uiautomator2/utils/w3c
-- https://github.com/appium/appium-espresso-driver/tree/master/espresso-server/app/src/androidTest/java/io/appium/espressoserver/lib/helpers/w3c
+- https://github.com/appium/appium-espresso-driver/tree/master/espresso-server/library/src/main/java/io/appium/espressoserver/lib/helpers/w3c

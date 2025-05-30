@@ -9,4 +9,15 @@ export const newMethodMap = {
       deprecated: true
     },
   },
+  '/session/:sessionId/log': {
+    POST: {
+      command: 'getLog',
+      payloadParams: {required: ['type']},
+    },
+  },
+  '/session/:sessionId/log/types': {
+    GET: {
+      command: 'getLogTypes',
+    },
+  },
 } as const;

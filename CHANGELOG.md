@@ -1,3 +1,9 @@
+## [4.2.6](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.5...v4.2.6) (2025-07-20)
+
+### Bug Fixes
+
+* do not proxy commands for retrieving session data ([#911](https://github.com/appium/appium-uiautomator2-driver/issues/911)) ([3f86b10](https://github.com/appium/appium-uiautomator2-driver/commit/3f86b103a60fc3ff471bdd7e0f5c94711891aa21))
+
 ## [4.2.5](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.4...v4.2.5) (2025-07-06)
 
 ### Miscellaneous Chores

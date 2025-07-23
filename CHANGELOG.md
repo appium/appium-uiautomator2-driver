@@ -1,3 +1,9 @@
+## [4.2.7](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.6...v4.2.7) (2025-07-23)
+
+### Miscellaneous Chores
+
+* docs for tooltip-text and text-has-clickable-span fields ([#912](https://github.com/appium/appium-uiautomator2-driver/issues/912)) ([fa77432](https://github.com/appium/appium-uiautomator2-driver/commit/fa7743205cb22f7144a12fd0ce5f76064819aa7d))
+
 ## [4.2.6](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.5...v4.2.6) (2025-07-20)
 
 ### Bug Fixes

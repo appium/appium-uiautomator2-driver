@@ -10,7 +10,7 @@ Appium UiAutomator2 Driver is a test automation framework for Android devices. A
 
 UiAutomator2 Driver proxies most of the commands to [UiAutomator2 server](https://github.com/appium/appium-uiautomator2-server), which uses Google's [UiAutomator](https://developer.android.com/training/testing/ui-automator) framework under the hood. Some commands are proxied directly to [appium-adb](https://github.com/appium/appium-adb) and other helpers built on top of Android platform tools.
 
-> **Note**
+> [!Note]
 >
 > Since version 2.0.0 UiAutomator2 driver has dropped the support of Appium 1, and is only compatible to Appium 2.
 > Use the `appium driver install uiautomator2` command to add it to your Appium 2 dist.
@@ -239,6 +239,8 @@ content-invalid | If the content of this element is invalid. For example, a date
 error | The error text of the element. | 'text string'
 pane-title | Title of the pane represented by this element. Available for API 28+ | 'text string'
 actions | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
+tooltip-text | The result of [getTooltipText](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTooltipText()). Could be `null`, available for API 28+  | 'Paste'
+text-has-clickable-span | Indicates whether the `TextView` content contains `ClickableSpan` or `URLSpan` elements, `null` in all other cases. | 'true'
 
 
 ## Element Location
@@ -297,7 +299,7 @@ Along with the common settings the following driver-specific settings are curren
 
 Name | Type | Description
 --- | --- | ---
-actionAcknowledgmentTimeout | long | Maximum number of milliseconds to wait for an acknowledgment of generic uiautomator actions, such as clicks, text setting, and menu presses. The acknowledgment is an[AccessibilityEvent](http://developer.android.com/reference/android/view/accessibility/AccessibilityEvent.html") corresponding to an action, that lets the framework determine if the action was successful. Generally, this timeout should not be modified. `3000` ms by default
+actionAcknowledgmentTimeout | long | Maximum number of milliseconds to wait for an acknowledgment of generic uiautomator actions, such as clicks, text setting, and menu presses. The acknowledgment is an [AccessibilityEvent](http://developer.android.com/reference/android/view/accessibility/AccessibilityEvent.html) corresponding to an action, that lets the framework determine if the action was successful. Generally, this timeout should not be modified. `3000` ms by default
 allowInvisibleElements | boolean | Whether to include elements that are not visible to the user (e. g. whose `displayed` attribute is `false`) to the XML source tree. `false` by default
 ignoreUnimportantViews | boolean | Enables or disables layout hierarchy compression. If compression is enabled, the layout hierarchy derived from the Acessibility framework will only contain nodes that are important for uiautomator testing. Any unnecessary surrounding layout nodes that make viewing and searching the hierarchy inefficient are removed. `false` by default
 elementResponseAttributes | string | Comma-separated list of element attribute names to be included into findElement response. By default only element UUID is present there, but it is also possible to add the following items: `name`, `text`, `rect`, `enabled`, `displayed`, `selected`, `attribute/<element_attribute_name>`. It is required that `shouldUseCompactResponses` setting is set to `false` in order for this one to apply.
@@ -455,7 +457,7 @@ waitForLaunch | boolean | no | If `false` then ADB won't wait for the started ac
 
 ### mobile: startLogsBroadcast
 
-Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected webcoket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
+Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/device/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected websocket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
 
 Consider using [logs broadcast via BiDi](./docs/bidi.md#logentryadded) over this extension.
 
@@ -1202,12 +1204,12 @@ airplaneMode | boolean | True if Airplane Mode is enabled
 Set the connectivity state for different services. At least one valid service name must be provided in arguments.
 Missing values tell the driver to not change the corresponding service's state.
 
-> **Note**
+> [!Note]
 >
 > Switching Wi-Fi and mobile data states reliably work on emulators for all Android versions.
 > Real devices support proper state switching only since Android 11.
 
-> **Note**
+> [!Note]
 >
 > UiAutomator2 REST server app is running on the device under test and might be terminated/disconnected by Android
 > thus failing the driver session as a result of using this API. The only way to restore the session would be to quit it
@@ -1697,7 +1699,7 @@ UiAutomator2 driver supports Appium endpoints for files management:
 Refer to the corresponding Appium client tutorial to find out the names of the corresponding wrappers for these APIs.
 
 Useful links:
-- https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/InteractsWithFiles.java
+- https://github.com/appium/java-client/blob/master/src/main/java/io/appium/java_client/PushesFiles.java
 - https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/remote_fs.py
 
 
@@ -1860,7 +1862,7 @@ If you observe automated tests need at least 10 seconds or more to locate/intera
 
 Setting the value of `waitForIdleTimeout` to zero `0` ms should completely disable any waits, and enforce interactions to happen immediately ignoring the accessibility event stream state. The downside of that would be that all interactions are never going to be delayed, so clicks and other actions might happen at wrong places of the application UI. That is why is it important to check the app under test first and fix its source to get rid of activities hogging the event loop. Sometimes it makes sence to disable animations completely for the app build under test, which could speed up your flows significantly in some situations.
 
-> **Warning**
+> [!Warning]
 > `waitForIdleTimeout` is a setting, not a capability.
 
 ### Session Startup Issues
@@ -1893,6 +1895,7 @@ In case of _xpath_ locators you could try to change values of the following sett
 1. [allowInvisibleElements](#settings-api)
 2. [ignoreUnimportantViews](#settings-api)
 3. [enableMultiWindows](#settings-api)
+4. [snapshotMaxDepth](#settings-api)
 
 By default, the first setting is set to `false`, which hides
 elements that are not visible from the page source and from the xpath location. Changing the setting value
@@ -1903,17 +1906,23 @@ that are normally hidden, because of their unimportance.
 
 The third setting being set to `true` extends the page source by adding the actual content of other windows that are currently present on the device's screen. For example, the on-screen keyboard in Android is not a part of the current app hierarchy, but rather belongs to a separate window.
 
+It only makes sense to change the default value of the `snapshotMaxDepth` setting if the application under test
+has deeply nested elements in the page tree hierarchy (e.g. more than 70 levels), and the destination element
+is suspected to be a part of these deeply nested views. Increasing the value of this
+setting will reduce the performance of xPath searches and page tree retrievals, so be careful while assigning too
+high values to it.
+
 In case of _id_ locators you could try to change the value of the following setting:
 
 1. [disableIdLocatorAutocompletion](#settings-api)
 
 The general resources naming convention for Android apps is `<app_id>:id/<resource_name>`. This should guarantee uniqueness of each identifier accross the user interface. Although, this is only a convention and it is still allowed to have various resource names that do not follow it. If you have gotten one of such applications for automated testing then consider assigning `disableIdLocatorAutocompletion` setting value to `true`, so UiAutomator2 driver does not automatically rewrite supplied id values by adding `<app_id>:id/` prefixes to them.
 
-> **Warning**
+> [!Warning]
 > Default values for settings above have been selected to optimize xpath lookup and page source generation performance.
 > Having these settings always different from their default values may sometimes significantly (especially in case of huge accessbility hierarchies) reduce xpath lookup and page source generation speed.
 
-> **Warning**
+> [!Warning]
 > All items above are settings, not capabilities.
 
 ### ClassCastException: java.util.ArrayList$ListItr cannot be cast to org.eclipse.wst.xml.xpath2.processor

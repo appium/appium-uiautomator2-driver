@@ -1,3 +1,39 @@
+## [4.2.9](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.8...v4.2.9) (2025-08-17)
+
+### Miscellaneous Chores
+
+* remove no reference dev deps rimraf ([#914](https://github.com/appium/appium-uiautomator2-driver/issues/914)) ([f19349f](https://github.com/appium/appium-uiautomator2-driver/commit/f19349fb5a7ee9b1e131a5aa52a40e5ab9ded190))
+
+## [4.2.8](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.7...v4.2.8) (2025-08-06)
+
+### Miscellaneous Chores
+
+* bump appium-android-driver to 10.3.11 ([#913](https://github.com/appium/appium-uiautomator2-driver/issues/913)) ([88d6cab](https://github.com/appium/appium-uiautomator2-driver/commit/88d6cab34eb1927787236b8e6d3b8114d6412a0d))
+
+## [4.2.7](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.6...v4.2.7) (2025-07-23)
+
+### Miscellaneous Chores
+
+* docs for tooltip-text and text-has-clickable-span fields ([#912](https://github.com/appium/appium-uiautomator2-driver/issues/912)) ([fa77432](https://github.com/appium/appium-uiautomator2-driver/commit/fa7743205cb22f7144a12fd0ce5f76064819aa7d))
+
+## [4.2.6](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.5...v4.2.6) (2025-07-20)
+
+### Bug Fixes
+
+* do not proxy commands for retrieving session data ([#911](https://github.com/appium/appium-uiautomator2-driver/issues/911)) ([3f86b10](https://github.com/appium/appium-uiautomator2-driver/commit/3f86b103a60fc3ff471bdd7e0f5c94711891aa21))
+
+## [4.2.5](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.4...v4.2.5) (2025-07-06)
+
+### Miscellaneous Chores
+
+* Bump android driver ([01fe469](https://github.com/appium/appium-uiautomator2-driver/commit/01fe46943b875f7b00737bde911932e9bb876118))
+
+## [4.2.4](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.3...v4.2.4) (2025-06-24)
+
+### Miscellaneous Chores
+
+* Bump android driver ([64c28f2](https://github.com/appium/appium-uiautomator2-driver/commit/64c28f24495028b975e9b33e719c38d6642ff6c8))
+
 ## [4.2.3](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.2...v4.2.3) (2025-04-25)
 
 ### Miscellaneous Chores

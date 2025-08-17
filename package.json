@@ -96,7 +96,6 @@
     "conventional-changelog-conventionalcommits": "^9.0.0",
     "mocha": "^11.0.1",
     "prettier": "^3.0.3",
-    "rimraf": "^5.0.0",
     "semantic-release": "^24.0.0",
     "sharp": "^0.x",
     "sinon": "^21.0.0",

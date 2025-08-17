@@ -52,8 +52,9 @@ jobs:
         check-latest: true
     - run: curl -sSL https://bit.ly/install-xq | sudo bash
     - run: |
+        appium_ver=$(node -p "require('./package.json').peerDependencies?.appium")
         npm install mocha-multi-reporters --save-dev
-        npm install -g appium@beta
+        npm install -g "appium@$appium_ver"
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
     - uses: actions/setup-java@v4

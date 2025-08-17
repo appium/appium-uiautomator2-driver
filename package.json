@@ -56,27 +56,27 @@
     "singleQuote": true
   },
   "dependencies": {
-    "appium-adb": "^12.12.0",
-    "appium-android-driver": "^10.3.11",
-    "appium-uiautomator2-server": "^7.7.0",
+    "appium-adb": "^13.0.0",
+    "appium-android-driver": "^11.0.0",
+    "appium-uiautomator2-server": "^8.0.0",
     "asyncbox": "^3.0.0",
     "axios": "^1.6.5",
     "bluebird": "^3.5.1",
     "css-selector-parser": "^3.0.0",
-    "io.appium.settings": "^5.14.3",
+    "io.appium.settings": "^6.0.0",
     "lodash": "^4.17.4",
     "portscanner": "^2.2.0",
     "source-map-support": "^0.x",
-    "teen_process": "^2.2.0",
+    "teen_process": "^3.0.0",
     "type-fest": "^4.4.0"
   },
   "devDependencies": {
-    "@appium/docutils": "^1.0.1",
-    "@appium/eslint-config-appium-ts": "^1.x",
-    "@appium/support": "^6.0.0",
-    "@appium/test-support": "^3.0.0",
-    "@appium/tsconfig": "^0.x",
-    "@appium/types": "^0.x",
+    "@appium/docutils": "^2.0.0-rc.1",
+    "@appium/eslint-config-appium-ts": "^2.0.0-rc.1",
+    "@appium/support": "^7.0.0-rc.1",
+    "@appium/test-support": "^4.0.0-rc.1",
+    "@appium/tsconfig": "^1.0.0-rc.1",
+    "@appium/types": "^1.0.0-rc.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/bluebird": "^3.5.38",
@@ -86,11 +86,9 @@
     "@types/portscanner": "^2.1.1",
     "@types/semver": "^7.5.0",
     "@types/source-map-support": "^0.x",
-    "@types/teen_process": "^2.0.0",
     "@types/ws": "^8.5.4",
     "@xmldom/xmldom": "^0.x",
-    "android-apidemos": "^4.1.1",
-    "appium": "^2.0.0-rc.3",
+    "android-apidemos": "^5.0.0",
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
     "conventional-changelog-conventionalcommits": "^9.0.0",
@@ -106,10 +104,10 @@
     "xpath": "^0.x"
   },
   "peerDependencies": {
-    "appium": "^3.0.0-beta.1"
+    "appium": "^3.0.0-rc.2"
   },
   "engines": {
-    "node": ">=20",
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
     "npm": ">=10"
   },
   "appium": {
@@ -131,9 +129,5 @@
   },
   "typedoc": {
     "entryPoint": "index.js"
-  },
-  "publishConfig": {
-    "access": "public",
-    "tag": "beta"
   }
 }

@@ -10,10 +10,9 @@ Appium UiAutomator2 Driver is a test automation framework for Android devices. A
 
 UiAutomator2 Driver proxies most of the commands to [UiAutomator2 server](https://github.com/appium/appium-uiautomator2-server), which uses Google's [UiAutomator](https://developer.android.com/training/testing/ui-automator) framework under the hood. Some commands are proxied directly to [appium-adb](https://github.com/appium/appium-adb) and other helpers built on top of Android platform tools.
 
-> [!Note]
->
-> Since version 2.0.0 UiAutomator2 driver has dropped the support of Appium 1, and is only compatible to Appium 2.
-> Use the `appium driver install uiautomator2` command to add it to your Appium 2 dist.
+> [!IMPORTANT]
+> Since major version *5.0.0*, this driver is only compatible with Appium 3. Use the `appium driver install uiautomator2`
+> command to add it to your distribution.
 
 
 ## Requirements

@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "4.2.9",
+  "version": "5.0.0-rc.1",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },

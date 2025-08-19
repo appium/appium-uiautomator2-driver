@@ -1,3 +1,15 @@
+## [5.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.9...v5.0.0) (2025-08-19)
+
+### ⚠ BREAKING CHANGES
+
+* Required Node.js version has been bumped to ^20.19.0 || ^22.12.0 || >=24.0.0
+* Required npm version has been bumped to >=10
+* Required Appium server version has been bumped to >=3.0.0-rc.2
+
+### Features
+
+* Update server compatibility for appium 3 ([#915](https://github.com/appium/appium-uiautomator2-driver/issues/915)) ([fab8535](https://github.com/appium/appium-uiautomator2-driver/commit/fab8535bde0b1904cfa44afbe08e2d9a61560f55))
+
 ## [4.2.9](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.8...v4.2.9) (2025-08-17)
 
 ### Miscellaneous Chores

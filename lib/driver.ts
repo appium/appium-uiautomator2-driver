@@ -8,6 +8,7 @@ import type {
   RouteMatcher,
   SingularSessionData,
   StringRecord,
+  SessionCapabilities,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
@@ -997,6 +998,11 @@ class AndroidUiautomator2Driver
       'GET'
     )) as Partial<Uiautomator2Settings>;
     return {...driverSettings, ...serverSettings} as any;
+  }
+
+  // needed to make the typechecker happy
+  async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
+    return super.getAppiumSessionCapabilities() as unknown as SessionCapabilities<Uiautomator2Constraints>;
   }
 
   mobileGetActionHistory = mobileGetActionHistory;

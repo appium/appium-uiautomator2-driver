@@ -1002,7 +1002,7 @@ class AndroidUiautomator2Driver
 
   // needed to make the typechecker happy
   async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
-    return super.getAppiumSessionCapabilities() as unknown as SessionCapabilities<Uiautomator2Constraints>;
+    return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
   }
 
   mobileGetActionHistory = mobileGetActionHistory;

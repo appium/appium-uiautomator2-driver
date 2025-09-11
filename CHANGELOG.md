@@ -1,3 +1,14 @@
+## [5.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.0...v5.0.1) (2025-09-11)
+
+### Bug Fixes
+
+* Build ([3168daa](https://github.com/appium/appium-uiautomator2-driver/commit/3168daacbd94078e608a3eeafb4b864748a308fa))
+* Missing await ([9d81a48](https://github.com/appium/appium-uiautomator2-driver/commit/9d81a4874ad19de85abdcc67cc6556d672442d7a))
+
+### Miscellaneous Chores
+
+* Update android driver ([b4d5f19](https://github.com/appium/appium-uiautomator2-driver/commit/b4d5f19560c3d51d7215f96f6d0b8863c1d82e93))
+
 ## [5.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v4.2.9...v5.0.0) (2025-08-19)
 
 ### ⚠ BREAKING CHANGES

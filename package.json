@@ -67,8 +67,7 @@
     "lodash": "^4.17.4",
     "portscanner": "^2.2.0",
     "source-map-support": "^0.x",
-    "teen_process": "^3.0.0",
-    "type-fest": "^5.0.0"
+    "teen_process": "^3.0.0"
   },
   "devDependencies": {
     "@appium/docutils": "^2.0.0-rc.1",

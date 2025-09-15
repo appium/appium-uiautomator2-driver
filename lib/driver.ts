@@ -26,7 +26,6 @@ import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constrai
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import {newMethodMap} from './method-map';
 import { signApp } from './helpers';
-import type { EmptyObject } from 'type-fest';
 import type {
   Uiautomator2Settings,
   Uiautomator2DeviceDetails,
@@ -36,6 +35,7 @@ import type {
   Uiautomator2SessionInfo,
   Uiautomator2StartSessionOpts,
   W3CUiautomator2DriverCaps,
+  EmptyObject,
 } from './types';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server} from './uiautomator2';
 import {

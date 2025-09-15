@@ -1,7 +1,10 @@
 import type {DriverCaps, DriverOpts, W3CDriverCaps} from '@appium/types';
-import type {EmptyObject} from 'type-fest';
 import type {RelativeRect} from './commands/types';
 import type {Uiautomator2Constraints} from './constraints';
+
+declare const emptyObjectSymbol: unique symbol;
+
+export type EmptyObject = {[emptyObjectSymbol]?: never};
 
 export type Uiautomator2DriverOpts = DriverOpts<Uiautomator2Constraints>;
 

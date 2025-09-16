@@ -1,3 +1,9 @@
+## [5.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.1...v5.0.2) (2025-09-16)
+
+### Miscellaneous Chores
+
+* bump appium-android-driver to 11.0.4 ([#921](https://github.com/appium/appium-uiautomator2-driver/issues/921)) ([0079706](https://github.com/appium/appium-uiautomator2-driver/commit/007970682b7db125397c7369e6203a4048180d8c))
+
 ## [5.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.0...v5.0.1) (2025-09-11)
 
 ### Bug Fixes

@@ -1,3 +1,9 @@
+## [5.0.4](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.3...v5.0.4) (2025-10-03)
+
+### Miscellaneous Chores
+
+* Bump dependencies ([5444a24](https://github.com/appium/appium-uiautomator2-driver/commit/5444a2421c1f462d6ce03fb1738432250fb0d2d0))
+
 ## [5.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.2...v5.0.3) (2025-09-17)
 
 ### Miscellaneous Chores

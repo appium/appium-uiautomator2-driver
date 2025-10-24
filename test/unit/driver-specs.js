@@ -43,8 +43,6 @@ describe('driver.js', function () {
   describe('createSession', function () {
     it('should throw an error if app can not be found', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      const adb = defaultStub(driver);
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       await driver
         .createSession(null, null, {
           firstMatch: [{}],
@@ -57,9 +55,7 @@ describe('driver.js', function () {
 
     it('should set sessionId', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      const adb = defaultStub(driver);
       sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
       await driver.createSession(null, null, {
         firstMatch: [{}],
@@ -74,8 +70,6 @@ describe('driver.js', function () {
 
     it('should set the default context', async function () {
       let driver = new AndroidUiautomator2Driver({}, false);
-      const adb = defaultStub(driver);
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
       sandbox.mock(driver).expects('checkAppPresent').returns(B.resolve());
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
       await driver.createSession(null, null, {
@@ -167,9 +161,7 @@ describe('driver.js', function () {
           item[0] === 'GET' && item[1].test('/session/xxx/screenshot/');
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({}, false);
-          const adb = defaultStub(driver);
           sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-          sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
           sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
         });
 

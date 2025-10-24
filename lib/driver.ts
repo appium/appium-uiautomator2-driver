@@ -152,7 +152,7 @@ const DEVICE_PORT = 6790;
 // We will forward one of the ports above on the system to this port on the
 // device.
 const MJPEG_SERVER_DEVICE_PORT = 7810;
-
+const MIN_SUPPORTED_API_LEVEL = 26;
 const LOCALHOST_IP4 = '127.0.0.1';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
@@ -370,12 +370,10 @@ class AndroidUiautomator2Driver
         this.log.info(`We're going to run a Chrome-based session`);
         const {pkg, activity: defaultActivity} = utils.getChromePkg(this.opts.browserName!);
         let activity: string = defaultActivity;
-        if (await this.adb.getApiLevel() >= 24) {
-          try {
-            activity = await this.adb.resolveLaunchableActivity(pkg);
-          } catch (e) {
-            this.log.warn(`Using the default ${pkg} activity ${activity}. Original error: ${e.message}`);
-          }
+        try {
+          activity = await this.adb.resolveLaunchableActivity(pkg);
+        } catch (e) {
+          this.log.warn(`Using the default ${pkg} activity ${activity}. Original error: ${e.message}`);
         }
         this.opts.appPackage = this.caps.appPackage = pkg;
         this.opts.appActivity = this.caps.appActivity = activity;
@@ -523,11 +521,8 @@ class AndroidUiautomator2Driver
 
   async performSessionPreExecSetup(): Promise<StringRecord|undefined> {
     const apiLevel = await this.adb.getApiLevel();
-    if (apiLevel < 21) {
-      throw this.log.errorWithException(
-        'UIAutomator2 is only supported since Android 5.0 (Lollipop). ' +
-          'You could still use other supported backends in order to automate older Android versions.'
-      );
+    if (apiLevel < MIN_SUPPORTED_API_LEVEL) {
+      throw this.log.errorWithException('UIAutomator2 only supports Android 8.0 (Oreo) and above');
     }
 
     const preflightPromises: Promise<any>[] = [];

@@ -7,7 +7,7 @@
     "automated testing",
     "android"
   ],
-  "version": "5.0.6",
+  "version": "5.0.7",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
@@ -56,14 +56,14 @@
     "singleQuote": true
   },
   "dependencies": {
-    "appium-adb": "^13.0.5",
-    "appium-android-driver": "^11.0.8",
+    "appium-adb": "^14.0.0",
+    "appium-android-driver": "^11.0.9",
     "appium-uiautomator2-server": "^9.0.0",
     "asyncbox": "^3.0.0",
-    "axios": "^1.6.5",
+    "axios": "^1.12.2",
     "bluebird": "^3.5.1",
     "css-selector-parser": "^3.0.0",
-    "io.appium.settings": "^6.0.0",
+    "io.appium.settings": "^6.0.8",
     "lodash": "^4.17.4",
     "portscanner": "^2.2.0",
     "source-map-support": "^0.x",

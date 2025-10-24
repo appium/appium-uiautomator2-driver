@@ -25,7 +25,9 @@ On top of standard Appium requirements UiAutomator2 driver also expects the foll
 - Java JDK must be installed and [JAVA_HOME](https://www.baeldung.com/java-home-on-windows-7-8-10-mac-os-x-linux) environment variable must be set. Android SDK below API 30 requires Java 8. Android SDK 30 and above requires Java 9 or newer.
 - [Emulator](https://developer.android.com/studio/run/managing-avds) platform image must be installed if you plan to run your tests on it. [Android Studio IDE](https://developer.android.com/studio) also provides a convenient UI to install and manage emulators.
 - Real Android devices must have [USB debugging enabled](https://developer.android.com/studio/debug/dev-options) and should be visible as `online` in `adb devices -l` output.
-- The minimum version of Android API must be 5.0 (API level 21) (6.0 is recommended as version 5 has some known compatibility issues).
+- Since driver version 6.0.0 the minimum supported version of Android API is 8/Oreo (API level 26).
+Before version 6.0.0 the minimum supported version of Android API is 5 (API level 21).
+6.0 is recommended as version 5 has some known compatibility issues.
 
 ### Doctor
 

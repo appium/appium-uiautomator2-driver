@@ -1,3 +1,13 @@
+## [6.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.7...v6.0.0) (2025-10-24)
+
+### ⚠ BREAKING CHANGES
+
+* Dropped support of older Android API levels below 26 (Oreo)
+
+### Features
+
+* Bump server version ([#929](https://github.com/appium/appium-uiautomator2-driver/issues/929)) ([d459273](https://github.com/appium/appium-uiautomator2-driver/commit/d459273422c336ad933f26699fac679f488d24e8))
+
 ## [5.0.7](https://github.com/appium/appium-uiautomator2-driver/compare/v5.0.6...v5.0.7) (2025-10-24)
 
 ### Miscellaneous Chores

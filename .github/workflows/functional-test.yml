@@ -27,10 +27,7 @@ jobs:
         - apiLevel: 30
           emuTag: google_apis
           arch: x86
-        - apiLevel: 28
-          emuTag: default
-          arch: x86
-        - apiLevel: 23
+        - apiLevel: 26
           emuTag: default
           arch: x86
 

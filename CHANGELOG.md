@@ -1,3 +1,9 @@
+## [6.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.0.1...v6.0.2) (2025-10-28)
+
+### Miscellaneous Chores
+
+* bump io.appium.settings to 7.0.1 basis ([#932](https://github.com/appium/appium-uiautomator2-driver/issues/932)) ([9a11765](https://github.com/appium/appium-uiautomator2-driver/commit/9a11765f89c9897cd6ae119623c61582770d3ea6))
+
 ## [6.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.0.0...v6.0.1) (2025-10-28)
 
 ### Miscellaneous Chores

@@ -1,3 +1,9 @@
+## [6.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.0.2...v6.1.0) (2025-10-30)
+
+### Features
+
+* Document the chromedriverForwardBiDi capability ([#934](https://github.com/appium/appium-uiautomator2-driver/issues/934)) ([83db68c](https://github.com/appium/appium-uiautomator2-driver/commit/83db68c1916b75e707591b15654da507fe6e0a03))
+
 ## [6.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.0.1...v6.0.2) (2025-10-28)
 
 ### Miscellaneous Chores

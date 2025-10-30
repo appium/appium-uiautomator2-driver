@@ -183,6 +183,7 @@ appium:showChromedriverLog | If set to `true` then all the output from chromedri
 pageLoadStrategy | One of the available page load strategies. See https://www.w3.org/TR/webdriver/#capabilities
 appium:chromeOptions | A mapping, that allows to customize chromedriver options. See https://chromedriver.chromium.org/capabilities for the list of available entries.
 appium:chromeLoggingPrefs | Chrome logging preferences mapping. Basically the same as [goog:loggingPrefs](https://newbedev.com/getting-console-log-output-from-chrome-with-selenium-python-api-bindings). It is set to `{"browser": "ALL"}` by default.
+appium:chromedriverForwardBiDi | Being set to `true` enables automated forwarding of chromedriver BiDi web socket to UIA2 driver web socket. This allows to send browser-specific BiDi commands being in a web view context. The web socket connection is terminated as soon as the session context is changed (by default all [BiDi commands](./docs/bidi.md) are handled by the UIA2 driver). It is required that session capabilities have the `webDriverUrl` capability set to `true`. Also note, that older chromedrivers may not support BiDi specification fully, or may not support it at all.
 
 ### Other
 

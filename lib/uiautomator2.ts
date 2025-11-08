@@ -38,10 +38,7 @@ const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
 class UIA2Proxy extends JWProxy {
   public didInstrumentationExit: boolean = false;
 
-  /**
-   * @override
-   */
-  async proxyCommand(
+  override async proxyCommand(
     url: string,
     method: HTTPMethod,
     body: HTTPBody = null,

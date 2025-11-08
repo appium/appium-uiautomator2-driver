@@ -37,7 +37,8 @@ import type {
   W3CUiautomator2DriverCaps,
   EmptyObject,
 } from './types';
-import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server, UiAutomator2ServerOptions} from './uiautomator2';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server} from './uiautomator2';
+import type {UiAutomator2ServerOptions} from './uiautomator2';
 import {
   mobileGetActionHistory,
   mobileScheduleAction,

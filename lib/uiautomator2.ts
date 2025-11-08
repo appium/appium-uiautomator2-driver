@@ -7,17 +7,18 @@ import {
   version as serverVersion,
 } from 'appium-uiautomator2-server';
 import {util, timing} from 'appium/support';
-import type {AppiumLogger, StringRecord, HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
+import type {
+  AppiumLogger,
+  StringRecord,
+  HTTPMethod,
+  HTTPBody,
+  ProxyResponse,
+  ProxyOptions,
+} from '@appium/types';
 import B from 'bluebird';
 import axios from 'axios';
-import type {ADB} from 'appium-adb';
-import type {InstallState} from 'appium-adb/lib/tools/types';
+import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
-
-// Type helper to extract required (non-optional) keys from UiAutomator2ServerOptions
-type RequiredKeysOf<T> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
-}[keyof T];
 
 const SERVER_LAUNCH_TIMEOUT_MS = 30000;
 const SERVER_INSTALL_RETRIES = 20;
@@ -27,7 +28,7 @@ const SERVER_REQUEST_TIMEOUT_MS = 500;
 export const SERVER_PACKAGE_ID = 'io.appium.uiautomator2.server';
 export const SERVER_TEST_PACKAGE_ID = `${SERVER_PACKAGE_ID}.test`;
 export const INSTRUMENTATION_TARGET = `${SERVER_TEST_PACKAGE_ID}/androidx.test.runner.AndroidJUnitRunner`;
-const REQUIRED_OPTIONS: Array<RequiredKeysOf<UiAutomator2ServerOptions>> = [
+const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
   'adb',
   'tmpDir',
   'host',
@@ -42,7 +43,11 @@ class UIA2Proxy extends JWProxy {
   /**
    * @override
    */
-  async proxyCommand(url: string, method: HTTPMethod, body: HTTPBody = null): Promise<[ProxyResponse, HTTPBody]> {
+  async proxyCommand(
+    url: string,
+    method: HTTPMethod,
+    body: HTTPBody = null,
+  ): Promise<[ProxyResponse, HTTPBody]> {
     if (this.didInstrumentationExit) {
       throw new errors.InvalidContextError(
         `'${method} ${url}' cannot be proxied to UiAutomator2 server because ` +
@@ -462,7 +467,7 @@ export class UiAutomator2Server {
       );
     } catch {
       this.log.warn(
-        `The UIA2 server did has not been terminated within ${SERVER_SHUTDOWN_TIMEOUT_MS}ms timeout. ` +
+        `The UIA2 server has not been terminated within ${SERVER_SHUTDOWN_TIMEOUT_MS}ms timeout. ` +
           `Continuing anyway`,
       );
     }
@@ -489,6 +494,11 @@ export interface UiAutomator2ServerOptions {
   apk?: string;
   basePath?: string;
 }
+
+// Type helper to extract required (non-optional) keys from UiAutomator2ServerOptions
+type RequiredKeysOf<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+}[keyof T];
 
 interface SessionInfo {
   id: string;

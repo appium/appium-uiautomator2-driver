@@ -37,7 +37,7 @@ import type {
   W3CUiautomator2DriverCaps,
   EmptyObject,
 } from './types';
-import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server} from './uiautomator2';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server, UiAutomator2ServerOptions} from './uiautomator2';
 import {
   mobileGetActionHistory,
   mobileScheduleAction,
@@ -688,14 +688,10 @@ class AndroidUiautomator2Driver
   }
 
   async initUiAutomator2Server() {
-    // broken out for readability
-    const uiautomator2Opts = {
-      // @ts-expect-error FIXME: maybe `address` instead of `host`?
-      host: this.opts.remoteAdbHost || this.opts.host || LOCALHOST_IP4,
+    const uiautomator2Opts: UiAutomator2ServerOptions = {
+      host: this.opts.remoteAdbHost || LOCALHOST_IP4,
       systemPort: this.systemPort as number,
-      devicePort: DEVICE_PORT,
       adb: this.adb,
-      tmpDir: this.opts.tmpDir as string,
       disableWindowAnimation: !!this.opts.disableWindowAnimation,
       disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
       readTimeout: this.opts.uiautomator2ServerReadTimeout,

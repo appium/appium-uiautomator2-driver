@@ -30,10 +30,8 @@ export const SERVER_TEST_PACKAGE_ID = `${SERVER_PACKAGE_ID}.test`;
 export const INSTRUMENTATION_TARGET = `${SERVER_TEST_PACKAGE_ID}/androidx.test.runner.AndroidJUnitRunner`;
 const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
   'adb',
-  'tmpDir',
   'host',
   'systemPort',
-  'devicePort',
   'disableWindowAnimation',
 ] as const;
 
@@ -484,14 +482,11 @@ export interface PackageInfo {
 
 export interface UiAutomator2ServerOptions {
   adb: ADB;
-  tmpDir: string;
   host: string;
   systemPort: number;
-  devicePort: number;
   disableWindowAnimation: boolean;
   readTimeout?: number;
   disableSuppressAccessibilityService?: boolean;
-  apk?: string;
   basePath?: string;
 }
 

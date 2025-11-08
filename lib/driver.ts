@@ -705,9 +705,7 @@ class AndroidUiautomator2Driver
     // uiautomator2 with the appropriate options
     this.uiautomator2 = new UiAutomator2Server(this.log, uiautomator2Opts);
     this.proxyReqRes = this.uiautomator2.proxyReqRes.bind(this.uiautomator2);
-    this.proxyCommand = this.uiautomator2.proxyCommand.bind(
-      this.uiautomator2
-    ) as typeof this.proxyCommand;
+    this.proxyCommand = this.uiautomator2.proxyCommand.bind(this.uiautomator2);
 
     if (this.opts.skipServerInstallation) {
       this.log.info(`'skipServerInstallation' is set. Skipping UIAutomator2 server installation.`);

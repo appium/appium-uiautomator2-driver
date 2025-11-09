@@ -21,10 +21,8 @@ describe('UiAutomator2', function () {
     'appId': 'io.appium.uiautomator2.server.test'
   };
   const defaultUIA2ServerOptions = {
-    tmpDir: 'tmp',
     systemPort: 4724,
     host: 'localhost',
-    devicePort: 6790,
     disableWindowAnimation: false
   };
 

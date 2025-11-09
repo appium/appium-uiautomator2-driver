@@ -38,6 +38,7 @@ import type {
   EmptyObject,
 } from './types';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID, UiAutomator2Server} from './uiautomator2';
+import type {UiAutomator2ServerOptions} from './uiautomator2';
 import {
   mobileGetActionHistory,
   mobileScheduleAction,
@@ -688,14 +689,10 @@ class AndroidUiautomator2Driver
   }
 
   async initUiAutomator2Server() {
-    // broken out for readability
-    const uiautomator2Opts = {
-      // @ts-expect-error FIXME: maybe `address` instead of `host`?
-      host: this.opts.remoteAdbHost || this.opts.host || LOCALHOST_IP4,
+    const uiautomator2Opts: UiAutomator2ServerOptions = {
+      host: this.opts.remoteAdbHost || LOCALHOST_IP4,
       systemPort: this.systemPort as number,
-      devicePort: DEVICE_PORT,
       adb: this.adb,
-      tmpDir: this.opts.tmpDir as string,
       disableWindowAnimation: !!this.opts.disableWindowAnimation,
       disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
       readTimeout: this.opts.uiautomator2ServerReadTimeout,
@@ -705,9 +702,7 @@ class AndroidUiautomator2Driver
     // uiautomator2 with the appropriate options
     this.uiautomator2 = new UiAutomator2Server(this.log, uiautomator2Opts);
     this.proxyReqRes = this.uiautomator2.proxyReqRes.bind(this.uiautomator2);
-    this.proxyCommand = this.uiautomator2.proxyCommand.bind(
-      this.uiautomator2
-    ) as typeof this.proxyCommand;
+    this.proxyCommand = this.uiautomator2.proxyCommand.bind(this.uiautomator2);
 
     if (this.opts.skipServerInstallation) {
       this.log.info(`'skipServerInstallation' is set. Skipping UIAutomator2 server installation.`);

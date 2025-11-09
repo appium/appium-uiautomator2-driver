@@ -1,3 +1,9 @@
+## [6.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.1.0...v6.1.1) (2025-11-09)
+
+### Miscellaneous Chores
+
+* Migrate UiAutomator2Server class to typescript ([#936](https://github.com/appium/appium-uiautomator2-driver/issues/936)) ([ed22e9a](https://github.com/appium/appium-uiautomator2-driver/commit/ed22e9aff54f991b2a81b6c4aab7baba878ef638))
+
 ## [6.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.0.2...v6.1.0) (2025-10-30)
 
 ### Features

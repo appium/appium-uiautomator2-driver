@@ -1,3 +1,9 @@
+## [6.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.1.1...v6.1.2) (2025-11-15)
+
+### Miscellaneous Chores
+
+* publish via trusted publisher ([#937](https://github.com/appium/appium-uiautomator2-driver/issues/937)) ([a04f3d4](https://github.com/appium/appium-uiautomator2-driver/commit/a04f3d4d902ffb67d3156d3f71d9d72e6e4286d7))
+
 ## [6.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.1.0...v6.1.1) (2025-11-09)
 
 ### Miscellaneous Chores

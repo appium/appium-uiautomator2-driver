@@ -1,3 +1,9 @@
+## [6.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.1.2...v6.2.0) (2025-11-16)
+
+### Features
+
+* Document 'mobile: getChromeCapabilities' extension ([#938](https://github.com/appium/appium-uiautomator2-driver/issues/938)) ([2adb038](https://github.com/appium/appium-uiautomator2-driver/commit/2adb03869d3e5d97e065446b75bfe0c7b641ba67))
+
 ## [6.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.1.1...v6.1.2) (2025-11-15)
 
 ### Miscellaneous Chores

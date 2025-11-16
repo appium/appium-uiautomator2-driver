@@ -1039,6 +1039,28 @@ Note that `description` in `page` can be an empty string most likely when it com
  }
 ```
 
+### mobile: getChromeCapabilities
+
+Retrieves the Chrome capabilities that are being used for the current
+Chromedriver session. This method is useful for debugging Chrome/webview
+automation issues and understanding what capabilities are being applied to the
+Chromedriver instance.
+
+#### Returned Result
+
+The extension returns a dictionary containing the Chrome capabilities that are
+currently being used by the Chromedriver session. The structure of the returned
+object follows the standard Chrome/Chromium capabilities format and may include
+properties such as:
+
+- `browserName`: The name of the browser (typically "chrome")
+- `browserVersion`: The version of Chrome/Chromium being automated
+- `platformName`: The platform name
+- Other standard WebDriver capabilities
+
+The exact structure and properties may vary depending on
+the Chrome version and the capabilities that were set during session creation.
+
 ### mobile: installMultipleApks
 
 Install applications via `install-multiple` option.
@@ -1733,6 +1755,7 @@ The following endpoints are used to control the current context:
 - GET `/session/:sessionId/context`: To retrieve the name of the current context
 - GET `/session/:sessionId/contexts`: To retrieve the list of available context names
 - [mobile: getContexts](#mobile-getcontexts)
+- [mobile: getChromeCapabilities](#mobile-getchromecapabilities)
 
 By default, the driver starts in the native context, which means that most of REST API commands are being
 forwarded to the downstream [appium-uiautomator2-server](https://github.com/appium/appium-uiautomator2-server).

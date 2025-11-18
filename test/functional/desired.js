@@ -1,11 +1,17 @@
 import _ from 'lodash';
-import path from 'path';
-import {API_DEMOS_APK_PATH} from 'android-apidemos';
 
 const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
 const ADB_EXEC_TIMEOUT = process.env.CI ? 60000 : 20000;
+
+// ApiDemos APK URL from GitHub releases
+const API_DEMOS_APK_URL = 'https://github.com/appium/android-apidemos/releases/download/v6.0.2/ApiDemos-debug.apk';
+
+// ApiDemos package and activity constants
+export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
+export const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
+export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
 
 function deepFreeze(object) {
   const propNames = Object.getOwnPropertyNames(object);
@@ -18,14 +24,14 @@ function deepFreeze(object) {
   return Object.freeze(object);
 }
 
-function amendCapabilities(baseCaps, ...newCaps) {
+export function amendCapabilities(baseCaps, ...newCaps) {
   return deepFreeze({
     alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
     firstMatch: [{}],
   });
 }
 
-const GENERIC_CAPS = deepFreeze({
+export const GENERIC_CAPS = deepFreeze({
   firstMatch: [{}],
   alwaysMatch: {
     'appium:deviceName': 'Android',
@@ -38,43 +44,24 @@ const GENERIC_CAPS = deepFreeze({
   },
 });
 
-// http://www.impressive-artworx.de/tutorials/android/gps_tutorial_1.zip
-const gpsDemoApp = path.resolve(__dirname, 'assets', 'gpsDemo-debug.apk');
-
-const APIDEMOS_CAPS = amendCapabilities(GENERIC_CAPS, {
-  'appium:app': API_DEMOS_APK_PATH,
-  'appium:appPackage': 'io.appium.android.apis',
-  'appium:appActivity': '.ApiDemos',
+export const APIDEMOS_CAPS = amendCapabilities(GENERIC_CAPS, {
+  'appium:app': API_DEMOS_APK_URL,
+  'appium:appPackage': APIDEMOS_PACKAGE,
+  'appium:appActivity': APIDEMOS_MAIN_ACTIVITY,
   'appium:disableWindowAnimation': true,
 });
 
-const SCROLL_CAPS = amendCapabilities(GENERIC_CAPS, {
-  'appium:app': API_DEMOS_APK_PATH,
-  'appium:appPackage': 'io.appium.android.apis',
-  'appium:appActivity': '.view.ScrollView2',
+export const SCROLL_CAPS = amendCapabilities(GENERIC_CAPS, {
+  'appium:app': API_DEMOS_APK_URL,
+  'appium:appPackage': APIDEMOS_PACKAGE,
+  'appium:appActivity': APIDEMOS_SCROLL_ACTIVITY,
 });
 
-const GPS_DEMO_CAPS = amendCapabilities(GENERIC_CAPS, {
-  'appium:app': gpsDemoApp,
-  'appium:appPackage': 'de.impressive.artworx.tutorials.gps',
-  'appium:appActivity': '.GPSTest',
-});
-
-const BROWSER_CAPS = amendCapabilities(GENERIC_CAPS, {
+export const BROWSER_CAPS = amendCapabilities(GENERIC_CAPS, {
   browserName: 'Chrome',
 });
 
-const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
+export const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
   'appium:appPackage': 'com.android.settings',
   'appium:appActivity': '.Settings',
 });
-
-export {
-  GENERIC_CAPS,
-  APIDEMOS_CAPS,
-  GPS_DEMO_CAPS,
-  BROWSER_CAPS,
-  SCROLL_CAPS,
-  SETTINGS_CAPS,
-  amendCapabilities,
-};

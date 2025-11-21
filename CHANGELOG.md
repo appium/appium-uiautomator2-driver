@@ -1,3 +1,9 @@
+## [6.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.2.1...v6.3.0) (2025-11-21)
+
+### Features
+
+* add context for BiDi - log.entryAdded event ([#941](https://github.com/appium/appium-uiautomator2-driver/issues/941)) ([ec14146](https://github.com/appium/appium-uiautomator2-driver/commit/ec14146cd288d4eaf4ad259aed5019532531ff51))
+
 ## [6.2.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.2.0...v6.2.1) (2025-11-17)
 
 ### Miscellaneous Chores

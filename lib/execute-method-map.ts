@@ -259,4 +259,27 @@ export const executeMethodMap = {
   'mobile: getClipboard': {
     command: 'getClipboard',
   },
+  'mobile: findElementOnDisplay': {  
+    command: 'mobileFindElementOnDisplay',
+    params: {
+      required: ['selector', 'displayIndex'],
+      optional: ['timeout', 'context'],
+    },
+  },
+  'mobile: findElementsOnDisplay': {  
+    command: 'mobileFindElementsOnDisplay',
+    params: {
+      required: ['selector', 'displayIndex'],
+      optional: ['timeout', 'context'],
+    },
+  },
+  'mobile: getDisplayInfo': {  
+    command: 'mobileGetDisplayInfo',
+  },
+  'mobile: getPageSourceOnDisplay': {  
+    command: 'mobileGetPageSourceOnDisplay',
+    params: {
+      optional: ['displayIndex'],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;

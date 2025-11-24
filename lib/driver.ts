@@ -83,6 +83,8 @@ import {
 } from './commands/element';
 import {
   doFindElementOrEls,
+  mobileFindElementOnDisplay,
+  mobileFindElementsOnDisplay,
 } from './commands/find';
 import {
   mobileClickGesture,
@@ -112,6 +114,8 @@ import {
   openNotifications,
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
+  mobileGetDisplayInfo,
+  mobileGetPageSourceOnDisplay,
 } from './commands/misc';
 import {
   setUrl,
@@ -1029,6 +1033,8 @@ class AndroidUiautomator2Driver
   mobileReplaceElementValue = mobileReplaceElementValue;
 
   doFindElementOrEls = doFindElementOrEls;
+  mobileFindElementOnDisplay = mobileFindElementOnDisplay;
+  mobileFindElementsOnDisplay = mobileFindElementsOnDisplay;
 
   mobileClickGesture = mobileClickGesture;
   mobileDoubleClickGesture = mobileDoubleClickGesture;
@@ -1055,6 +1061,8 @@ class AndroidUiautomator2Driver
   openNotifications = openNotifications;
   suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
+  mobileGetDisplayInfo = mobileGetDisplayInfo;
+  mobileGetPageSourceOnDisplay = mobileGetPageSourceOnDisplay;
 
   getClipboard = getClipboard;
   setClipboard = setClipboard;

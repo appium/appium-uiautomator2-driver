@@ -524,6 +524,16 @@ Retrieves the information about the device under test, like the device model, se
 
 The extension returns a dictionary whose entries are the device properties. Check https://github.com/appium/appium-uiautomator2-server/blob/master/app/src/main/java/io/appium/uiautomator2/handler/GetDeviceInfo.java to get the full list of returned keys and their corresponding values.
 
+### mobile: resetAccessibilityCache
+
+Resets the accessibility cache on the device. This can be useful when the accessibility
+service cache becomes stale and needs to be refreshed to reflect the current UI state.
+The driver does cache reset automatically before any element lookup as well as before
+retrieving a page source, hovewer it makes sense to call this method manually to avoid stale reference errors or interaction issues if the application under test posseses
+highly dynamic elements. Note that this methods also waits until app under test becomes
+idle, so it might also slow down your automation if called too often under non-idling
+circumstances.
+
 ### mobile: getDeviceTime
 
 Retrieves the current device's timestamp.

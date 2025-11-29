@@ -259,4 +259,8 @@ export const executeMethodMap = {
   'mobile: getClipboard': {
     command: 'getClipboard',
   },
+
+  'mobile: resetAccessibilityCache': {
+    command: 'mobileResetAccessibilityCache',
+  },
 } as const satisfies ExecuteMethodMap<any>;

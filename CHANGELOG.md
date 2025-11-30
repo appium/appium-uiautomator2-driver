@@ -1,3 +1,9 @@
+## [6.4.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.4.0...v6.4.1) (2025-11-30)
+
+### Bug Fixes
+
+* Add missing /appium prefix to the custom endpoint ([#944](https://github.com/appium/appium-uiautomator2-driver/issues/944)) ([deed050](https://github.com/appium/appium-uiautomator2-driver/commit/deed050054bc93e98cc24dc28710902589475c29))
+
 ## [6.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.3.0...v6.4.0) (2025-11-30)
 
 ### Features

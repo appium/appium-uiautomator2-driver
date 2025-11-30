@@ -1,3 +1,9 @@
+## [6.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.3.0...v6.4.0) (2025-11-30)
+
+### Features
+
+* Add 'mobile: resetAccessibilityCache' API ([#943](https://github.com/appium/appium-uiautomator2-driver/issues/943)) ([97fceda](https://github.com/appium/appium-uiautomator2-driver/commit/97fceda17ee59fd45df7fe1c285d3e60399bebd3))
+
 ## [6.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.2.1...v6.3.0) (2025-11-21)
 
 ### Features

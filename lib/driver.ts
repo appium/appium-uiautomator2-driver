@@ -112,6 +112,7 @@ import {
   openNotifications,
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
+  mobileResetAccessibilityCache,
 } from './commands/misc';
 import {
   setUrl,
@@ -1055,6 +1056,7 @@ class AndroidUiautomator2Driver
   openNotifications = openNotifications;
   suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
+  mobileResetAccessibilityCache = mobileResetAccessibilityCache;
 
   getClipboard = getClipboard;
   setClipboard = setClipboard;

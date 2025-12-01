@@ -1,3 +1,9 @@
+## [6.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.4.1...v6.5.0) (2025-12-01)
+
+### Features
+
+* Add 'mobile: listWindows' execute method ([#945](https://github.com/appium/appium-uiautomator2-driver/issues/945)) ([78ef335](https://github.com/appium/appium-uiautomator2-driver/commit/78ef335b7c3f7193f3e93f99250041f3747ccb13))
+
 ## [6.4.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.4.0...v6.4.1) (2025-11-30)
 
 ### Bug Fixes

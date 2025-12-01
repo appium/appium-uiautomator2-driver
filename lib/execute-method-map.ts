@@ -263,4 +263,11 @@ export const executeMethodMap = {
   'mobile: resetAccessibilityCache': {
     command: 'mobileResetAccessibilityCache',
   },
+
+  'mobile: listWindows': {
+    command: 'mobileListWindows',
+    params: {
+      optional: ['filters', 'skipScreenshots'],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;

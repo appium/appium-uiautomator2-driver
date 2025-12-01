@@ -534,6 +534,34 @@ highly dynamic elements. Note that this methods also waits until app under test 
 idle, so it might also slow down your automation if called too often under non-idling
 circumstances.
 
+### mobile: listWindows
+
+Gets a list of windows on all displays. For Android API 30+ (R), uses `getWindowsOnAllDisplays()` to retrieve windows from all displays. For older APIs, uses `getWindows()` which only returns windows from the default display.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+filters | object | no | Optional filters to apply to the window list. All filters are applied with AND logic (all must match). Supported filter keys: | `{packageName: 'com.example.app', displayId: 0}`
+ | | | | `packageName` (string): Package name pattern with glob support (e.g., `com.example.*`) |
+ | | | | `windowId` (number): Window identifier |
+ | | | | `displayId` (number): Display identifier |
+ | | | | `physicalDisplayId` (number): Physical display identifier |
+skipScreenshots | boolean | no | Whether to skip taking screenshots for each window. Defaults to `false`. Setting this to `true` can improve performance. Screenshots are only available on Android API 34+ even when this is `false`. | true
+
+#### Returned Result
+
+The extension returns an array of window information objects. Each object contains:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+windowId | number \| null | Window identifier (may be null) | 42
+displayId | number \| null | Display identifier where the window is located (may be null) | 0
+physicalDisplayId | number \| null | Physical display identifier (may be null) | 1234567890
+rect | object | Window bounds rectangle with `left`, `top`, `right`, `bottom` properties | `{left: 0, top: 0, right: 1080, bottom: 1920}`
+packageName | string \| null | Package name of the application that owns this window (may be null) | `com.example.app`
+screenshot | string \| null | Base64-encoded PNG screenshot of the window (may be null). Only available on Android API 34+ and when `skipScreenshots` is `false`. | `iVBORw0KGgoAAAANSUhEUgAA...`
+
 ### mobile: getDeviceTime
 
 Retrieves the current device's timestamp.

@@ -270,4 +270,8 @@ export const executeMethodMap = {
       optional: ['filters', 'skipScreenshots'],
     },
   },
+
+  'mobile: listDisplays': {
+    command: 'mobileListDisplays',
+  },
 } as const satisfies ExecuteMethodMap<any>;

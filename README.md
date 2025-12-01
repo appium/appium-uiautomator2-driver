@@ -563,6 +563,48 @@ rect | object | Window bounds rectangle with `left`, `top`, `right`, `bottom` pr
 packageName | string \| null | Package name of the application that owns this window (may be null) | `com.example.app`
 screenshot | string \| null | Base64-encoded PNG screenshot of the window (may be null). Only available on Android API 34+ and when `skipScreenshots` is `false`. | `iVBORw0KGgoAAAANSUhEUgAA...`
 
+### mobile: listDisplays
+
+Gets a list of all displays available on the device.
+
+#### Returned Result
+
+The extension returns an array of display information objects. Each object contains:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+id | number | Display identifier (logical display ID). This is the value used by the `currentDisplayId` setting. | 0
+physicalId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. This is the value used by the `mobile: screenshots` method. | '1234567890'
+metrics | object | Display metrics containing size and density information. See below for details. | See metrics table
+isDefault | boolean | Whether this is the default display | true
+
+#### Display Metrics
+
+The `metrics` object contains the following properties:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+widthPixels | number | Display width in pixels | 1080
+heightPixels | number | Display height in pixels | 1920
+density | number | Display density (logical density factor). This is a scaling factor for the display. | 2.625
+densityDpi | number | Display density in DPI (dots per inch) | 420
+scaledDensity | number | Scaled density factor for fonts. This is typically the same as `density` but may be adjusted by the user's font size preference. | 2.625
+xdpi | number | Exact physical pixels per inch of the screen in the X dimension | 420.0
+ydpi | number | Exact physical pixels per inch of the screen in the Y dimension | 420.0
+
+**Example:**
+```python
+# List all displays
+displays = driver.execute_script('mobile: listDisplays')
+
+for display in displays:
+    print(f"Display ID: {display['id']}")
+    print(f"  Physical ID: {display['physicalId']}")
+    print(f"  Is default: {display['isDefault']}")
+    print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
+    print(f"  Density: {display['metrics']['density']} ({display['metrics']['densityDpi']} DPI)")
+```
+
 ### mobile: getDeviceTime
 
 Retrieves the current device's timestamp.
@@ -1605,16 +1647,21 @@ These extensions allow to deal with short-living UI elements. Read [the document
 Retrieves a screenshot of each display available to Android.
 This functionality is only supported since Android 10.
 
+**Important:** This method uses **physical display IDs**, which are different from logical display IDs used by the `currentDisplayId` setting. Physical display IDs can be obtained from:
+- The `physicalId` field returned by [`mobile: listDisplays`](#mobile-listdisplays) (recommended)
+- The `physicalDisplayId` field returned by [`mobile: listWindows`](#mobile-listwindows)
+- The `adb shell dumpsys SurfaceFlinger --display-id` command output
+
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-displayId | number or string | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. Actual display identifiers could be retrived from the `adb shell dumpsys SurfaceFlinger --display-id` command output. | 1
+displayId | number or string | no | **Physical display identifier** to take a screenshot for. If not provided then screenshots of all displays are going to be returned. If no matches were found then an error is thrown. **Note:** This is a physical display ID, not a logical display ID. Use `mobile: listDisplays` to get the correct `physicalId` value. | 1234567890
 
 #### Returns
 
-A dictionary where each key is the display identifier and the value has the following keys:
-- `id`: The same display identifier
+A dictionary where each key is the physical display identifier (as a string) and the value has the following keys:
+- `id`: The physical display identifier (same as the key)
 - `name`: Display name
 - `isDefault`: Whether this display is the default one
 - `payload`: The actual PNG screenshot data encoded to base64 string

@@ -1,3 +1,9 @@
+## [6.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.5.0...v6.6.0) (2025-12-01)
+
+### Features
+
+* Add documentation for 'mobile: listDisplays' API ([#948](https://github.com/appium/appium-uiautomator2-driver/issues/948)) ([df7ca78](https://github.com/appium/appium-uiautomator2-driver/commit/df7ca7816da2f4dd71482cfaabd9d51ba86a2206))
+
 ## [6.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.4.1...v6.5.0) (2025-12-01)
 
 ### Features

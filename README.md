@@ -547,7 +547,14 @@ filters | object | no | Optional filters to apply to the window list. All filter
  | | | | `packageName` (string): Package name pattern with glob support (e.g., `com.example.*`) |
  | | | | `windowId` (number): Window identifier |
  | | | | `displayId` (number): Display identifier |
- | | | | `physicalDisplayId` (number): Physical display identifier |
+ | | | | `physicalDisplayId` (string): Physical display identifier (as string to avoid JavaScript number precision issues) |
+ | | | | `type` (number): Window type (see [AccessibilityWindowInfo.TYPE_*](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo#TYPE_APPLICATION) constants) |
+ | | | | `title` (string): Window title pattern with glob support |
+ | | | | `layer` (number): Window Z-order layer (higher values are on top) |
+ | | | | `isAccessibilityFocused` (boolean): Whether the window has accessibility focus |
+ | | | | `isActive` (boolean): Whether the window is active |
+ | | | | `isFocused` (boolean): Whether the window has input focus |
+ | | | | `isInPictureInPictureMode` (boolean): Whether the window is in picture-in-picture mode |
 skipScreenshots | boolean | no | Whether to skip taking screenshots for each window. Defaults to `false`. Setting this to `true` can improve performance. Screenshots are only available on Android API 34+ even when this is `false`. | true
 
 #### Returned Result
@@ -556,12 +563,19 @@ The extension returns an array of window information objects. Each object contai
 
 Name | Type | Description | Example
 --- | --- | --- | ---
-windowId | number \| null | Window identifier (may be null) | 42
-displayId | number \| null | Display identifier where the window is located (may be null) | 0
-physicalDisplayId | number \| null | Physical display identifier (may be null) | 1234567890
+windowId | number \| null | Window identifier (may be null if the window ID cannot be determined) | 42
+displayId | number | Display identifier where the window is located | 0
+physicalDisplayId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. | '1234567890'
 rect | object | Window bounds rectangle with `left`, `top`, `right`, `bottom` properties | `{left: 0, top: 0, right: 1080, bottom: 1920}`
 packageName | string \| null | Package name of the application that owns this window (may be null) | `com.example.app`
 screenshot | string \| null | Base64-encoded PNG screenshot of the window (may be null). Only available on Android API 34+ and when `skipScreenshots` is `false`. | `iVBORw0KGgoAAAANSUhEUgAA...`
+type | number | Window type. See [AccessibilityWindowInfo.TYPE_*](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo#TYPE_APPLICATION) constants for possible values (e.g., `TYPE_APPLICATION`, `TYPE_INPUT_METHOD`, `TYPE_SYSTEM`, `TYPE_ACCESSIBILITY_OVERLAY`, `TYPE_SPLIT_SCREEN_DIVIDER`). | 1
+title | string \| null | Window title (may be null) | 'My App Window'
+layer | number | Window Z-order layer. Higher values indicate windows that are drawn on top of windows with lower layer values. | 100
+isAccessibilityFocused | boolean | Whether the window has accessibility focus | true
+isActive | boolean | Whether the window is active | true
+isFocused | boolean | Whether the window has input focus | true
+isInPictureInPictureMode | boolean | Whether the window is in picture-in-picture mode | false
 
 ### mobile: listDisplays
 

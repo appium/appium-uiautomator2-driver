@@ -113,8 +113,11 @@ import {
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
   mobileResetAccessibilityCache,
-  mobileListWindows,
 } from './commands/misc';
+import {
+  mobileListWindows,
+  mobileListDisplays,
+} from './commands/windows';
 import {
   setUrl,
   mobileDeepLink,
@@ -1059,6 +1062,7 @@ class AndroidUiautomator2Driver
   mobileGetDeviceInfo = mobileGetDeviceInfo;
   mobileResetAccessibilityCache = mobileResetAccessibilityCache;
   mobileListWindows = mobileListWindows;
+  mobileListDisplays = mobileListDisplays;
 
   getClipboard = getClipboard;
   setClipboard = setClipboard;

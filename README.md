@@ -84,7 +84,7 @@ appium:forceAppLaunch | Set it to `true` if you want the application under test 
 appium:shouldTerminateApp | Set it to `true` if you want the application under test to be always terminated on session end even if `appium:noReset` is `true`. If `noReset` is falsy, then the app under test is going to be terminated if `appium:dontStopAppOnReset` is also falsy (the default behavior). `false` by default
 appium:autoLaunch | Whether to launch the application under test automatically (`true`, the default value) after a test starts
 appium:autoGrantPermissions | Whether to grant all the requested application permissions automatically when a test starts(`true`). The targetSdkVersion in the application manifest must be greater or equal to 23 and the Android version on the device under test must be greater or equal to Android 6 (API level 23) to grant permissions. Applications whose targetSdkVersion is lower than or equal to 22 must be reinstalled to grant permissions, for example, by setting the `appium:fullReset` capability as `true` for Android 6+ devices. If your app needs some special security permissions, like access to notifications or media recording, consider using [mobile: changePermissions](#mobile-changepermissions) extension with `appops` target. `false` by default
-appium:otherApps | Allows to set one or more comma-separated paths to Android packages that are going to be installed along with the main application under test. This might be useful if the tested app has dependencies
+appium:otherApps | Allows to set one or more comma-separated paths to Android packages that are going to be installed along with the main application under test. This may be useful if the tested app has dependencies
 appium:uninstallOtherPackages | Allows to set one or more comma-separated package identifiers to be uninstalled from the device before a test starts
 appium:allowTestPackages | If set to `true` then it would be possible to use packages built with the test flag for the automated testing (literally adds `-t` flag to the `adb install` command). `false` by default
 appium:remoteAppsCacheLimit | Sets the maximum amount of application packages to be cached on the device under test. This is needed for devices that don't support streamed installs (Android 7 and below), because ADB must push app packages to the device first in order to install them, which takes some time. Setting this capability to zero disables apps caching. `10` by default.
@@ -145,7 +145,7 @@ appium:noSign | Set it to `true` in order to skip application signing. By defaul
 
 Capability Name | Description
 --- | ---
-appium:skipUnlock | Whether to skip the check for lock screen presence (`true`). The default driver behaviour is to verify the presence of the screen lock (e.g. 'false' value of the capability) before starting the test and to unlock that (which sometimes might be unstable). Note, that this operation takes some time, so it is highly recommended to set this capability to `true` and disable screen locking on device(s) under test. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
+appium:skipUnlock | Whether to skip the check for lock screen presence (`true`). The default driver behaviour is to verify the presence of the screen lock (e.g. 'false' value of the capability) before starting the test and to unlock that (which sometimes may be unstable). Note, that this operation takes some time, so it is highly recommended to set this capability to `true` and disable screen locking on device(s) under test. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockType | Set one of the possible types of Android lock screens to unlock. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockKey | Allows to set an unlock key. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockStrategy | Either 'locksettings' (default) or 'uiautomator'. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
@@ -189,10 +189,10 @@ appium:chromedriverForwardBiDi | Being set to `true` enables automated forwardin
 
 Capability Name | Description
 --- | ---
-appium:disableSuppressAccessibilityService | Being set to `true` tells the instrumentation process to not suppress accessibility services during the automated test. This might be useful if your automated test needs these services. `false` by default
-appium:userProfile | Integer identifier of a [user profile](https://source.android.com/devices/tech/admin/multi-user). By default the app under test is installed for the currently active user, but in case it is necessary to test how the app performs while being installed for a user profile, which is different from the current one, then this capability might come in handy.
+appium:disableSuppressAccessibilityService | Being set to `true` tells the instrumentation process to not suppress accessibility services during the automated test. This may be useful if your automated test needs these services. `false` by default
+appium:userProfile | Integer identifier of a [user profile](https://source.android.com/devices/tech/admin/multi-user). By default the app under test is installed for the currently active user, but in case it is necessary to test how the app performs while being installed for a user profile, which is different from the current one, then this capability may come in handy.
 appium:newCommandTimeout | How long (in seconds) the driver should wait for a new command from the client before assuming the client has stopped sending requests. After the timeout the session is going to be deleted. `60` seconds by default. Setting it to zero disables the timer.
-appium:skipLogcatCapture | Skips to start capturing logs such as logcat. It might improve network performance. Log-related commands won't work if the capability is enabled. Defaults to `false`.
+appium:skipLogcatCapture | Skips to start capturing logs such as logcat. It may improve network performance. Log-related commands won't work if the capability is enabled. Defaults to `false`.
 appium:timeZone | Overrides the current device's time zone since the driver version 3.1.0. This change is preserved until the next override. The time zone identifier must be a valid name from the list of [available time zone identifiers](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), for example `Europe/Kyiv`
 
 
@@ -243,7 +243,7 @@ pane-title | Title of the pane represented by this element. Available for API 28
 actions | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
 tooltip-text | The result of [getTooltipText](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTooltipText()). Could be `null`, available for API 28+  | 'Paste'
 text-has-clickable-span | Indicates whether the `TextView` content contains `ClickableSpan` or `URLSpan` elements, `null` in all other cases. | 'true'
-window-id | The integer identifier of the [accessbility window](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) this element belongs to. In some rare cases might not be present if the window identifier cannot be determined. | 123
+window-id | The integer identifier of the [accessbility window](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) this element belongs to. In some rare cases, it may not be present if the window identifier cannot be determined. | 123
 
 
 ## Element Location
@@ -549,7 +549,14 @@ filters | object | no | Optional filters to apply to the window list. All filter
  | | | | `packageName` (string): Package name pattern with glob support (e.g., `com.example.*`) |
  | | | | `windowId` (number): Window identifier |
  | | | | `displayId` (number): Display identifier |
- | | | | `physicalDisplayId` (number): Physical display identifier |
+ | | | | `physicalDisplayId` (string): Physical display identifier (as string to avoid JavaScript number precision issues) |
+ | | | | `type` (number): Window type (see [AccessibilityWindowInfo.TYPE_*](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo#TYPE_APPLICATION) constants) |
+ | | | | `title` (string): Window title pattern with glob support |
+ | | | | `layer` (number): Window Z-order layer (higher values are on top) |
+ | | | | `isAccessibilityFocused` (boolean): Whether the window has accessibility focus |
+ | | | | `isActive` (boolean): Whether the window is active |
+ | | | | `isFocused` (boolean): Whether the window has input focus |
+ | | | | `isInPictureInPictureMode` (boolean): Whether the window is in picture-in-picture mode |
 skipScreenshots | boolean | no | Whether to skip taking screenshots for each window. Defaults to `false`. Setting this to `true` can improve performance. Screenshots are only available on Android API 34+ even when this is `false`. | true
 
 #### Returned Result
@@ -558,12 +565,61 @@ The extension returns an array of window information objects. Each object contai
 
 Name | Type | Description | Example
 --- | --- | --- | ---
-windowId | number \| null | Window identifier (may be null) | 42
-displayId | number \| null | Display identifier where the window is located (may be null) | 0
-physicalDisplayId | number \| null | Physical display identifier (may be null) | 1234567890
+windowId | number \| null | Window identifier (may be null if the window ID cannot be determined) | 42
+displayId | number | Display identifier where the window is located | 0
+physicalDisplayId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. | '1234567890'
 rect | object | Window bounds rectangle with `left`, `top`, `right`, `bottom` properties | `{left: 0, top: 0, right: 1080, bottom: 1920}`
 packageName | string \| null | Package name of the application that owns this window (may be null) | `com.example.app`
 screenshot | string \| null | Base64-encoded PNG screenshot of the window (may be null). Only available on Android API 34+ and when `skipScreenshots` is `false`. | `iVBORw0KGgoAAAANSUhEUgAA...`
+type | number | Window type. See [AccessibilityWindowInfo.TYPE_*](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo#TYPE_APPLICATION) constants for possible values (e.g., `TYPE_APPLICATION`, `TYPE_INPUT_METHOD`, `TYPE_SYSTEM`, `TYPE_ACCESSIBILITY_OVERLAY`, `TYPE_SPLIT_SCREEN_DIVIDER`). | 1
+title | string \| null | Window title (may be null) | 'My App Window'
+layer | number | Window Z-order layer. Higher values indicate windows that are drawn on top of windows with lower layer values. | 100
+isAccessibilityFocused | boolean | Whether the window has accessibility focus | true
+isActive | boolean | Whether the window is active | true
+isFocused | boolean | Whether the window has input focus | true
+isInPictureInPictureMode | boolean | Whether the window is in picture-in-picture mode | false
+
+### mobile: listDisplays
+
+Gets a list of all displays available on the device.
+
+#### Returned Result
+
+The extension returns an array of display information objects. Each object contains:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+id | number | Display identifier (logical display ID). This is the value used by the `currentDisplayId` setting. | 0
+physicalId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. This is the value used by the `mobile: screenshots` method. | '1234567890'
+metrics | object | Display metrics containing size and density information. See below for details. | See metrics table
+isDefault | boolean | Whether this is the default display | true
+
+#### Display Metrics
+
+The `metrics` object contains the following properties:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+widthPixels | number | Display width in pixels | 1080
+heightPixels | number | Display height in pixels | 1920
+density | number | Display density (logical density factor). This is a scaling factor for the display. | 2.625
+densityDpi | number | Display density in DPI (dots per inch) | 420
+scaledDensity | number | Scaled density factor for fonts. This is typically the same as `density` but may be adjusted by the user's font size preference. | 2.625
+xdpi | number | Exact physical pixels per inch of the screen in the X dimension | 420.0
+ydpi | number | Exact physical pixels per inch of the screen in the Y dimension | 420.0
+
+**Example:**
+```python
+# List all displays
+displays = driver.execute_script('mobile: listDisplays')
+
+for display in displays:
+    print(f"Display ID: {display['id']}")
+    print(f"  Physical ID: {display['physicalId']}")
+    print(f"  Is default: {display['isDefault']}")
+    print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
+    print(f"  Density: {display['metrics']['density']} ({display['metrics']['densityDpi']} DPI)")
+```
 
 ### mobile: getDeviceTime
 
@@ -1607,16 +1663,21 @@ These extensions allow to deal with short-living UI elements. Read [the document
 Retrieves a screenshot of each display available to Android.
 This functionality is only supported since Android 10.
 
+**Important:** This method uses **physical display IDs**, which are different from logical display IDs used by the `currentDisplayId` setting. Physical display IDs can be obtained from:
+- The `physicalId` field returned by [`mobile: listDisplays`](#mobile-listdisplays) (recommended)
+- The `physicalDisplayId` field returned by [`mobile: listWindows`](#mobile-listwindows)
+- The `adb shell dumpsys SurfaceFlinger --display-id` command output
+
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-displayId | number or string | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. Actual display identifiers could be retrived from the `adb shell dumpsys SurfaceFlinger --display-id` command output. | 1
+displayId | number or string | no | **Physical display identifier** to take a screenshot for. If not provided then screenshots of all displays are going to be returned. If no matches were found then an error is thrown. **Note:** This is a physical display ID, not a logical display ID. Use `mobile: listDisplays` to get the correct `physicalId` value. | 1234567890
 
 #### Returns
 
-A dictionary where each key is the display identifier and the value has the following keys:
-- `id`: The same display identifier
+A dictionary where each key is the physical display identifier (as a string) and the value has the following keys:
+- `id`: The physical display identifier (same as the key)
 - `name`: Display name
 - `isDefault`: Whether this display is the default one
 - `payload`: The actual PNG screenshot data encoded to base64 string

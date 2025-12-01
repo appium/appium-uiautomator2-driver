@@ -243,6 +243,7 @@ pane-title | Title of the pane represented by this element. Available for API 28
 actions | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
 tooltip-text | The result of [getTooltipText](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTooltipText()). Could be `null`, available for API 28+  | 'Paste'
 text-has-clickable-span | Indicates whether the `TextView` content contains `ClickableSpan` or `URLSpan` elements, `null` in all other cases. | 'true'
+window-id | The integer identifier of the [accessbility window](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) this element belongs to. In some rare cases might not be present if the window identifier cannot be determined. | 123
 
 
 ## Element Location

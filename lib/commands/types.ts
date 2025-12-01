@@ -132,3 +132,53 @@ export interface WindowInfo {
    */
   screenshot: string | null;
 }
+
+export interface DisplayMetrics {
+  /**
+   * Display width in pixels
+   */
+  widthPixels: number;
+  /**
+   * Display height in pixels
+   */
+  heightPixels: number;
+  /**
+   * Display density (logical density factor)
+   */
+  density: number;
+  /**
+   * Display density in DPI
+   */
+  densityDpi: number;
+  /**
+   * Scaled density factor for fonts
+   */
+  scaledDensity: number;
+  /**
+   * Exact physical pixels per inch of the screen in the X dimension
+   */
+  xdpi: number;
+  /**
+   * Exact physical pixels per inch of the screen in the Y dimension
+   */
+  ydpi: number;
+}
+
+export interface DisplayInfo {
+  /**
+   * Display identifier (logical display ID)
+   */
+  id: number;
+  /**
+   * Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values.
+   */
+  physicalId: string | null;
+  /**
+   * Display metrics containing size and density information
+   */
+  metrics: DisplayMetrics;
+  /**
+   * Whether this is the default display
+   */
+  isDefault: boolean;
+}

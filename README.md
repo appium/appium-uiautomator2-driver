@@ -84,7 +84,7 @@ appium:forceAppLaunch | Set it to `true` if you want the application under test 
 appium:shouldTerminateApp | Set it to `true` if you want the application under test to be always terminated on session end even if `appium:noReset` is `true`. If `noReset` is falsy, then the app under test is going to be terminated if `appium:dontStopAppOnReset` is also falsy (the default behavior). `false` by default
 appium:autoLaunch | Whether to launch the application under test automatically (`true`, the default value) after a test starts
 appium:autoGrantPermissions | Whether to grant all the requested application permissions automatically when a test starts(`true`). The targetSdkVersion in the application manifest must be greater or equal to 23 and the Android version on the device under test must be greater or equal to Android 6 (API level 23) to grant permissions. Applications whose targetSdkVersion is lower than or equal to 22 must be reinstalled to grant permissions, for example, by setting the `appium:fullReset` capability as `true` for Android 6+ devices. If your app needs some special security permissions, like access to notifications or media recording, consider using [mobile: changePermissions](#mobile-changepermissions) extension with `appops` target. `false` by default
-appium:otherApps | Allows to set one or more comma-separated paths to Android packages that are going to be installed along with the main application under test. This might be useful if the tested app has dependencies
+appium:otherApps | Allows to set one or more comma-separated paths to Android packages that are going to be installed along with the main application under test. This may be useful if the tested app has dependencies
 appium:uninstallOtherPackages | Allows to set one or more comma-separated package identifiers to be uninstalled from the device before a test starts
 appium:allowTestPackages | If set to `true` then it would be possible to use packages built with the test flag for the automated testing (literally adds `-t` flag to the `adb install` command). `false` by default
 appium:remoteAppsCacheLimit | Sets the maximum amount of application packages to be cached on the device under test. This is needed for devices that don't support streamed installs (Android 7 and below), because ADB must push app packages to the device first in order to install them, which takes some time. Setting this capability to zero disables apps caching. `10` by default.
@@ -145,7 +145,7 @@ appium:noSign | Set it to `true` in order to skip application signing. By defaul
 
 Capability Name | Description
 --- | ---
-appium:skipUnlock | Whether to skip the check for lock screen presence (`true`). The default driver behaviour is to verify the presence of the screen lock (e.g. 'false' value of the capability) before starting the test and to unlock that (which sometimes might be unstable). Note, that this operation takes some time, so it is highly recommended to set this capability to `true` and disable screen locking on device(s) under test. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
+appium:skipUnlock | Whether to skip the check for lock screen presence (`true`). The default driver behaviour is to verify the presence of the screen lock (e.g. 'false' value of the capability) before starting the test and to unlock that (which sometimes may be unstable). Note, that this operation takes some time, so it is highly recommended to set this capability to `true` and disable screen locking on device(s) under test. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockType | Set one of the possible types of Android lock screens to unlock. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockKey | Allows to set an unlock key. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
 appium:unlockStrategy | Either 'locksettings' (default) or 'uiautomator'. Read the [Unlock tutorial](./docs/unlock/main.md) for more details.
@@ -189,10 +189,10 @@ appium:chromedriverForwardBiDi | Being set to `true` enables automated forwardin
 
 Capability Name | Description
 --- | ---
-appium:disableSuppressAccessibilityService | Being set to `true` tells the instrumentation process to not suppress accessibility services during the automated test. This might be useful if your automated test needs these services. `false` by default
-appium:userProfile | Integer identifier of a [user profile](https://source.android.com/devices/tech/admin/multi-user). By default the app under test is installed for the currently active user, but in case it is necessary to test how the app performs while being installed for a user profile, which is different from the current one, then this capability might come in handy.
+appium:disableSuppressAccessibilityService | Being set to `true` tells the instrumentation process to not suppress accessibility services during the automated test. This may be useful if your automated test needs these services. `false` by default
+appium:userProfile | Integer identifier of a [user profile](https://source.android.com/devices/tech/admin/multi-user). By default the app under test is installed for the currently active user, but in case it is necessary to test how the app performs while being installed for a user profile, which is different from the current one, then this capability may come in handy.
 appium:newCommandTimeout | How long (in seconds) the driver should wait for a new command from the client before assuming the client has stopped sending requests. After the timeout the session is going to be deleted. `60` seconds by default. Setting it to zero disables the timer.
-appium:skipLogcatCapture | Skips to start capturing logs such as logcat. It might improve network performance. Log-related commands won't work if the capability is enabled. Defaults to `false`.
+appium:skipLogcatCapture | Skips to start capturing logs such as logcat. It may improve network performance. Log-related commands won't work if the capability is enabled. Defaults to `false`.
 appium:timeZone | Overrides the current device's time zone since the driver version 3.1.0. This change is preserved until the next override. The time zone identifier must be a valid name from the list of [available time zone identifiers](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), for example `Europe/Kyiv`
 
 
@@ -243,7 +243,7 @@ pane-title | Title of the pane represented by this element. Available for API 28
 actions | The comma-separated id names of the available accessibility actions for the element from [getActionList](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getActionList()). Available only if `includeA11yActionsInPageSource` setting is turned on. | 'ACTION_FOCUS,ACTION_SELECT,ACTION_CLEAR_SELECTION,ACTION_CLICK,ACTION_ACCESSIBILITY_FOCUS,ACTION_NEXT_AT_MOVEMENT_GRANULARITY,ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY,ACTION_SET_SELECTION,ACTION_SHOW_ON_SCREEN'
 tooltip-text | The result of [getTooltipText](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTooltipText()). Could be `null`, available for API 28+  | 'Paste'
 text-has-clickable-span | Indicates whether the `TextView` content contains `ClickableSpan` or `URLSpan` elements, `null` in all other cases. | 'true'
-window-id | The integer identifier of the [accessbility window](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) this element belongs to. In some rare cases might not be present if the window identifier cannot be determined. | 123
+window-id | The integer identifier of the [accessbility window](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) this element belongs to. In some rare cases, it may not be present if the window identifier cannot be determined. | 123
 
 
 ## Element Location

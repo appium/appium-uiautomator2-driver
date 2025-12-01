@@ -113,6 +113,7 @@ import {
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
   mobileResetAccessibilityCache,
+  mobileListWindows,
 } from './commands/misc';
 import {
   setUrl,
@@ -1057,6 +1058,7 @@ class AndroidUiautomator2Driver
   suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
   mobileResetAccessibilityCache = mobileResetAccessibilityCache;
+  mobileListWindows = mobileListWindows;
 
   getClipboard = getClipboard;
   setClipboard = setClipboard;

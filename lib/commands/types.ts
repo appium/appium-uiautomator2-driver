@@ -80,3 +80,55 @@ export interface ActionResult {
   repeats: number;
   stepResults: StringRecord[][];
 }
+
+export interface WindowFilters {
+  /**
+   * Package name pattern with glob support (e.g., 'com.example.*')
+   */
+  packageName?: string;
+  /**
+   * Window identifier
+   */
+  windowId?: number;
+  /**
+   * Display identifier
+   */
+  displayId?: number;
+  /**
+   * Physical display identifier
+   */
+  physicalDisplayId?: number;
+}
+
+export interface WindowInfo {
+  /**
+   * Window identifier (may be null)
+   */
+  windowId: number | null;
+  /**
+   * Display identifier where the window is located (may be null)
+   */
+  displayId: number | null;
+  /**
+   * Physical display identifier (may be null)
+   */
+  physicalDisplayId: number | null;
+  /**
+   * Window bounds rectangle
+   */
+  rect: {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+  };
+  /**
+   * Package name of the application that owns this window (may be null)
+   */
+  packageName: string | null;
+  /**
+   * Base64-encoded PNG screenshot of the window (may be null).
+   * Only available on Android API 34+ and when skipScreenshots is false.
+   */
+  screenshot: string | null;
+}

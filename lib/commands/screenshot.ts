@@ -26,7 +26,7 @@ export function parseSurfaceFlingerDisplays(
 
     // Try to match display header line
     if ((match = DISPLAY_PATTERN.exec(line))) {
-      const [matchedDisplayId, hwcId, displayName] = match; // Always present in the format
+      const [, matchedDisplayId, hwcId, displayName] = match; // Skip match[0] (full match), then Display ID, HWC ID (optional), Display name
 
       // Determine if default: HWC display 0 is default, or first physical display if no HWC info
       const isDefault = hwcId !== undefined

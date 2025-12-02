@@ -48,7 +48,7 @@
     "rebuild": "npm run clean; npm run build",
     "format": "prettier -w ./lib",
     "reset": "node ./scripts/reset.js",
-    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\" \"./test/unit/**/*-specs.ts\""
+    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.ts\""
   },
   "prettier": {
     "bracketSpacing": false,

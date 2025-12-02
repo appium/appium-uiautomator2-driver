@@ -1,7 +1,7 @@
 // @ts-check
 
 import {expect} from 'chai';
-import {parseSurfaceFlingerDisplays} from '../../../build/lib/commands/screenshot';
+import {parseSurfaceFlingerDisplays} from '../../../lib/commands/screenshot';
 
 describe('Screenshot - parseSurfaceFlingerDisplays', function () {
   describe('physical displays', function () {

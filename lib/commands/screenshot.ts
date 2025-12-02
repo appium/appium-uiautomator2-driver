@@ -115,7 +115,7 @@ export async function mobileScreenshots(
     (await this.adb.takeScreenshot(dispId)).toString('base64');
 
   const displayIdStr: string | null =
-    displayId == null || displayId === ''
+    _.isNil(displayId) || displayId === ''
       ? null
       : String(displayId);
 

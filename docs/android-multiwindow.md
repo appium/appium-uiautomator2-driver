@@ -27,6 +27,8 @@ A **window** is a container for UI elements that belongs to an application. Each
 - A Z-order (`layer`) determining which window appears on top
 - A `type` indicating the window type (application, input method, system, etc.)
 - A `title` (may be null)
+- A `physicalDisplayId` (physical display identifier, may be null) - returned as a string
+- A `virtualDisplayId` (virtual display identifier, may be null) - only set for virtual displays
 - State flags: `isActive`, `isFocused`, `isAccessibilityFocused`, `isInPictureInPictureMode`
 
 You can list all available windows using the [`mobile: listWindows`](../README.md#mobile-listwindows) command, which is essential for understanding the window structure in multi-window scenarios.
@@ -35,7 +37,9 @@ You can list all available windows using the [`mobile: listWindows`](../README.m
 
 A **display** (also called a logical display) is a virtual screen that can contain multiple windows. Each display has:
 - A `displayId` identifier (typically `0` for the default display) - this is the logical display ID
+- A `name` (display name, may be null)
 - A `physicalId` (physical display identifier) that maps to the actual hardware display
+- A `virtualId` (virtual display identifier, may be null) - only set for virtual displays
 - Display metrics (width, height, density, DPI, etc.)
 
 On Android, the default display (`displayId = 0`) is always present. Additional displays can be created for:
@@ -78,6 +82,8 @@ for window in windows:
     print(f"Window ID: {window['windowId']}")
     print(f"Display ID: {window['displayId']}")
     print(f"Physical Display ID: {window['physicalDisplayId']}")
+    if window.get('virtualDisplayId'):
+        print(f"Virtual Display ID: {window['virtualDisplayId']}")
     print(f"Package: {window['packageName']}")
     print(f"Type: {window['type']}")
     print(f"Title: {window['title']}")
@@ -217,7 +223,10 @@ print(f"Found {len(system_windows)} system windows")
 displays = driver.execute_script('mobile: listDisplays')
 for display in displays:
     print(f"Logical Display ID: {display['id']}")
+    print(f"  Name: {display['name']}")
     print(f"  Physical ID: {display['physicalId']}")
+    if display.get('virtualId'):
+        print(f"  Virtual ID: {display['virtualId']}")
     print(f"  Is default: {display['isDefault']}")
     print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
 
@@ -287,7 +296,10 @@ displays = driver.execute_script('mobile: listDisplays')
 # Print information about each display
 for display in displays:
     print(f"Logical Display ID: {display['id']}")
+    print(f"  Name: {display['name']}")
     print(f"  Physical ID: {display['physicalId']}")
+    if display.get('virtualId'):
+        print(f"  Virtual ID: {display['virtualId']}")
     print(f"  Is default: {display['isDefault']}")
     print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
     print(f"  Density: {display['metrics']['density']} ({display['metrics']['densityDpi']} DPI)")
@@ -389,6 +401,7 @@ The `currentDisplayId` setting determines which display is used for element look
 - Only windows from the specified display are considered during element search
 - This setting is applied to `BySelector` objects via the `displayId()` method
 - If the specified display ID doesn't exist, an error is thrown
+- Set to `-1` to reset the setting to its default behavior (use the default display)
 
 **Example:**
 ```python
@@ -397,6 +410,9 @@ driver.update_settings({'currentDisplayId': 1})
 
 # Now all element lookups will search only on display 1
 element = driver.find_element('id', 'myButton')
+
+# Reset to default display behavior
+driver.update_settings({'currentDisplayId': -1})
 ```
 
 **Note:** This setting only affects UiObject2-based locators (`id`, `accessibility id`, `className`). It has no effect on legacy `-android uiautomator` selectors or xpath lookups (which use their own window selection logic).
@@ -636,8 +652,8 @@ element = driver.find_element('id', 'myButton')
 # Screenshots will also be taken from display 1
 screenshot = driver.get_screenshot_as_base64()
 
-# Reset to default display
-driver.update_settings({'currentDisplayId': 0})
+# Reset to default display (using -1)
+driver.update_settings({'currentDisplayId': -1})
 ```
 
 ## Screenshots and Multi-Display Support
@@ -661,8 +677,8 @@ driver.update_settings({'currentDisplayId': 1})
 # This screenshot will be from display 1
 screenshot = driver.get_screenshot_as_base64()
 
-# Reset to default display
-driver.update_settings({'currentDisplayId': 0})
+# Reset to default display (using -1)
+driver.update_settings({'currentDisplayId': -1})
 
 # Now screenshots will be from the default display
 screenshot = driver.get_screenshot_as_base64()
@@ -688,52 +704,73 @@ for display_id, display_info in screenshots.items():
 
 #### Taking Screenshots of a Specific Display
 
-**Recommended approach:** Use `mobile: listDisplays` to get physical display IDs:
+**Recommended approach:** Use `mobile: listDisplays` to get physical or virtual display IDs:
 
 ```python
-# Get physical display ID from mobile: listDisplays (recommended)
+# Get display ID from mobile: listDisplays (recommended)
 displays = driver.execute_script('mobile: listDisplays')
+
+# For physical displays, use physicalId
 if displays and displays[0].get('physicalId') is not None:
-    physical_display_id = displays[0]['physicalId']
+    display_id = displays[0]['physicalId']
 
     # Use the physical display ID to take a screenshot
     screenshots = driver.execute_script('mobile: screenshots', {
-        'displayId': physical_display_id
+        'displayId': display_id
     })
 
     # Returns a dictionary with one entry
-    # Note: The key in the returned dictionary will be a string representation
-    display_info = screenshots[physical_display_id]
+    display_info = screenshots[display_id]
+    screenshot_data = display_info['payload']  # base64-encoded PNG
+
+# For virtual displays, use virtualId
+elif displays and displays[0].get('virtualId') is not None:
+    display_id = displays[0]['virtualId']
+
+    # Use the virtual display ID to take a screenshot
+    screenshots = driver.execute_script('mobile: screenshots', {
+        'displayId': display_id
+    })
+
+    # Returns a dictionary with one entry
+    display_info = screenshots[display_id]
     screenshot_data = display_info['payload']  # base64-encoded PNG
 else:
-    print("Physical display ID not available")
+    print("Display ID not available")
 ```
 
-**Alternative approach:** Get physical display ID from `mobile: listWindows`:
+**Alternative approach:** Get display ID from `mobile: listWindows`:
 
 ```python
-# Get physical display ID from a window
+# Get display ID from a window
 windows = driver.execute_script('mobile: listWindows', {
     'filters': {'packageName': 'com.example.myapp'}
 })
 
-# Get the physical display ID from the window (note: it's a string)
-if windows and windows[0].get('physicalDisplayId') is not None:
-    physical_display_id = windows[0]['physicalDisplayId']
+if windows:
+    window = windows[0]
+    display_id = None
 
-    # Use the physical display ID to take a screenshot
-    screenshots = driver.execute_script('mobile: screenshots', {
-        'displayId': physical_display_id
-    })
+    # Prefer physical display ID, fall back to virtual if available
+    if window.get('physicalDisplayId') is not None:
+        display_id = window['physicalDisplayId']
+    elif window.get('virtualDisplayId') is not None:
+        display_id = window['virtualDisplayId']
 
-    # Returns a dictionary with one entry
-    display_info = screenshots[physical_display_id]
-    screenshot_data = display_info['payload']  # base64-encoded PNG
-else:
-    print("Physical display ID not available for this window")
+    if display_id:
+        # Use the display ID to take a screenshot
+        screenshots = driver.execute_script('mobile: screenshots', {
+            'displayId': display_id
+        })
+
+        # Returns a dictionary with one entry
+        display_info = screenshots[display_id]
+        screenshot_data = display_info['payload']  # base64-encoded PNG
+    else:
+        print("Display ID not available for this window")
 ```
 
-**Direct usage:** You can also use a known physical display ID directly:
+**Direct usage:** You can also use a known physical or virtual display ID directly:
 
 ```python
 # Get screenshot of a specific physical display ID
@@ -741,19 +778,28 @@ screenshots = driver.execute_script('mobile: screenshots', {
     'displayId': '1234567890'  # Physical display ID (string)
 })
 
+# Or use a virtual display ID
+screenshots = driver.execute_script('mobile: screenshots', {
+    'displayId': '12345'  # Virtual display ID (string)
+})
+
 # Returns a dictionary with one entry
-display_info = screenshots['1234567890']
+display_info = screenshots['1234567890']  # or '12345' for virtual
 screenshot_data = display_info['payload']  # base64-encoded PNG
 ```
 
 #### Understanding Display Identifiers
 
-**Important:** The display identifiers used by `mobile: screenshots` are **physical display IDs**, which are different from the logical display IDs used by `currentDisplayId` setting.
+**Important:** The display identifiers used by `mobile: screenshots` are **physical or virtual display IDs**, which are different from the logical display IDs used by `currentDisplayId` setting.
 
 - **Logical display ID** (`currentDisplayId`): Used for element location, window operations, and standard screenshots. Typically starts at 0. You can get this from the `id` field returned by `mobile: listDisplays`.
-- **Physical display ID** (`mobile: screenshots`): Used for the `mobile: screenshots` method. Returned as a string to avoid JavaScript number precision issues. You can get this value from:
+- **Physical display ID** (`mobile: screenshots`): Used for the `mobile: screenshots` method with physical displays. Returned as a string to avoid JavaScript number precision issues. You can get this value from:
   - The `physicalId` field returned by `mobile: listDisplays` (recommended)
   - The `physicalDisplayId` field returned by `mobile: listWindows` (note: this is a string)
+  - The `adb shell dumpsys SurfaceFlinger --display-id` command output
+- **Virtual display ID** (`mobile: screenshots`): Used for the `mobile: screenshots` method with virtual displays. Returned as a string. You can get this value from:
+  - The `virtualId` field returned by `mobile: listDisplays` (recommended)
+  - The `virtualDisplayId` field returned by `mobile: listWindows` (note: this is a string)
   - The `adb shell dumpsys SurfaceFlinger --display-id` command output
 
 **Example workflow:**
@@ -763,6 +809,8 @@ displays = driver.execute_script('mobile: listDisplays')
 for display in displays:
     print(f"Logical Display ID: {display['id']}")
     print(f"  Physical ID: {display['physicalId']}")
+    if display.get('virtualId'):
+        print(f"  Virtual ID: {display['virtualId']}")
     print(f"  Is default: {display['isDefault']}")
     print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
 
@@ -772,23 +820,27 @@ for window in windows:
     print(f"Window ID: {window['windowId']}")
     print(f"  Logical display ID: {window['displayId']}")
     print(f"  Physical display ID: {window['physicalDisplayId']}")  # Note: string type
+    if window.get('virtualDisplayId'):
+        print(f"  Virtual display ID: {window['virtualDisplayId']}")
     print(f"  Package: {window['packageName']}")
     print(f"  Type: {window['type']}, Layer: {window['layer']}")
 
 # 3. Use currentDisplayId for element operations (logical display)
-driver.update_settings({'currentDisplayId': 0})
+driver.update_settings({'currentDisplayId': 0})  # Or use -1 to reset to default
 element = driver.find_element('id', 'myButton')
 
-# 4. Use mobile: screenshots with physical display IDs
-# Get physical display ID from mobile: listDisplays (recommended)
+# 4. Use mobile: screenshots with physical or virtual display IDs
+# Get display ID from mobile: listDisplays (recommended)
 default_display = next((d for d in displays if d['isDefault']), None)
-if default_display and default_display.get('physicalId'):
-    physical_display_id = default_display['physicalId']
-    screenshots = driver.execute_script('mobile: screenshots', {
-        'displayId': physical_display_id
-    })
-    display_info = screenshots[physical_display_id]
-    screenshot_data = display_info['payload']
+if default_display:
+    # Prefer physical ID, fall back to virtual ID if available
+    display_id = default_display.get('physicalId') or default_display.get('virtualId')
+    if display_id:
+        screenshots = driver.execute_script('mobile: screenshots', {
+            'displayId': display_id
+        })
+        display_info = screenshots[display_id]
+        screenshot_data = display_info['payload']
 ```
 
 **Example:**
@@ -805,11 +857,11 @@ for display_id, info in screenshots.items():
 ### Best Practices for Screenshots in Multi-Display Scenarios
 
 1. **Use `currentDisplayId` for standard screenshots** when you want screenshots to match your current testing context
-2. **Use `mobile: screenshots`** when you need screenshots from multiple displays simultaneously or want to target specific physical displays
-3. **Be aware of the difference** between logical display IDs (`currentDisplayId`) and physical display IDs (`mobile: screenshots`)
-4. **Use `mobile: listDisplays`** to get physical display IDs - This is the recommended way to obtain physical display IDs along with display metrics. The `physicalId` field (returned as a string) can be used directly with `mobile: screenshots`
-5. **Use `mobile: listWindows`** to understand which windows are on which displays - The `physicalDisplayId` field (returned as a string) can also be used with `mobile: screenshots` if you need to screenshot the display containing a specific window
-6. **Alternative: Use `adb shell dumpsys SurfaceFlinger --display-id`** if you need to find all physical display IDs without using the driver methods
+2. **Use `mobile: screenshots`** when you need screenshots from multiple displays simultaneously or want to target specific physical or virtual displays
+3. **Be aware of the difference** between logical display IDs (`currentDisplayId`) and physical/virtual display IDs (`mobile: screenshots`)
+4. **Use `mobile: listDisplays`** to get display IDs - This is the recommended way to obtain physical or virtual display IDs along with display metrics. The `physicalId` field (for physical displays) or `virtualId` field (for virtual displays), both returned as strings, can be used directly with `mobile: screenshots`
+5. **Use `mobile: listWindows`** to understand which windows are on which displays - The `physicalDisplayId` field (for physical displays) or `virtualDisplayId` field (for virtual displays), both returned as strings, can also be used with `mobile: screenshots` if you need to screenshot the display containing a specific window
+6. **Alternative: Use `adb shell dumpsys SurfaceFlinger --display-id`** if you need to find all display IDs without using the driver methods
 
 ## References
 

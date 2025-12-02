@@ -1670,21 +1670,23 @@ These extensions allow to deal with short-living UI elements. Read [the document
 Retrieves a screenshot of each display available to Android.
 This functionality is only supported since Android 10.
 
-**Important:** This method uses **physical display IDs**, which are different from logical display IDs used by the `currentDisplayId` setting. Physical display IDs can be obtained from:
-- The `physicalId` field returned by [`mobile: listDisplays`](#mobile-listdisplays) (recommended)
-- The `physicalDisplayId` field returned by [`mobile: listWindows`](#mobile-listwindows)
+**Important:** This method uses **physical or virtual display IDs**, which are different from logical display IDs used by the `currentDisplayId` setting. Display IDs can be obtained from:
+- The `physicalId` or `virtualId` field returned by [`mobile: listDisplays`](#mobile-listdisplays) (recommended)
+- The `physicalDisplayId` or `virtualDisplayId` field returned by [`mobile: listWindows`](#mobile-listwindows)
 - The `adb shell dumpsys SurfaceFlinger --display-id` command output
+
+**Note:** For physical displays, use the `physicalId` from `mobile: listDisplays` or `physicalDisplayId` from `mobile: listWindows`. For virtual displays, use the `virtualId` from `mobile: listDisplays` or `virtualDisplayId` from `mobile: listWindows`.
 
 #### Arguments
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-displayId | number or string | no | **Physical display identifier** to take a screenshot for. If not provided then screenshots of all displays are going to be returned. If no matches were found then an error is thrown. **Note:** This is a physical display ID, not a logical display ID. Use `mobile: listDisplays` to get the correct `physicalId` value. | 1234567890
+displayId | number or string | no | **Physical or virtual display identifier** to take a screenshot for. If not provided then screenshots of all displays are going to be returned. If no matches were found then an error is thrown. **Note:** This is a physical or virtual display ID, not a logical display ID. Use `mobile: listDisplays` to get the correct `physicalId` (for physical displays) or `virtualId` (for virtual displays) value. | 1234567890
 
 #### Returns
 
-A dictionary where each key is the physical display identifier (as a string) and the value has the following keys:
-- `id`: The physical display identifier (same as the key)
+A dictionary where each key is the physical or virtual display identifier (as a string) and the value has the following keys:
+- `id`: The physical or virtual display identifier (same as the key)
 - `name`: Display name
 - `isDefault`: Whether this display is the default one
 - `payload`: The actual PNG screenshot data encoded to base64 string

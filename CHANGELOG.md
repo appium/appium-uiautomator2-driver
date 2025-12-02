@@ -1,3 +1,9 @@
+## [6.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.0...v6.6.1) (2025-12-02)
+
+### Miscellaneous Chores
+
+* Document new properties on list.. methods ([#950](https://github.com/appium/appium-uiautomator2-driver/issues/950)) ([1c74692](https://github.com/appium/appium-uiautomator2-driver/commit/1c7469240bd1be919bf017ea682806288eb7b526))
+
 ## [6.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.5.0...v6.6.0) (2025-12-01)
 
 ### Features

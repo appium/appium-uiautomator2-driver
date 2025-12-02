@@ -569,6 +569,7 @@ Name | Type | Description | Example
 windowId | number \| null | Window identifier (may be null if the window ID cannot be determined) | 42
 displayId | number | Display identifier where the window is located | 0
 physicalDisplayId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. | '1234567890'
+virtualDisplayId | string \| null | Virtual display identifier (may be null). Only set for virtual displays, null otherwise. Parsed from 'dumpsys SurfaceFlinger --displays' output by matching display name. | '12345'
 rect | object | Window bounds rectangle with `left`, `top`, `right`, `bottom` properties | `{left: 0, top: 0, right: 1080, bottom: 1920}`
 packageName | string \| null | Package name of the application that owns this window (may be null) | `com.example.app`
 screenshot | string \| null | Base64-encoded PNG screenshot of the window (may be null). Only available on Android API 34+ and when `skipScreenshots` is `false`. | `iVBORw0KGgoAAAANSUhEUgAA...`
@@ -591,7 +592,9 @@ The extension returns an array of display information objects. Each object conta
 Name | Type | Description | Example
 --- | --- | --- | ---
 id | number | Display identifier (logical display ID). This is the value used by the `currentDisplayId` setting. | 0
+name | string \| null | Display name (may be null) | 'Built-in Screen'
 physicalId | string \| null | Physical display identifier (may be null). Returned as a string to avoid JavaScript number precision issues with large values. This is the value used by the `mobile: screenshots` method. | '1234567890'
+virtualId | string \| null | Virtual display identifier (may be null). Only set for virtual displays, null otherwise. Parsed from 'dumpsys SurfaceFlinger --displays' output by matching display name. | '12345'
 metrics | object | Display metrics containing size and density information. See below for details. | See metrics table
 isDefault | boolean | Whether this is the default display | true
 
@@ -616,7 +619,10 @@ displays = driver.execute_script('mobile: listDisplays')
 
 for display in displays:
     print(f"Display ID: {display['id']}")
+    print(f"  Name: {display['name']}")
     print(f"  Physical ID: {display['physicalId']}")
+    if display.get('virtualId'):
+        print(f"  Virtual ID: {display['virtualId']}")
     print(f"  Is default: {display['isDefault']}")
     print(f"  Size: {display['metrics']['widthPixels']}x{display['metrics']['heightPixels']}")
     print(f"  Density: {display['metrics']['density']} ({display['metrics']['densityDpi']} DPI)")

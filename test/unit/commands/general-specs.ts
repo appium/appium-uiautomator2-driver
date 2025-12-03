@@ -1,25 +1,15 @@
-// @ts-check
-
 import sinon from 'sinon';
 import {AndroidUiautomator2Driver} from '../../../lib/driver';
 import { ADB } from 'appium-adb';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+const {expect} = chai;
+chai.use(chaiAsPromised);
 
 describe('General', function () {
-  let driver;
-  let chai;
-  let expect;
-  let mockDriver;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
-    expect = chai.expect;
-  });
+  let driver: AndroidUiautomator2Driver;
+  let mockDriver: sinon.SinonMock;
 
   beforeEach(function () {
     driver = new AndroidUiautomator2Driver();
@@ -68,10 +58,9 @@ describe('General', function () {
   });
 
   describe('mobile: installMultipleApks', function () {
-    /** @type {ADB} */
-    let adb;
-    let mockHelpers;
-    let mockAdb;
+    let adb: ADB;
+    let mockHelpers: sinon.SinonMock;
+    let mockAdb: sinon.SinonMock;
 
     beforeEach(function () {
       adb = new ADB();
@@ -105,3 +94,4 @@ describe('General', function () {
     });
   });
 });
+

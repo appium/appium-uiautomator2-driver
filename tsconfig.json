@@ -6,7 +6,7 @@
     "outDir": "build",
     "strict": false,
     "checkJs": true,
-    "types": ["node"]
+    "types": ["node", "mocha"]
   },
-  "include": ["lib", "index.js"]
+  "include": ["lib", "index.js", "test/unit"]
 }

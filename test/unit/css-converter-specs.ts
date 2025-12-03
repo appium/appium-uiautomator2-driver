@@ -1,18 +1,9 @@
 import CssConverter from '../../lib/css-converter';
+import {expect} from 'chai';
 
 describe('css-converter.js', function () {
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
-
   describe('simple cases', function () {
-    const simpleCases = [
+    const simpleCases: Array<[string, string]> = [
       ['android.widget.TextView', 'new UiSelector().className("android.widget.TextView")'],
       ['TextView', 'new UiSelector().classNameMatches("TextView")'],
       ['.TextView', 'new UiSelector().classNameMatches("TextView")'],
@@ -51,12 +42,12 @@ describe('css-converter.js', function () {
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {
-        new CssConverter(cssSelector).toUiAutomatorSelector().should.equal(uiAutomatorSelector);
+        expect(new CssConverter(cssSelector).toUiAutomatorSelector()).to.equal(uiAutomatorSelector);
       });
     }
   });
   describe('unsupported css', function () {
-    const testCases = [
+    const testCases: string[] = [
       '*[checked="ItS ChEcKeD"]',
       '*[foo="bar"]',
       '*:checked("ischecked")',
@@ -65,8 +56,9 @@ describe('css-converter.js', function () {
     ];
     for (const cssSelector of testCases) {
       it(`should reject '${cssSelector}'`, function () {
-        (() => new CssConverter(cssSelector).toUiAutomatorSelector()).should.throw();
+        expect(() => new CssConverter(cssSelector).toUiAutomatorSelector()).to.throw();
       });
     }
   });
 });
+

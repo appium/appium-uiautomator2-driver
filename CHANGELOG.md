@@ -1,3 +1,9 @@
+## [6.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.1...v6.6.2) (2025-12-03)
+
+### Bug Fixes
+
+* Update mobile: screenshots endpoint to properly handle virtual display ids ([#951](https://github.com/appium/appium-uiautomator2-driver/issues/951)) ([5e96d51](https://github.com/appium/appium-uiautomator2-driver/commit/5e96d518372c332b108d28f96a0303ac6f97a1e9))
+
 ## [6.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.0...v6.6.1) (2025-12-02)
 
 ### Miscellaneous Chores

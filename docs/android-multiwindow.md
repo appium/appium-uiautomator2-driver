@@ -598,7 +598,7 @@ elements = driver.find_elements('xpath', f'//*[@window-id="{target_window_id}"]'
 
 3. **Use `currentDisplayId`** when testing on devices with multiple displays (Android API 30+)
 
-4. **Enable `enableTopmostWindowFromActivePackage`** when your app has multiple windows and you want to interact with the visible one
+4. **Enable `enableTopmostWindowFromActivePackage`** when your app has multiple windows, and you want to interact with the visible one
 
 5. **Reset accessibility cache** using [`mobile: resetAccessibilityCache`](../README.md#mobile-resetaccessibilitycache) if you encounter stale element references after window changes
 
@@ -640,16 +640,15 @@ source = driver.get_page_source()
 ## Example: Testing on Multiple Displays
 
 ```python
-# Check available displays (Android API 30+)
-# Use adb command: adb shell dumpsys display
+displays = driver.execute_script('mobile: listDisplays')
 
 # Set the current display for element lookups
-driver.update_settings({'currentDisplayId': 1})
+driver.update_settings({'currentDisplayId': displays[1]['id']})
 
-# All subsequent element lookups will search on display 1
+# All subsequent element lookups will search on the second display
 element = driver.find_element('id', 'myButton')
 
-# Screenshots will also be taken from display 1
+# Screenshots will also be taken from the second display
 screenshot = driver.get_screenshot_as_base64()
 
 # Reset to default display (using -1)

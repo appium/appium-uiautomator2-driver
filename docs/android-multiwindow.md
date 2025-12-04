@@ -667,6 +667,8 @@ When the `currentDisplayId` setting is configured to a non-default display:
 - **Standard screenshots** (`getScreenshot()`, `get_screenshot_as_base64()`, etc.) will capture the specified display
 - The driver automatically detects if the display has custom density or is a non-default display
 - For better compatibility with custom displays, the driver may use the `screencap` command instead of the standard screenshot API
+- If the device under test is an emulator and has a virtual display, then it is only possible to take the virtual
+  display screenshot since Android API 34 or newer.
 - This ensures that screenshots match the display context you're currently testing
 
 **Example:**

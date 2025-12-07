@@ -115,6 +115,7 @@ appium:mockLocationApp | Sets the package identifier of the app, which is used a
 appium:logcatFormat | The log print format, where `format` is one of: `brief` `process` `tag` `thread` `raw` `time` `threadtime` `long`. `threadtime` is the default value.
 appium:logcatFilterSpecs | Series of `tag[:priority]` where `tag` is a log component tag (or * for all) and priority is: `V    Verbose`, `D    Debug`, `I    Info`, `W    Warn`, `E    Error`, `F    Fatal`, `S    Silent (supress all output)`. '*' means '*:d' and `tag` by itself means `tag:v`. If not specified on the commandline, filterspec is set from ANDROID_LOG_TAGS. If no filterspec is found, filter defaults to '*:I'.
 appium:allowDelayAdb | Being set to `false` prevents emulator to use `-delay-adb` feature to detect its startup. See https://github.com/appium/appium/issues/14773 for more details.
+appium:adbListenAllNetwork | Being set to `true` adds `-a` ADB command line global option. It requires to be `uiautomator2:adb_listen_all_network` feature enabled. Unset by default
 
 ### Emulator (Android Virtual Device)
 
@@ -387,7 +388,7 @@ object result = driver.ExecuteScript("mobile: <methodName>", new Dictionary<stri
 
 ### mobile: shell
 
-Executes the given shell command on the device under test via ADB connection. This extension exposes a potential security risk and thus is only enabled when explicitly activated by the `adb_shell` server command line feature specifier.
+Executes the given shell command on the device under test via ADB connection. This extension exposes a potential security risk and thus is only enabled when explicitly activated by the `uiautomator2:adb_shell` server command line feature specifier.
 
 #### Arguments
 
@@ -1958,7 +1959,7 @@ in it. The contents of the file needs to be parsable as a JSON object, like:
 }
 ```
 
-There is a possibility to automatically download the necessary chromedriver(s) into `appium:chromedriverExecutableDir` from the official Google storage. The script will automatically search for the newest chromedriver version that supports the given browser/web view, download it (the hash sum is verified as well for the downloaded archive) and add to the `appium:chromedriverChromeMappingFile` mapping. Everything, which is needed to be done from your side is to execute the server with `chromedriver_autodownload` feature enabled (like `appium server --allow-insecure chromedriver_autodownload`).
+There is a possibility to automatically download the necessary chromedriver(s) into `appium:chromedriverExecutableDir` from the official Google storage. The script will automatically search for the newest chromedriver version that supports the given browser/web view, download it (the hash sum is verified as well for the downloaded archive) and add to the `appium:chromedriverChromeMappingFile` mapping. Everything, which is needed to be done from your side is to execute the server with `uiautomator2:chromedriver_autodownload` feature enabled (like `appium server --allow-insecure uiautomator2:chromedriver_autodownload`).
 
 ### Troubleshooting Chromedriver Download Issues
 

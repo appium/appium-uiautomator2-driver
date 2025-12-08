@@ -1,5 +1,5 @@
 import { ADB } from 'appium-adb';
-import { withMocks } from '@appium/test-support';
+import sinon from 'sinon';
 import {
   UiAutomator2Server, INSTRUMENTATION_TARGET, SERVER_TEST_PACKAGE_ID
 } from '../../lib/uiautomator2';
@@ -176,155 +176,146 @@ describe('UiAutomator2', function () {
     });
   });
 
-  describe('installServerApk', withMocks({adb, helpers}, (mocks: any) => {
+  describe('installServerApk', function () {
+    let mockAdb: sinon.SinonMock;
+    let mockHelpers: sinon.SinonMock;
+    let testAdb: ADB;
+
     beforeEach(function () {
+      testAdb = new ADB();
+      mockAdb = sinon.mock(testAdb);
+      mockHelpers = sinon.mock(helpers);
+
       uiautomator2 = new UiAutomator2Server(log, {
-        adb, ...defaultUIA2ServerOptions
+        adb: testAdb, ...defaultUIA2ServerOptions
       });
     });
     afterEach(function () {
-      mocks.verify();
+      mockAdb.verify();
+      mockHelpers.verify();
+      mockAdb.restore();
+      mockHelpers.restore();
     });
 
     it('new server and server.test are older than installed version', async function () {
-      mocks.helpers.expects('isWriteable').never();
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(true);
+      mockAdb.expects('uninstallApk').twice();
+      mockAdb.expects('install').twice();
 
-      mocks.adb.expects('uninstallApk').twice();
-      mocks.adb.expects('install').twice();
-
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
-      mocks.adb.expects('shell')
+      mockAdb.expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are newer than installed version', async function () {
-      mocks.helpers.expects('isWriteable').never();
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(true);
-
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
-      mocks.adb.expects('uninstallApk').twice();
-      mocks.adb.expects('install').twice();
+      mockAdb.expects('uninstallApk').never();
+      mockAdb.expects('install').twice();
 
-      mocks.adb.expects('shell')
+      mockAdb.expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are the same as installed version', async function () {
-      mocks.helpers.expects('isWriteable').never();
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(true);
-
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(true);
 
-      mocks.adb.expects('uninstallApk').never();
-      mocks.adb.expects('install').never();
+      mockAdb.expects('uninstallApk').never();
+      mockAdb.expects('install').never();
 
-      mocks.adb.expects('shell')
+      mockAdb.expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are not installed', async function () {
-      mocks.helpers.expects('isWriteable').atLeast(1)
-        .returns(true);
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(false);
-      mocks.adb.expects('sign').twice();
-
       // SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
-      mocks.adb.expects('uninstallApk').never();
-      mocks.adb.expects('install').twice();
+      mockAdb.expects('uninstallApk').never();
+      mockAdb.expects('install').twice();
 
-      mocks.adb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation'])
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('version numbers of new server and server.test are unknown', async function () {
-      mocks.helpers.expects('isWriteable').never();
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.UNKNOWN);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(true);
-
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
-      mocks.adb.expects('uninstallApk').twice();
-      mocks.adb.expects('install').twice();
+      mockAdb.expects('uninstallApk').twice();
+      mockAdb.expects('install').twice();
 
-      mocks.adb.expects('shell')
+      mockAdb.expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('a server is installed but server.test is not', async function () {
-      mocks.helpers.expects('isWriteable').never();
+      mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mocks.adb.expects('getApplicationInstallState').once()
+      mockAdb.expects('getApplicationInstallState').once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
-      // SERVER_PACKAGE_ID and SERVER_TEST_PACKAGE_ID
-      mocks.adb.expects('checkApkCert').twice().returns(true);
-
-      mocks.adb.expects('isAppInstalled')
+      mockAdb.expects('isAppInstalled')
         .withExactArgs(SERVER_TEST_PACKAGE_ID)
         .once().returns(false);
 
-      mocks.adb.expects('uninstallApk').never();
-      mocks.adb.expects('install').twice();
+      mockAdb.expects('uninstallApk').twice();
+      mockAdb.expects('install').twice();
 
-      mocks.adb.expects('shell')
+      mockAdb.expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
         .once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
-  }));
+  });
 });
 

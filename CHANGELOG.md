@@ -1,3 +1,9 @@
+## [6.6.3](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.2...v6.6.3) (2025-12-08)
+
+### Miscellaneous Chores
+
+* Ditch usage of @appium/test-support ([#954](https://github.com/appium/appium-uiautomator2-driver/issues/954)) ([9351cfc](https://github.com/appium/appium-uiautomator2-driver/commit/9351cfc9ef911155634abc06d28b497e182657c2))
+
 ## [6.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.1...v6.6.2) (2025-12-03)
 
 ### Bug Fixes

@@ -1,3 +1,9 @@
+## [6.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.3...v6.7.0) (2025-12-09)
+
+### Features
+
+* add appium:adbListenAllNetwork with uiautomator2:adb_listen_all_network flag to add -a option for adb ([#955](https://github.com/appium/appium-uiautomator2-driver/issues/955)) ([5b0fa8b](https://github.com/appium/appium-uiautomator2-driver/commit/5b0fa8b61b41b9273f272c9a426b048463b51ddc))
+
 ## [6.6.3](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.2...v6.6.3) (2025-12-08)
 
 ### Miscellaneous Chores

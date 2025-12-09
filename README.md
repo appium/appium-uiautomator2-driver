@@ -88,7 +88,7 @@ appium:otherApps | Allows to set one or more comma-separated paths to Android pa
 appium:uninstallOtherPackages | Allows to set one or more comma-separated package identifiers to be uninstalled from the device before a test starts
 appium:allowTestPackages | If set to `true` then it would be possible to use packages built with the test flag for the automated testing (literally adds `-t` flag to the `adb install` command). `false` by default
 appium:remoteAppsCacheLimit | Sets the maximum amount of application packages to be cached on the device under test. This is needed for devices that don't support streamed installs (Android 7 and below), because ADB must push app packages to the device first in order to install them, which takes some time. Setting this capability to zero disables apps caching. `10` by default.
-appium:enforceAppInstall | If set to `true` then the application under test is always reinstalled even if a newer version of it already exists on the device under test. This capability has no effect if `appium:noReset` is set to `true`. `false` by default. Since driver version 6.7.0.
+appium:enforceAppInstall | If set to `true` then the application under test is always reinstalled even if a newer version of it already exists on the device under test. This capability has no effect if `appium:noReset` is set to `true`. `false` by default.
 
 ### App Localization
 
@@ -115,7 +115,7 @@ appium:mockLocationApp | Sets the package identifier of the app, which is used a
 appium:logcatFormat | The log print format, where `format` is one of: `brief` `process` `tag` `thread` `raw` `time` `threadtime` `long`. `threadtime` is the default value.
 appium:logcatFilterSpecs | Series of `tag[:priority]` where `tag` is a log component tag (or * for all) and priority is: `V    Verbose`, `D    Debug`, `I    Info`, `W    Warn`, `E    Error`, `F    Fatal`, `S    Silent (supress all output)`. '*' means '*:d' and `tag` by itself means `tag:v`. If not specified on the commandline, filterspec is set from ANDROID_LOG_TAGS. If no filterspec is found, filter defaults to '*:I'.
 appium:allowDelayAdb | Being set to `false` prevents emulator to use `-delay-adb` feature to detect its startup. See https://github.com/appium/appium/issues/14773 for more details.
-appium:adbListenAllNetwork | Being set to `true` adds `-a` ADB command line global option. Requires `uiautomator2:adb_listen_all_network` [security feature](https://github.com/appium/appium/blob/master/packages/appium/docs/en/guides/security.md) to be enabled. Unset by default
+appium:adbListenAllNetwork | Being set to `true` adds `-a` ADB command line global option. Requires `uiautomator2:adb_listen_all_network` [security feature](https://github.com/appium/appium/blob/master/packages/appium/docs/en/guides/security.md) to be enabled. Unset by default. Available since driver version 6.7.0.
 
 ### Emulator (Android Virtual Device)
 

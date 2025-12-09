@@ -115,7 +115,7 @@ appium:mockLocationApp | Sets the package identifier of the app, which is used a
 appium:logcatFormat | The log print format, where `format` is one of: `brief` `process` `tag` `thread` `raw` `time` `threadtime` `long`. `threadtime` is the default value.
 appium:logcatFilterSpecs | Series of `tag[:priority]` where `tag` is a log component tag (or * for all) and priority is: `V    Verbose`, `D    Debug`, `I    Info`, `W    Warn`, `E    Error`, `F    Fatal`, `S    Silent (supress all output)`. '*' means '*:d' and `tag` by itself means `tag:v`. If not specified on the commandline, filterspec is set from ANDROID_LOG_TAGS. If no filterspec is found, filter defaults to '*:I'.
 appium:allowDelayAdb | Being set to `false` prevents emulator to use `-delay-adb` feature to detect its startup. See https://github.com/appium/appium/issues/14773 for more details.
-appium:adbListenAllNetwork | Being set to `true` adds `-a` ADB command line global option. It requires to be `uiautomator2:adb_listen_all_network` feature enabled. Unset by default
+appium:adbListenAllNetwork | Being set to `true` adds `-a` ADB command line global option. Requires `uiautomator2:adb_listen_all_network` [security feature](https://github.com/appium/appium/blob/master/packages/appium/docs/en/guides/security.md) to be enabled. Unset by default
 
 ### Emulator (Android Virtual Device)
 

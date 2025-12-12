@@ -1,3 +1,9 @@
+## [6.7.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.0...v6.7.1) (2025-12-12)
+
+### Miscellaneous Chores
+
+* **deps:** remove `source-map-support` ([#962](https://github.com/appium/appium-uiautomator2-driver/issues/962)) ([2bd655d](https://github.com/appium/appium-uiautomator2-driver/commit/2bd655d577a41885f3b910d6405d6826c16b7b67))
+
 ## [6.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.6.3...v6.7.0) (2025-12-09)
 
 ### Features

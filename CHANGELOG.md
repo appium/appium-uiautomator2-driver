@@ -1,3 +1,9 @@
+## [6.7.5](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.4...v6.7.5) (2025-12-22)
+
+### Miscellaneous Chores
+
+* **deps:** bump teen_process from 3.0.6 to 4.0.4 ([#969](https://github.com/appium/appium-uiautomator2-driver/issues/969)) ([ff5d39f](https://github.com/appium/appium-uiautomator2-driver/commit/ff5d39f24bba4295729e5ff3a1ed114dd6a349c0))
+
 ## [6.7.4](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.3...v6.7.4) (2025-12-22)
 
 ### Miscellaneous Chores

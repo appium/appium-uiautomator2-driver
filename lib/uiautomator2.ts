@@ -469,7 +469,6 @@ export class UiAutomator2Server {
   }
 }
 
-export default UiAutomator2Server;
 
 export interface PackageInfo {
   installState: InstallState;

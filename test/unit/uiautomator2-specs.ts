@@ -4,7 +4,7 @@ import {
   UiAutomator2Server, INSTRUMENTATION_TARGET, SERVER_TEST_PACKAGE_ID
 } from '../../lib/uiautomator2';
 import * as helpers from '../../lib/helpers';
-import log from '../../lib/logger';
+import {log} from '../../lib/logger';
 import {expect} from 'chai';
 
 describe('UiAutomator2', function () {

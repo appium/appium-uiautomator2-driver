@@ -1,4 +1,4 @@
-import CssConverter from '../../lib/css-converter';
+import {CssConverter} from '../../lib/css-converter';
 import {expect} from 'chai';
 
 describe('css-converter.js', function () {

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
 import type {AndroidUiautomator2Driver} from '../driver';
+import type {Chromedriver} from 'appium-chromedriver';
 
 /**
  * Gets the currently active element.
@@ -115,19 +116,19 @@ export async function clear(this: AndroidUiautomator2Driver, elementId: string):
  * Gets the element rectangle.
  */
 export async function getElementRect(this: AndroidUiautomator2Driver, elementId: string): Promise<Rect> {
-  const chromedriver = this.chromedriver as any;
-  if (this.isWebContext()) {
-    this.log.debug(`Detected downstream chromedriver protocol: ${chromedriver.jwproxy.downstreamProtocol}`);
-    if (chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP) {
-      const [{x, y}, {width, height}] = (await B.all([
-        chromedriver.jwproxy.command(`/element/${elementId}/location`, 'GET'),
-        chromedriver.jwproxy.command(`/element/${elementId}/size`, 'GET'),
-      ])) as [Position, Size];
-      return {x, y, width, height};
-    }
-    return (await chromedriver.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
+  if (!this.isWebContext()) {
+    return (await this.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
   }
-  return (await this.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
+
+  const chromedriver = this.chromedriver as Chromedriver;
+  if (chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP) {
+    const [{x, y}, {width, height}] = (await B.all([
+      chromedriver.jwproxy.command(`/element/${elementId}/location`, 'GET'),
+      chromedriver.jwproxy.command(`/element/${elementId}/size`, 'GET'),
+    ])) as [Position, Size];
+    return {x, y, width, height};
+  }
+  return (await chromedriver.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
 }
 
 /**

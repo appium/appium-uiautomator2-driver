@@ -1,3 +1,9 @@
+## [6.7.6](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.5...v6.7.6) (2025-12-23)
+
+### Miscellaneous Chores
+
+* Migrate various command modules to typescript (part 2) ([#970](https://github.com/appium/appium-uiautomator2-driver/issues/970)) ([976d79d](https://github.com/appium/appium-uiautomator2-driver/commit/976d79dcb122f5ba28128d16c7b90a5d37dc868f))
+
 ## [6.7.5](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.4...v6.7.5) (2025-12-22)
 
 ### Miscellaneous Chores

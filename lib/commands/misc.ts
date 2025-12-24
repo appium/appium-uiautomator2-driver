@@ -3,6 +3,7 @@ import type {AndroidUiautomator2Driver} from '../driver';
 
 /**
  * Retrieves the current page source.
+ * @returns The XML page source of the current screen.
  */
 export async function getPageSource(this: AndroidUiautomator2Driver): Promise<string> {
   return String(await this.uiautomator2.jwproxy.command('/source', 'GET', {}));
@@ -10,6 +11,7 @@ export async function getPageSource(this: AndroidUiautomator2Driver): Promise<st
 
 /**
  * Gets the current device orientation.
+ * @returns The current device orientation ('LANDSCAPE' or 'PORTRAIT').
  */
 export async function getOrientation(this: AndroidUiautomator2Driver): Promise<Orientation> {
   return (await this.uiautomator2.jwproxy.command(`/orientation`, 'GET', {})) as Orientation;
@@ -17,6 +19,7 @@ export async function getOrientation(this: AndroidUiautomator2Driver): Promise<O
 
 /**
  * Sets the device orientation.
+ * @param orientation - The desired orientation ('LANDSCAPE' or 'PORTRAIT').
  */
 export async function setOrientation(
   this: AndroidUiautomator2Driver,
@@ -49,6 +52,7 @@ export function suspendChromedriverProxy(this: AndroidUiautomator2Driver): void 
 
 /**
  * Retrieves device info via the UIA2 server.
+ * @returns Device information as a string record.
  */
 export async function mobileGetDeviceInfo(this: AndroidUiautomator2Driver): Promise<StringRecord> {
   return (await this.uiautomator2.jwproxy.command('/appium/device/info', 'GET')) as StringRecord;

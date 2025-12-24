@@ -7,6 +7,9 @@ import type {AndroidUiautomator2Driver} from '../driver';
 
 /**
  * Performs a simple click/tap gesture.
+ * @param elementId - Optional element to use as the origin for the click. If not provided, uses screen coordinates.
+ * @param x - Optional X offset from the element origin or screen.
+ * @param y - Optional Y offset from the element origin or screen.
  */
 export async function mobileClickGesture(
   this: AndroidUiautomator2Driver,
@@ -22,6 +25,10 @@ export async function mobileClickGesture(
 
 /**
  * Performs a long click with an optional duration.
+ * @param elementId - Optional element to use as the origin for the long click.
+ * @param x - Optional X offset from the element origin or screen.
+ * @param y - Optional Y offset from the element origin or screen.
+ * @param duration - Optional duration of the long press in milliseconds.
  */
 export async function mobileLongClickGesture(
   this: AndroidUiautomator2Driver,
@@ -39,6 +46,9 @@ export async function mobileLongClickGesture(
 
 /**
  * Performs a double-click gesture.
+ * @param elementId - Optional element to use as the origin for the double click.
+ * @param x - Optional X offset from the element origin or screen.
+ * @param y - Optional Y offset from the element origin or screen.
  */
 export async function mobileDoubleClickGesture(
   this: AndroidUiautomator2Driver,
@@ -54,6 +64,12 @@ export async function mobileDoubleClickGesture(
 
 /**
  * Drags from a start point to an end point.
+ * @param elementId - Optional element to use as the origin for the drag.
+ * @param startX - X coordinate of the drag start point.
+ * @param startY - Y coordinate of the drag start point.
+ * @param endX - X coordinate of the drag end point.
+ * @param endY - Y coordinate of the drag end point.
+ * @param speed - Optional speed of the drag gesture.
  */
 export async function mobileDragGesture(
   this: AndroidUiautomator2Driver,
@@ -74,6 +90,14 @@ export async function mobileDragGesture(
 
 /**
  * Performs a fling gesture and reports if further scrolling is possible.
+ * @param direction - Direction of the fling ('up', 'down', 'left', 'right').
+ * @param elementId - Optional element to use as the origin for the fling.
+ * @param left - Optional left coordinate of the fling area.
+ * @param top - Optional top coordinate of the fling area.
+ * @param width - Optional width of the fling area.
+ * @param height - Optional height of the fling area.
+ * @param speed - Optional speed of the fling gesture.
+ * @returns True if further scrolling is possible, false otherwise.
  */
 export async function mobileFlingGesture(
   this: AndroidUiautomator2Driver,
@@ -95,6 +119,13 @@ export async function mobileFlingGesture(
 
 /**
  * Performs a pinch-close gesture.
+ * @param percent - Percentage of the pinch (0-100).
+ * @param elementId - Optional element to use as the origin for the pinch.
+ * @param left - Optional left coordinate of the pinch area.
+ * @param top - Optional top coordinate of the pinch area.
+ * @param width - Optional width of the pinch area.
+ * @param height - Optional height of the pinch area.
+ * @param speed - Optional speed of the pinch gesture.
  */
 export async function mobilePinchCloseGesture(
   this: AndroidUiautomator2Driver,
@@ -116,6 +147,13 @@ export async function mobilePinchCloseGesture(
 
 /**
  * Performs a pinch-open gesture.
+ * @param percent - Percentage of the pinch (0-100).
+ * @param elementId - Optional element to use as the origin for the pinch.
+ * @param left - Optional left coordinate of the pinch area.
+ * @param top - Optional top coordinate of the pinch area.
+ * @param width - Optional width of the pinch area.
+ * @param height - Optional height of the pinch area.
+ * @param speed - Optional speed of the pinch gesture.
  */
 export async function mobilePinchOpenGesture(
   this: AndroidUiautomator2Driver,
@@ -137,6 +175,14 @@ export async function mobilePinchOpenGesture(
 
 /**
  * Performs a swipe gesture for the given direction and percent.
+ * @param direction - Direction of the swipe ('up', 'down', 'left', 'right').
+ * @param percent - Percentage of the swipe distance (0-100).
+ * @param elementId - Optional element to use as the origin for the swipe.
+ * @param left - Optional left coordinate of the swipe area.
+ * @param top - Optional top coordinate of the swipe area.
+ * @param width - Optional width of the swipe area.
+ * @param height - Optional height of the swipe area.
+ * @param speed - Optional speed of the swipe gesture.
  */
 export async function mobileSwipeGesture(
   this: AndroidUiautomator2Driver,
@@ -160,6 +206,15 @@ export async function mobileSwipeGesture(
 
 /**
  * Performs a scroll gesture and reports if further scrolling is possible.
+ * @param direction - Direction of the scroll ('up', 'down', 'left', 'right').
+ * @param percent - Percentage of the scroll distance (0-100).
+ * @param elementId - Optional element to use as the origin for the scroll.
+ * @param left - Optional left coordinate of the scroll area.
+ * @param top - Optional top coordinate of the scroll area.
+ * @param width - Optional width of the scroll area.
+ * @param height - Optional height of the scroll area.
+ * @param speed - Optional speed of the scroll gesture.
+ * @returns True if further scrolling is possible, false otherwise.
  */
 export async function mobileScrollGesture(
   this: AndroidUiautomator2Driver,
@@ -183,6 +238,9 @@ export async function mobileScrollGesture(
 
 /**
  * Scrolls a scrollable element until a target element becomes visible.
+ * @param elementId - ID of the scrollable element.
+ * @param elementToId - ID of the target element to scroll to.
+ * @throws {errors.InvalidArgumentError} If either elementId or elementToId is not provided.
  */
 export async function mobileScrollBackTo(
   this: AndroidUiautomator2Driver,
@@ -201,6 +259,11 @@ export async function mobileScrollBackTo(
 
 /**
  * Scrolls until an element located by the given strategy is visible.
+ * @param strategy - Locator strategy to use (e.g., 'id', 'xpath', 'class name').
+ * @param selector - Selector string for the element to find.
+ * @param elementId - Optional element to use as the origin for scrolling.
+ * @param maxSwipes - Optional maximum number of swipes to perform.
+ * @throws {errors.InvalidArgumentError} If either strategy or selector is not provided.
  */
 export async function mobileScroll(
   this: AndroidUiautomator2Driver,

@@ -8,5 +8,5 @@
     "checkJs": true,
     "types": ["node", "mocha"]
   },
-  "include": ["lib", "index.js", "test/unit"]
+  "include": ["lib", "test/unit"]
 }

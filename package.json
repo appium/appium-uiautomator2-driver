@@ -17,14 +17,13 @@
     "type": "git",
     "url": "https://github.com/appium/appium-uiautomator2-driver.git"
   },
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
   "bin": {},
   "directories": {
     "lib": "lib"
   },
   "files": [
-    "index.js",
     "lib",
     "build",
     "scripts",
@@ -121,8 +120,5 @@
         "./build/lib/doctor/optional-checks.js"
       ]
     }
-  },
-  "typedoc": {
-    "entryPoint": "index.js"
   }
 }

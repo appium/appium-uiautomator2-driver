@@ -1,18 +1,15 @@
-import { APIDEMOS_CAPS } from '../../desired';
-import { initSession, deleteSession } from '../../helpers/session';
+import type {Browser} from 'webdriverio';
+import {APIDEMOS_CAPS} from '../../desired';
+import {initSession, deleteSession} from '../../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('mobile', function () {
-  let driver;
-  let chai;
+  let driver: Browser;
 
   before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
     driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
@@ -22,8 +19,8 @@ describe('mobile', function () {
     it('should call execute command without proxy error, but require relaxed security flag', async function () {
       try {
         await driver.execute('mobile: shell', {command: 'echo', args: ['hello']});
-      } catch (e) {
-        e.message.should.match(/Potentially insecure feature 'adb_shell' has not been enabled/);
+      } catch (e: any) {
+        expect(e.message).to.match(/Potentially insecure feature 'adb_shell' has not been enabled/);
       }
     });
   });
@@ -33,14 +30,15 @@ describe('mobile', function () {
         action: 'io.appium.settings.sms.read',
         extras: [['s', 'max', '10']],
       });
-      output.should.include('result=-1');
+      expect(output).to.include('result=-1');
     });
   });
   describe('mobile:batteryInfo', function () {
     it('should get battery info', async function () {
-      const {level, state} = await driver.execute('mobile: batteryInfo', {});
-      level.should.be.greaterThan(0.0);
-      state.should.be.greaterThan(1);
+      const {level, state} = await driver.execute('mobile: batteryInfo', {}) as {level: number; state: number};
+      expect(level).to.be.greaterThan(0.0);
+      expect(state).to.be.greaterThan(1);
     });
   });
 });
+

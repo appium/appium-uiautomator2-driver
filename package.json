@@ -39,7 +39,7 @@
     "e2e-test:commands:find": "mocha --exit --timeout 10m \"./test/functional/commands/find\"",
     "e2e-test:commands:general": "mocha --exit --timeout 10m \"./test/functional/commands/general\"",
     "e2e-test:commands:keyboard": "mocha --exit --timeout 10m \"./test/functional/commands/keyboard\"",
-    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.js\"",
+    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver-e2e-specs.ts\"",
     "lint": "eslint .",
     "lint:commit": "commitlint",
     "lint:fix": "npm run lint -- --fix",

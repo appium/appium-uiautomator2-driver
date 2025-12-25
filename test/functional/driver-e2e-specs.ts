@@ -1,17 +1,19 @@
-import { ADB } from 'appium-adb';
-import { APIDEMOS_CAPS, amendCapabilities } from './desired';
-import { initSession, deleteSession } from './helpers/session';
+import type {Browser} from 'webdriverio';
+import {ADB} from 'appium-adb';
+import {APIDEMOS_CAPS, amendCapabilities, APIDEMOS_PACKAGE, APIDEMOS_MAIN_ACTIVITY} from './desired';
+import {initSession, deleteSession} from './helpers/session';
 import B from 'bluebird';
-import { retryInterval } from 'asyncbox';
+import {retryInterval} from 'asyncbox';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
-const APIDEMOS_PACKAGE = 'io.appium.android.apis';
-const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
 const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
 
 const DEFAULT_ADB_PORT = 5037;
 
-async function killAndPrepareServer (oldPort, newPort) {
+async function killAndPrepareServer(oldPort: number, newPort: number): Promise<void> {
   const oldAdb = await ADB.createADB({adbPort: oldPort});
   await oldAdb.killServer();
   if (process.env.CI) {
@@ -23,16 +25,7 @@ async function killAndPrepareServer (oldPort, newPort) {
 }
 
 describe('createSession', function () {
-  let driver;
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
+  let driver: Browser | undefined;
 
   describe('default adb port', function () {
     afterEach(async function () {
@@ -41,8 +34,8 @@ describe('createSession', function () {
 
     it('should start android session focusing on default pkg and act', async function () {
       driver = await initSession(APIDEMOS_CAPS);
-      await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
+      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
     });
     it('should start android session focusing on custom pkg and act', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -50,8 +43,8 @@ describe('createSession', function () {
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       driver = await initSession(caps);
-      await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_SPLIT_TOUCH_ACTIVITY);
+      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
+      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_SPLIT_TOUCH_ACTIVITY);
     });
     it('should error out for not apk extension', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -59,7 +52,7 @@ describe('createSession', function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await initSession(caps).should.eventually.be.rejectedWith(/does not exist or is not accessible/);
+      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
     it('should error out for invalid app path', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -67,13 +60,13 @@ describe('createSession', function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await initSession(caps).should.eventually.be.rejectedWith(/does not exist or is not accessible/);
+      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
   });
 
   describe('custom adb port', function () {
-    let adbPort = 5042;
-    let driver;
+    const adbPort = 5042;
+    let driver: Browser | undefined;
 
     beforeEach(async function () {
       await killAndPrepareServer(DEFAULT_ADB_PORT, adbPort);
@@ -89,9 +82,10 @@ describe('createSession', function () {
         'appium:adbPort': adbPort,
         'appium:allowOfflineDevices': true,
       });
-      driver = await initSession(caps, adbPort);
-      await driver.getCurrentPackage().should.eventually.equal(APIDEMOS_PACKAGE);
-      await driver.getCurrentActivity().should.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      driver = await initSession(caps, {adbPort} as any);
+      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
+      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
     });
   });
 });
+

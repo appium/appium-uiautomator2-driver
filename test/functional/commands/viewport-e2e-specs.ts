@@ -1,24 +1,17 @@
+import type {Browser} from 'webdriverio';
 import sharp from 'sharp';
 import {SCROLL_CAPS} from '../desired';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('testViewportCommands', function () {
-  /** @type {import('../../../lib/driver').AndroidUiautomator2Driver} */
-  let driver;
-  let chai;
-  let expect;
-
+  let driver: Browser;
   const caps = SCROLL_CAPS;
 
   before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-    expect = chai.expect;
-
     driver = await initSession(caps);
   });
 
@@ -37,7 +30,7 @@ describe('testViewportCommands', function () {
       return this.skip();
     }
 
-    const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession();
+    const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession() as any;
 
     expect(pixelRatio).not.to.be.empty;
     expect(statBarHeight).to.be.greaterThan(0);
@@ -45,7 +38,7 @@ describe('testViewportCommands', function () {
   });
 
   it('should get scrollable element', async function () {
-    await expect(driver.$('//*[@scrollable="true"]')).to.eventually.exist;
+    await expect(driver.$('//*[@scrollable="true"]').elementId).to.eventually.exist;
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
@@ -53,10 +46,10 @@ describe('testViewportCommands', function () {
       return this.skip();
     }
 
-    let scrollableEl = await driver.$('//*[@scrollable="true"]');
-    let contentSize = await scrollableEl.getAttribute('contentSize');
+    const scrollableEl = await driver.$('//*[@scrollable="true"]');
+    const contentSize = await scrollableEl.getAttribute('contentSize');
     expect(contentSize).to.exist;
-    expect(JSON.parse(contentSize).scrollableOffset).to.exist;
+    expect(JSON.parse(contentSize as string).scrollableOffset).to.exist;
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
@@ -64,10 +57,10 @@ describe('testViewportCommands', function () {
       return this.skip();
     }
 
-    let scrollableEl = await driver.$('//android.widget.ScrollView');
-    let contentSize = await scrollableEl.getAttribute('contentSize');
+    const scrollableEl = await driver.$('//android.widget.ScrollView');
+    const contentSize = await scrollableEl.getAttribute('contentSize');
     expect(contentSize).to.exist;
-    expect(JSON.parse(contentSize).scrollableOffset).to.exist;
+    expect(JSON.parse(contentSize as string).scrollableOffset).to.exist;
   });
 
   it('should get first element from scrollable element', async function () {
@@ -75,8 +68,8 @@ describe('testViewportCommands', function () {
       return this.skip();
     }
 
-    let scrollableEl = await driver.$('//*[@scrollable="true"]');
-    expect(await scrollableEl.$('/*[@firstVisible="true"]')).to.eventually.exist;
+    const scrollableEl = await driver.$('//*[@scrollable="true"]');
+    await expect(scrollableEl.$('/*[@firstVisible="true"]').elementId).to.eventually.exist;
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
@@ -84,16 +77,17 @@ describe('testViewportCommands', function () {
     if (process.env.CI) {
       return this.skip();
     }
-    const {viewportRect, statBarHeight} = await driver.getSession();
+    const {viewportRect, statBarHeight} = await driver.getSession() as any;
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');
-    const viewB64 = Buffer.from(viewScreen, 'base64');
+    const viewB64 = Buffer.from(viewScreen as string, 'base64');
     const fullImgMeta = await sharp(fullB64).metadata();
     const viewImgMeta = await sharp(viewB64).metadata();
-    viewportRect.top.should.eql(statBarHeight);
-    viewImgMeta.height.should.eql(viewportRect.height);
-    viewImgMeta.width.should.eql(fullImgMeta.width);
-    fullImgMeta.height.should.be.above(viewImgMeta.height);
+    expect(viewportRect.top).to.eql(statBarHeight);
+    expect(viewImgMeta.height).to.eql(viewportRect.height);
+    expect(viewImgMeta.width).to.eql(fullImgMeta.width);
+    expect(fullImgMeta.height).to.be.above(viewImgMeta.height!);
   });
 });
+

@@ -1,9 +1,13 @@
-import _ from 'lodash';
+import type {Browser} from 'webdriverio';
 import B from 'bluebird';
-import { retryInterval } from 'asyncbox';
-import { APIDEMOS_CAPS } from '../../desired';
-import { initSession, deleteSession } from '../../helpers/session';
-import { ADB } from 'appium-adb';
+import {retryInterval} from 'asyncbox';
+import {APIDEMOS_CAPS} from '../../desired';
+import {initSession, deleteSession} from '../../helpers/session';
+import {ADB} from 'appium-adb';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+chai.use(chaiAsPromised);
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
@@ -15,12 +19,12 @@ const KEYEVENT_ACTIVITY = '.text.KeyEventText';
 const defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
   newCommandTimeout: 90,
   appPackage: PACKAGE,
-  appActivity: TEXTFIELD_ACTIVITY
+  appActivity: TEXTFIELD_ACTIVITY,
 });
 
 const defaultUnicodeCaps = defaultAsciiCaps;
 
-async function ensureUnlocked (driver) {
+async function ensureUnlocked(driver: Browser): Promise<void> {
   // on Travis the device is sometimes not unlocked
   await retryInterval(10, 1000, async function () {
     if (!await driver.isLocked()) {
@@ -33,25 +37,38 @@ async function ensureUnlocked (driver) {
   });
 }
 
-function deSamsungify (text) {
+function deSamsungify(text: string): string {
   // For samsung S5 text is appended with ". Editing."
   return text.replace('. Editing.', '');
 }
 
-async function getElement (driver, className) {
-  return await retryInterval(10, 1000, async () => await driver.$(className));
+async function getElement(driver: Browser, className: string): Promise<Awaited<ReturnType<Browser['$']>>> {
+  const result = await retryInterval(10, 1000, async () => {
+    const el = await driver.$(className);
+    if (!el) {
+      throw new Error('Element not found');
+    }
+    return el;
+  });
+  if (!result) {
+    throw new Error('Element not found after retries');
+  }
+  return result;
 }
 
-async function waitForText (element, expectedText) {
-  return await retryInterval(10, 1000, async () => {
+async function waitForText(element: any, expectedText: string): Promise<void> {
+  const result = await retryInterval(10, 1000, async () => {
     const text = await element.getText();
     if (text !== expectedText) {
       throw new Error(`Unexpected element text. Actual: "${text}". Expected: "${expectedText}"`);
     }
   });
+  if (result === null) {
+    throw new Error('Text did not match after retries');
+  }
 }
 
-async function runTextEditTest (driver, testText, keys = false) {
+async function runTextEditTest(driver: Browser, testText: string, keys = false): Promise<Awaited<ReturnType<Browser['$']>>> {
   const el = await getElement(driver, EDITTEXT_CLASS);
   await el.clearValue();
   await el.click();
@@ -60,12 +77,14 @@ async function runTextEditTest (driver, testText, keys = false) {
     await driver.sendKeys([testText]);
   } else {
     // await el.sendKeys(testText);
-    await driver.elementSendKeys(el.elementId, testText);
+    const elementId = await el.elementId;
+    await driver.elementSendKeys(elementId, testText);
   }
 
   await retryInterval(10, 1000, async () => {
     const text = await el.getText();
-    deSamsungify(text).should.be.equal(testText);
+    const textStr = text as string;
+    expect(deSamsungify(textStr)).to.be.equal(testText);
   });
 
   return el;
@@ -76,7 +95,7 @@ async function runTextEditTest (driver, testText, keys = false) {
  * positives from previously run tests. The page has a single button that
  * removes all text from within the main TextView.
  */
-async function clearKeyEvents (driver) {
+async function clearKeyEvents(driver: Browser): Promise<void> {
   const el = await getElement(driver, BUTTON_CLASS);
   await el.click();
 
@@ -84,7 +103,7 @@ async function clearKeyEvents (driver) {
   await B.delay(500);
 }
 
-async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
+async function keyEventTest(driver: Browser, keyCode: number, metaState: number | undefined, expectedTextArray: string[]): Promise<void> {
   const runTest = async function () {
     await driver.pressKeyCode(keyCode, metaState);
     const el = driver.$('id=io.appium.android.apis:id/text');
@@ -99,79 +118,74 @@ async function keyEventTest (driver, keyCode, metaState, expectedTextArray) {
     text = await runTest();
   }
   for (const expectedText of expectedTextArray) {
-    text.should.include(expectedText);
+    expect(text).to.include(expectedText);
   }
 }
 
-async function runCombinationKeyEventTest (driver) {
+async function runCombinationKeyEventTest(driver: Browser): Promise<void> {
   await keyEventTest(driver, 29, 193, ['keyCode=KEYCODE_A', 'metaState=META_SHIFT_ON']);
 }
 
-async function runKeyEventTest (driver) {
+async function runKeyEventTest(driver: Browser): Promise<void> {
   await keyEventTest(driver, 82, undefined, ['[keycode=82]', 'keyCode=KEYCODE_MENU']);
 }
 
 const tests = [
-  { label: 'editing a text field', text: 'Life, the Universe and Everything.' },
-  { label: 'sending \'&-\'', text: '&-' },
-  { label: 'sending \'&\' and \'-\' in other text', text: 'In the mid-1990s he ate fish & chips as mayor-elect.' },
-  { label: 'sending \'-\' in text', text: 'Super-test.' },
-  { label: 'sending numbers', text: '0123456789'},
+  {label: 'editing a text field', text: 'Life, the Universe and Everything.'},
+  {label: 'sending \'&-\'', text: '&-'},
+  {label: 'sending \'&\' and \'-\' in other text', text: 'In the mid-1990s he ate fish & chips as mayor-elect.'},
+  {label: 'sending \'-\' in text', text: 'Super-test.'},
+  {label: 'sending numbers', text: '0123456789'},
 ];
 
 const unicodeTests = [
-  { label: 'should be able to send \'-\' in unicode text', text: 'परीक्षा-परीक्षण' },
-  { label: 'should be able to send \'&\' in text', text: 'Fish & chips' },
-  { label: 'should be able to send \'&\' in unicode text', text: 'Mīna & chips' },
-  { label: 'should be able to send roman characters with diacritics', text: 'Áé Œ ù ḍ' },
-  { label: 'should be able to send a \'u\' with an umlaut', text: 'ü' },
+  {label: 'should be able to send \'-\' in unicode text', text: 'परीक्षा-परीक्षण'},
+  {label: 'should be able to send \'&\' in text', text: 'Fish & chips'},
+  {label: 'should be able to send \'&\' in unicode text', text: 'Mīna & chips'},
+  {label: 'should be able to send roman characters with diacritics', text: 'Áé Œ ù ḍ'},
+  {label: 'should be able to send a \'u\' with an umlaut', text: 'ü'},
 ];
 
 const languageTests = [
-  { label: 'should be able to send Tamil', text: 'சோதனை' },
-  { label: 'should be able to send Gujarati', text: 'પરીક્ષણ' },
-  { label: 'should be able to send Chinese', text: '测试' },
-  { label: 'should be able to send Russian', text: 'тестирование' },
-  { label: 'should be able to send Arabic', text: 'تجريب' },
-  { label: 'should be able to send Hebrew', text: 'בדיקות' },
+  {label: 'should be able to send Tamil', text: 'சோதனை'},
+  {label: 'should be able to send Gujarati', text: 'પરીક્ષણ'},
+  {label: 'should be able to send Chinese', text: '测试'},
+  {label: 'should be able to send Russian', text: 'тестирование'},
+  {label: 'should be able to send Arabic', text: 'تجريب'},
+  {label: 'should be able to send Hebrew', text: 'בדיקות'},
 ];
 
 describe('keyboard', function () {
-  let chai;
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
-
   describe('ascii', function () {
-    let driver;
+    let driver: Browser;
     before(async function () {
       driver = await initSession(defaultAsciiCaps);
 
       if (!process.env.CI) {
         // sometimes the default ime is not what we are using
-        const engines = await driver.getAvailableEngines();
-        let selectedEngine = _.first(engines);
-        for (const engine of engines) {
+        const engines = await driver.availableIMEEngines();
+        let selectedEngine = engines?.[0];
+        for (const engine of engines || []) {
           // it seems that the latin ime has `android.inputmethod` in its package name
           if (engine.indexOf('android.inputmethod') !== -1) {
             selectedEngine = engine;
           }
         }
-        await driver.activateIME(selectedEngine);
+        if (selectedEngine) {
+          await (driver as any).activateIME(selectedEngine);
+        }
       }
 
-      await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
+      await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
       try {
         const okBtn = await driver.$('id=android:id/button1');
         console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
         await okBtn.click();
         await ensureUnlocked(driver);
-        await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
-      } catch {}
+        await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
+      } catch {
+        // ignore
+      }
     });
     after(async function () {
       await deleteSession();
@@ -182,14 +196,20 @@ describe('keyboard', function () {
     });
 
     describe('editing a text field', function () {
-      let els;
+      let els: Awaited<ReturnType<Browser['$$']>>;
       beforeEach(async function () {
-        await driver.startActivity(defaultAsciiCaps.appPackage, defaultAsciiCaps.appActivity);
-        els = await retryInterval(10, 1000, async function () {
-          const els = await driver.$$(EDITTEXT_CLASS);
-          els.should.have.length.at.least(1);
-          return els;
+        await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
+        const elsResult = await retryInterval(10, 1000, async function () {
+          const elsPromise = driver.$$(EDITTEXT_CLASS);
+          const elsArray = await elsPromise;
+          const length = await elsArray.length;
+          expect(length).to.be.at.least(1);
+          return elsArray;
         });
+        if (!elsResult) {
+          throw new Error('Elements not found after retries');
+        }
+        els = elsResult;
       });
 
       for (const test of tests) {
@@ -210,9 +230,10 @@ describe('keyboard', function () {
         // there is currently no way to directly assert anything about the contents
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';
-        let passwordTextField = els[1];
-        let passwordOutput = await driver.$('id=io.appium.android.apis:id/edit1Text');
-        await driver.elementSendKeys(passwordTextField.elementId, password);
+        const passwordTextField = els[1];
+        const passwordOutput = await driver.$('id=io.appium.android.apis:id/edit1Text');
+        const elementId = await passwordTextField.elementId;
+        await driver.elementSendKeys(elementId, password);
         await waitForText(passwordOutput, password);
         await passwordTextField.clearValue();
         await waitForText(passwordOutput, '');
@@ -221,7 +242,8 @@ describe('keyboard', function () {
       it('should be able to type in length-limited field', async function () {
         const charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const adb = new ADB();
-        const apiLevel = parseInt(await adb.getApiLevel(), 10);
+        const apiLevelStr = await adb.getApiLevel();
+        const apiLevel = parseInt(String(apiLevelStr), 10);
         if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
           // below Android 7.0 (API level 24) typing too many characters in a
           // length-limited field will either throw a NullPointerException or
@@ -234,7 +256,7 @@ describe('keyboard', function () {
 
         // expect first 11 characters (limit of the field) to be in the field
         const text = await el.getText();
-        text.should.eql('0123456789a');
+        expect(text).to.eql('0123456789a');
       });
     });
 
@@ -255,13 +277,13 @@ describe('keyboard', function () {
 
   describe('unicode', function () {
     const adb = new ADB();
-    let initialIME;
-    let driver;
+    let initialIME: string | null | undefined;
+    let driver: Browser;
     before(async function () {
       // save the initial ime so we can make sure it is restored
       if (adb) {
         initialIME = await adb.defaultIME();
-        initialIME.should.not.eql('io.appium.settings/.UnicodeIME');
+        expect(initialIME).to.not.eql('io.appium.settings/.UnicodeIME');
       }
 
       driver = await initSession(defaultUnicodeCaps);
@@ -272,8 +294,8 @@ describe('keyboard', function () {
       // make sure the IME has been restored
       if (adb) {
         const ime = await adb.defaultIME();
-        ime.should.eql(initialIME);
-        ime.should.not.eql('io.appium.settings/.UnicodeIME');
+        expect(ime).to.eql(initialIME);
+        expect(ime).to.not.eql('io.appium.settings/.UnicodeIME');
       }
     });
 
@@ -283,7 +305,7 @@ describe('keyboard', function () {
 
     describe('editing a text field', function () {
       beforeEach(async function () {
-        await driver.startActivity(defaultUnicodeCaps.appPackage, defaultUnicodeCaps.appActivity);
+        await driver.startActivity(defaultUnicodeCaps.alwaysMatch?.['appium:appPackage'] as string, defaultUnicodeCaps.alwaysMatch?.['appium:appActivity'] as string);
       });
 
       for (const testSet of [tests, unicodeTests, languageTests]) {
@@ -314,3 +336,4 @@ describe('keyboard', function () {
     });
   });
 });
+

@@ -13,10 +13,10 @@ export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 export const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
 export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
 
-function deepFreeze(object) {
+function deepFreeze<T>(object: T): T {
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
-    const value = object[name];
+    const value = (object as any)[name];
     if (value && typeof value === 'object') {
       deepFreeze(value);
     }
@@ -24,7 +24,7 @@ function deepFreeze(object) {
   return Object.freeze(object);
 }
 
-export function amendCapabilities(baseCaps, ...newCaps) {
+export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
   return deepFreeze({
     alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
     firstMatch: [{}],
@@ -65,3 +65,4 @@ export const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
   'appium:appPackage': 'com.android.settings',
   'appium:appActivity': '.Settings',
 });
+

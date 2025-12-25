@@ -1,3 +1,9 @@
+## [6.7.8](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.7...v6.7.8) (2025-12-25)
+
+### Miscellaneous Chores
+
+* Migrate index to typescript ([#972](https://github.com/appium/appium-uiautomator2-driver/issues/972)) ([381fadd](https://github.com/appium/appium-uiautomator2-driver/commit/381fadd7b3e53ad7fa9bd16e8e60d563ebfc8c24))
+
 ## [6.7.7](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.6...v6.7.7) (2025-12-24)
 
 ### Miscellaneous Chores

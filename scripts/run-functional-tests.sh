@@ -25,7 +25,7 @@ checkTestPrerequisites
 
 RESULTS_XML=test-results.xml
 echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
-ARGS=(./test/functional/driver-e2e-specs.js \
+ARGS=(./test/functional/driver-e2e-specs.ts \
 ./test/functional/commands \
 ./test/functional/commands/find \
 ./test/functional/commands/general \

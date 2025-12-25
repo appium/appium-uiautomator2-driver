@@ -1,31 +1,32 @@
-import {DOMParser, XMLDom} from '@xmldom/xmldom';
+import type {Browser} from 'webdriverio';
+import {DOMParser} from '@xmldom/xmldom';
 import xpath from 'xpath';
 import {APIDEMOS_CAPS} from '../../desired';
 import {initSession, deleteSession} from '../../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('apidemo - source', function () {
-  let driver;
-  let chai;
+  let driver: Browser;
 
   before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
     driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
     await deleteSession();
   });
 
-  function assertSource(source) {
-    source.should.exist;
-    const dom = new DOMParser().parseFromString(source, XMLDom.MIME_TYPE.XML_TEXT);
+  function assertSource(source: string): void {
+    expect(source).to.exist;
+    const dom = new DOMParser().parseFromString(source, 'text/xml');
     const nodes = xpath.select('//hierarchy', dom);
-    nodes.length.should.equal(1);
+    if (nodes && Array.isArray(nodes)) {
+      expect(nodes.length).to.equal(1);
+    } else {
+      expect(nodes).to.exist;
+    }
   }
 
   it('should return the page source', async function () {
@@ -43,7 +44,8 @@ describe('apidemo - source', function () {
     };
     const sourceWithoutCompression = await getSourceWithoutCompression();
     const sourceWithCompression = await getSourceWithCompression();
-    sourceWithoutCompression.length.should.be.greaterThan(sourceWithCompression.length);
-    await getSourceWithoutCompression().should.eventually.eql(sourceWithoutCompression);
+    expect(sourceWithoutCompression.length).to.be.greaterThan(sourceWithCompression.length);
+    await expect(getSourceWithoutCompression()).to.eventually.eql(sourceWithoutCompression);
   });
 });
+

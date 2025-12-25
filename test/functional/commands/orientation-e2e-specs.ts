@@ -1,21 +1,16 @@
+import type {Browser} from 'webdriverio';
 import B from 'bluebird';
-import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
-import { initSession, deleteSession } from '../helpers/session';
+import {APIDEMOS_CAPS, amendCapabilities} from '../desired';
+import {initSession, deleteSession} from '../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('apidemo - orientation -', function () {
-  let driver;
-  let chai;
+  let driver: Browser;
 
   describe('initial -', function () {
-    before(async function () {
-      chai = await import('chai');
-      const chaiAsPromised = await import('chai-as-promised');
-
-      chai.should();
-      chai.use(chaiAsPromised.default);
-    });
-
     afterEach(async function () {
       await driver.setOrientation('PORTRAIT');
       await deleteSession();
@@ -25,20 +20,20 @@ describe('apidemo - orientation -', function () {
         'appium:appActivity': '.view.TextFields',
         'appium:orientation': 'PORTRAIT',
       }));
-      await driver.getOrientation().should.eventually.eql('PORTRAIT');
+      await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
       driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
         'appium:appActivity': '.view.TextFields',
         'appium:orientation': 'LANDSCAPE',
       }));
-      await driver.getOrientation().should.eventually.eql('LANDSCAPE');
+      await expect(driver.getOrientation()).to.eventually.eql('LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
       driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
         'appium:appActivity': '.view.TextFields',
       }));
-      await driver.getOrientation().should.eventually.eql('PORTRAIT');
+      await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
     });
   });
   describe('setting -', function () {
@@ -55,21 +50,22 @@ describe('apidemo - orientation -', function () {
       await B.delay(3000);
       await driver.setOrientation('LANDSCAPE');
       await B.delay(3000);
-      await driver.getOrientation().should.eventually.become('LANDSCAPE');
+      await expect(driver.getOrientation()).to.eventually.become('LANDSCAPE');
     });
     it('should rotate screen to portrait', async function () {
       await driver.setOrientation('LANDSCAPE');
       await B.delay(3000);
       await driver.setOrientation('PORTRAIT');
       await B.delay(3000);
-      await driver.getOrientation().should.eventually.become('PORTRAIT');
+      await expect(driver.getOrientation()).to.eventually.become('PORTRAIT');
     });
     it('should not error when trying to rotate to portrait again', async function () {
       await driver.setOrientation('PORTRAIT');
       await B.delay(3000);
       await driver.setOrientation('PORTRAIT');
       await B.delay(3000);
-      await driver.getOrientation().should.eventually.become('PORTRAIT');
+      await expect(driver.getOrientation()).to.eventually.become('PORTRAIT');
     });
   });
 });
+

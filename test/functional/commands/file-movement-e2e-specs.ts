@@ -1,63 +1,59 @@
-import _ from 'lodash';
+import type {Browser} from 'webdriverio';
 import B from 'bluebird';
-import stream from 'stream';
+import stream from 'node:stream';
 import unzipper from 'unzipper';
-import { APIDEMOS_CAPS } from '../desired';
-import { initSession, deleteSession } from '../helpers/session';
+import {APIDEMOS_CAPS} from '../desired';
+import {initSession, deleteSession} from '../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('file movement', function () {
-  let driver;
-  let chai;
+  let driver: Browser;
 
   before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
     driver = await initSession(APIDEMOS_CAPS);
   });
   after(async function () {
     await deleteSession();
   });
 
-  function getRandomDir () {
+  function getRandomDir(): string {
     return `/data/local/tmp/test${Math.random()}`;
   }
 
   it('should push and pull a file', async function () {
-    let stringData = `random string data ${Math.random()}`;
-    let base64Data = Buffer.from(stringData).toString('base64');
-    let remotePath = `${getRandomDir()}/remote.txt`;
+    const stringData = `random string data ${Math.random()}`;
+    const base64Data = Buffer.from(stringData).toString('base64');
+    const remotePath = `${getRandomDir()}/remote.txt`;
 
     await driver.pushFile(remotePath, base64Data);
 
     // get the file and its contents, to check
-    let remoteData64 = await driver.pullFile(remotePath);
-    let remoteData = Buffer.from(remoteData64, 'base64').toString();
-    remoteData.should.equal(stringData);
+    const remoteData64 = await driver.pullFile(remotePath);
+    const remoteData = Buffer.from(remoteData64, 'base64').toString();
+    expect(remoteData).to.equal(stringData);
   });
 
   it('should pull a folder', async function () {
-    let stringData = `random string data ${Math.random()}`;
-    let base64Data = Buffer.from(stringData).toString('base64');
+    const stringData = `random string data ${Math.random()}`;
+    const base64Data = Buffer.from(stringData).toString('base64');
 
     // send the files, then pull the whole folder
-    let remoteDir = getRandomDir();
+    const remoteDir = getRandomDir();
     await driver.pushFile(`${remoteDir}/remote0.txt`, base64Data);
     await driver.pushFile(`${remoteDir}/remote1.txt`, base64Data);
 
     // TODO: 'pullFolder' is returning 404 error
-    let data = await driver.pullFolder(remoteDir);
+    const data = await driver.pullFolder(remoteDir);
 
     // go through the folder we pulled and make sure the
     // two files we pushed are in it
-    let zipPromise = new B((resolve) => {
+    const zipPromise = new B<number>((resolve) => {
       let entryCount = 0;
-      let zipStream = new stream.Readable();
-      zipStream._read = _.noop;
+      const zipStream = new stream.Readable();
+      zipStream._read = () => {};
       zipStream
         .pipe(unzipper.Parse())
         .on('entry', function (entry) {
@@ -73,6 +69,7 @@ describe('file movement', function () {
       zipStream.push(null);
     });
 
-    (await zipPromise).should.equal(2);
+    expect(await zipPromise).to.equal(2);
   });
 });
+

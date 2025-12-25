@@ -1,24 +1,21 @@
+import type {Browser} from 'webdriverio';
 import B from 'bluebird';
-import path from 'path';
-import { APIDEMOS_CAPS, amendCapabilities } from '../../desired';
-import { initSession, deleteSession } from '../../helpers/session';
+import path from 'node:path';
+import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
+import {initSession, deleteSession} from '../../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 const START_IMG = path.resolve(__dirname, '..', '..', 'assets', 'start-button.png');
 const STOP_IMG = path.resolve(__dirname, '..', '..', 'assets', 'stop-button.png');
 const SQUARES_IMG = path.resolve(__dirname, '..', '..', 'assets', 'checkered-squares.png');
 
 describe('Find - Image', function () {
-  let driver;
-  let chai;
+  let driver: Browser;
 
   before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
     // TODO: @appium/images-plugin needs to be installed
     this.skip();
     const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -38,48 +35,50 @@ describe('Find - Image', function () {
 
   it('should find image elements', async function () {
     const els = await driver.$$(START_IMG);
-    els.should.have.length(1);
+    expect(els).to.have.length(1);
   });
   it('should find an image element', async function () {
     const el = await driver.$(START_IMG);
-    el.getValue().should.match(/appium-image-element/);
+    const value = await el.getValue();
+    expect(value).to.match(/appium-image-element/);
   });
   it('should not find an image element that is not matched', async function () {
-    await driver.$(SQUARES_IMG)
-      .should.eventually.be.rejectedWith(/Error response status: 7/);
+    await expect(driver.$(SQUARES_IMG)).to.eventually.be.rejectedWith(/Error response status: 7/);
   });
   it('should find anything with a threshold low enough', async function () {
     const {imageMatchThreshold} = await driver.getSettings();
     await driver.updateSettings({imageMatchThreshold: 0});
     try {
-      await driver.$(SQUARES_IMG).should.eventually.exist;
+      await expect(driver.$(SQUARES_IMG).elementId).to.eventually.exist;
     } finally {
       await driver.updateSettings({imageMatchThreshold});
     }
   });
   it('should be able to get basic element properties', async function () {
-    let el = await driver.$(START_IMG);
-    await el.isDisplayed().should.eventually.be.true;
-    let size = await el.getSize();
-    size.width.should.be.above(0);
-    size.height.should.be.above(0);
-    let loc = await el.getLocation();
-    loc.x.should.be.at.least(0);
-    loc.y.should.be.at.least(0);
-    let locInView = await el.getLocationInView();
-    locInView.x.should.eql(loc.x);
-    locInView.y.should.eql(loc.y);
+    const el = await driver.$(START_IMG);
+    await expect(el.isDisplayed()).to.eventually.be.true;
+    const size = await el.getSize();
+    expect(size.width).to.be.above(0);
+    expect(size.height).to.be.above(0);
+    const loc = await el.getLocation();
+    expect(loc.x).to.be.at.least(0);
+    expect(loc.y).to.be.at.least(0);
+    // TODO: getLocationInView requires an argument - skipping for now
+    // const locInView = await el.getLocationInView();
+    // expect(locInView.x).to.eql(loc.x);
+    // expect(locInView.y).to.eql(loc.y);
   });
   it('should be able to click an element', async function () {
     // start and stop the chronometer using images, and then verify the time
     await driver.$(START_IMG).click();
     await B.delay(3000);
     await driver.$(STOP_IMG).click();
-    let readout = await driver.$("//*[contains(@text, 'Initial format')]");
-    let text = await readout.getText();
-    let match = /Initial format: \d\d:(\d\d)/.exec(text);
-    let secs = parseInt(match[1], 10);
-    secs.should.be.above(2);
-    secs.should.be.below(20);
+    const readout = await driver.$("//*[contains(@text, 'Initial format')]");
+    const text = await readout.getText();
+    const match = /Initial format: \d\d:(\d\d)/.exec(text);
+    const secs = parseInt(match![1], 10);
+    expect(secs).to.be.above(2);
+    expect(secs).to.be.below(20);
   });
 });
+

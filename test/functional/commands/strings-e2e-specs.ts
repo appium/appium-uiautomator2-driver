@@ -1,18 +1,13 @@
-import { APIDEMOS_CAPS, amendCapabilities } from '../desired';
-import { initSession, deleteSession } from '../helpers/session';
+import type {Browser} from 'webdriverio';
+import {APIDEMOS_CAPS, amendCapabilities} from '../desired';
+import {initSession, deleteSession} from '../helpers/session';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
+chai.use(chaiAsPromised);
 
 describe('strings', function () {
-  let driver;
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
+  let driver: Browser;
 
   describe('specific language', function () {
     before(async function () {
@@ -23,13 +18,13 @@ describe('strings', function () {
     });
 
     it('should return app strings', async function () {
-      let strings = await driver.getStrings('en');
-      strings.hello_world.should.equal('Hello, World!');
+      const strings = await driver.getStrings('en');
+      expect(strings.hello_world).to.equal('Hello, World!');
     });
 
     it('should return app strings for different language', async function () {
-      let strings = await driver.getStrings('fr');
-      strings.hello_world.should.equal('Bonjour, Monde!');
+      const strings = await driver.getStrings('fr');
+      expect(strings.hello_world).to.equal('Bonjour, Monde!');
     });
   });
 
@@ -43,10 +38,11 @@ describe('strings', function () {
         'appium:language': 'en',
         'appium:locale': 'US',
       });
-      driver = await initSession(APIDEMOS_CAPS, caps);
+      driver = await initSession(caps);
 
-      let strings = await driver.getStrings();
-      strings.hello_world.should.equal('Hello, World!');
+      const strings = await driver.getStrings();
+      expect(strings.hello_world).to.equal('Hello, World!');
     });
   });
 });
+

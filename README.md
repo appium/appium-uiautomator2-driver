@@ -262,7 +262,7 @@ xpath | For elements lookup Xpath strategy the driver uses the same XML tree tha
 > [!NOTE] For testing multi-window applications, see the [Multi-Window Testing Guide](docs/android-multiwindow.md).
 
 > [!WARNING]
-> Google is going to [deprecate](https://developer.android.com/training/testing/other-components/ui-automator#ui-automator)
+> Google is going to [deprecate](https://developer.android.com/training/testing/other-components/ui-automator-legacy#ui-automator)
 > and remove `UiCollection`, `UiObject`, `UiScrollable`, and `UiSelector` support from the UiAutomator framework.
 > This will render all `-android uiautomator`-based locators invalid, so please keep it in mind while
 > using them or plan to use them in the future.

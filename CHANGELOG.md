@@ -1,3 +1,9 @@
+## [6.7.10](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.9...v6.7.10) (2026-01-16)
+
+### Miscellaneous Chores
+
+* Update appium-android-driver to version 12.6.4 ([a67b51a](https://github.com/appium/appium-uiautomator2-driver/commit/a67b51a9c2f827c93bcee4af6de6b54f8a345598))
+
 ## [6.7.9](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.8...v6.7.9) (2026-01-13)
 
 ### Miscellaneous Chores

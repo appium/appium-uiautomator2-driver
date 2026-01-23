@@ -1,3 +1,9 @@
+## [6.7.11](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.10...v6.7.11) (2026-01-23)
+
+### Miscellaneous Chores
+
+* Exclude tests from published dist ([4f2cf50](https://github.com/appium/appium-uiautomator2-driver/commit/4f2cf50716c87956d9b8654cca453dbbfb63b640))
+
 ## [6.7.10](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.9...v6.7.10) (2026-01-16)
 
 ### Miscellaneous Chores

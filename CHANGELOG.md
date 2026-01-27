@@ -1,3 +1,9 @@
+## [6.7.12](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.11...v6.7.12) (2026-01-27)
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 4.1.1 to 6.0.1 ([#977](https://github.com/appium/appium-uiautomator2-driver/issues/977)) ([042c71b](https://github.com/appium/appium-uiautomator2-driver/commit/042c71b3afff181eacf1cd16c76a7f547221a605))
+
 ## [6.7.11](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.10...v6.7.11) (2026-01-23)
 
 ### Miscellaneous Chores

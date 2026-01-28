@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import type {ADB} from 'appium-adb';
 import {fs, system} from 'appium/support';
 

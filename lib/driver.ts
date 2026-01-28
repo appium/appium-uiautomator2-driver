@@ -525,7 +525,7 @@ class AndroidUiautomator2Driver
     }
   }
 
-  async performSessionPreExecSetup(): Promise<StringRecord|undefined> {
+  async performSessionPreExecSetup(): Promise<StringRecord | undefined> {
     const apiLevel = await this.adb.getApiLevel();
     if (apiLevel < MIN_SUPPORTED_API_LEVEL) {
       throw this.log.errorWithException('UIAutomator2 only supports Android 8.0 (Oreo) and above');
@@ -679,7 +679,7 @@ class AndroidUiautomator2Driver
 
     await this.performSessionExecution(capsWithSessionInfo);
 
-    const deviceInfoPromise: Promise<Uiautomator2DeviceDetails|EmptyObject> = (async () => {
+    const deviceInfoPromise: Promise<Uiautomator2DeviceDetails | EmptyObject> = (async () => {
       try {
         return await this.getDeviceDetails();
       } catch (e) {

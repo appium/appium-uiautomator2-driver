@@ -1,3 +1,9 @@
+## [6.7.13](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.12...v6.7.13) (2026-01-28)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/eslint-config-appium-ts from 2.0.5 to 3.0.0 ([#978](https://github.com/appium/appium-uiautomator2-driver/issues/978)) ([09109a9](https://github.com/appium/appium-uiautomator2-driver/commit/09109a9f380d754551009498949197f256c117c1))
+
 ## [6.7.12](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.11...v6.7.12) (2026-01-27)
 
 ### Miscellaneous Chores

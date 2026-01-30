@@ -1,3 +1,9 @@
+## [6.7.15](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.14...v6.7.15) (2026-01-30)
+
+### Miscellaneous Chores
+
+* Update appium-uiautomator2-server ([77f970c](https://github.com/appium/appium-uiautomator2-driver/commit/77f970c96d97c998792bb6586faa29790cb673f7))
+
 ## [6.7.14](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.13...v6.7.14) (2026-01-30)
 
 ### Miscellaneous Chores

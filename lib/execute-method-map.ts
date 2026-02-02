@@ -218,7 +218,7 @@ export const executeMethodMap = {
     command: 'mobilePressKey',
     params: {
       required: ['keycode'],
-      optional: ['metastate', 'flags', 'isLongPress'],
+      optional: ['metastate', 'flags', 'isLongPress', 'source'],
     }
   },
 

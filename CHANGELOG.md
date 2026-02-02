@@ -1,3 +1,9 @@
+## [6.8.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.15...v6.8.0) (2026-02-02)
+
+### Features
+
+* Add `source` param to `mobile: pressKey` extension method ([#979](https://github.com/appium/appium-uiautomator2-driver/issues/979)) ([b1d0b21](https://github.com/appium/appium-uiautomator2-driver/commit/b1d0b2121f32dcfe561abfa4db0f627155c36274))
+
 ## [6.7.15](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.14...v6.7.15) (2026-01-30)
 
 ### Miscellaneous Chores

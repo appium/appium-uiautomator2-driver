@@ -1398,7 +1398,7 @@ keycode | number | yes | A valid Android key code. See [KeyEvent documentation](
 metastate | number | no | An integer in which each bit set to 1 represents a pressed meta key. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for more details. | 0x00000010 (which is META_ALT_LEFT_ON)
 flags | number | no | Flags for the particular key event. See [KeyEvent documentation](https://developer.android.com/reference/android/view/KeyEvent) for more details. | 0x00000001 (which is FLAG_WOKE_HERE)
 isLongPress | boolean | no | Whether to emulate long key press. `false` by default. | true
-source | number | no | Input device source. One or more [InputDevice.SOURCE_*](https://developer.android.com/reference/android/view/InputDevice) values (e.g. SOURCE_KEYBOARD, SOURCE_DPAD, SOURCE_GAMEPAD). Default is SOURCE_KEYBOARD. Multiple values can be combined using the logical OR operator. | 0x00000101 (SOURCE_KEYBOARD)
+source | number | no | Input device source. One or more [InputDevice.SOURCE_*](https://developer.android.com/reference/android/view/InputDevice) values (e.g. SOURCE_KEYBOARD, SOURCE_DPAD, SOURCE_GAMEPAD). Default is `257` or `0x101`, which maps to SOURCE_KEYBOARD. Multiple values can be combined using the logical OR operator. | 0x00000101 (SOURCE_KEYBOARD), 0x00000101 | 0x00000201 (SOURCE_KEYBOARD or SOURCE_DPAD)
 
 ### mobile: backgroundApp
 

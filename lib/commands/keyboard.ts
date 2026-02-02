@@ -42,11 +42,14 @@ export async function longPressKeyCode(
 }
 
 /**
- * Presses a key code with optional metastate, flags, and long press support.
+ * Presses a key code with optional metastate, flags, source, and long press support.
  * @param keycode - Android key code to press.
  * @param metastate - Optional meta state modifier keys.
  * @param flags - Optional flags for the key event.
  * @param isLongPress - Whether to perform a long press. Defaults to false.
+ * @param source - Optional input device source. One or more InputDevice.SOURCE_* values (default is SOURCE_KEYBOARD).
+ *                 Multiple source values can be combined using the logical OR operator.
+ *                 See https://developer.android.com/reference/android/view/InputDevice for details.
  */
 export async function mobilePressKey(
   this: AndroidUiautomator2Driver,
@@ -54,11 +57,13 @@ export async function mobilePressKey(
   metastate?: number,
   flags?: string,
   isLongPress: boolean = false,
+  source?: number,
 ): Promise<void> {
   await this.uiautomator2.jwproxy.command(`/appium/device/${isLongPress ? 'long_' : ''}press_keycode`, 'POST', {
     keycode,
     metastate,
     flags,
+    source,
   });
 }
 

@@ -1,3 +1,9 @@
+## [6.8.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.0...v6.8.1) (2026-02-13)
+
+### Miscellaneous Chores
+
+* Update appium-uiautomator2-server version to 9.11.1 ([87016a1](https://github.com/appium/appium-uiautomator2-driver/commit/87016a172143346a284f3a1ff2c47a8e7dc7d20b))
+
 ## [6.8.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.7.15...v6.8.0) (2026-02-02)
 
 ### Features

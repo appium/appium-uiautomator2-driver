@@ -1,3 +1,9 @@
+## [6.8.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.1...v6.8.2) (2026-02-16)
+
+### Bug Fixes
+
+* format ([#981](https://github.com/appium/appium-uiautomator2-driver/issues/981)) ([d5bcefc](https://github.com/appium/appium-uiautomator2-driver/commit/d5bcefcfcf746eeadda7a249ac2ccdb03d58ccc8))
+
 ## [6.8.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.0...v6.8.1) (2026-02-13)
 
 ### Miscellaneous Chores

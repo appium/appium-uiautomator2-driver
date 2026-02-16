@@ -1,7 +1,9 @@
-import { ADB } from 'appium-adb';
+import {ADB} from 'appium-adb';
 import sinon from 'sinon';
 import {
-  UiAutomator2Server, INSTRUMENTATION_TARGET, SERVER_TEST_PACKAGE_ID
+  UiAutomator2Server,
+  INSTRUMENTATION_TARGET,
+  SERVER_TEST_PACKAGE_ID,
 } from '../../lib/uiautomator2';
 import * as helpers from '../../lib/helpers';
 import {log} from '../../lib/logger';
@@ -12,168 +14,190 @@ describe('UiAutomator2', function () {
 
   const adb = new ADB();
   const serverApk = {
-    'appPath': 'path/to/appium-uiautomator2-server.apk',
-    'appId': 'io.appium.uiautomator2.server'
+    appPath: 'path/to/appium-uiautomator2-server.apk',
+    appId: 'io.appium.uiautomator2.server',
   };
   const serverTestApk = {
-    'appPath': 'path/to/appium-uiautomator2-server-test.apk',
-    'appId': 'io.appium.uiautomator2.server.test'
+    appPath: 'path/to/appium-uiautomator2-server-test.apk',
+    appId: 'io.appium.uiautomator2.server.test',
   };
   const defaultUIA2ServerOptions = {
     systemPort: 4724,
     host: 'localhost',
-    disableWindowAnimation: false
+    disableWindowAnimation: false,
   };
 
   describe('shouldUninstallServerPackages', function () {
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
-        adb, ...defaultUIA2ServerOptions
+        adb,
+        ...defaultUIA2ServerOptions,
       });
     });
-    it('with newer servers are installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldUninstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.true;
+    (it('with newer servers are installed', function () {
+      expect(
+        // @ts-expect-error - private method
+        uiautomator2.shouldUninstallServerPackages([
+          {
+            installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+            ...serverApk,
+          },
+          {
+            installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+            ...serverTestApk,
+          },
+        ]),
+      ).to.be.true;
     }),
-    it('with newer server is installed but the other could be old one', function () {
-      // Then, enforce to uninstall all apks
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldUninstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.true;
-    }),
-    it('with newer server is installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldUninstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.false;
-    }),
-    it('with older servers are installed', function () {
-      // then, installing newer serves are sufficient.
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldUninstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.false;
-    }),
-    it('with no server are installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldUninstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.false;
-    });
+      it('with newer server is installed but the other could be old one', function () {
+        // Then, enforce to uninstall all apks
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldUninstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.true;
+      }),
+      it('with newer server is installed', function () {
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldUninstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.false;
+      }),
+      it('with older servers are installed', function () {
+        // then, installing newer serves are sufficient.
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldUninstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.false;
+      }),
+      it('with no server are installed', function () {
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldUninstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.false;
+      }));
   });
 
   describe('shouldInstallServerPackages', function () {
     beforeEach(function () {
       uiautomator2 = new UiAutomator2Server(log, {
-        adb, ...defaultUIA2ServerOptions
+        adb,
+        ...defaultUIA2ServerOptions,
       });
     });
-    it('with newer servers are installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldInstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      // since installation may fail
-      ])).to.be.false;
+    (it('with newer servers are installed', function () {
+      expect(
+        // @ts-expect-error - private method
+        uiautomator2.shouldInstallServerPackages([
+          {
+            installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+            ...serverApk,
+          },
+          {
+            installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+            ...serverTestApk,
+          },
+          // since installation may fail
+        ]),
+      ).to.be.false;
     }),
-    it('with newer server is installed but the other could be old one', function () {
-      // Then, enforce to uninstall all apks
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldInstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.true;
-    }),
-    it('with newer server is installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldInstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.false;
-    }),
-    it('with older servers are installed', function () {
-      // then, installing newer serves are sufficient.
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldInstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.true;
-    }),
-    it('with no server are installed', function () {
-      // @ts-expect-error - private method
-      expect(uiautomator2.shouldInstallServerPackages([
-        {
-          'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          ...serverApk
-        },
-        {
-          'installState': adb.APP_INSTALL_STATE.NOT_INSTALLED,
-          ...serverTestApk
-        }
-      ])).to.be.true;
-    });
+      it('with newer server is installed but the other could be old one', function () {
+        // Then, enforce to uninstall all apks
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldInstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.true;
+      }),
+      it('with newer server is installed', function () {
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldInstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.false;
+      }),
+      it('with older servers are installed', function () {
+        // then, installing newer serves are sufficient.
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldInstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.true;
+      }),
+      it('with no server are installed', function () {
+        expect(
+          // @ts-expect-error - private method
+          uiautomator2.shouldInstallServerPackages([
+            {
+              installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,
+              ...serverApk,
+            },
+            {
+              installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,
+              ...serverTestApk,
+            },
+          ]),
+        ).to.be.true;
+      }));
   });
 
   describe('installServerApk', function () {
@@ -187,7 +211,8 @@ describe('UiAutomator2', function () {
       mockHelpers = sinon.mock(helpers);
 
       uiautomator2 = new UiAutomator2Server(log, {
-        adb: testAdb, ...defaultUIA2ServerOptions
+        adb: testAdb,
+        ...defaultUIA2ServerOptions,
       });
     });
     afterEach(function () {
@@ -201,19 +226,21 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
+      mockAdb
+        .expects('getApplicationInstallState')
+        .once()
         .returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
 
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(true);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
-      mockAdb.expects('shell')
+      mockAdb
+        .expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -221,19 +248,21 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
+      mockAdb
+        .expects('getApplicationInstallState')
+        .once()
         .returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
 
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(true);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').twice();
 
-      mockAdb.expects('shell')
+      mockAdb
+        .expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -241,19 +270,21 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
+      mockAdb
+        .expects('getApplicationInstallState')
+        .once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(true);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').never();
 
-      mockAdb.expects('shell')
+      mockAdb
+        .expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -261,19 +292,22 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
+      mockAdb
+        .expects('getApplicationInstallState')
+        .once()
         .returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
 
       // SERVER_TEST_PACKAGE_ID
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(false);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(false);
 
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').twice();
 
-      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+      mockAdb
+        .expects('shell')
+        .withExactArgs(['pm', 'list', 'instrumentation'])
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -281,19 +315,18 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
-        .returns(adb.APP_INSTALL_STATE.UNKNOWN);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.UNKNOWN);
 
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(false);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(false);
 
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
-      mockAdb.expects('shell')
+      mockAdb
+        .expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -301,21 +334,22 @@ describe('UiAutomator2', function () {
       mockHelpers.expects('isWriteable').never();
 
       // SERVER_PACKAGE_ID
-      mockAdb.expects('getApplicationInstallState').once()
+      mockAdb
+        .expects('getApplicationInstallState')
+        .once()
         .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
-      mockAdb.expects('isAppInstalled')
-        .withExactArgs(SERVER_TEST_PACKAGE_ID)
-        .once().returns(false);
+      mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(false);
 
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
-      mockAdb.expects('shell')
+      mockAdb
+        .expects('shell')
         .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once().returns(INSTRUMENTATION_TARGET);
+        .once()
+        .returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
   });
 });
-

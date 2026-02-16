@@ -46,7 +46,8 @@
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run rebuild",
     "rebuild": "npm run clean; npm run build",
-    "format": "prettier -w ./lib",
+    "format": "prettier -w ./lib ./test",
+    "format:check": "prettier --check ./lib ./test",
     "reset": "node ./scripts/reset.js",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.ts\""
   },

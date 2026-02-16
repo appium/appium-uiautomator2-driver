@@ -56,19 +56,14 @@ const ALL_ATTRS = [...BOOLEAN_ATTRS, ...NUMERIC_ATTRS, ...STR_ATTRS] as readonly
 
 const ATTRIBUTE_ALIASES: Array<[string, string[]]> = [
   [RESOURCE_ID, ['id']],
-  [
-    'description',
-    ['content-description', 'content-desc', 'desc', 'accessibility-id'],
-  ],
+  ['description', ['content-description', 'content-desc', 'desc', 'accessibility-id']],
   ['index', ['nth-child']],
 ];
 
-const isAstAttribute = (item: {type?: string}): item is AstAttribute =>
-  item.type === 'Attribute';
+const isAstAttribute = (item: {type?: string}): item is AstAttribute => item.type === 'Attribute';
 const isAstPseudoClass = (item: {type?: string}): item is AstPseudoClass =>
   item.type === 'PseudoClass';
-const isAstClassName = (item: {type?: string}): item is AstClassName =>
-  item.type === 'ClassName';
+const isAstClassName = (item: {type?: string}): item is AstClassName => item.type === 'ClassName';
 const isAstTagName = (item: {type?: string}): item is AstTagName => item.type === 'TagName';
 const isAstId = (item: {type?: string}): item is AstId => item.type === 'Id';
 
@@ -92,9 +87,7 @@ function requireBoolean(css: AstAttribute | AstPseudoClass): 'true' | 'false' {
   if (value === 'false') {
     return 'false';
   }
-  throw new Error(
-    `'${css.name}' must be true, false or empty. Found '${(css as any).value}'`,
-  );
+  throw new Error(`'${css.name}' must be true, false or empty. Found '${(css as any).value}'`);
 }
 
 function requireEntityName(cssEntity: AstAttribute | AstPseudoClass): string {
@@ -159,7 +152,10 @@ export class CssConverter {
     const attrName = requireEntityName(cssAttr);
     const methodName = toSnakeCase(attrName);
 
-    if (!STR_ATTRS.includes(attrName as (typeof STR_ATTRS)[number]) && !BOOLEAN_ATTRS.includes(attrName as (typeof BOOLEAN_ATTRS)[number])) {
+    if (
+      !STR_ATTRS.includes(attrName as (typeof STR_ATTRS)[number]) &&
+      !BOOLEAN_ATTRS.includes(attrName as (typeof BOOLEAN_ATTRS)[number])
+    ) {
       throw new Error(
         `'${attrName}' is not supported. Supported attributes are '${[...STR_ATTRS, ...BOOLEAN_ATTRS].join(', ')}'`,
       );

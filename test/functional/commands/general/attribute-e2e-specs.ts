@@ -57,4 +57,3 @@ describe('apidemo - attributes', function () {
     expect(size.height).to.be.at.least(0);
   });
 });
-

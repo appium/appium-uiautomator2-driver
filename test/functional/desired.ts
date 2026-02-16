@@ -6,7 +6,8 @@ const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 const ADB_EXEC_TIMEOUT = process.env.CI ? 60000 : 20000;
 
 // ApiDemos APK URL from GitHub releases
-const API_DEMOS_APK_URL = 'https://github.com/appium/android-apidemos/releases/download/v6.0.2/ApiDemos-debug.apk';
+const API_DEMOS_APK_URL =
+  'https://github.com/appium/android-apidemos/releases/download/v6.0.2/ApiDemos-debug.apk';
 
 // ApiDemos package and activity constants
 export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
@@ -65,4 +66,3 @@ export const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {
   'appium:appPackage': 'com.android.settings',
   'appium:appActivity': '.Settings',
 });
-

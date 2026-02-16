@@ -19,7 +19,8 @@ export async function mobileInstallMultipleApks(
   if (!_.isArray(apks) || _.isEmpty(apks)) {
     throw new errors.InvalidArgumentError('No apks are given to install');
   }
-  const configuredApks = await B.all(apks.map((app) => this.helpers.configureApp(app, [APK_EXTENSION])));
+  const configuredApks = await B.all(
+    apks.map((app) => this.helpers.configureApp(app, [APK_EXTENSION])),
+  );
   await this.adb.installMultipleApks(configuredApks, options);
 }
-

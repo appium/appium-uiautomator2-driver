@@ -9,27 +9,21 @@ import type {WindowFilters, WindowInfo, DisplayInfo} from './types';
 export async function mobileListWindows(
   this: AndroidUiautomator2Driver,
   filters?: WindowFilters,
-  skipScreenshots?: boolean
+  skipScreenshots?: boolean,
 ): Promise<WindowInfo[]> {
-  return await this.uiautomator2.jwproxy.command(
-    '/appium/list_windows',
-    'POST',
-    {
-      filters,
-      skipScreenshots,
-    }
-  ) as WindowInfo[];
+  return (await this.uiautomator2.jwproxy.command('/appium/list_windows', 'POST', {
+    filters,
+    skipScreenshots,
+  })) as WindowInfo[];
 }
 
 /**
  * Gets a list of all displays available on the device.
  */
-export async function mobileListDisplays(
-  this: AndroidUiautomator2Driver
-): Promise<DisplayInfo[]> {
-  return await this.uiautomator2.jwproxy.command(
+export async function mobileListDisplays(this: AndroidUiautomator2Driver): Promise<DisplayInfo[]> {
+  return (await this.uiautomator2.jwproxy.command(
     '/appium/list_displays',
     'POST',
-    {}
-  ) as DisplayInfo[];
+    {},
+  )) as DisplayInfo[];
 }

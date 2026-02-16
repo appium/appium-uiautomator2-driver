@@ -48,4 +48,3 @@ describe('apidemo - source', function () {
     await expect(getSourceWithoutCompression()).to.eventually.eql(sourceWithoutCompression);
   });
 });
-

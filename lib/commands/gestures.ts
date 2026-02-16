@@ -248,7 +248,9 @@ export async function mobileScrollBackTo(
   elementToId?: string,
 ): Promise<void> {
   if (!elementId || !elementToId) {
-    throw new errors.InvalidArgumentError(`Both elementId and elementToId arguments must be provided`);
+    throw new errors.InvalidArgumentError(
+      `Both elementId and elementToId arguments must be provided`,
+    );
   }
   await this.uiautomator2.jwproxy.command(
     `/appium/element/${util.unwrapElement(elementId)}/scroll_to/${util.unwrapElement(elementToId)}`,
@@ -289,9 +291,13 @@ function toPoint(x?: number, y?: number): Partial<Position> | undefined {
   return _.isFinite(x) && _.isFinite(y) ? {x, y} : undefined;
 }
 
-function toRect(left?: number, top?: number, width?: number, height?: number): RelativeRect | undefined {
+function toRect(
+  left?: number,
+  top?: number,
+  width?: number,
+  height?: number,
+): RelativeRect | undefined {
   return [left, top, width, height].some((v) => !_.isFinite(v))
     ? undefined
     : ({left, top, width, height} as RelativeRect);
 }
-

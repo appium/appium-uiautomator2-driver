@@ -28,4 +28,3 @@ export async function signApp(adb: ADB, appPath: string): Promise<void> {
   }
   await adb.sign(appPath);
 }
-

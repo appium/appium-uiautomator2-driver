@@ -7,13 +7,20 @@ import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
 
-async function expectPackageAndActivity(driver: Browser, pkg: string, activity: string, timeoutMs = 5000): Promise<void> {
-  await waitForCondition(async () =>
-    (await driver.getCurrentPackage() === pkg)
-    && (await driver.getCurrentActivity() === activity), {
+async function expectPackageAndActivity(
+  driver: Browser,
+  pkg: string,
+  activity: string,
+  timeoutMs = 5000,
+): Promise<void> {
+  await waitForCondition(
+    async () =>
+      (await driver.getCurrentPackage()) === pkg &&
+      (await driver.getCurrentActivity()) === activity,
+    {
       waitMs: timeoutMs,
       intervalMs: 300,
-    }
+    },
   );
 }
 
@@ -46,7 +53,13 @@ describe('general', function () {
       const startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       const startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
 
-      await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
+      await driver.startActivity(
+        startAppPackage,
+        startAppActivity,
+        undefined,
+        undefined,
+        startIntentCategory,
+      );
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
@@ -66,4 +79,3 @@ describe('general', function () {
     });
   });
 });
-

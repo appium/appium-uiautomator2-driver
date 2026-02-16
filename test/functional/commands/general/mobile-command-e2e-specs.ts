@@ -35,10 +35,12 @@ describe('mobile', function () {
   });
   describe('mobile:batteryInfo', function () {
     it('should get battery info', async function () {
-      const {level, state} = await driver.execute('mobile: batteryInfo', {}) as {level: number; state: number};
+      const {level, state} = (await driver.execute('mobile: batteryInfo', {})) as {
+        level: number;
+        state: number;
+      };
       expect(level).to.be.greaterThan(0.0);
       expect(state).to.be.greaterThan(1);
     });
   });
 });
-

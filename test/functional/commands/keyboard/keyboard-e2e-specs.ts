@@ -27,7 +27,7 @@ const defaultUnicodeCaps = defaultAsciiCaps;
 async function ensureUnlocked(driver: Browser): Promise<void> {
   // on Travis the device is sometimes not unlocked
   await retryInterval(10, 1000, async function () {
-    if (!await driver.isLocked()) {
+    if (!(await driver.isLocked())) {
       return;
     }
     console.log(`\n\nDevice locked. Attempting to unlock`); // eslint-disable-line
@@ -42,7 +42,10 @@ function deSamsungify(text: string): string {
   return text.replace('. Editing.', '');
 }
 
-async function getElement(driver: Browser, className: string): Promise<Awaited<ReturnType<Browser['$']>>> {
+async function getElement(
+  driver: Browser,
+  className: string,
+): Promise<Awaited<ReturnType<Browser['$']>>> {
   const result = await retryInterval(10, 1000, async () => {
     const el = await driver.$(className);
     if (!el) {
@@ -68,7 +71,11 @@ async function waitForText(element: any, expectedText: string): Promise<void> {
   }
 }
 
-async function runTextEditTest(driver: Browser, testText: string, keys = false): Promise<Awaited<ReturnType<Browser['$']>>> {
+async function runTextEditTest(
+  driver: Browser,
+  testText: string,
+  keys = false,
+): Promise<Awaited<ReturnType<Browser['$']>>> {
   const el = await getElement(driver, EDITTEXT_CLASS);
   await el.clearValue();
   await el.click();
@@ -103,7 +110,12 @@ async function clearKeyEvents(driver: Browser): Promise<void> {
   await B.delay(500);
 }
 
-async function keyEventTest(driver: Browser, keyCode: number, metaState: number | undefined, expectedTextArray: string[]): Promise<void> {
+async function keyEventTest(
+  driver: Browser,
+  keyCode: number,
+  metaState: number | undefined,
+  expectedTextArray: string[],
+): Promise<void> {
   const runTest = async function () {
     await driver.pressKeyCode(keyCode, metaState);
     const el = driver.$('id=io.appium.android.apis:id/text');
@@ -132,18 +144,21 @@ async function runKeyEventTest(driver: Browser): Promise<void> {
 
 const tests = [
   {label: 'editing a text field', text: 'Life, the Universe and Everything.'},
-  {label: 'sending \'&-\'', text: '&-'},
-  {label: 'sending \'&\' and \'-\' in other text', text: 'In the mid-1990s he ate fish & chips as mayor-elect.'},
-  {label: 'sending \'-\' in text', text: 'Super-test.'},
+  {label: "sending '&-'", text: '&-'},
+  {
+    label: "sending '&' and '-' in other text",
+    text: 'In the mid-1990s he ate fish & chips as mayor-elect.',
+  },
+  {label: "sending '-' in text", text: 'Super-test.'},
   {label: 'sending numbers', text: '0123456789'},
 ];
 
 const unicodeTests = [
-  {label: 'should be able to send \'-\' in unicode text', text: 'परीक्षा-परीक्षण'},
-  {label: 'should be able to send \'&\' in text', text: 'Fish & chips'},
-  {label: 'should be able to send \'&\' in unicode text', text: 'Mīna & chips'},
+  {label: "should be able to send '-' in unicode text", text: 'परीक्षा-परीक्षण'},
+  {label: "should be able to send '&' in text", text: 'Fish & chips'},
+  {label: "should be able to send '&' in unicode text", text: 'Mīna & chips'},
   {label: 'should be able to send roman characters with diacritics', text: 'Áé Œ ù ḍ'},
-  {label: 'should be able to send a \'u\' with an umlaut', text: 'ü'},
+  {label: "should be able to send a 'u' with an umlaut", text: 'ü'},
 ];
 
 const languageTests = [
@@ -176,13 +191,19 @@ describe('keyboard', function () {
         }
       }
 
-      await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
+      await driver.startActivity(
+        defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+        defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+      );
       try {
         const okBtn = await driver.$('id=android:id/button1');
         console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
         await okBtn.click();
         await ensureUnlocked(driver);
-        await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
+        await driver.startActivity(
+          defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+          defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+        );
       } catch {
         // ignore
       }
@@ -198,7 +219,10 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els: Awaited<ReturnType<Browser['$$']>>;
       beforeEach(async function () {
-        await driver.startActivity(defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string, defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string);
+        await driver.startActivity(
+          defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+          defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+        );
         const elsResult = await retryInterval(10, 1000, async function () {
           const elsPromise = driver.$$(EDITTEXT_CLASS);
           const elsArray = await elsPromise;
@@ -305,7 +329,10 @@ describe('keyboard', function () {
 
     describe('editing a text field', function () {
       beforeEach(async function () {
-        await driver.startActivity(defaultUnicodeCaps.alwaysMatch?.['appium:appPackage'] as string, defaultUnicodeCaps.alwaysMatch?.['appium:appActivity'] as string);
+        await driver.startActivity(
+          defaultUnicodeCaps.alwaysMatch?.['appium:appPackage'] as string,
+          defaultUnicodeCaps.alwaysMatch?.['appium:appActivity'] as string,
+        );
       });
 
       for (const testSet of [tests, unicodeTests, languageTests]) {
@@ -336,4 +363,3 @@ describe('keyboard', function () {
     });
   });
 });
-

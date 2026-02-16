@@ -8,7 +8,7 @@ export async function getClipboard(this: AndroidUiautomator2Driver): Promise<str
   return String(
     (await this.adb.getApiLevel()) < 29
       ? await this.uiautomator2.jwproxy.command('/appium/device/get_clipboard', 'POST', {})
-      : await this.settingsApp.getClipboard()
+      : await this.settingsApp.getClipboard(),
   );
 }
 
@@ -24,6 +24,9 @@ export async function setClipboard(
   contentType: 'plaintext' = 'plaintext',
   label?: string,
 ): Promise<void> {
-  await this.uiautomator2.jwproxy.command('/appium/device/set_clipboard', 'POST', {content, contentType, label});
+  await this.uiautomator2.jwproxy.command('/appium/device/set_clipboard', 'POST', {
+    content,
+    contentType,
+    label,
+  });
 }
-

@@ -57,9 +57,9 @@ describe('Find - xpath', function () {
     await expect(driver.$(`//*`).elementId).to.eventually.exist;
   });
   it('should find less elements with compression turned on', async function () {
-    await driver.updateSettings({'ignoreUnimportantViews': false});
+    await driver.updateSettings({ignoreUnimportantViews: false});
     const elementsWithoutCompression = await driver.$$(`//*`);
-    await driver.updateSettings({'ignoreUnimportantViews': true});
+    await driver.updateSettings({ignoreUnimportantViews: true});
     const elementsWithCompression = await driver.$$(`//*`);
     expect(elementsWithoutCompression.length).to.be.greaterThan(elementsWithCompression.length);
   });
@@ -72,13 +72,14 @@ describe('Find - xpath', function () {
     const searchEl = await driver.$(`.//*[@text='Search']`);
     await searchEl.waitForDisplayed({timeout: 5000});
     await searchEl.click();
-    await expect(driver.$(`//*[@text='Clicked popup menu item Search']`).elementId).to.eventually.exist;
+    await expect(driver.$(`//*[@text='Clicked popup menu item Search']`).elementId).to.eventually
+      .exist;
 
     await popUpEl.click();
     const addEl = await driver.$(`.//*[@text='Add']`);
     await addEl.waitForDisplayed({timeout: 5000});
     await addEl.click();
-    await expect(driver.$(`//*[@text='Clicked popup menu item Add']`).elementId).to.eventually.exist;
+    await expect(driver.$(`//*[@text='Clicked popup menu item Add']`).elementId).to.eventually
+      .exist;
   });
 });
-

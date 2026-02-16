@@ -45,4 +45,3 @@ describe('strings', function () {
     });
   });
 });
-

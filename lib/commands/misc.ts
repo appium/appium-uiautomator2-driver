@@ -26,7 +26,9 @@ export async function setOrientation(
   orientation: Orientation,
 ): Promise<void> {
   const normalizedOrientation = orientation.toUpperCase() as Orientation;
-  await this.uiautomator2.jwproxy.command(`/orientation`, 'POST', {orientation: normalizedOrientation});
+  await this.uiautomator2.jwproxy.command(`/orientation`, 'POST', {
+    orientation: normalizedOrientation,
+  });
 }
 
 /**
@@ -61,7 +63,8 @@ export async function mobileGetDeviceInfo(this: AndroidUiautomator2Driver): Prom
 /**
  * Resets the accessibility cache on the device.
  */
-export async function mobileResetAccessibilityCache(this: AndroidUiautomator2Driver): Promise<void> {
+export async function mobileResetAccessibilityCache(
+  this: AndroidUiautomator2Driver,
+): Promise<void> {
   await this.uiautomator2.jwproxy.command('/appium/reset_ax_cache', 'POST', {});
 }
-

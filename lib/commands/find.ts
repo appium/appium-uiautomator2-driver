@@ -31,7 +31,11 @@ export async function doFindElementOrEls(
   const uiautomator2 = this.uiautomator2;
   if (params.strategy === 'xpath' && MAGIC_FIRST_VIS_CHILD_SEL.test(params.selector)) {
     const elementId = params.context;
-    return (await uiautomator2.jwproxy.command(`/appium/element/${elementId}/first_visible`, 'GET', {})) as AppiumElement;
+    return (await uiautomator2.jwproxy.command(
+      `/appium/element/${elementId}/first_visible`,
+      'GET',
+      {},
+    )) as AppiumElement;
   }
   if (params.strategy === 'xpath' && MAGIC_SCROLLABLE_SEL.test(params.selector)) {
     params.strategy = '-android uiautomator';
@@ -39,10 +43,14 @@ export async function doFindElementOrEls(
   }
   if (params.strategy === 'css selector') {
     params.strategy = '-android uiautomator';
-    params.selector = new CssConverter(params.selector, this.opts.appPackage).toUiAutomatorSelector();
+    params.selector = new CssConverter(
+      params.selector,
+      this.opts.appPackage,
+    ).toUiAutomatorSelector();
   }
-  return (await uiautomator2.jwproxy.command(`/element${params.multiple ? 's' : ''}`, 'POST', params)) as
-    | AppiumElement
-    | AppiumElement[];
+  return (await uiautomator2.jwproxy.command(
+    `/element${params.multiple ? 's' : ''}`,
+    'POST',
+    params,
+  )) as AppiumElement | AppiumElement[];
 }
-

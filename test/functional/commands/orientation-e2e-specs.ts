@@ -16,31 +16,39 @@ describe('apidemo - orientation -', function () {
       await deleteSession();
     });
     it('should have portrait orientation if requested', async function () {
-      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
-        'appium:appActivity': '.view.TextFields',
-        'appium:orientation': 'PORTRAIT',
-      }));
+      driver = await initSession(
+        amendCapabilities(APIDEMOS_CAPS, {
+          'appium:appActivity': '.view.TextFields',
+          'appium:orientation': 'PORTRAIT',
+        }),
+      );
       await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
-      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
-        'appium:appActivity': '.view.TextFields',
-        'appium:orientation': 'LANDSCAPE',
-      }));
+      driver = await initSession(
+        amendCapabilities(APIDEMOS_CAPS, {
+          'appium:appActivity': '.view.TextFields',
+          'appium:orientation': 'LANDSCAPE',
+        }),
+      );
       await expect(driver.getOrientation()).to.eventually.eql('LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
-      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
-        'appium:appActivity': '.view.TextFields',
-      }));
+      driver = await initSession(
+        amendCapabilities(APIDEMOS_CAPS, {
+          'appium:appActivity': '.view.TextFields',
+        }),
+      );
       await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
     });
   });
   describe('setting -', function () {
     before(async function () {
-      driver = await initSession(amendCapabilities(APIDEMOS_CAPS, {
-        'appium:appActivity': '.view.TextFields'
-      }));
+      driver = await initSession(
+        amendCapabilities(APIDEMOS_CAPS, {
+          'appium:appActivity': '.view.TextFields',
+        }),
+      );
     });
     after(async function () {
       await deleteSession();
@@ -68,4 +76,3 @@ describe('apidemo - orientation -', function () {
     });
   });
 });
-

@@ -29,4 +29,3 @@ export async function mobileDeepLink(
 export async function back(this: AndroidUiautomator2Driver): Promise<void> {
   await this.adb.keyevent(4);
 }
-

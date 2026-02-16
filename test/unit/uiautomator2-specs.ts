@@ -35,8 +35,8 @@ describe('UiAutomator2', function () {
       });
     });
     (it('with newer servers are installed', function () {
-      // @ts-expect-error - private method
       expect(
+        // @ts-expect-error - private method
         uiautomator2.shouldUninstallServerPackages([
           {
             installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
@@ -51,8 +51,8 @@ describe('UiAutomator2', function () {
     }),
       it('with newer server is installed but the other could be old one', function () {
         // Then, enforce to uninstall all apks
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
@@ -66,8 +66,8 @@ describe('UiAutomator2', function () {
         ).to.be.true;
       }),
       it('with newer server is installed', function () {
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
@@ -82,8 +82,8 @@ describe('UiAutomator2', function () {
       }),
       it('with older servers are installed', function () {
         // then, installing newer serves are sufficient.
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
@@ -97,8 +97,8 @@ describe('UiAutomator2', function () {
         ).to.be.false;
       }),
       it('with no server are installed', function () {
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,
@@ -121,8 +121,8 @@ describe('UiAutomator2', function () {
       });
     });
     (it('with newer servers are installed', function () {
-      // @ts-expect-error - private method
       expect(
+        // @ts-expect-error - private method
         uiautomator2.shouldInstallServerPackages([
           {
             installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
@@ -138,8 +138,8 @@ describe('UiAutomator2', function () {
     }),
       it('with newer server is installed but the other could be old one', function () {
         // Then, enforce to uninstall all apks
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
@@ -153,8 +153,8 @@ describe('UiAutomator2', function () {
         ).to.be.true;
       }),
       it('with newer server is installed', function () {
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED,
@@ -169,8 +169,8 @@ describe('UiAutomator2', function () {
       }),
       it('with older servers are installed', function () {
         // then, installing newer serves are sufficient.
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
@@ -184,8 +184,8 @@ describe('UiAutomator2', function () {
         ).to.be.true;
       }),
       it('with no server are installed', function () {
-        // @ts-expect-error - private method
         expect(
+          // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
               installState: adb.APP_INSTALL_STATE.NOT_INSTALLED,

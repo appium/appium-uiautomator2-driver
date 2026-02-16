@@ -28,4 +28,3 @@ describe('Find - from element', function () {
     expect(innerEls).to.have.length.above(1);
   });
 });
-

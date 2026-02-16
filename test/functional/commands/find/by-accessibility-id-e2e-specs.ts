@@ -27,4 +27,3 @@ describe('Find - accessibility ID', function () {
     await expect(driver.$("~Access'ibility").elementId).to.eventually.exist;
   });
 });
-

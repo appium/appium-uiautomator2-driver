@@ -19,4 +19,3 @@ describe('Find - invalid strategy', function () {
     await expect(driver.$$('ios=.elements()')).to.eventually.be.rejected;
   });
 });
-

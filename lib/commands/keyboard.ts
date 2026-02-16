@@ -59,12 +59,16 @@ export async function mobilePressKey(
   isLongPress: boolean = false,
   source?: number,
 ): Promise<void> {
-  await this.uiautomator2.jwproxy.command(`/appium/device/${isLongPress ? 'long_' : ''}press_keycode`, 'POST', {
-    keycode,
-    metastate,
-    flags,
-    source,
-  });
+  await this.uiautomator2.jwproxy.command(
+    `/appium/device/${isLongPress ? 'long_' : ''}press_keycode`,
+    'POST',
+    {
+      keycode,
+      metastate,
+      flags,
+      source,
+    },
+  );
 }
 
 /**
@@ -87,7 +91,10 @@ export async function mobileType(
  * Sends keys to the current element.
  * @param params - Options containing the text to send and optional replace flag.
  */
-export async function doSendKeys(this: AndroidUiautomator2Driver, params: SendKeysOpts): Promise<void> {
+export async function doSendKeys(
+  this: AndroidUiautomator2Driver,
+  params: SendKeysOpts,
+): Promise<void> {
   await this.uiautomator2.jwproxy.command('/keys', 'POST', params);
 }
 
@@ -104,4 +111,3 @@ export async function keyevent(
   this.log.debug(`Ignoring metastate ${metastate}`);
   await this.adb.keyevent(keycode);
 }
-

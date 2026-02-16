@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import {AndroidUiautomator2Driver} from '../../../lib/driver';
-import { ADB } from 'appium-adb';
+import {ADB} from 'appium-adb';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
@@ -35,9 +35,7 @@ describe('General', function () {
 
   describe('mobile command', function () {
     it('should raise error on non-existent mobile command', async function () {
-      await expect(driver.execute('mobile: fruta', {})).to.be.rejectedWith(
-        /Unsupported/
-      );
+      await expect(driver.execute('mobile: fruta', {})).to.be.rejectedWith(/Unsupported/);
     });
   });
 
@@ -46,10 +44,7 @@ describe('General', function () {
     // true, because the "am I an emulator?" check happens in the sensorSet
     // implementation, which is stubbed out.
     it('should call sensorSet', async function () {
-      mockDriver.expects('sensorSet').once().withArgs(
-        'acceleration',
-        '0:9.77631:0.812349',
-      );
+      mockDriver.expects('sensorSet').once().withArgs('acceleration', '0:9.77631:0.812349');
       await driver.execute('mobile: sensorSet', {
         sensorType: 'acceleration',
         value: '0:9.77631:0.812349',
@@ -79,14 +74,17 @@ describe('General', function () {
     });
 
     it('should call mobileInstallMultipleApks', async function () {
-      mockAdb.expects('installMultipleApks').once().withExactArgs(['/path/to/test/apk.apk'], undefined);
+      mockAdb
+        .expects('installMultipleApks')
+        .once()
+        .withExactArgs(['/path/to/test/apk.apk'], undefined);
       await driver.execute('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
     });
 
     it('should reject if no apks were given', async function () {
-      await expect(
-        driver.execute('mobile: installMultipleApks', {apks: []})
-      ).to.be.rejectedWith('No apks are given to install');
+      await expect(driver.execute('mobile: installMultipleApks', {apks: []})).to.be.rejectedWith(
+        'No apks are given to install',
+      );
     });
 
     it('should reject with default args', async function () {
@@ -94,4 +92,3 @@ describe('General', function () {
     });
   });
 });
-

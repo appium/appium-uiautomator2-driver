@@ -42,13 +42,10 @@ export interface Uiautomator2ServerInfo {
 }
 
 export interface Uiautomator2StartSessionOpts
-  extends Uiautomator2DriverCaps,
-    Uiautomator2ServerInfo {}
+  extends Uiautomator2DriverCaps, Uiautomator2ServerInfo {}
 
 export interface Uiautomator2SessionCaps
-  extends Uiautomator2ServerInfo,
-    Uiautomator2SessionInfo,
-    Partial<Uiautomator2DeviceDetails> {}
+  extends Uiautomator2ServerInfo, Uiautomator2SessionInfo, Partial<Uiautomator2DeviceDetails> {}
 
 export interface Uiautomator2Settings {
   ignoreUnimportantViews: boolean;

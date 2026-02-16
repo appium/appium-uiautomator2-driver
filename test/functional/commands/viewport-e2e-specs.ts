@@ -30,7 +30,7 @@ describe('testViewportCommands', function () {
       return this.skip();
     }
 
-    const {viewportRect, statBarHeight, pixelRatio} = await driver.getSession() as any;
+    const {viewportRect, statBarHeight, pixelRatio} = (await driver.getSession()) as any;
 
     expect(pixelRatio).not.to.be.empty;
     expect(statBarHeight).to.be.greaterThan(0);
@@ -77,7 +77,7 @@ describe('testViewportCommands', function () {
     if (process.env.CI) {
       return this.skip();
     }
-    const {viewportRect, statBarHeight} = await driver.getSession() as any;
+    const {viewportRect, statBarHeight} = (await driver.getSession()) as any;
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');
@@ -90,4 +90,3 @@ describe('testViewportCommands', function () {
     expect(fullImgMeta.height).to.be.above(viewImgMeta.height!);
   });
 });
-

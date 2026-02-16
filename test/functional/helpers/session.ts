@@ -11,7 +11,10 @@ const ALERT_CHECK_INTERVAL = 1000;
 
 let driver: Browser | undefined;
 
-export async function initSession(caps: StringRecord, remoteOpts: StringRecord = {}): Promise<Browser> {
+export async function initSession(
+  caps: StringRecord,
+  remoteOpts: StringRecord = {},
+): Promise<Browser> {
   // Create the driver
   const host = DEFAULT_HOST;
   const port = DEFAULT_PORT;
@@ -64,7 +67,7 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
           caps.alwaysMatch?.['appium:appPackage'] as string,
           caps.alwaysMatch?.['appium:appActivity'] as string,
           caps.alwaysMatch?.['appium:appWaitPackage'] as string | undefined,
-          caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined
+          caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined,
         );
       }
     }

@@ -6,7 +6,7 @@ export const newMethodMap = {
     POST: {
       command: 'getClipboard',
       payloadParams: {optional: ['contentType']},
-      deprecated: true
+      deprecated: true,
     },
   },
   '/session/:sessionId/log': {

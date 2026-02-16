@@ -72,4 +72,3 @@ describe('file movement', function () {
     expect(await zipPromise).to.equal(2);
   });
 });
-

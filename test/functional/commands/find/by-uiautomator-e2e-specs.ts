@@ -11,7 +11,7 @@ describe('Find - uiautomator', function () {
 
   before(async function () {
     driver = await initSession(APIDEMOS_CAPS);
-    await driver.updateSettings({'enableNotificationListener': false});
+    await driver.updateSettings({enableNotificationListener: false});
     await driver.setTimeout({implicit: 20000});
   });
   after(async function () {
@@ -59,11 +59,15 @@ describe('Find - uiautomator', function () {
     expect(els).to.have.length.at.least(8);
   });
   it('should find an element with a long chain of methods', async function () {
-    const el = await driver.$('android=new UiSelector().clickable(true).className(android.widget.TextView).index(1)');
+    const el = await driver.$(
+      'android=new UiSelector().clickable(true).className(android.widget.TextView).index(1)',
+    );
     await expect(el.getText()).to.eventually.equal('Accessibility');
   });
   it('should find an element with recursive UiSelectors', async function () {
-    const els = await driver.$$('android=new UiSelector().childSelector(new UiSelector().clickable(true)).focused(true)');
+    const els = await driver.$$(
+      'android=new UiSelector().childSelector(new UiSelector().clickable(true)).focused(true)',
+    );
     expect(els).to.have.length(1);
   });
   it('should not find an element which does not exist', async function () {
@@ -77,7 +81,9 @@ describe('Find - uiautomator', function () {
     expect(clickableEls.length).to.be.above(0);
     const notClickableEls = await driver.$$('android=new UiSelector().clickable(false)');
     expect(notClickableEls.length).to.be.above(0);
-    const both = await driver.$$('android=new UiSelector().clickable(true); new UiSelector().clickable(false);');
+    const both = await driver.$$(
+      'android=new UiSelector().clickable(true); new UiSelector().clickable(false);',
+    );
     const clickableLength = await clickableEls.length;
     const notClickableLength = await notClickableEls.length;
     const bothLength = await both.length;
@@ -86,12 +92,15 @@ describe('Find - uiautomator', function () {
   it('should allow multiple selector statements and return the Union of the two sets', async function () {
     const clickableEls = await driver.$$('android=new UiSelector().clickable(true)');
     expect(clickableEls.length).to.be.above(0);
-    const clickableClickableEl = await driver.$$('android=new UiSelector().clickable(true); new UiSelector().clickable(true);');
+    const clickableClickableEl = await driver.$$(
+      'android=new UiSelector().clickable(true); new UiSelector().clickable(true);',
+    );
     expect(clickableClickableEl.length).to.be.above(0);
     expect(clickableClickableEl).to.have.length(clickableEls.length);
   });
   it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
-    const selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
+    const selector =
+      'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     const els = await driver.$$(`android=${selector}`);
     expect(els.length).to.be.above(0);
   });
@@ -100,30 +109,35 @@ describe('Find - uiautomator', function () {
     //  * The test above this one works and it proxies to 'POST /elements'.
     //  * This test doesn't work and the only difference is that it proxies to 'POST /element'
     //  (see find.js for reference)
-    const selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
+    const selector =
+      'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     const el = await driver.$(`android=${selector}`);
     expect(el.elementId).to.exist;
   });
   it('should allow selectors using fromParent contruct', async function () {
-    const selector = 'new UiSelector().className("android.widget.ListView").fromParent(new UiSelector().resourceId("android:id/text1"))';
+    const selector =
+      'new UiSelector().className("android.widget.ListView").fromParent(new UiSelector().resourceId("android:id/text1"))';
     const el = await driver.$(`android=${selector}`);
     expect(el.elementId).to.exist;
   });
   it('should scroll to, and return elements using UiScrollable', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.List1');
-    const selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
+    const selector =
+      'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     const el = await driver.$(`android=${selector}`);
     await expect(el.getText()).to.eventually.equal('Beer Cheese');
   });
   it('should allow chaining UiScrollable methods', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.List1');
-    const selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
+    const selector =
+      'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     const el = await driver.$(`android=${selector}`);
     expect(el.elementId).to.exist;
   });
   it('should allow UiScrollable scrollIntoView', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.List1');
-    const selector = 'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0));';
+    const selector =
+      'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0));';
     const el = await driver.$(`android=${selector}`);
     await expect(el.getText()).to.eventually.equal('Beer Cheese');
   });
@@ -134,4 +148,3 @@ describe('Find - uiautomator', function () {
     await expect(el.getText()).to.eventually.equal('عربي');
   });
 });
-

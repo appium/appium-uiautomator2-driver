@@ -46,10 +46,7 @@ describe('apidemo - element', function () {
     it('should active element be equal to clicked element', async function () {
       await el.click();
       const activeElement = await driver.getActiveElement();
-      expect(
-        util.unwrapElement(activeElement as any),
-      ).to.equal(el.elementId);
+      expect(util.unwrapElement(activeElement as any)).to.equal(el.elementId);
     });
   });
 });
-

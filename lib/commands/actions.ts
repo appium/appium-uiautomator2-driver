@@ -43,7 +43,9 @@ export async function mobileGetActionHistory(
   this: AndroidUiautomator2Driver,
   name: string,
 ): Promise<ActionResult> {
-  return (await this.uiautomator2.jwproxy.command('/appium/action_history', 'POST', {name})) as ActionResult;
+  return (await this.uiautomator2.jwproxy.command('/appium/action_history', 'POST', {
+    name,
+  })) as ActionResult;
 }
 
 /**
@@ -77,8 +79,8 @@ export async function performActions(
               pointerType: 'touch',
             },
           }
-        : {}
-    )
+        : {},
+    ),
   );
   this.log.debug(`Preprocessed actions: ${JSON.stringify(preprocessedActions, null, '  ')}`);
   await this.uiautomator2.jwproxy.command('/actions', 'POST', {
@@ -92,4 +94,3 @@ export async function performActions(
 export async function releaseActions(this: AndroidUiautomator2Driver): Promise<void> {
   this.log.info('On this platform, releaseActions is a no-op');
 }
-

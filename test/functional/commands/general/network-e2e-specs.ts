@@ -24,4 +24,3 @@ describe('wifi @skip-ci', function () {
     await expect((driver as any).isWifiOn()).to.eventually.equal(true);
   });
 });
-

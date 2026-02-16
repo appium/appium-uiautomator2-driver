@@ -81,4 +81,3 @@ describe('Find - Image', function () {
     expect(secs).to.be.below(20);
   });
 });
-

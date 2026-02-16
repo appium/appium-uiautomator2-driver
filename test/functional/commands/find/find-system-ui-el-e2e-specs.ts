@@ -21,12 +21,14 @@ describe('Find - android ui elements', function () {
     const statusBar = await driver!.$$(`//*[@resource-id='android:id/statusBarBackground']`); //check server (NPE) if allowInvisibleElements is unset on server side
     expect(statusBar.length).to.be.equal(0);
     await driver!.updateSettings({allowInvisibleElements: false});
-    const statusBarWithInvisibleEl = await driver!.$$(`//*[@resource-id='android:id/statusBarBackground']`);
+    const statusBarWithInvisibleEl = await driver!.$$(
+      `//*[@resource-id='android:id/statusBarBackground']`,
+    );
     expect(statusBarWithInvisibleEl.length).to.be.equal(0);
   });
   it('should find statusBarBackground element via xpath', async function () {
     await driver!.updateSettings({allowInvisibleElements: true});
-    await expect(driver!.$(`//*[@resource-id='android:id/statusBarBackground']`).elementId).to.eventually.exist;
+    await expect(driver!.$(`//*[@resource-id='android:id/statusBarBackground']`).elementId).to
+      .eventually.exist;
   });
 });
-

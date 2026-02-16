@@ -28,7 +28,8 @@ describe('Find - CSS', function () {
     expect(els).to.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    await expect(driver.$('*[content-description="Access\'ibility"]').elementId).to.eventually.exist;
+    await expect(driver.$('*[content-description="Access\'ibility"]').elementId).to.eventually
+      .exist;
   });
   it('should find an element by class name', async function () {
     const el = await driver.$('android.widget.TextView');
@@ -69,4 +70,3 @@ describe('Find - CSS', function () {
     await expect(el.getText()).to.eventually.equal('عربي');
   });
 });
-

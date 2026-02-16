@@ -43,4 +43,3 @@ describe('setUrl', function () {
     await expect(el.getHTML()).to.eventually.include('Autify');
   });
 });
-

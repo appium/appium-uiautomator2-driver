@@ -43,4 +43,3 @@ export async function mobileDismissAlert(
 export async function postDismissAlert(this: AndroidUiautomator2Driver): Promise<void> {
   await this.mobileDismissAlert();
 }
-

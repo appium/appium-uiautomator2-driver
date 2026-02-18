@@ -1,3 +1,9 @@
+## [6.9.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.2...v6.9.0) (2026-02-18)
+
+### Features
+
+* add mobile:listApps ([#982](https://github.com/appium/appium-uiautomator2-driver/issues/982)) ([b98268c](https://github.com/appium/appium-uiautomator2-driver/commit/b98268cfdb8cfd6bf1c8230576af732a2f343ebc))
+
 ## [6.8.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.1...v6.8.2) (2026-02-16)
 
 ### Bug Fixes

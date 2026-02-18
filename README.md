@@ -876,11 +876,26 @@ Verify whether an application is installed on the device under test.
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 appId | string | yes | The identifier of the application package to be checked | `my.app.id`
-user | number or string | no | The user ID for which the package is installed.. The `current` user is used by default | 1006
+user | number or string | no | The user ID for which the package is installed. The `current` user is used by default | 1006
 
 #### Returned Result
 
 True or false
+
+### mobile: listApps
+
+Lists all installed packages on the Android device, optionally filtered by user.
+An exception will be thrown on devices running Android API below level 26.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+user | number or string | no | The user ID for which the package is installed. The `current` user is used by default | 1006
+
+#### Returned Result
+
+List of installed package names.
 
 ### mobile: queryAppState
 
@@ -1808,6 +1823,7 @@ action | string | yes | The action to execute on the NFC adapter. The following 
 
 UiAutomator2 driver supports Appium endpoints for applications management:
 - Check if app is installed ([mobile: isAppInstalled](#mobile-isappinstalled))
+- Lists all installed packages ([mobile: listApps](#mobile-listapps))
 - Install/upgrade app ([mobile: installApp](#mobile-installapp))
 - Activate app ([mobile: activateApp](#mobile-activateapp))
     - Since UIAutomator2 driver v2.2.0, the server calls `am start`/`am start-activity` to start the application on devices with API level 24+. [monkey](https://developer.android.com/studio/test/other-testing-tools/monkey) tool is called on devices below API level 24.

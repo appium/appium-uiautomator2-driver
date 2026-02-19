@@ -1,3 +1,9 @@
+## [6.9.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.0...v6.9.1) (2026-02-19)
+
+### Miscellaneous Chores
+
+* Set minimum axios dependency version to 1.13.5 ([f05897e](https://github.com/appium/appium-uiautomator2-driver/commit/f05897ee49bc23c9f0789b86b17eed3d5f934cb5))
+
 ## [6.9.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.8.2...v6.9.0) (2026-02-18)
 
 ### Features

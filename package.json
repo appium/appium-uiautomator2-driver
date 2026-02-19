@@ -61,7 +61,7 @@
     "appium-android-driver": "^12.7.0",
     "appium-uiautomator2-server": "^9.11.1",
     "asyncbox": "^6.0.1",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "bluebird": "^3.5.1",
     "css-selector-parser": "^3.0.0",
     "io.appium.settings": "^7.0.1",

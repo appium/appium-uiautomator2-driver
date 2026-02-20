@@ -1,3 +1,9 @@
+## [6.9.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.1...v6.9.2) (2026-02-20)
+
+### Bug Fixes
+
+* modify the format of listApps to follow xcuitest format ([#983](https://github.com/appium/appium-uiautomator2-driver/issues/983)) ([d1e3528](https://github.com/appium/appium-uiautomator2-driver/commit/d1e35280ba392de0e491bbe3f5143ec3adefaebe))
+
 ## [6.9.1](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.0...v6.9.1) (2026-02-19)
 
 ### Miscellaneous Chores

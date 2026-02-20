@@ -1,3 +1,9 @@
+## [6.9.3](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.2...v6.9.3) (2026-02-20)
+
+### Reverts
+
+* Revert "fix: modify the format of listApps to follow xcuitest format ([#983](https://github.com/appium/appium-uiautomator2-driver/issues/983))" ([#985](https://github.com/appium/appium-uiautomator2-driver/issues/985)) ([d5574c9](https://github.com/appium/appium-uiautomator2-driver/commit/d5574c9b522f1adf5cabdc3baed73bfbac1582cb))
+
 ## [6.9.2](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.1...v6.9.2) (2026-02-20)
 
 ### Bug Fixes

@@ -895,8 +895,7 @@ user | number or string | no | The user ID for which the package is installed. T
 
 #### Returned Result
 
-A map where keys are packageName and values are maps of platform-specific app properties since UIAutomator2 driver v7.0.0.
-UIAutomator2 driver v6.9.0 and v6.9.1 were a list of installed package names.
+List of installed package names.
 
 ### mobile: queryAppState
 

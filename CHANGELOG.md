@@ -1,3 +1,13 @@
+## [7.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.3...v7.0.0) (2026-02-20)
+
+### ⚠ BREAKING CHANGES
+
+* modify the mobile:listApps style to follow XCUITest driver format
+
+### Bug Fixes
+
+* modify the format of listApps to follow xcuitest format ([#986](https://github.com/appium/appium-uiautomator2-driver/issues/986)) ([f163507](https://github.com/appium/appium-uiautomator2-driver/commit/f1635079e3c495e7f5b68850781f907ed7fccae6))
+
 ## [6.9.3](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.2...v6.9.3) (2026-02-20)
 
 ### Reverts

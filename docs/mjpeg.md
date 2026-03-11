@@ -86,12 +86,6 @@ When running multiple sessions (e.g. parallel tests or multiple devices):
 
 For long-running or parallel streaming, start with moderate defaults (for example, framerate `10`, scaling factor `50`, quality `50`) and then adjust as needed.
 
-## Requirements
-
-- For **device-side MJPEG streaming** itself, no extra tools are required beyond a compatible Android device and the UiAutomator2 server; the broadcaster runs entirely on the device.
-- For **tools that consume the stream** (for example, screen recording on the host), you must ensure whatever tool you use (such as `ffmpeg` or a custom recorder) understands MJPEG over HTTP and can connect to the forwarded MJPEG URL.
-- For **`mobile: startScreenStreaming` / `stopScreenStreaming`**, which are host-side and GStreamer-based, you must have GStreamer with `gst-plugins-base`, `gst-plugins-good`, and `gst-plugins-bad` installed and available on the host `PATH`.
-
 ## Relationship to `mobile: startScreenStreaming` / `stopScreenStreaming`
 
 The driver also supports **`mobile: startScreenStreaming`** and **`mobile: stopScreenStreaming`**. These are **different** from the built-in device MJPEG server:
@@ -100,6 +94,12 @@ The driver also supports **`mobile: startScreenStreaming`** and **`mobile: stopS
 - The **device MJPEG server** described in this guide runs entirely on the device, is built into the UiAutomator2 server, and does not require GStreamer.
 
 Use the **device MJPEG server** (with `appium:mjpegServerPort` and optionally `appium:mjpegScreenshotUrl`) when you only need a simple TCP MJPEG stream from the device. Use **`mobile: startScreenStreaming`** when you need the host-based GStreamer pipeline (e.g. for specific encoding or network options).
+
+## Requirements
+
+- For **device-side MJPEG streaming** itself, no extra tools are required beyond a compatible Android device and the UiAutomator2 server; the broadcaster runs entirely on the device.
+- For **tools that consume the stream** (for example, screen recording on the host), you must ensure whatever tool you use (such as `ffmpeg` or a custom recorder) understands MJPEG over HTTP and can connect to the forwarded MJPEG URL.
+- For **`mobile: startScreenStreaming` / `stopScreenStreaming`**, which are host-side and GStreamer-based, you must have GStreamer with `gst-plugins-base`, `gst-plugins-good`, and `gst-plugins-bad` installed and available on the host `PATH`.
 
 ## Summary
 

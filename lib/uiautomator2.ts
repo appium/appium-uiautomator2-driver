@@ -38,65 +38,56 @@ const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
 class UIA2Proxy extends JWProxy {
   public didInstrumentationExit: boolean = false;
 
-override async proxyCommand(
-  url: string,
-  method: HTTPMethod,
-  body: HTTPBody = null,
-): Promise<[ProxyResponse, HTTPBody]> {
+  override async proxyCommand(
+    url: string,
+    method: HTTPMethod,
+    body: HTTPBody = null,
+  ): Promise<[ProxyResponse, HTTPBody]> {
+    // retry counter
+    (this as any)._retries = (this as any)._retries || 0;
 
-  // retry counter
-  (this as any)._retries = (this as any)._retries || 0;
+    if (this.didInstrumentationExit && !(this as any).uia2Server.isRecovering) {
+      if ((this as any)._retries < 2 && !(this as any).uia2Server.isRecovering) {
+        (this as any)._retries++;
 
-  if (this.didInstrumentationExit && !(this as any).uia2Server.isRecovering) {
-    if ((this as any)._retries < 2 && !(this as any).uia2Server.isRecovering) {
-      (this as any)._retries++;
+        this.log.warn(`UiAutomator2 crashed. Attempting recovery #${(this as any)._retries}`);
+        await (this as any).uia2Server.recoverUiAutomator2();
 
-      this.log.warn(
-        `UiAutomator2 crashed. Attempting recovery #${(this as any)._retries}`
+        this.didInstrumentationExit = false;
+
+        this.log.warn('Retrying command after recovery...');
+        return await super.proxyCommand(url, method, body);
+      }
+
+      throw new errors.InvalidContextError(
+        `'${method} ${url}' cannot be proxied because instrumentation crashed repeatedly`,
       );
-      await (this as any).uia2Server.recoverUiAutomator2();
-
-      this.didInstrumentationExit = false;
-
-      this.log.warn('Retrying command after recovery...');
-      return await super.proxyCommand(url, method, body);
     }
 
-    throw new errors.InvalidContextError(
-      `'${method} ${url}' cannot be proxied because instrumentation crashed repeatedly`
-    );
-  }
+    try {
+      const result = await super.proxyCommand(url, method, body);
 
-  try {
-    const result = await super.proxyCommand(url, method, body);
+      // reset retry counter on success
+      (this as any)._retries = 0;
 
-    // reset retry counter on success
-    (this as any)._retries = 0;
+      return result;
+    } catch (err: any) {
+      const msg = err?.message || '';
 
-    return result;
+      if (msg.includes('instrumentation process is not running') && (this as any)._retries < 2) {
+        (this as any)._retries++;
 
-  } catch (err: any) {
-    const msg = err?.message || '';
+        this.log.warn(`Proxy error detected. Recovery attempt #${(this as any)._retries}`);
 
-    if (
-      msg.includes('instrumentation process is not running') &&
-      (this as any)._retries < 2
-    ) {
-      (this as any)._retries++;
+        // await (this as any).server.recoverUiAutomator2();
+        await (this as any).uia2Server.recoverUiAutomator2();
 
-      this.log.warn(
-        `Proxy error detected. Recovery attempt #${(this as any)._retries}`
-      );
+        return await super.proxyCommand(url, method, body);
+      }
 
-      // await (this as any).server.recoverUiAutomator2();
-      await (this as any).uia2Server.recoverUiAutomator2();
-
-      return await super.proxyCommand(url, method, body);
+      throw err;
     }
-
-    throw err;
   }
-}
 }
 
 export class UiAutomator2Server {
@@ -547,107 +538,103 @@ export class UiAutomator2Server {
   private isRecovering: boolean = false;
 
   async recoverUiAutomator2(): Promise<void> {
-  if (this.isRecovering) {
-    this.log.warn('Recovery already in progress, skipping...');
-    return;
-  }
+    if (this.isRecovering) {
+      this.log.warn('Recovery already in progress, skipping...');
+      return;
+    }
 
-  this.isRecovering = true;
+    this.isRecovering = true;
 
-  this.log.warn('Recovering UiAutomator2...');
-
-  try {
-    await this.stopInstrumentationProcess();
-
-    await this.adb.forceStop(SERVER_PACKAGE_ID);
-    await this.adb.forceStop(SERVER_TEST_PACKAGE_ID);
+    this.log.warn('Recovering UiAutomator2...');
 
     try {
-      await this.adb.killProcessesByName('uiautomator');
-    } catch {
-      this.log.debug('No uiautomator processes found (safe to ignore)');
-    }
+      await this.stopInstrumentationProcess();
 
-    await B.delay(2000);
+      await this.adb.forceStop(SERVER_PACKAGE_ID);
+      await this.adb.forceStop(SERVER_TEST_PACKAGE_ID);
 
-    await this.startInstrumentationProcess();
+      try {
+        await this.adb.killProcessesByName('uiautomator');
+      } catch {
+        this.log.debug('No uiautomator processes found (safe to ignore)');
+      }
 
-    this.jwproxy.didInstrumentationExit = false;
-    (this.jwproxy as any)._retries = 0;
-    this.jwproxy.sessionId = null;
+      await B.delay(2000);
 
-    await waitForCondition(
-      async () => {
-        try {
-          await axios.get(`http://${this.host}:${this.systemPort}/status`);
-          return true;
-        } catch {
-          return false;
-        }
-      },
-      {waitMs: 20000, intervalMs: 1000}
-    );
+      await this.startInstrumentationProcess();
 
-    this.log.info('UiAutomator2 server restarted');
+      this.jwproxy.didInstrumentationExit = false;
+      (this.jwproxy as any)._retries = 0;
+      this.jwproxy.sessionId = null;
 
-    await B.delay(3000);
+      await waitForCondition(
+        async () => {
+          try {
+            await axios.get(`http://${this.host}:${this.systemPort}/status`);
+            return true;
+          } catch {
+            return false;
+          }
+        },
+        {waitMs: 20000, intervalMs: 1000},
+      );
 
-    this.log.info('Creating new UiAutomator2 session...');
+      this.log.info('UiAutomator2 server restarted');
 
-const response = await axios.post(
-  `http://${this.host}:${this.systemPort}/session`,
-  {
-    capabilities: {
-      firstMatch: [{}],
-      alwaysMatch: {},
-    },
-  }
-);
+      await B.delay(3000);
 
-const newSessionId =
-  response.data?.sessionId || response.data?.value?.sessionId;
+      this.log.info('Creating new UiAutomator2 session...');
 
-if (!newSessionId) {
-  throw new Error('Failed to create new UiAutomator2 session');
-}
-
-this.jwproxy.sessionId = newSessionId;
-
-this.log.info(`New session created: ${newSessionId}`);
-
-    await this.ensureAppRunning();
-
-  } catch (e) {
-    this.log.error('Recovery failed', e);
-    throw e;
-  } finally {
-    this.isRecovering = false;
-  }
-}
-async ensureAppRunning(): Promise<void> {
-  try {
-    const pkg = (this as any).driver?.opts?.appPackage;
-
-    if (!pkg) {return;}
-
-    const isRunning = await this.adb.processExists(pkg);
-
-    if (!isRunning) {
-      this.log.warn(`App ${pkg} is not running. Restarting...`);
-
-      await this.adb.startApp({
-        pkg,
-        activity: (this as any).driver?.opts?.appActivity,
-        action: 'android.intent.action.MAIN',
-        category: 'android.intent.category.LAUNCHER',
-        stopApp: false,
+      const response = await axios.post(`http://${this.host}:${this.systemPort}/session`, {
+        capabilities: {
+          firstMatch: [{}],
+          alwaysMatch: {},
+        },
       });
-    }
 
-  } catch (e) {
-    this.log.warn('Could not ensure app running', e);
+      const newSessionId = response.data?.sessionId || response.data?.value?.sessionId;
+
+      if (!newSessionId) {
+        throw new Error('Failed to create new UiAutomator2 session');
+      }
+
+      this.jwproxy.sessionId = newSessionId;
+
+      this.log.info(`New session created: ${newSessionId}`);
+
+      await this.ensureAppRunning();
+    } catch (e) {
+      this.log.error('Recovery failed', e);
+      throw e;
+    } finally {
+      this.isRecovering = false;
+    }
   }
-}
+  async ensureAppRunning(): Promise<void> {
+    try {
+      const pkg = (this as any).driver?.opts?.appPackage;
+
+      if (!pkg) {
+        return;
+      }
+
+      const isRunning = await this.adb.processExists(pkg);
+
+      if (!isRunning) {
+        this.log.warn(`App ${pkg} is not running. Restarting...`);
+
+        await this.adb.startApp({
+          pkg,
+          activity: (this as any).driver?.opts?.appActivity,
+          action: 'android.intent.action.MAIN',
+          category: 'android.intent.category.LAUNCHER',
+          stopApp: false,
+        });
+      }
+    } catch (e) {
+      this.log.warn('Could not ensure app running', e);
+    }
+  }
 }
 
 export interface PackageInfo {

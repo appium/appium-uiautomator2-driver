@@ -628,7 +628,7 @@ async ensureAppRunning(): Promise<void> {
   try {
     const pkg = (this as any).driver?.opts?.appPackage;
 
-    if (!pkg) return;
+    if (!pkg) {return;}
 
     const isRunning = await this.adb.processExists(pkg);
 

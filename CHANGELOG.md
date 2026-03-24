@@ -1,3 +1,9 @@
+## [7.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.0.0...v7.1.0) (2026-03-24)
+
+### Features
+
+* add mobile: setStylusHandwriting behind a security flag ([#990](https://github.com/appium/appium-uiautomator2-driver/issues/990)) ([0c42ef6](https://github.com/appium/appium-uiautomator2-driver/commit/0c42ef6230cb0889f3e08789c7bcff92031dafc0))
+
 ## [7.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v6.9.3...v7.0.0) (2026-02-20)
 
 ### ⚠ BREAKING CHANGES

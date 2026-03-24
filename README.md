@@ -1826,7 +1826,7 @@ action | string | yes | The action to execute on the NFC adapter. The following 
 Allows to control the stylus handwriting feature on the device under test. Available since driver version 7.1.0.
 This extension requires the `uiautomation2:set_stylus_handwriting` server command line feature to be enabled.
 
-Disabling the stylus handwriting will help to prevent blocking text input by it.
+Disabling the stylus handwriting will help to prevent blocking text input by the demo view.
 See [this ticket](https://github.com/appium/appium-uiautomator2-driver/issues/909) for more details.
 
 #### Arguments

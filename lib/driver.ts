@@ -695,6 +695,7 @@ class AndroidUiautomator2Driver
     // now that we have package and activity, we can create an instance of
     // uiautomator2 with the appropriate options
     this.uiautomator2 = new UiAutomator2Server(this.log, uiautomator2Opts);
+    (this.uiautomator2 as any).driver = this;
     this.proxyReqRes = this.uiautomator2.proxyReqRes.bind(this.uiautomator2);
     this.proxyCommand = this.uiautomator2.proxyCommand.bind(this.uiautomator2);
 

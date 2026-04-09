@@ -21,7 +21,7 @@ describe('apidemo - source', function () {
   function assertSource(source: string): void {
     expect(source).to.exist;
     const dom = new DOMParser().parseFromString(source, 'text/xml');
-    const nodes = xpath.select('//hierarchy', dom);
+    const nodes = xpath.select('//hierarchy', dom as unknown as Node);
     if (nodes && Array.isArray(nodes)) {
       expect(nodes.length).to.equal(1);
     } else {

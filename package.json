@@ -25,12 +25,11 @@
   },
   "files": [
     "lib",
-    "build",
+    "build/lib",
     "scripts",
     "CHANGELOG.md",
     "LICENSE",
-    "npm-shrinkwrap.json",
-    "!build/test"
+    "npm-shrinkwrap.json"
   ],
   "scripts": {
     "build": "tsc -b",

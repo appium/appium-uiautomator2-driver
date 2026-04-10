@@ -1,3 +1,9 @@
+## [7.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.1.1...v7.1.2) (2026-04-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.9.3 to 6.0.2 ([#991](https://github.com/appium/appium-uiautomator2-driver/issues/991)) ([5fbcd6f](https://github.com/appium/appium-uiautomator2-driver/commit/5fbcd6f4d1d8bb3cc9d61208707eccd627b14042))
+
 ## [7.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v7.1.0...v7.1.1) (2026-04-09)
 
 ### Bug Fixes

@@ -8,5 +8,11 @@
     "checkJs": true,
     "types": ["node", "mocha"]
   },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "rootDir": "."
+    }
+  },
   "include": ["lib", "test"]
 }

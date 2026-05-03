@@ -76,21 +76,18 @@ describe('apidemo - orientation -', function () {
       await waitForOrientation('PORTRAIT');
       await driver.setOrientation('LANDSCAPE');
       await waitForOrientation('LANDSCAPE');
-      expect(await driver.getOrientation()).to.eql('LANDSCAPE');
     });
     it('should rotate screen to portrait', async function () {
       await driver.setOrientation('LANDSCAPE');
       await waitForOrientation('LANDSCAPE');
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');
-      expect(await driver.getOrientation()).to.eql('PORTRAIT');
     });
     it('should not error when trying to rotate to portrait again', async function () {
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');
-      expect(await driver.getOrientation()).to.eql('PORTRAIT');
     });
   });
 });

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import B from 'bluebird';
 import {errors} from 'appium/driver';
 import {APK_EXTENSION} from '../extensions';
 import type {AndroidUiautomator2Driver} from '../driver';
@@ -19,7 +18,7 @@ export async function mobileInstallMultipleApks(
   if (!_.isArray(apks) || _.isEmpty(apks)) {
     throw new errors.InvalidArgumentError('No apks are given to install');
   }
-  const configuredApks = await B.all(
+  const configuredApks = await Promise.all(
     apks.map((app) => this.helpers.configureApp(app, [APK_EXTENSION])),
   );
   await this.adb.installMultipleApks(configuredApks, options);

@@ -1,5 +1,4 @@
 import {PROTOCOLS} from 'appium/driver';
-import B from 'bluebird';
 import _ from 'lodash';
 import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
@@ -190,7 +189,7 @@ export async function getElementRect(
 
   const chromedriver = this.chromedriver as Chromedriver;
   if (chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP) {
-    const [{x, y}, {width, height}] = (await B.all([
+    const [{x, y}, {width, height}] = (await Promise.all([
       chromedriver.jwproxy.command(`/element/${elementId}/location`, 'GET'),
       chromedriver.jwproxy.command(`/element/${elementId}/size`, 'GET'),
     ])) as [Position, Size];

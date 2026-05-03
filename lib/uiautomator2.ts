@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {JWProxy, errors} from 'appium/driver';
-import {waitForCondition} from 'asyncbox';
+import {sleep, waitForCondition} from 'asyncbox';
 import {
   SERVER_APK_PATH as apkPath,
   TEST_APK_PATH as testApkPath,
@@ -15,7 +15,6 @@ import type {
   ProxyResponse,
   ProxyOptions,
 } from '@appium/types';
-import B from 'bluebird';
 import axios from 'axios';
 import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
@@ -28,6 +27,36 @@ const SERVER_REQUEST_TIMEOUT_MS = 500;
 export const SERVER_PACKAGE_ID = 'io.appium.uiautomator2.server';
 export const SERVER_TEST_PACKAGE_ID = `${SERVER_PACKAGE_ID}.test`;
 export const INSTRUMENTATION_TARGET = `${SERVER_TEST_PACKAGE_ID}/androidx.test.runner.AndroidJUnitRunner`;
+
+export interface PackageInfo {
+  installState: InstallState;
+  appPath: string;
+  appId: string;
+}
+
+export interface UiAutomator2ServerOptions {
+  adb: ADB;
+  host: string;
+  systemPort: number;
+  disableWindowAnimation: boolean;
+  readTimeout?: number;
+  disableSuppressAccessibilityService?: boolean;
+  basePath?: string;
+}
+
+// Type helper to extract required (non-optional) keys from UiAutomator2ServerOptions
+type RequiredKeysOf<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+}[keyof T];
+
+interface SessionInfo {
+  id: string;
+}
+
+interface SessionsResponse {
+  value: SessionInfo[];
+}
+
 const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
   'adb',
   'host',
@@ -103,7 +132,7 @@ export class UiAutomator2Server {
    * @param installTimeout - Installation timeout
    */
   async installServerApk(installTimeout: number = SERVER_INSTALL_RETRIES * 1000): Promise<void> {
-    const packagesInfo = await B.all(
+    const packagesInfo = await Promise.all(
       [
         {
           appPath: apkPath,
@@ -136,7 +165,7 @@ export class UiAutomator2Server {
           this.log.info(`Cannot uninstall '${pkgId}': ${err.message}`);
         }
       };
-      await B.all(packagesInfo.map(({appId}) => silentUninstallPkg(appId)));
+      await Promise.all(packagesInfo.map(({appId}) => silentUninstallPkg(appId)));
     }
     if (shouldInstallServerPackages) {
       const installPkg = async (pkgPath: string): Promise<void> => {
@@ -147,7 +176,7 @@ export class UiAutomator2Server {
           timeoutCapName: 'uiautomator2ServerInstallTimeout',
         });
       };
-      await B.all(packagesInfo.map(({appPath}) => installPkg(appPath)));
+      await Promise.all(packagesInfo.map(({appPath}) => installPkg(appPath)));
     }
 
     await this.verifyServicesAvailability();
@@ -217,7 +246,7 @@ export class UiAutomator2Server {
           `Retrying UiAutomator2 startup (#${retries} of ${maxRetries - 1})`,
       );
       await this.cleanupAutomationLeftovers(true);
-      await B.delay(delayBetweenRetries);
+      await sleep(delayBetweenRetries);
     }
 
     this.log.debug(
@@ -256,7 +285,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await B.all([
+      await Promise.all([
         this.adb.forceStop(SERVER_PACKAGE_ID),
         this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
       ]);
@@ -435,7 +464,7 @@ export class UiAutomator2Server {
         this.log.debug(
           `Cleaning up ${util.pluralize('obsolete session', activeSessionIds.length, true)}`,
         );
-        await B.all(
+        await Promise.all(
           activeSessionIds.map((id: string) =>
             axios.delete(`${serverBase}/session/${id}`, {
               timeout: SERVER_REQUEST_TIMEOUT_MS,
@@ -452,7 +481,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await B.all([
+      await Promise.all([
         this.adb.forceStop(SERVER_PACKAGE_ID),
         this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
       ]);
@@ -493,33 +522,4 @@ export class UiAutomator2Server {
       );
     }
   }
-}
-
-export interface PackageInfo {
-  installState: InstallState;
-  appPath: string;
-  appId: string;
-}
-
-export interface UiAutomator2ServerOptions {
-  adb: ADB;
-  host: string;
-  systemPort: number;
-  disableWindowAnimation: boolean;
-  readTimeout?: number;
-  disableSuppressAccessibilityService?: boolean;
-  basePath?: string;
-}
-
-// Type helper to extract required (non-optional) keys from UiAutomator2ServerOptions
-type RequiredKeysOf<T> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
-}[keyof T];
-
-interface SessionInfo {
-  id: string;
-}
-
-interface SessionsResponse {
-  value: SessionInfo[];
 }

@@ -67,50 +67,6 @@ const isAstClassName = (item: {type?: string}): item is AstClassName => item.typ
 const isAstTagName = (item: {type?: string}): item is AstTagName => item.type === 'TagName';
 const isAstId = (item: {type?: string}): item is AstId => item.type === 'Id';
 
-function toSnakeCase(str?: string | null): string {
-  if (!str) {
-    return '';
-  }
-  const tokens = str
-    .split('-')
-    .map((token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase());
-  const out = tokens.join('');
-  return out.charAt(0).toLowerCase() + out.slice(1);
-}
-
-function requireBoolean(css: AstAttribute | AstPseudoClass): 'true' | 'false' {
-  const rawValue = (css as any).value?.value ?? (css as any).argument?.value;
-  const value = _.toLower(rawValue ?? 'true');
-  if (value === 'true') {
-    return 'true';
-  }
-  if (value === 'false') {
-    return 'false';
-  }
-  throw new Error(`'${css.name}' must be true, false or empty. Found '${(css as any).value}'`);
-}
-
-function requireEntityName(cssEntity: AstAttribute | AstPseudoClass): string {
-  const attrName = cssEntity.name.toLowerCase();
-
-  if (ALL_ATTRS.includes(attrName)) {
-    return attrName;
-  }
-
-  for (const [officialAttr, aliasAttrs] of ATTRIBUTE_ALIASES) {
-    if (aliasAttrs.includes(attrName)) {
-      return officialAttr;
-    }
-  }
-  throw new Error(
-    `'${attrName}' is not a valid attribute. Supported attributes are '${ALL_ATTRS.join(', ')}'`,
-  );
-}
-
-function getWordMatcherRegex(word: string): string {
-  return `\\b(\\w*${_.escapeRegExp(word)}\\w*)\\b`;
-}
-
 export class CssConverter {
   constructor(
     private readonly selector: string,
@@ -276,4 +232,48 @@ export class CssConverter {
 
     throw new Error('No rules could be parsed out of the current selector');
   }
+}
+
+function toSnakeCase(str?: string | null): string {
+  if (!str) {
+    return '';
+  }
+  const tokens = str
+    .split('-')
+    .map((token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase());
+  const out = tokens.join('');
+  return out.charAt(0).toLowerCase() + out.slice(1);
+}
+
+function requireBoolean(css: AstAttribute | AstPseudoClass): 'true' | 'false' {
+  const rawValue = (css as any).value?.value ?? (css as any).argument?.value;
+  const value = _.toLower(rawValue ?? 'true');
+  if (value === 'true') {
+    return 'true';
+  }
+  if (value === 'false') {
+    return 'false';
+  }
+  throw new Error(`'${css.name}' must be true, false or empty. Found '${(css as any).value}'`);
+}
+
+function requireEntityName(cssEntity: AstAttribute | AstPseudoClass): string {
+  const attrName = cssEntity.name.toLowerCase();
+
+  if (ALL_ATTRS.includes(attrName)) {
+    return attrName;
+  }
+
+  for (const [officialAttr, aliasAttrs] of ATTRIBUTE_ALIASES) {
+    if (aliasAttrs.includes(attrName)) {
+      return officialAttr;
+    }
+  }
+  throw new Error(
+    `'${attrName}' is not a valid attribute. Supported attributes are '${ALL_ATTRS.join(', ')}'`,
+  );
+}
+
+function getWordMatcherRegex(word: string): string {
+  return `\\b(\\w*${_.escapeRegExp(word)}\\w*)\\b`;
 }

@@ -1,7 +1,6 @@
 import {AndroidUiautomator2Driver} from '../../lib/driver';
 import sinon from 'sinon';
 import * as path from 'node:path';
-import B from 'bluebird';
 import {ADB} from 'appium-adb';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -45,7 +44,7 @@ describe('driver.js', function () {
     it('should throw an error if app can not be found', async function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       const adb = defaultStub(driver);
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
       await expect(
         driver.createSession(
           {} as any,
@@ -63,9 +62,9 @@ describe('driver.js', function () {
     it('should set sessionId', async function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       const adb = defaultStub(driver);
-      sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-      sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
+      sandbox.mock(driver).expects('checkAppPresent').once().returns(Promise.resolve());
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
+      sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(Promise.resolve());
       await driver.createSession(
         {} as any,
         {} as any,
@@ -82,9 +81,9 @@ describe('driver.js', function () {
     it('should set the default context', async function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       const adb = defaultStub(driver);
-      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-      sandbox.mock(driver).expects('checkAppPresent').returns(B.resolve());
-      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
+      sandbox.mock(driver).expects('checkAppPresent').returns(Promise.resolve());
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
       await driver.createSession(
         {} as any,
         {} as any,
@@ -104,7 +103,7 @@ describe('driver.js', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       defaultStub(driver);
       const app = path.resolve('.');
-      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
       const configureAppStub = sandbox.stub(driver.helpers, 'configureApp').returns(app);
 
       await driver.createSession(
@@ -127,8 +126,10 @@ describe('driver.js', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       defaultStub(driver);
       const app = path.resolve('asdfasdf');
-      const checkAppPresentStub = sandbox.stub(driver, 'checkAppPresent').returns(B.resolve());
-      sandbox.mock(driver).expects('startUiAutomator2Session').returns(B.resolve());
+      const checkAppPresentStub = sandbox
+        .stub(driver, 'checkAppPresent')
+        .returns(Promise.resolve());
+      sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
       sandbox.mock(driver.helpers).expects('configureApp').returns(app);
 
       await driver.createSession(
@@ -187,9 +188,13 @@ describe('driver.js', function () {
         beforeEach(function () {
           driver = new AndroidUiautomator2Driver({} as any, false);
           const adb = defaultStub(driver);
-          sandbox.mock(driver).expects('checkAppPresent').once().returns(B.resolve());
-          sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(B.resolve(24));
-          sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(B.resolve());
+          sandbox.mock(driver).expects('checkAppPresent').once().returns(Promise.resolve());
+          sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
+          sandbox
+            .mock(driver)
+            .expects('startUiAutomator2Session')
+            .once()
+            .returns(Promise.resolve());
         });
 
         describe('on webview mode', function () {

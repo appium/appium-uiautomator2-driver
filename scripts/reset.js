@@ -1,5 +1,4 @@
 const { ADB } = require('appium-adb');
-const B = require('bluebird');
 const {logger} = require('appium/support');
 
 const log = logger.getLogger('UIA2Reset');
@@ -26,7 +25,7 @@ async function runReset () {
     deviceAdb.setDeviceId(udid);
     uninstallPromises.push(...(SERVER_PKGS.map((pkgId) => deviceAdb.uninstallApk(pkgId))));
   }
-  await B.all(uninstallPromises);
+  await Promise.all(uninstallPromises);
 }
 
 (async () => await runReset())();

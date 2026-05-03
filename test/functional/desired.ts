@@ -14,6 +14,13 @@ export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 export const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
 export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
 
+export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
+  return deepFreeze({
+    alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
+    firstMatch: [{}],
+  });
+}
+
 function deepFreeze<T>(object: T): T {
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
@@ -23,13 +30,6 @@ function deepFreeze<T>(object: T): T {
     }
   }
   return Object.freeze(object);
-}
-
-export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
-  return deepFreeze({
-    alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
-    firstMatch: [{}],
-  });
 }
 
 export const GENERIC_CAPS = deepFreeze({

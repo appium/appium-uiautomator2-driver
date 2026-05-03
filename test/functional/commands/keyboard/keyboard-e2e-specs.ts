@@ -1,6 +1,5 @@
 import type {Browser} from 'webdriverio';
-import B from 'bluebird';
-import {retryInterval} from 'asyncbox';
+import {retryInterval, sleep} from 'asyncbox';
 import {APIDEMOS_CAPS} from '../../desired';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
@@ -107,7 +106,7 @@ async function clearKeyEvents(driver: Browser): Promise<void> {
   await el.click();
 
   // wait a moment for the clearing to occur, lest we too quickly try to enter more text
-  await B.delay(500);
+  await sleep(500);
 }
 
 async function keyEventTest(
@@ -287,7 +286,7 @@ describe('keyboard', function () {
     describe('sending a key event', function () {
       before(async function () {
         await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
-        await B.delay(500);
+        await sleep(500);
       });
 
       it('should be able to send combination keyevents', async function () {

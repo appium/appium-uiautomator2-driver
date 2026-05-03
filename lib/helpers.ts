@@ -2,6 +2,10 @@ import path from 'node:path';
 import type {ADB} from 'appium-adb';
 import {fs, system} from 'appium/support';
 
+/**
+ * @param filePath - Path to check
+ * @returns Whether the file is writeable by the current process
+ */
 export async function isWriteable(filePath: string): Promise<boolean> {
   try {
     await fs.access(filePath, fs.constants.W_OK);
@@ -18,6 +22,12 @@ export async function isWriteable(filePath: string): Promise<boolean> {
   }
 }
 
+/**
+ * Ensures the app at `appPath` is writeable, then signs it with the given ADB instance.
+ *
+ * @param adb - ADB instance used to sign the APK
+ * @param appPath - Path to the application package
+ */
 export async function signApp(adb: ADB, appPath: string): Promise<void> {
   if (!(await isWriteable(appPath))) {
     throw new Error(

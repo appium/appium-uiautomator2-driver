@@ -7,7 +7,6 @@ import {
   APIDEMOS_MAIN_ACTIVITY,
 } from './desired';
 import {initSession, deleteSession} from './helpers/session';
-import B from 'bluebird';
 import {retryInterval} from 'asyncbox';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -21,12 +20,10 @@ const DEFAULT_ADB_PORT = 5037;
 async function killAndPrepareServer(oldPort: number, newPort: number): Promise<void> {
   const oldAdb = await ADB.createADB({adbPort: oldPort});
   await oldAdb.killServer();
-  if (process.env.CI) {
-    // on Travis this takes a while to get into a good state
-    await B.delay(10000);
-  }
   const newAdb = await ADB.createADB({adbPort: newPort});
-  await retryInterval(5, 500, async () => await newAdb.getApiLevel());
+  await retryInterval(20, 500, async () => {
+    await newAdb.getApiLevel();
+  });
 }
 
 describe('createSession', function () {

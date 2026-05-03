@@ -1,3 +1,9 @@
+## [7.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.1.2...v7.2.0) (2026-05-03)
+
+### Features
+
+* Ditch bluebird ([#996](https://github.com/appium/appium-uiautomator2-driver/issues/996)) ([68a290e](https://github.com/appium/appium-uiautomator2-driver/commit/68a290e08967430665077c0fa7aef75cc3a49323))
+
 ## [7.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.1.1...v7.1.2) (2026-04-10)
 
 ### Miscellaneous Chores

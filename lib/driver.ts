@@ -265,6 +265,90 @@ class AndroidUiautomator2Driver
 
   override desiredCapConstraints: Uiautomator2Constraints;
 
+  mobileGetActionHistory = mobileGetActionHistory;
+  mobileScheduleAction = mobileScheduleAction;
+  mobileUnscheduleAction = mobileUnscheduleAction;
+  performActions = performActions;
+  releaseActions = releaseActions;
+
+  getAlertText = getAlertText;
+  mobileAcceptAlert = mobileAcceptAlert;
+  mobileDismissAlert = mobileDismissAlert;
+  postAcceptAlert = postAcceptAlert;
+  postDismissAlert = postDismissAlert;
+
+  mobileInstallMultipleApks = mobileInstallMultipleApks;
+
+  mobileGetBatteryInfo = mobileGetBatteryInfo;
+
+  active = active;
+  getAttribute = getAttribute;
+  elementEnabled = elementEnabled;
+  elementDisplayed = elementDisplayed;
+  elementSelected = elementSelected;
+  getName = getName;
+  getLocation = getLocation;
+  getSize = getSize;
+  getElementRect = getElementRect;
+  getElementScreenshot = getElementScreenshot;
+  getText = getText;
+  setValueImmediate = setValueImmediate;
+  doSetElementValue = doSetElementValue;
+  click = click;
+  clear = clear;
+  mobileReplaceElementValue = mobileReplaceElementValue;
+
+  doFindElementOrEls = doFindElementOrEls;
+
+  mobileClickGesture = mobileClickGesture;
+  mobileDoubleClickGesture = mobileDoubleClickGesture;
+  mobileDragGesture = mobileDragGesture;
+  mobileFlingGesture = mobileFlingGesture;
+  mobileLongClickGesture = mobileLongClickGesture;
+  mobilePinchCloseGesture = mobilePinchCloseGesture;
+  mobilePinchOpenGesture = mobilePinchOpenGesture;
+  mobileScroll = mobileScroll;
+  mobileScrollBackTo = mobileScrollBackTo;
+  mobileScrollGesture = mobileScrollGesture;
+  mobileSwipeGesture = mobileSwipeGesture;
+
+  pressKeyCode = pressKeyCode;
+  longPressKeyCode = longPressKeyCode;
+  mobilePressKey = mobilePressKey;
+  mobileType = mobileType;
+  doSendKeys = doSendKeys;
+  keyevent = keyevent;
+
+  getPageSource = getPageSource;
+  getOrientation = getOrientation;
+  setOrientation = setOrientation;
+  openNotifications = openNotifications;
+  suspendChromedriverProxy = suspendChromedriverProxy as any;
+  mobileGetDeviceInfo = mobileGetDeviceInfo;
+  mobileResetAccessibilityCache = mobileResetAccessibilityCache;
+  mobileListWindows = mobileListWindows;
+  mobileListDisplays = mobileListDisplays;
+
+  getClipboard = getClipboard;
+  setClipboard = setClipboard;
+
+  setUrl = setUrl;
+  mobileDeepLink = mobileDeepLink;
+  back = back;
+
+  mobileScreenshots = mobileScreenshots;
+  mobileViewportScreenshot = mobileViewportScreenshot;
+  getScreenshot = getScreenshot;
+  getViewportScreenshot = getViewportScreenshot;
+
+  getStatusBarHeight = getStatusBarHeight;
+  getDevicePixelRatio = getDevicePixelRatio;
+  getDisplayDensity = getDisplayDensity;
+  getViewPortRect = getViewPortRect;
+  getWindowRect = getWindowRect;
+  getWindowSize = getWindowSize;
+  mobileViewPortRect = mobileViewPortRect;
+
   constructor(opts: InitialOpts = {} as InitialOpts, shouldValidateCaps = true) {
     // `shell` overwrites adb.shell, so remove
     // @ts-expect-error FIXME: what is this?
@@ -298,6 +382,11 @@ class AndroidUiautomator2Driver
     for (const fn of MEMOIZED_FUNCTIONS) {
       this[fn] = _.memoize(this[fn]) as any;
     }
+  }
+
+  override get driverData() {
+    // TODO fill out resource info here
+    return {};
   }
 
   override validateDesiredCaps(caps: any): caps is Uiautomator2DriverCaps {
@@ -423,11 +512,6 @@ class AndroidUiautomator2Driver
       deviceScreenSize: realDisplaySize,
       deviceScreenDensity: displayDensity,
     };
-  }
-
-  override get driverData() {
-    // TODO fill out resource info here
-    return {};
   }
 
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
@@ -856,13 +940,13 @@ class AndroidUiautomator2Driver
 
     if (this.adb) {
       await B.all(
-        screenRecordingStopTasks.map((task) => {
+        screenRecordingStopTasks.map((task) =>
           (async () => {
             try {
               await task();
             } catch {}
-          })();
-        }),
+          })(),
+        ),
       );
 
       if (this.opts.appPackage) {
@@ -989,90 +1073,6 @@ class AndroidUiautomator2Driver
   async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
     return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
   }
-
-  mobileGetActionHistory = mobileGetActionHistory;
-  mobileScheduleAction = mobileScheduleAction;
-  mobileUnscheduleAction = mobileUnscheduleAction;
-  performActions = performActions;
-  releaseActions = releaseActions;
-
-  getAlertText = getAlertText;
-  mobileAcceptAlert = mobileAcceptAlert;
-  mobileDismissAlert = mobileDismissAlert;
-  postAcceptAlert = postAcceptAlert;
-  postDismissAlert = postDismissAlert;
-
-  mobileInstallMultipleApks = mobileInstallMultipleApks;
-
-  mobileGetBatteryInfo = mobileGetBatteryInfo;
-
-  active = active;
-  getAttribute = getAttribute;
-  elementEnabled = elementEnabled;
-  elementDisplayed = elementDisplayed;
-  elementSelected = elementSelected;
-  getName = getName;
-  getLocation = getLocation;
-  getSize = getSize;
-  getElementRect = getElementRect;
-  getElementScreenshot = getElementScreenshot;
-  getText = getText;
-  setValueImmediate = setValueImmediate;
-  doSetElementValue = doSetElementValue;
-  click = click;
-  clear = clear;
-  mobileReplaceElementValue = mobileReplaceElementValue;
-
-  doFindElementOrEls = doFindElementOrEls;
-
-  mobileClickGesture = mobileClickGesture;
-  mobileDoubleClickGesture = mobileDoubleClickGesture;
-  mobileDragGesture = mobileDragGesture;
-  mobileFlingGesture = mobileFlingGesture;
-  mobileLongClickGesture = mobileLongClickGesture;
-  mobilePinchCloseGesture = mobilePinchCloseGesture;
-  mobilePinchOpenGesture = mobilePinchOpenGesture;
-  mobileScroll = mobileScroll;
-  mobileScrollBackTo = mobileScrollBackTo;
-  mobileScrollGesture = mobileScrollGesture;
-  mobileSwipeGesture = mobileSwipeGesture;
-
-  pressKeyCode = pressKeyCode;
-  longPressKeyCode = longPressKeyCode;
-  mobilePressKey = mobilePressKey;
-  mobileType = mobileType;
-  doSendKeys = doSendKeys;
-  keyevent = keyevent;
-
-  getPageSource = getPageSource;
-  getOrientation = getOrientation;
-  setOrientation = setOrientation;
-  openNotifications = openNotifications;
-  suspendChromedriverProxy = suspendChromedriverProxy as any;
-  mobileGetDeviceInfo = mobileGetDeviceInfo;
-  mobileResetAccessibilityCache = mobileResetAccessibilityCache;
-  mobileListWindows = mobileListWindows;
-  mobileListDisplays = mobileListDisplays;
-
-  getClipboard = getClipboard;
-  setClipboard = setClipboard;
-
-  setUrl = setUrl;
-  mobileDeepLink = mobileDeepLink;
-  back = back;
-
-  mobileScreenshots = mobileScreenshots;
-  mobileViewportScreenshot = mobileViewportScreenshot;
-  getScreenshot = getScreenshot;
-  getViewportScreenshot = getViewportScreenshot;
-
-  getStatusBarHeight = getStatusBarHeight;
-  getDevicePixelRatio = getDevicePixelRatio;
-  getDisplayDensity = getDisplayDensity;
-  getViewPortRect = getViewPortRect;
-  getWindowRect = getWindowRect;
-  getWindowSize = getWindowSize;
-  mobileViewPortRect = mobileViewPortRect;
 }
 
 export {AndroidUiautomator2Driver};

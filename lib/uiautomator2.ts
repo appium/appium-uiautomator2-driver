@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {JWProxy, errors} from 'appium/driver';
-import {waitForCondition} from 'asyncbox';
+import {sleep, waitForCondition} from 'asyncbox';
 import {
   SERVER_APK_PATH as apkPath,
   TEST_APK_PATH as testApkPath,
@@ -15,7 +15,6 @@ import type {
   ProxyResponse,
   ProxyOptions,
 } from '@appium/types';
-import B from 'bluebird';
 import axios from 'axios';
 import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
@@ -133,7 +132,7 @@ export class UiAutomator2Server {
    * @param installTimeout - Installation timeout
    */
   async installServerApk(installTimeout: number = SERVER_INSTALL_RETRIES * 1000): Promise<void> {
-    const packagesInfo = await B.all(
+    const packagesInfo = await Promise.all(
       [
         {
           appPath: apkPath,
@@ -166,7 +165,7 @@ export class UiAutomator2Server {
           this.log.info(`Cannot uninstall '${pkgId}': ${err.message}`);
         }
       };
-      await B.all(packagesInfo.map(({appId}) => silentUninstallPkg(appId)));
+      await Promise.all(packagesInfo.map(({appId}) => silentUninstallPkg(appId)));
     }
     if (shouldInstallServerPackages) {
       const installPkg = async (pkgPath: string): Promise<void> => {
@@ -177,7 +176,7 @@ export class UiAutomator2Server {
           timeoutCapName: 'uiautomator2ServerInstallTimeout',
         });
       };
-      await B.all(packagesInfo.map(({appPath}) => installPkg(appPath)));
+      await Promise.all(packagesInfo.map(({appPath}) => installPkg(appPath)));
     }
 
     await this.verifyServicesAvailability();
@@ -247,7 +246,7 @@ export class UiAutomator2Server {
           `Retrying UiAutomator2 startup (#${retries} of ${maxRetries - 1})`,
       );
       await this.cleanupAutomationLeftovers(true);
-      await B.delay(delayBetweenRetries);
+      await sleep(delayBetweenRetries);
     }
 
     this.log.debug(
@@ -286,7 +285,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await B.all([
+      await Promise.all([
         this.adb.forceStop(SERVER_PACKAGE_ID),
         this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
       ]);
@@ -465,7 +464,7 @@ export class UiAutomator2Server {
         this.log.debug(
           `Cleaning up ${util.pluralize('obsolete session', activeSessionIds.length, true)}`,
         );
-        await B.all(
+        await Promise.all(
           activeSessionIds.map((id: string) =>
             axios.delete(`${serverBase}/session/${id}`, {
               timeout: SERVER_REQUEST_TIMEOUT_MS,
@@ -482,7 +481,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await B.all([
+      await Promise.all([
         this.adb.forceStop(SERVER_PACKAGE_ID),
         this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
       ]);

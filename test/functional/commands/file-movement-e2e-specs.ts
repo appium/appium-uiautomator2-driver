@@ -1,5 +1,4 @@
 import type {Browser} from 'webdriverio';
-import B from 'bluebird';
 import stream from 'node:stream';
 import unzipper from 'unzipper';
 import {APIDEMOS_CAPS} from '../desired';
@@ -50,7 +49,7 @@ describe('file movement', function () {
 
     // go through the folder we pulled and make sure the
     // two files we pushed are in it
-    const zipPromise = new B<number>((resolve) => {
+    const zipPromise = new Promise<number>((resolve) => {
       let entryCount = 0;
       const zipStream = new stream.Readable();
       zipStream._read = () => {};

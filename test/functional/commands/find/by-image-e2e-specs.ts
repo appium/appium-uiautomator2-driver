@@ -1,5 +1,5 @@
 import type {Browser} from 'webdriverio';
-import B from 'bluebird';
+import {sleep} from 'asyncbox';
 import path from 'node:path';
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
 import {initSession, deleteSession} from '../../helpers/session';
@@ -71,7 +71,7 @@ describe('Find - Image', function () {
   it('should be able to click an element', async function () {
     // start and stop the chronometer using images, and then verify the time
     await driver.$(START_IMG).click();
-    await B.delay(3000);
+    await sleep(3000);
     await driver.$(STOP_IMG).click();
     const readout = await driver.$("//*[contains(@text, 'Initial format')]");
     const text = await readout.getText();

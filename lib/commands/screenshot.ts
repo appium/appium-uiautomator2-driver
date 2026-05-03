@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import B from 'bluebird';
 import {imageUtil} from 'appium/support';
 import type {AndroidUiautomator2Driver} from '../driver';
 import type {Screenshot} from './types';
@@ -125,7 +124,7 @@ export async function mobileScreenshots(
   const allInfos = _.values(infos).filter(
     (info): info is Partial<Screenshot> & {id: string} => !!info?.id,
   );
-  const screenshots = await B.all(allInfos.map((info) => toB64Screenshot(info.id)));
+  const screenshots = await Promise.all(allInfos.map((info) => toB64Screenshot(info.id)));
   for (const [info, payload] of _.zip(allInfos, screenshots) as Array<
     [Partial<Screenshot>, string]
   >) {

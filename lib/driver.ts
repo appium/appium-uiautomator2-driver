@@ -16,7 +16,6 @@ import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {BaseDriver, DeviceSettings} from 'appium/driver';
 import {fs, mjpeg, util} from 'appium/support';
 import {retryInterval} from 'asyncbox';
-import B from 'bluebird';
 import _ from 'lodash';
 import os from 'node:os';
 import path from 'node:path';
@@ -494,7 +493,7 @@ class AndroidUiautomator2Driver
       statBarHeight,
       viewportRect,
       {apiVersion, platformVersion, manufacturer, model, realDisplaySize, displayDensity},
-    ] = await B.all([
+    ] = await Promise.all([
       this.getDevicePixelRatio(),
       this.getStatusBarHeight(),
       this.getViewPortRect(),
@@ -644,14 +643,14 @@ class AndroidUiautomator2Driver
     // start settings app, set the language/locale, start logcat etc...
     preflightPromises.push(this.initDevice());
 
-    await B.all(preflightPromises);
+    await Promise.all(preflightPromises);
 
     this.opts = {...this.opts, ...(appInfo ?? {})};
     return appInfo;
   }
 
   async performSessionExecution(capsWithSessionInfo: StringRecord): Promise<void> {
-    await B.all([
+    await Promise.all([
       // Prepare the device by forwarding the UiAutomator2 port
       // This call mutates this.systemPort if it is not set explicitly
       this.allocateSystemPort(),
@@ -660,7 +659,7 @@ class AndroidUiautomator2Driver
       this.allocateMjpegServerPort(),
     ]);
 
-    const [uiautomator2] = await B.all([
+    const [uiautomator2] = await Promise.all([
       // set up the modified UiAutomator2 server etc
       this.initUiAutomator2Server(),
       (async () => {
@@ -824,7 +823,7 @@ class AndroidUiautomator2Driver
           `Could not parse "otherApps" capability: ${(e as Error).message}`,
         );
       }
-      otherApps = await B.all(
+      otherApps = await Promise.all(
         otherApps.map((app) => this.helpers.configureApp(app, [APK_EXTENSION, APKS_EXTENSION])),
       );
       await this.installOtherApks(otherApps);
@@ -939,7 +938,7 @@ class AndroidUiautomator2Driver
     }
 
     if (this.adb) {
-      await B.all(
+      await Promise.all(
         screenRecordingStopTasks.map((task) =>
           (async () => {
             try {

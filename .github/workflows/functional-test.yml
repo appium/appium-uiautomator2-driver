@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - apiLevel: 37
+        - apiLevel: CANARY
           emuTag: google_apis
           arch: x86_64
 

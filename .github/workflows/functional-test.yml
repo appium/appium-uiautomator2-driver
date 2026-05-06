@@ -18,18 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - apiLevel: 36
+        - apiLevel: 37
           emuTag: google_apis
           arch: x86_64
-        - apiLevel: 32
-          emuTag: google_apis
-          arch: x86_64
-        - apiLevel: 30
-          emuTag: google_apis
-          arch: x86
-        - apiLevel: 26
-          emuTag: default
-          arch: x86
 
     env:
       CI: true

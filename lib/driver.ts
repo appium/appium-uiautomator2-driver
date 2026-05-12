@@ -513,11 +513,7 @@ class AndroidUiautomator2Driver
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
     const sessionData = await BaseDriver.prototype.getSession.call(this);
     this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.uiautomator2!.jwproxy.command(
-      '/',
-      'GET',
-      {},
-    )) as StringRecord;
+    const uia2Data = (await this.uiautomator2!.jwproxy.command('/', 'GET', {})) as StringRecord;
     return {...sessionData, ...uia2Data};
   }
 

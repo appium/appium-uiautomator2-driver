@@ -1,4 +1,4 @@
-import {Constraints} from '@appium/types';
+import type {Constraints} from '@appium/types';
 import {commonCapConstraints} from 'appium-android-driver';
 
 const UIAUTOMATOR2_CONSTRAINTS = {

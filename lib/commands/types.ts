@@ -1,4 +1,4 @@
-import {Rect, StringRecord} from '@appium/types';
+import type {Rect, StringRecord} from '@appium/types';
 
 export type BatteryState = -1 | 1 | 2 | 3 | 4 | 5;
 

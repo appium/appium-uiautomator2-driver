@@ -4,7 +4,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "build",
-    "strict": false,
+    "strict": true,
     "checkJs": true,
     "types": ["node", "mocha"]
   },

@@ -1,0 +1,383 @@
+lib/commands/element.ts(186,8): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(253,3): error TS2564: Property 'uiautomator2' has no initializer and is not definitely assigned in the constructor.
+lib/driver.ts(270,3): error TS2416: Property 'performActions' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, actions: StringRecord[]) => Promise<void>' is not assignable to type '(this: AndroidDriver, actions: StringRecord[]) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(284,3): error TS2416: Property 'getAttribute' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(285,3): error TS2416: Property 'elementEnabled' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<boolean>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<boolean>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(286,3): error TS2416: Property 'elementDisplayed' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<boolean>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<boolean>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(287,3): error TS2416: Property 'elementSelected' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<boolean>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<boolean>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(288,3): error TS2416: Property 'getName' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<string>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(289,3): error TS2416: Property 'getLocation' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<Position>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<Position>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(290,3): error TS2416: Property 'getSize' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<Size>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<Size>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(293,3): error TS2416: Property 'getText' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<string>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(294,3): error TS2416: Property 'setValueImmediate' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, keys: string | string[], elementId: string) => Promise<void>' is not assignable to type '(this: AndroidDriver, keys: string | string[], elementId: string) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(295,3): error TS2416: Property 'doSetElementValue' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, params: DoSetElementValueOpts) => Promise<void>' is not assignable to type '(this: AndroidDriver, params: DoSetElementValueOpts) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(296,3): error TS2416: Property 'click' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, element: string) => Promise<void>' is not assignable to type '(this: AndroidDriver, elementId: string) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(300,3): error TS2416: Property 'doFindElementOrEls' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '{ (this: AndroidUiautomator2Driver, params: FindElementOpts & { multiple: true; }): Promise<Element<string>[]>; (this: AndroidUiautomator2Driver, params: FindElementOpts & { ...; }): Promise<...>; }' is not assignable to type '(this: AndroidDriver, params: FindElementOpts) => Promise<Element<string> | Element<string>[]>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(314,3): error TS2416: Property 'pressKeyCode' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, keycode: string | number, metastate?: number | undefined, flags?: number | undefined) => Promise<void>' is not assignable to type '(this: AndroidDriver, keycode: string | number, metastate?: number | undefined) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(315,3): error TS2416: Property 'longPressKeyCode' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, keycode: string | number, metastate: number, flags?: number | undefined) => Promise<void>' is not assignable to type '(this: AndroidDriver, keycode: string | number, metastate?: number | undefined) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(318,3): error TS2416: Property 'doSendKeys' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, params: SendKeysOpts) => Promise<void>' is not assignable to type '(this: AndroidDriver, params: SendKeysOpts) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(324,3): error TS2416: Property 'openNotifications' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver) => Promise<void>' is not assignable to type '(this: AndroidDriver) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(334,3): error TS2416: Property 'setUrl' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver, url: string) => Promise<void>' is not assignable to type '(this: AndroidDriver, uri: string) => Promise<void>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(345,3): error TS2416: Property 'getDisplayDensity' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver) => Promise<number>' is not assignable to type '(this: AndroidDriver) => Promise<number>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(347,3): error TS2416: Property 'getWindowRect' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver) => Promise<Rect>' is not assignable to type '(this: AndroidDriver) => Promise<Rect>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(348,3): error TS2416: Property 'getWindowSize' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'AndroidDriver'.
+  Type '(this: AndroidUiautomator2Driver) => Promise<Size>' is not assignable to type '(this: AndroidDriver) => Promise<Size>'.
+    The 'this' types of each signature are incompatible.
+      Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(434,36): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(440,24): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(450,79): error TS18046: 'e' is of type 'unknown'.
+lib/driver.ts(613,59): error TS18046: 'err' is of type 'unknown'.
+lib/driver.ts(640,25): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(644,28): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(697,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(704,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(718,24): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(721,68): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(this: (this: AndroidDriver, name?: string | undefined) => Promise<void>, thisArg: AndroidDriver): (name?: string | undefined) => Promise<...>', gave the following error.
+    Argument of type 'this' is not assignable to parameter of type 'AndroidDriver'.
+      Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+        Types of property 'getAttribute' are incompatible.
+          Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+            The 'this' types of each signature are incompatible.
+              Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+  Overload 2 of 2, '(this: (this: AndroidDriver, name?: string | undefined) => Promise<void>, thisArg: AndroidDriver): (name?: string | undefined) => Promise<...>', gave the following error.
+    Argument of type 'this' is not assignable to parameter of type 'AndroidDriver'.
+      Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+        Types of property 'getAttribute' are incompatible.
+          Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+            The 'this' types of each signature are incompatible.
+              Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(725,16): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(725,46): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(726,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(746,14): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ deviceName: string; deviceUDID: string; platformName: string; app: string | undefined; platformVersion: string | undefined; webSocketUrl: boolean | undefined; newCommandTimeout: number | undefined; ... 117 more ...; desired: Uiautomator2DriverCaps; }'.
+  No index signature with a parameter of type 'string' was found on type '{ deviceName: string; deviceUDID: string; platformName: string; app: string | undefined; platformVersion: string | undefined; webSocketUrl: boolean | undefined; newCommandTimeout: number | undefined; ... 117 more ...; desired: Uiautomator2DriverCaps; }'.
+lib/driver.ts(747,11): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ deviceName: string; deviceUDID: string; platformName: string; app: string | undefined; platformVersion: string | undefined; webSocketUrl: boolean | undefined; newCommandTimeout: number | undefined; ... 117 more ...; desired: Uiautomator2DriverCaps; }'.
+  No index signature with a parameter of type 'string' was found on type '{ deviceName: string; deviceUDID: string; platformName: string; app: string | undefined; platformVersion: string | undefined; webSocketUrl: boolean | undefined; newCommandTimeout: number | undefined; ... 117 more ...; desired: Uiautomator2DriverCaps; }'.
+lib/driver.ts(758,71): error TS18046: 'e' is of type 'unknown'.
+lib/driver.ts(809,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(829,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(848,15): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(862,15): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(910,17): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(914,19): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(915,17): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(920,17): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(926,13): error TS2684: The 'this' context of type 'this' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Type 'AndroidUiautomator2Driver' is not assignable to type 'AndroidDriver'.
+    Types of property 'getAttribute' are incompatible.
+      Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+        The 'this' types of each signature are incompatible.
+          Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+lib/driver.ts(983,61): error TS18046: 'e' is of type 'unknown'.
+lib/driver.ts(1057,9): error TS2416: Property 'updateSettings' in type 'AndroidUiautomator2Driver' is not assignable to the same property in base type 'ExternalDriver<{ readonly platformName: { readonly isString: true; readonly inclusionCaseInsensitive: readonly ["Android"]; readonly presence: true; }; readonly deviceName: { readonly isString: true; }; readonly appActivity: { ...; }; ... 97 more ...; readonly shouldTerminateApp: { ...; }; }, ... 5 more ..., StringR...'.
+  Type '(settings: Uiautomator2Settings) => Promise<void>' is not assignable to type '(settings: StringRecord) => Promise<void>'.
+    Types of parameters 'settings' and 'settings' are incompatible.
+      Type 'StringRecord' is missing the following properties from type 'Uiautomator2Settings': ignoreUnimportantViews, allowInvisibleElements
+lib/uiautomator2.ts(8,8): error TS7016: Could not find a declaration file for module 'appium-uiautomator2-server'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/appium-uiautomator2-server/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/appium-uiautomator2-server` if it exists or add a new declaration (.d.ts) file containing `declare module 'appium-uiautomator2-server';`
+lib/uiautomator2.ts(91,20): error TS2564: Property 'host' has no initializer and is not definitely assigned in the constructor.
+lib/uiautomator2.ts(92,20): error TS2564: Property 'systemPort' has no initializer and is not definitely assigned in the constructor.
+lib/uiautomator2.ts(93,20): error TS2564: Property 'adb' has no initializer and is not definitely assigned in the constructor.
+lib/uiautomator2.ts(94,20): error TS2564: Property 'disableWindowAnimation' has no initializer and is not definitely assigned in the constructor.
+lib/uiautomator2.ts(112,20): error TS2565: Property 'host' is used before being assigned.
+lib/uiautomator2.ts(113,18): error TS2565: Property 'systemPort' is used before being assigned.
+test/functional/commands/file-movement-e2e-specs.ts(3,22): error TS7016: Could not find a declaration file for module 'unzipper'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/unzipper/unzip.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/unzipper` if it exists or add a new declaration (.d.ts) file containing `declare module 'unzipper';`
+test/functional/commands/file-movement-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/file-movement-e2e-specs.ts(7,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/file-movement-e2e-specs.ts(58,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+test/functional/commands/find/by-accessibility-id-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-accessibility-id-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/by-css-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-css-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/by-id-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-id-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/by-image-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-image-e2e-specs.ts(7,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/by-uiautomator-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-uiautomator-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/by-xpath-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/by-xpath-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/find-basic-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/find-basic-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/find-system-ui-el-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/find-system-ui-el-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/from-el-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/from-el-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/find/invalid-strategy-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/find/invalid-strategy-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/attribute-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/attribute-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/context-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/context-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/element-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/element-e2e-specs.ts(7,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/general-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/general-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/mobile-command-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/mobile-command-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/network-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/network-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/source-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/source-e2e-specs.ts(7,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/general/url-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/general/url-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/keyboard/keyboard-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/keyboard/keyboard-e2e-specs.ts(7,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/orientation-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/orientation-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/strings-e2e-specs.ts(4,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/strings-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/commands/viewport-e2e-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/commands/viewport-e2e-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/functional/driver-e2e-specs.ts(11,28): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/functional/driver-e2e-specs.ts(12,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/unit/commands/general-specs.ts(1,19): error TS7016: Could not find a declaration file for module 'sinon'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/sinon/lib/sinon.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/sinon` if it exists or add a new declaration (.d.ts) file containing `declare module 'sinon';`
+test/unit/commands/general-specs.ts(4,18): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/unit/commands/general-specs.ts(5,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/unit/commands/general-specs.ts(38,20): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+test/unit/commands/general-specs.ts(48,13): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+test/unit/commands/general-specs.ts(81,13): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+test/unit/commands/general-specs.ts(85,20): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+test/unit/commands/general-specs.ts(91,20): error TS2684: The 'this' context of type 'AndroidUiautomator2Driver' is not assignable to method's 'this' of type 'AndroidDriver'.
+  Types of property 'getAttribute' are incompatible.
+    Type '(this: AndroidUiautomator2Driver, attribute: string, elementId: string) => Promise<string>' is not assignable to type '(this: AndroidDriver, attribute: string, elementId: string) => Promise<string | null>'.
+      The 'this' types of each signature are incompatible.
+        Type 'AndroidDriver' is missing the following properties from type 'AndroidUiautomator2Driver': uiautomator2, systemPort, _originalIme, mobileGetActionHistory, and 61 more.
+test/unit/commands/screenshot-specs.ts(3,22): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/unit/css-converter-specs.ts(2,22): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/unit/driver-specs.ts(2,19): error TS7016: Could not find a declaration file for module 'sinon'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/sinon/lib/sinon.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/sinon` if it exists or add a new declaration (.d.ts) file containing `declare module 'sinon';`
+test/unit/driver-specs.ts(5,18): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`
+test/unit/driver-specs.ts(6,28): error TS7016: Could not find a declaration file for module 'chai-as-promised'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai-as-promised/lib/chai-as-promised.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai-as-promised` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai-as-promised';`
+test/unit/uiautomator2-specs.ts(2,19): error TS7016: Could not find a declaration file for module 'sinon'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/sinon/lib/sinon.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/sinon` if it exists or add a new declaration (.d.ts) file containing `declare module 'sinon';`
+test/unit/uiautomator2-specs.ts(10,22): error TS7016: Could not find a declaration file for module 'chai'. '/Users/elf/code/appium-uiautomator2-driver/node_modules/chai/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/chai` if it exists or add a new declaration (.d.ts) file containing `declare module 'chai';`

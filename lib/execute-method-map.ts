@@ -1,4 +1,4 @@
-import {ExecuteMethodMap} from '@appium/types';
+import type {ExecuteMethodMap} from '@appium/types';
 import {AndroidDriver} from 'appium-android-driver';
 
 export const executeMethodMap = {

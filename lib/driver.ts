@@ -241,8 +241,6 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/se/log$')],
 ];
 
-const MEMOIZED_FUNCTIONS = ['getStatusBarHeight', 'getDevicePixelRatio'] as const;
-
 class AndroidUiautomator2Driver
   extends AndroidDriver
   implements ExternalDriver<Uiautomator2Constraints, string, StringRecord>
@@ -267,7 +265,7 @@ class AndroidUiautomator2Driver
   mobileGetActionHistory = mobileGetActionHistory;
   mobileScheduleAction = mobileScheduleAction;
   mobileUnscheduleAction = mobileUnscheduleAction;
-  performActions = performActions as any;
+  performActions = performActions as AndroidDriver['performActions'];
   releaseActions = releaseActions;
 
   getAlertText = getAlertText;
@@ -281,23 +279,23 @@ class AndroidUiautomator2Driver
   mobileGetBatteryInfo = mobileGetBatteryInfo;
 
   active = active;
-  getAttribute = getAttribute as any;
-  elementEnabled = elementEnabled as any;
-  elementDisplayed = elementDisplayed as any;
-  elementSelected = elementSelected as any;
-  getName = getName as any;
-  getLocation = getLocation as any;
-  getSize = getSize as any;
+  getAttribute = getAttribute as AndroidDriver['getAttribute'];
+  elementEnabled = elementEnabled as AndroidDriver['elementEnabled'];
+  elementDisplayed = elementDisplayed as AndroidDriver['elementDisplayed'];
+  elementSelected = elementSelected as AndroidDriver['elementSelected'];
+  getName = getName as AndroidDriver['getName'];
+  getLocation = getLocation as AndroidDriver['getLocation'];
+  getSize = getSize as AndroidDriver['getSize'];
   getElementRect = getElementRect;
   getElementScreenshot = getElementScreenshot;
-  getText = getText as any;
-  setValueImmediate = setValueImmediate as any;
-  doSetElementValue = doSetElementValue as any;
-  click = click as any;
+  getText = getText as AndroidDriver['getText'];
+  setValueImmediate = setValueImmediate as AndroidDriver['setValueImmediate'];
+  doSetElementValue = doSetElementValue as AndroidDriver['doSetElementValue'];
+  click = click as AndroidDriver['click'];
   clear = clear;
   mobileReplaceElementValue = mobileReplaceElementValue;
 
-  doFindElementOrEls = doFindElementOrEls as any;
+  doFindElementOrEls = doFindElementOrEls as AndroidDriver['doFindElementOrEls'];
 
   mobileClickGesture = mobileClickGesture;
   mobileDoubleClickGesture = mobileDoubleClickGesture;
@@ -311,18 +309,18 @@ class AndroidUiautomator2Driver
   mobileScrollGesture = mobileScrollGesture;
   mobileSwipeGesture = mobileSwipeGesture;
 
-  pressKeyCode = pressKeyCode as any;
-  longPressKeyCode = longPressKeyCode as any;
+  pressKeyCode = pressKeyCode as AndroidDriver['pressKeyCode'];
+  longPressKeyCode = longPressKeyCode as AndroidDriver['longPressKeyCode'];
   mobilePressKey = mobilePressKey;
   mobileType = mobileType;
-  doSendKeys = doSendKeys as any;
+  doSendKeys = doSendKeys as AndroidDriver['doSendKeys'];
   keyevent = keyevent;
 
   getPageSource = getPageSource;
   getOrientation = getOrientation;
   setOrientation = setOrientation;
-  openNotifications = openNotifications as any;
-  suspendChromedriverProxy = suspendChromedriverProxy as any;
+  openNotifications = openNotifications as AndroidDriver['openNotifications'];
+  suspendChromedriverProxy = suspendChromedriverProxy as AndroidDriver['suspendChromedriverProxy'];
   mobileGetDeviceInfo = mobileGetDeviceInfo;
   mobileResetAccessibilityCache = mobileResetAccessibilityCache;
   mobileListWindows = mobileListWindows;
@@ -331,7 +329,7 @@ class AndroidUiautomator2Driver
   getClipboard = getClipboard;
   setClipboard = setClipboard;
 
-  setUrl = setUrl as any;
+  setUrl = setUrl as AndroidDriver['setUrl'];
   mobileDeepLink = mobileDeepLink;
   back = back;
 
@@ -342,10 +340,10 @@ class AndroidUiautomator2Driver
 
   getStatusBarHeight = getStatusBarHeight;
   getDevicePixelRatio = getDevicePixelRatio;
-  getDisplayDensity = getDisplayDensity as any;
+  getDisplayDensity = getDisplayDensity as AndroidDriver['getDisplayDensity'];
   getViewPortRect = getViewPortRect;
-  getWindowRect = getWindowRect as any;
-  getWindowSize = getWindowSize as any;
+  getWindowRect = getWindowRect as AndroidDriver['getWindowRect'];
+  getWindowSize = getWindowSize as AndroidDriver['getWindowSize'];
   mobileViewPortRect = mobileViewPortRect;
 
   constructor(opts: InitialOpts = {} as InitialOpts, shouldValidateCaps = true) {
@@ -378,9 +376,8 @@ class AndroidUiautomator2Driver
     this.caps = {} as Uiautomator2DriverCaps;
     this.opts = opts as Uiautomator2DriverOpts;
     // memoize functions here, so that they are done on a per-instance basis
-    for (const fn of MEMOIZED_FUNCTIONS) {
-      this[fn] = _.memoize(this[fn]) as any;
-    }
+    this.getStatusBarHeight = _.memoize(this.getStatusBarHeight);
+    this.getDevicePixelRatio = _.memoize(this.getDevicePixelRatio);
   }
 
   override get driverData() {
@@ -516,7 +513,11 @@ class AndroidUiautomator2Driver
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
     const sessionData = await BaseDriver.prototype.getSession.call(this);
     this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.uiautomator2!.jwproxy.command('/', 'GET', {})) as any;
+    const uia2Data = (await this.uiautomator2!.jwproxy.command(
+      '/',
+      'GET',
+      {},
+    )) as StringRecord;
     return {...sessionData, ...uia2Data};
   }
 
@@ -1060,13 +1061,13 @@ class AndroidUiautomator2Driver
     await this.uiautomator2!.jwproxy.command('/appium/settings', 'POST', {settings});
   }
 
-  async getSettings() {
+  async getSettings(): Promise<StringRecord> {
     const driverSettings = this.settings.getSettings();
     const serverSettings = (await this.uiautomator2!.jwproxy.command(
       '/appium/settings',
       'GET',
     )) as Partial<Uiautomator2Settings>;
-    return {...driverSettings, ...serverSettings} as any;
+    return {...driverSettings, ...serverSettings};
   }
 
   // needed to make the typechecker happy

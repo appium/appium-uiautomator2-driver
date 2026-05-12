@@ -104,7 +104,7 @@ describe('driver.js', function () {
       defaultStub(driver);
       const app = path.resolve('.');
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
-      const configureAppStub = sandbox.stub(driver.helpers, 'configureApp').returns(app);
+      const configureAppStub = sandbox.stub(driver.helpers, 'configureApp').resolves(app);
 
       await driver.createSession(
         {} as any,
@@ -348,13 +348,13 @@ describe('driver.js', function () {
     });
 
     it('should call setDefaultHiddenApiPolicy', async function () {
-      sandbox.stub(driver.adb, 'getApiLevel').returns(28);
+      sandbox.stub(driver.adb, 'getApiLevel').resolves(28);
       const setDefaultHiddenApiPolicyStub = sandbox.stub(driver.adb, 'setDefaultHiddenApiPolicy');
       await driver.deleteSession();
       expect(setDefaultHiddenApiPolicyStub.calledOnce).to.be.true;
     });
     it('should not call setDefaultHiddenApiPolicy', async function () {
-      sandbox.stub(driver.adb, 'getApiLevel').returns(27);
+      sandbox.stub(driver.adb, 'getApiLevel').resolves(27);
       const setDefaultHiddenApiPolicyStub = sandbox.stub(driver.adb, 'setDefaultHiddenApiPolicy');
       await driver.deleteSession();
       expect(setDefaultHiddenApiPolicyStub.calledOnce).to.be.false;

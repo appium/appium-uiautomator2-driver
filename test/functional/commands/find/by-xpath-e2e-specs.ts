@@ -61,7 +61,7 @@ describe('Find - xpath', function () {
     const elementsWithoutCompression = await driver.$$(`//*`);
     await driver.updateSettings({ignoreUnimportantViews: true});
     const elementsWithCompression = await driver.$$(`//*`);
-    expect(elementsWithoutCompression.length).to.be.greaterThan(elementsWithCompression.length);
+    expect(elementsWithoutCompression.length).to.be.greaterThan(await elementsWithCompression.length);
   });
   it('should find toast message element by text', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.PopupMenu1');

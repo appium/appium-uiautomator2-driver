@@ -88,10 +88,10 @@ export class UiAutomator2Server {
   public readonly proxyReqRes: typeof UIA2Proxy.prototype.proxyReqRes;
   public readonly proxyCommand: typeof UIA2Proxy.prototype.command;
 
-  private readonly host: string;
-  private readonly systemPort: number;
-  private readonly adb: ADB;
-  private readonly disableWindowAnimation: boolean;
+  private readonly host!: string;
+  private readonly systemPort!: number;
+  private readonly adb!: ADB;
+  private readonly disableWindowAnimation!: boolean;
   private readonly disableSuppressAccessibilityService?: boolean;
   private readonly log: AppiumLogger;
   private instrumentationProcess: SubProcess | null = null;

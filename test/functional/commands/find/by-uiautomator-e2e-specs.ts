@@ -96,7 +96,7 @@ describe('Find - uiautomator', function () {
       'android=new UiSelector().clickable(true); new UiSelector().clickable(true);',
     );
     expect(clickableClickableEl.length).to.be.above(0);
-    expect(clickableClickableEl).to.have.length(clickableEls.length);
+    expect(clickableClickableEl).to.have.length(await clickableEls.length);
   });
   it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
     const selector =

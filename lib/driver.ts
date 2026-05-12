@@ -250,7 +250,7 @@ class AndroidUiautomator2Driver
   static newMethodMap = newMethodMap;
   static executeMethodMap = executeMethodMap;
 
-  uiautomator2: UiAutomator2Server;
+  uiautomator2!: UiAutomator2Server;
 
   systemPort: number | undefined;
 
@@ -267,7 +267,7 @@ class AndroidUiautomator2Driver
   mobileGetActionHistory = mobileGetActionHistory;
   mobileScheduleAction = mobileScheduleAction;
   mobileUnscheduleAction = mobileUnscheduleAction;
-  performActions = performActions;
+  performActions = performActions as any;
   releaseActions = releaseActions;
 
   getAlertText = getAlertText;
@@ -281,23 +281,23 @@ class AndroidUiautomator2Driver
   mobileGetBatteryInfo = mobileGetBatteryInfo;
 
   active = active;
-  getAttribute = getAttribute;
-  elementEnabled = elementEnabled;
-  elementDisplayed = elementDisplayed;
-  elementSelected = elementSelected;
-  getName = getName;
-  getLocation = getLocation;
-  getSize = getSize;
+  getAttribute = getAttribute as any;
+  elementEnabled = elementEnabled as any;
+  elementDisplayed = elementDisplayed as any;
+  elementSelected = elementSelected as any;
+  getName = getName as any;
+  getLocation = getLocation as any;
+  getSize = getSize as any;
   getElementRect = getElementRect;
   getElementScreenshot = getElementScreenshot;
-  getText = getText;
-  setValueImmediate = setValueImmediate;
-  doSetElementValue = doSetElementValue;
-  click = click;
+  getText = getText as any;
+  setValueImmediate = setValueImmediate as any;
+  doSetElementValue = doSetElementValue as any;
+  click = click as any;
   clear = clear;
   mobileReplaceElementValue = mobileReplaceElementValue;
 
-  doFindElementOrEls = doFindElementOrEls;
+  doFindElementOrEls = doFindElementOrEls as any;
 
   mobileClickGesture = mobileClickGesture;
   mobileDoubleClickGesture = mobileDoubleClickGesture;
@@ -311,17 +311,17 @@ class AndroidUiautomator2Driver
   mobileScrollGesture = mobileScrollGesture;
   mobileSwipeGesture = mobileSwipeGesture;
 
-  pressKeyCode = pressKeyCode;
-  longPressKeyCode = longPressKeyCode;
+  pressKeyCode = pressKeyCode as any;
+  longPressKeyCode = longPressKeyCode as any;
   mobilePressKey = mobilePressKey;
   mobileType = mobileType;
-  doSendKeys = doSendKeys;
+  doSendKeys = doSendKeys as any;
   keyevent = keyevent;
 
   getPageSource = getPageSource;
   getOrientation = getOrientation;
   setOrientation = setOrientation;
-  openNotifications = openNotifications;
+  openNotifications = openNotifications as any;
   suspendChromedriverProxy = suspendChromedriverProxy as any;
   mobileGetDeviceInfo = mobileGetDeviceInfo;
   mobileResetAccessibilityCache = mobileResetAccessibilityCache;
@@ -331,7 +331,7 @@ class AndroidUiautomator2Driver
   getClipboard = getClipboard;
   setClipboard = setClipboard;
 
-  setUrl = setUrl;
+  setUrl = setUrl as any;
   mobileDeepLink = mobileDeepLink;
   back = back;
 
@@ -342,10 +342,10 @@ class AndroidUiautomator2Driver
 
   getStatusBarHeight = getStatusBarHeight;
   getDevicePixelRatio = getDevicePixelRatio;
-  getDisplayDensity = getDisplayDensity;
+  getDisplayDensity = getDisplayDensity as any;
   getViewPortRect = getViewPortRect;
-  getWindowRect = getWindowRect;
-  getWindowSize = getWindowSize;
+  getWindowRect = getWindowRect as any;
+  getWindowSize = getWindowSize as any;
   mobileViewPortRect = mobileViewPortRect;
 
   constructor(opts: InitialOpts = {} as InitialOpts, shouldValidateCaps = true) {
@@ -447,7 +447,7 @@ class AndroidUiautomator2Driver
           activity = await this.adb.resolveLaunchableActivity(pkg);
         } catch (e) {
           this.log.warn(
-            `Using the default ${pkg} activity ${activity}. Original error: ${e.message}`,
+            `Using the default ${pkg} activity ${activity}. Original error: ${(e as Error).message}`,
           );
         }
         this.opts.appPackage = this.caps.appPackage = pkg;
@@ -610,7 +610,7 @@ class AndroidUiautomator2Driver
                 'Please check https://github.com/appium/appium/issues/13802 for more details. ' +
                 'You could also set the "appium:ignoreHiddenApiPolicyError" capability to true in order to ' +
                 'ignore this error, which might later lead to unexpected crashes or behavior of ' +
-                `the automation server. Original error: ${err.message}`,
+                `the automation server. Original error: ${(err as Error).message}`,
             );
           }
         })(),
@@ -742,9 +742,9 @@ class AndroidUiautomator2Driver
     };
     // Adding AUT info in the capabilities if it does not exist in caps
     if (appInfo) {
-      for (const capName of ['appPackage', 'appActivity']) {
-        if (!capsWithSessionInfo[capName] && appInfo[capName]) {
-          capsWithSessionInfo[capName] = appInfo[capName];
+      for (const capName of ['appPackage', 'appActivity'] as const) {
+        if (!(capsWithSessionInfo as StringRecord)[capName] && appInfo[capName]) {
+          (capsWithSessionInfo as StringRecord)[capName] = appInfo[capName];
         }
       }
     }
@@ -755,7 +755,7 @@ class AndroidUiautomator2Driver
       try {
         return await this.getDeviceDetails();
       } catch (e) {
-        this.log.warn(`Cannot fetch device details. Original error: ${e.message}`);
+        this.log.warn(`Cannot fetch device details. Original error: ${(e as Error).message}`);
         return {};
       }
     })();
@@ -980,7 +980,7 @@ class AndroidUiautomator2Driver
         try {
           await this.adb.setIME(this._originalIme);
         } catch (e) {
-          this.log.warn(`Cannot restore the original IME: ${e.message}`);
+          this.log.warn(`Cannot restore the original IME: ${(e as Error).message}`);
         }
       }
       try {
@@ -1054,6 +1054,7 @@ class AndroidUiautomator2Driver
     return this.jwpProxyAvoid;
   }
 
+  // @ts-expect-error narrower parameter type than the base class override allows
   async updateSettings(settings: Uiautomator2Settings) {
     await this.settings.update(settings);
     await this.uiautomator2!.jwproxy.command('/appium/settings', 'POST', {settings});

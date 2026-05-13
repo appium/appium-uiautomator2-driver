@@ -1020,19 +1020,19 @@ class AndroidUiautomator2Driver
     // settings to the uiauto2 server already
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  proxyActive(sessionId: string): boolean {
+  override proxyActive(sessionId: string): boolean {
+    void sessionId;
     // we always have an active proxy to the UiAutomator2 server
     return true;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  canProxy(sessionId: string): boolean {
+  override canProxy(sessionId: string): boolean {
+    void sessionId;
     // we can always proxy to the uiautomator2 server
     return true;
   }
 
-  getProxyAvoidList(): RouteMatcher[] {
+  override getProxyAvoidList(): RouteMatcher[] {
     // we are maintaining two sets of NO_PROXY lists, one for chromedriver(CHROME_NO_PROXY)
     // and one for uiautomator2(NO_PROXY), based on current context will return related NO_PROXY list
     if (util.hasValue(this.chromedriver)) {
@@ -1052,12 +1052,12 @@ class AndroidUiautomator2Driver
   }
 
   // @ts-expect-error narrower parameter type than the base class override allows
-  async updateSettings(settings: Uiautomator2Settings) {
+  override async updateSettings(settings: Uiautomator2Settings) {
     await this.settings.update(settings);
     await this.uiautomator2!.jwproxy.command('/appium/settings', 'POST', {settings});
   }
 
-  async getSettings(): Promise<StringRecord> {
+  override async getSettings(): Promise<StringRecord> {
     const driverSettings = this.settings.getSettings();
     const serverSettings = (await this.uiautomator2!.jwproxy.command(
       '/appium/settings',
@@ -1067,7 +1067,7 @@ class AndroidUiautomator2Driver
   }
 
   // needed to make the typechecker happy
-  async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
+  override async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
     return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
   }
 }

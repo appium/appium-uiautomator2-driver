@@ -12,7 +12,7 @@ export function memoize<Fn extends (...args: any[]) => any>(
   fn: Fn,
   resolver?: (...args: Parameters<Fn>) => unknown,
 ): Fn & {cache: Map<unknown, ReturnType<Fn>>} {
-  const memoizedFn = (function (this: unknown, ...args: Parameters<Fn>) {
+  const memoizedFn = function (this: unknown, ...args: Parameters<Fn>) {
     const key = resolver ? resolver.apply(this, args) : args[0];
     if (memoizedFn.cache.has(key)) {
       return memoizedFn.cache.get(key) as ReturnType<Fn>;
@@ -20,7 +20,7 @@ export function memoize<Fn extends (...args: any[]) => any>(
     const result = fn.apply(this, args);
     memoizedFn.cache.set(key, result);
     return result;
-  }) as unknown as Fn & {cache: Map<unknown, ReturnType<Fn>>};
+  } as unknown as Fn & {cache: Map<unknown, ReturnType<Fn>>};
   memoizedFn.cache = new Map<unknown, ReturnType<Fn>>();
   return memoizedFn;
 }

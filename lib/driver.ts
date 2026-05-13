@@ -888,8 +888,8 @@ class AndroidUiautomator2Driver
     const appWaitPackage = this.opts.appWaitPackage || appPackage;
     const appWaitActivity = this.opts.appWaitActivity || appActivity;
     this.log.info(
-      `Starting '${appPackage}${appActivity ? ('/' + appActivity) : ''}` +
-        `and waiting for '${appWaitPackage}${appWaitActivity ? ('/' + appWaitActivity) : ''}'`,
+      `Starting '${appPackage}${appActivity ? '/' + appActivity : ''}` +
+        `and waiting for '${appWaitPackage}${appWaitActivity ? '/' + appWaitActivity : ''}'`,
     );
 
     if (this.opts.noReset && !this.opts.forceAppLaunch && (await adb.processExists(appPackage))) {

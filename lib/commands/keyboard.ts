@@ -1,5 +1,4 @@
 import {errors} from 'appium/driver';
-import _ from 'lodash';
 import type {AndroidUiautomator2Driver} from '../driver';
 import type {SendKeysOpts} from 'appium-android-driver';
 
@@ -81,7 +80,7 @@ export async function mobileType(
   this: AndroidUiautomator2Driver,
   text: string | number | boolean,
 ): Promise<boolean> {
-  if (_.isUndefined(text)) {
+  if (text === undefined) {
     throw new errors.InvalidArgumentError(`The 'text' argument is mandatory`);
   }
   return await this.settingsApp.typeUnicode(String(text));

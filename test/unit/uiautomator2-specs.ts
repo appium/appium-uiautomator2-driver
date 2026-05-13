@@ -5,7 +5,6 @@ import {
   INSTRUMENTATION_TARGET,
   SERVER_TEST_PACKAGE_ID,
 } from '../../lib/uiautomator2';
-import * as helpers from '../../lib/helpers';
 import {log} from '../../lib/logger';
 import {expect} from 'chai';
 
@@ -202,13 +201,11 @@ describe('UiAutomator2', function () {
 
   describe('installServerApk', function () {
     let mockAdb: sinon.SinonMock;
-    let mockHelpers: sinon.SinonMock;
     let testAdb: ADB;
 
     beforeEach(function () {
       testAdb = new ADB();
       mockAdb = sinon.mock(testAdb);
-      mockHelpers = sinon.mock(helpers);
 
       uiautomator2 = new UiAutomator2Server(log, {
         adb: testAdb,
@@ -217,14 +214,10 @@ describe('UiAutomator2', function () {
     });
     afterEach(function () {
       mockAdb.verify();
-      mockHelpers.verify();
       mockAdb.restore();
-      mockHelpers.restore();
     });
 
     it('new server and server.test are older than installed version', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb
         .expects('getApplicationInstallState')
@@ -245,8 +238,6 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are newer than installed version', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb
         .expects('getApplicationInstallState')
@@ -267,8 +258,6 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are the same as installed version', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb
         .expects('getApplicationInstallState')
@@ -289,8 +278,6 @@ describe('UiAutomator2', function () {
     });
 
     it('new server and server.test are not installed', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb
         .expects('getApplicationInstallState')
@@ -312,8 +299,6 @@ describe('UiAutomator2', function () {
     });
 
     it('version numbers of new server and server.test are unknown', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.UNKNOWN);
 
@@ -331,8 +316,6 @@ describe('UiAutomator2', function () {
     });
 
     it('a server is installed but server.test is not', async function () {
-      mockHelpers.expects('isWriteable').never();
-
       // SERVER_PACKAGE_ID
       mockAdb
         .expects('getApplicationInstallState')

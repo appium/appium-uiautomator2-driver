@@ -1,6 +1,5 @@
 import {errors} from 'appium/driver';
 import {util} from 'appium/support';
-import _ from 'lodash';
 import type {Element as AppiumElement, Position} from '@appium/types';
 import type {RelativeRect} from './types';
 import type {AndroidUiautomator2Driver} from '../driver';
@@ -288,7 +287,7 @@ function toOrigin(element?: AppiumElement | string): AppiumElement | undefined {
 }
 
 function toPoint(x?: number, y?: number): Partial<Position> | undefined {
-  return _.isFinite(x) && _.isFinite(y) ? {x, y} : undefined;
+  return Number.isFinite(x) && Number.isFinite(y) ? {x, y} : undefined;
 }
 
 function toRect(
@@ -297,7 +296,7 @@ function toRect(
   width?: number,
   height?: number,
 ): RelativeRect | undefined {
-  return [left, top, width, height].some((v) => !_.isFinite(v))
+  return [left, top, width, height].some((v) => !Number.isFinite(v))
     ? undefined
     : ({left, top, width, height} as RelativeRect);
 }

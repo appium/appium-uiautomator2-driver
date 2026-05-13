@@ -15,7 +15,6 @@ import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {BaseDriver, DeviceSettings} from 'appium/driver';
 import {fs, mjpeg, util} from 'appium/support';
 import {retryInterval} from 'asyncbox';
-import _ from 'lodash';
 import os from 'node:os';
 import path from 'node:path';
 import {checkPortStatus, findAPortNotInUse} from 'portscanner';
@@ -23,7 +22,7 @@ import type {ExecError} from 'teen_process';
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints';
 import {APKS_EXTENSION, APK_EXTENSION} from './extensions';
 import {newMethodMap} from './method-map';
-import {signApp} from './helpers';
+import {assignDefaults, memoize, signApp} from './utils';
 import type {
   Uiautomator2Settings,
   Uiautomator2DeviceDetails,
@@ -360,7 +359,7 @@ class AndroidUiautomator2Driver
       'css selector',
       '-android uiautomator',
     ];
-    this.desiredCapConstraints = _.cloneDeep(UIAUTOMATOR2_CONSTRAINTS);
+    this.desiredCapConstraints = structuredClone(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
     this._originalIme = null;
@@ -375,8 +374,8 @@ class AndroidUiautomator2Driver
     this.caps = {} as Uiautomator2DriverCaps;
     this.opts = opts as Uiautomator2DriverOpts;
     // memoize functions here, so that they are done on a per-instance basis
-    this.getStatusBarHeight = _.memoize(this.getStatusBarHeight);
-    this.getDevicePixelRatio = _.memoize(this.getDevicePixelRatio);
+    this.getStatusBarHeight = memoize(this.getStatusBarHeight);
+    this.getDevicePixelRatio = memoize(this.getDevicePixelRatio);
   }
 
   override get driverData() {
@@ -423,7 +422,7 @@ class AndroidUiautomator2Driver
         adbPort: DEFAULT_ADB_PORT,
         androidInstallTimeout: 90000,
       };
-      _.defaults(this.opts, defaultOpts);
+      assignDefaults(this.opts as Record<string, unknown>, defaultOpts);
 
       this.opts.adbPort = this.opts.adbPort || DEFAULT_ADB_PORT;
       // get device udid for this session
@@ -500,7 +499,7 @@ class AndroidUiautomator2Driver
       pixelRatio,
       statBarHeight,
       viewportRect,
-      deviceApiLevel: _.parseInt(apiVersion),
+      deviceApiLevel: Number.parseInt(String(apiVersion), 10),
       platformVersion,
       deviceManufacturer: manufacturer,
       deviceModel: model,
@@ -921,7 +920,7 @@ class AndroidUiautomator2Driver
 
     const screenRecordingStopTasks = [
       async () => {
-        if (!_.isEmpty(this._screenRecordingProperties)) {
+        if (this._screenRecordingProperties) {
           await this.stopRecordingScreen();
         }
       },
@@ -931,7 +930,7 @@ class AndroidUiautomator2Driver
         }
       },
       async () => {
-        if (!_.isEmpty(this._screenStreamingProps)) {
+        if (this._screenStreamingProps) {
           await this.mobileStopScreenStreaming();
         }
       },

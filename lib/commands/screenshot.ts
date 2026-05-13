@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import {imageUtil} from 'appium/support';
+import {isEmpty} from '../utils';
 import type {AndroidUiautomator2Driver} from '../driver';
 import type {Screenshot} from './types';
 import type {StringRecord} from '@appium/types';
@@ -94,7 +94,7 @@ export async function mobileScreenshots(
 ): Promise<StringRecord<Screenshot>> {
   const displaysInfo = await this.adb.shell(['dumpsys', 'SurfaceFlinger', '--display-id']);
   const infos = parseSurfaceFlingerDisplays(displaysInfo);
-  if (_.isEmpty(infos)) {
+  if (isEmpty(infos)) {
     this.log.debug(displaysInfo);
     throw new Error('Cannot determine the information about connected Android displays');
   }
@@ -104,7 +104,7 @@ export async function mobileScreenshots(
     (await this.adb.takeScreenshot(dispId)).toString('base64');
 
   const displayIdStr: string | null =
-    _.isNil(displayId) || displayId === '' ? null : String(displayId);
+    displayId == null || displayId === '' ? null : String(displayId);
 
   if (displayIdStr) {
     if (!infos[displayIdStr]) {
@@ -121,13 +121,13 @@ export async function mobileScreenshots(
     };
   }
 
-  const allInfos = _.values(infos).filter(
+  const allInfos = Object.values(infos).filter(
     (info): info is Partial<Screenshot> & {id: string} => !!info?.id,
   );
   const screenshots = await Promise.all(allInfos.map((info) => toB64Screenshot(info.id)));
-  for (const [info, payload] of _.zip(allInfos, screenshots) as Array<
-    [Partial<Screenshot>, string]
-  >) {
+  for (let i = 0; i < allInfos.length; i++) {
+    const info = allInfos[i];
+    const payload = screenshots[i];
     if (info && payload) {
       info.payload = payload;
     }

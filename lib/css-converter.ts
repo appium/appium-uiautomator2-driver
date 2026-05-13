@@ -8,9 +8,9 @@ import type {
   AstSelector,
   AstTagName,
 } from 'css-selector-parser';
-import _ from 'lodash';
 import {errors} from 'appium/driver';
 import {log} from './logger';
+import {escapeRegExp, isEmpty} from './utils';
 
 const parseCssSelector = createParser({
   syntax: {
@@ -100,7 +100,7 @@ export class CssConverter {
   private parseAttr(cssAttr: AstAttribute): string {
     const attrValueNode = cssAttr.value as {value?: string} | undefined;
     const attrValue = attrValueNode?.value;
-    if (!_.isString(attrValue) && !_.isEmpty(attrValue)) {
+    if (typeof attrValue !== 'string' && !isEmpty(attrValue)) {
       throw new Error(
         `'${cssAttr.name}=${attrValue}' is an invalid attribute. Only 'string' and empty attribute types are supported. Found '${attrValue}'`,
       );
@@ -136,14 +136,14 @@ export class CssConverter {
         if (['description', 'text'].includes(attrName)) {
           return `.${methodName}Contains("${value}")`;
         }
-        return `.${methodName}Matches("${_.escapeRegExp(value)}")`;
+        return `.${methodName}Matches("${escapeRegExp(value)}")`;
       case '^=':
         if (['description', 'text'].includes(attrName)) {
           return `.${methodName}StartsWith("${value}")`;
         }
-        return `.${methodName}Matches("^${_.escapeRegExp(value)}")`;
+        return `.${methodName}Matches("^${escapeRegExp(value)}")`;
       case '$=':
-        return `.${methodName}Matches("${_.escapeRegExp(value)}$")`;
+        return `.${methodName}Matches("${escapeRegExp(value)}$")`;
       case '~=':
         return `.${methodName}Matches("${getWordMatcherRegex(value)}")`;
       default:
@@ -155,7 +155,7 @@ export class CssConverter {
 
   private parsePseudo(cssPseudo: AstPseudoClass): string | undefined {
     const argValue = (cssPseudo.argument as {value?: string} | undefined)?.value;
-    if (!_.isString(argValue) && !_.isEmpty(argValue)) {
+    if (typeof argValue !== 'string' && !isEmpty(argValue)) {
       throw new Error(
         `'${cssPseudo.name}=${argValue}'. Unsupported css pseudo class value: '${argValue}'. Only 'string' type or empty is supported.`,
       );
@@ -226,7 +226,7 @@ export class CssConverter {
   }
 
   private parseCssObject(css: AstSelector): string {
-    if (!_.isEmpty(css.rules)) {
+    if (!isEmpty(css.rules)) {
       return this.parseCssRule(css.rules[0] as AstRule);
     }
 
@@ -247,7 +247,7 @@ function toSnakeCase(str?: string | null): string {
 
 function requireBoolean(css: AstAttribute | AstPseudoClass): 'true' | 'false' {
   const rawValue = (css as any).value?.value ?? (css as any).argument?.value;
-  const value = _.toLower(rawValue ?? 'true');
+  const value = String(rawValue ?? 'true').toLowerCase();
   if (value === 'true') {
     return 'true';
   }
@@ -275,5 +275,5 @@ function requireEntityName(cssEntity: AstAttribute | AstPseudoClass): string {
 }
 
 function getWordMatcherRegex(word: string): string {
-  return `\\b(\\w*${_.escapeRegExp(word)}\\w*)\\b`;
+  return `\\b(\\w*${escapeRegExp(word)}\\w*)\\b`;
 }

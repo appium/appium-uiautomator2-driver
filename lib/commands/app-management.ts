@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {errors} from 'appium/driver';
 import {APK_EXTENSION} from '../extensions';
 import type {AndroidUiautomator2Driver} from '../driver';
@@ -15,7 +14,7 @@ export async function mobileInstallMultipleApks(
   apks: string[],
   options?: InstallOptions,
 ): Promise<void> {
-  if (!_.isArray(apks) || _.isEmpty(apks)) {
+  if (!Array.isArray(apks) || apks.length === 0) {
     throw new errors.InvalidArgumentError('No apks are given to install');
   }
   const configuredApks = await Promise.all(

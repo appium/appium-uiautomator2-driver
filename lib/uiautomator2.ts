@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {JWProxy, errors} from 'appium/driver';
 import {sleep, waitForCondition} from 'asyncbox';
 import {
@@ -409,7 +408,7 @@ export class UiAutomator2Server {
     if (this.disableWindowAnimation) {
       cmd.push('--no-window-animation');
     }
-    if (_.isBoolean(this.disableSuppressAccessibilityService)) {
+    if (typeof this.disableSuppressAccessibilityService === 'boolean') {
       cmd.push(
         '-e',
         'DISABLE_SUPPRESS_ACCESSIBILITY_SERVICES',

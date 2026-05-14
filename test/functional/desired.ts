@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
@@ -16,7 +14,7 @@ export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
 
 export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
   return deepFreeze({
-    alwaysMatch: _.cloneDeep(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
+    alwaysMatch: structuredClone(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
     firstMatch: [{}],
   });
 }

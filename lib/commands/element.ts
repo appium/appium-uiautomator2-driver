@@ -1,5 +1,4 @@
 import {PROTOCOLS} from 'appium/driver';
-import _ from 'lodash';
 import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
 import type {AndroidUiautomator2Driver} from '../driver';
@@ -130,7 +129,7 @@ export async function setValueImmediate(
 ): Promise<void> {
   await this.uiautomator2.jwproxy.command(`/element/${elementId}/value`, 'POST', {
     elementId,
-    text: _.isArray(keys) ? keys.join('') : keys,
+    text: Array.isArray(keys) ? keys.join('') : keys,
     replace: false,
   });
 }
@@ -215,5 +214,5 @@ export async function mobileReplaceElementValue(
 }
 
 function toBool(value: any): boolean {
-  return _.isString(value) ? value.toLowerCase() === 'true' : !!value;
+  return typeof value === 'string' ? value.toLowerCase() === 'true' : !!value;
 }

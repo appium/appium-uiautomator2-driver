@@ -1,3 +1,9 @@
+## [7.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.3.0...v7.4.0) (2026-05-14)
+
+### Features
+
+* Ditch lodash ([#1001](https://github.com/appium/appium-uiautomator2-driver/issues/1001)) ([d89d7ae](https://github.com/appium/appium-uiautomator2-driver/commit/d89d7ae774f4f2895d06dd704284828e35f88691))
+
 ## [7.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.2.3...v7.3.0) (2026-05-13)
 
 ### Features

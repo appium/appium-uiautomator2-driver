@@ -17,14 +17,13 @@ import type {
 import axios from 'axios';
 import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages';
 
 const SERVER_LAUNCH_TIMEOUT_MS = 30000;
 const SERVER_INSTALL_RETRIES = 20;
 const SERVICES_LAUNCH_TIMEOUT_MS = 30000;
 const SERVER_SHUTDOWN_TIMEOUT_MS = 5000;
 const SERVER_REQUEST_TIMEOUT_MS = 500;
-export const SERVER_PACKAGE_ID = 'io.appium.uiautomator2.server';
-export const SERVER_TEST_PACKAGE_ID = `${SERVER_PACKAGE_ID}.test`;
 export const INSTRUMENTATION_TARGET = `${SERVER_TEST_PACKAGE_ID}/androidx.test.runner.AndroidJUnitRunner`;
 
 export interface PackageInfo {

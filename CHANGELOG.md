@@ -1,3 +1,9 @@
+## [7.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.4.0...v7.5.0) (2026-05-19)
+
+### Features
+
+* Refactor driver helpers to mixins ([#1002](https://github.com/appium/appium-uiautomator2-driver/issues/1002)) ([32de026](https://github.com/appium/appium-uiautomator2-driver/commit/32de0263706566a47d10870a97080186a87ffdcd))
+
 ## [7.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.3.0...v7.4.0) (2026-05-14)
 
 ### Features

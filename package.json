@@ -56,13 +56,13 @@
     "singleQuote": true
   },
   "dependencies": {
-    "appium-adb": "^14.0.0",
-    "appium-android-driver": "^13.1.1",
+    "appium-adb": "^15.0.0",
+    "appium-android-driver": "^13.2.3",
     "appium-uiautomator2-server": "^10.1.0",
     "asyncbox": "^6.0.1",
     "axios": "^1.16.0",
     "css-selector-parser": "^3.0.0",
-    "io.appium.settings": "^7.0.1",
+    "io.appium.settings": "^7.1.3",
     "portscanner": "^2.2.0",
     "teen_process": "^4.0.4"
   },

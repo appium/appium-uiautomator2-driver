@@ -65,7 +65,7 @@ export async function initAUT(this: AndroidUiautomator2Driver): Promise<void> {
     if ((this.opts.noReset && !(await adb.isAppInstalled(appPackage))) || !this.opts.noReset) {
       if (
         !this.opts.noSign &&
-        !(await adb.checkApkCert(this.opts.app, appPackage, {
+        !(await adb.checkApkCert(this.opts.app, {
           requireDefaultCert: false,
         }))
       ) {

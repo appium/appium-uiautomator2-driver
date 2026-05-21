@@ -1,3 +1,9 @@
+## [7.5.1](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.0...v7.5.1) (2026-05-21)
+
+### Miscellaneous Chores
+
+* Bump appium-adb to version 15 ([#1003](https://github.com/appium/appium-uiautomator2-driver/issues/1003)) ([64c39df](https://github.com/appium/appium-uiautomator2-driver/commit/64c39df963f7e0339b8445c5af3cc28a4643d647))
+
 ## [7.5.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.4.0...v7.5.0) (2026-05-19)
 
 ### Features

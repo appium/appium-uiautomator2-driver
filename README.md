@@ -2099,7 +2099,11 @@ The general resources naming convention for Android apps is `<app_id>:id/<resour
 
 ### ClassCastException: java.util.ArrayList$ListItr cannot be cast to org.eclipse.wst.xml.xpath2.processor
 
-This exception happens due to a known bug in the [Eclipse's Psychopath](https://wiki.eclipse.org/PsychoPathXPathProcessor) library used by UiAutomator2 driver to support [XPath2](https://www.w3.org/TR/xpath20/) syntax. The issue has been observed while using `following::` or `preceding::` axes in xpath queries. Unfortunately, this library has not been maintained for quite a while, and there is no good open source alternative to it. The only known workaround would be to forcefully switch the driver's XPath processor to the standard Android's Apache Harmony-based XPath1, which does not have this issue (but also does not support XPath2 syntax). See the Appium issue [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
+This exception was caused by a bug in the [Eclipse's Psychopath](https://wiki.eclipse.org/PsychoPathXPathProcessor) library used by UiAutomator2 driver to support [XPath2](https://www.w3.org/TR/xpath20/) syntax. The issue was observed while using `following::` or `preceding::` axes in xpath queries (for example, `(//android.widget.TextView[@text='some, text']/following::android.widget.ImageButton)[1]`).
+
+The bug has been fixed in UiAutomator2 driver version `7.5.2+`. Upgrade to use XPath2 `following::` and `preceding::` axes in your element lookup queries.
+
+If you still encounter this exception on an older driver version, the workaround is to forcefully switch the driver's XPath processor to the standard Android's Apache Harmony-based XPath1, which does not have this issue (but also does not support XPath2 syntax). See the Appium issue [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
 
 ### A gesture, like scroll or swipe, does not have any effect / It is unclear how to do it
 

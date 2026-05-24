@@ -1,3 +1,9 @@
+## [7.5.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.1...v7.5.2) (2026-05-24)
+
+### Miscellaneous Chores
+
+* Bump uia2-server ([#1004](https://github.com/appium/appium-uiautomator2-driver/issues/1004)) ([ce0d583](https://github.com/appium/appium-uiautomator2-driver/commit/ce0d5836c1ccd9f79335112c7b19b68e2502298c))
+
 ## [7.5.1](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.0...v7.5.1) (2026-05-21)
 
 ### Miscellaneous Chores

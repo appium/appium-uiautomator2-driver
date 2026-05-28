@@ -31,13 +31,4 @@ flowchart TD
   U2S -->|"UiAutomator APIs"| UIA
   UIA -->|"UI interactions + accessibility tree"| AUT
   CD -->|"WebDriver in webview"| AUT
-
-  AUT -->|"UI state / DOM"| UIA
-  AUT --> CD
-  UIA --> U2S
-  U2S --> XD
-  CD --> XD
-  XD --> AS
-  AS --> CL
-  CL --> T
 ```

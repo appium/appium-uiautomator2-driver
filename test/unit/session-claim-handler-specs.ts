@@ -81,7 +81,9 @@ describe('SessionClaimHandler', function () {
     resetDriverInstanceIpcForTesting();
   });
 
-  function makeDriver(overrides: Partial<AndroidUiautomator2Driver> = {}): AndroidUiautomator2Driver {
+  function makeDriver(
+    overrides: Partial<AndroidUiautomator2Driver> = {},
+  ): AndroidUiautomator2Driver {
     return {
       sessionId: 'new-session',
       opts: {
@@ -185,13 +187,17 @@ describe('SessionClaimHandler', function () {
 
     const contendedCallIndex = publish
       .getCalls()
-      .findIndex((call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.CONTENDED_TOPIC);
+      .findIndex(
+        (call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.CONTENDED_TOPIC,
+      );
     expect(contendedCallIndex).to.be.greaterThan(-1);
     expect(callOrder).to.eql(['deleteSession']);
     expect(contendedCallIndex).to.be.lessThan(
       publish
         .getCalls()
-        .findIndex((call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.RELEASED_TOPIC),
+        .findIndex(
+          (call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.RELEASED_TOPIC,
+        ),
     );
   });
 

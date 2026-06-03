@@ -1,15 +1,50 @@
 import type {StringRecord} from '@appium/types';
+import type {Capabilities} from '@wdio/types';
 import type {Browser} from 'webdriverio';
 import {DEFAULT_HOST, DEFAULT_PORT} from './constants';
 import {log as logger} from '../../../lib/logger';
 import {remote} from 'webdriverio';
 import {retry, retryInterval} from 'asyncbox';
 
+export const MOCHA_TIMEOUT = 60 * 1000 * 4;
+
+export type SessionCapabilities = Capabilities.RequestedStandaloneCapabilities;
+
+type RemoteSessionOptions = Omit<
+  Capabilities.WebdriverIOConfig,
+  'hostname' | 'port' | 'capabilities' | 'connectionRetryTimeout' | 'connectionRetryCount'
+>;
+
 const INIT_RETRIES = process.env.CI ? 2 : 1;
 const ALERT_CHECK_RETRIES = 5;
 const ALERT_CHECK_INTERVAL = 1000;
 
 let driver: Browser | undefined;
+
+export async function createRemoteSession(
+  caps: SessionCapabilities,
+  remoteOpts: RemoteSessionOptions = {},
+): Promise<Browser> {
+  return await remote({
+    hostname: DEFAULT_HOST,
+    port: DEFAULT_PORT,
+    capabilities: caps,
+    connectionRetryTimeout: MOCHA_TIMEOUT,
+    connectionRetryCount: 1,
+    ...remoteOpts,
+  });
+}
+
+export async function deleteRemoteSession(sessionDriver?: Browser): Promise<void> {
+  if (!sessionDriver) {
+    return;
+  }
+  try {
+    await sessionDriver.deleteSession();
+  } catch {
+    // ignore
+  }
+}
 
 export async function initSession(
   caps: StringRecord,

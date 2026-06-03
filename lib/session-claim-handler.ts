@@ -192,7 +192,10 @@ export class SessionClaimHandler {
     await this.terminateSessionOnRequest(driver, udid);
   }
 
-  private async publishSessionUdidContended(driver: AndroidUiautomator2Driver, udid: string): Promise<void> {
+  private async publishSessionUdidContended(
+    driver: AndroidUiautomator2Driver,
+    udid: string,
+  ): Promise<void> {
     const ipc = await this.getIpc();
     const sessionId = driver.sessionId ?? undefined;
     if (!ipc || !udid || !sessionId) {
@@ -209,7 +212,10 @@ export class SessionClaimHandler {
     );
   }
 
-  private async terminateSessionOnRequest(driver: AndroidUiautomator2Driver, udid: string): Promise<void> {
+  private async terminateSessionOnRequest(
+    driver: AndroidUiautomator2Driver,
+    udid: string,
+  ): Promise<void> {
     const sessionId = driver.sessionId ?? undefined;
     const publisherId = sessionId ? this.getPublisherId(driver) : undefined;
     const {log} = driver;

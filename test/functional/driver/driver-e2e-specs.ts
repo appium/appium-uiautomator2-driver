@@ -5,8 +5,8 @@ import {
   amendCapabilities,
   APIDEMOS_PACKAGE,
   APIDEMOS_MAIN_ACTIVITY,
-} from './desired';
-import {initSession, deleteSession} from './helpers/session';
+} from '../desired';
+import {initSession, deleteSession} from '../helpers/session';
 import {retryInterval} from 'asyncbox';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -27,7 +27,7 @@ async function killAndPrepareServer(oldPort: number, newPort: number): Promise<v
 }
 
 describe('createSession', function () {
-  let driver: Browser | undefined;
+  let driver!: Browser;
 
   describe('default adb port', function () {
     afterEach(async function () {
@@ -72,7 +72,7 @@ describe('createSession', function () {
 
   describe('custom adb port', function () {
     const adbPort = 5042;
-    let driver: Browser | undefined;
+    let driver!: Browser;
 
     beforeEach(async function () {
       await killAndPrepareServer(DEFAULT_ADB_PORT, adbPort);

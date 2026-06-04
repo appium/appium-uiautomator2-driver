@@ -17,19 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-        - apiLevel: 36
-          emuTag: google_apis
-          arch: x86_64
-        - apiLevel: 32
-          emuTag: google_apis
-          arch: x86_64
-        - apiLevel: 30
-          emuTag: google_apis
-          arch: x86
-        - apiLevel: 26
-          emuTag: default
-          arch: x86
+        apiLevel: [36, 32, 30, 26]
+        batch: [1, 2, 3, 4, 5]
 
     env:
       CI: true
@@ -79,6 +68,22 @@ jobs:
           ~/.android/avd/*
           ~/.android/adb*
         key: avd-${{ matrix.apiLevel }}
+    - name: Set emulator image for API level
+      run: |
+        case ${{ matrix.apiLevel }} in
+          26)
+            echo "EMU_TAG=default" >> "$GITHUB_ENV"
+            echo "EMU_ARCH=x86" >> "$GITHUB_ENV"
+            ;;
+          30)
+            echo "EMU_TAG=google_apis" >> "$GITHUB_ENV"
+            echo "EMU_ARCH=x86" >> "$GITHUB_ENV"
+            ;;
+          *)
+            echo "EMU_TAG=google_apis" >> "$GITHUB_ENV"
+            echo "EMU_ARCH=x86_64" >> "$GITHUB_ENV"
+            ;;
+        esac
     - name: create AVD and generate snapshot for caching
       if: steps.avd-cache.outputs.cache-hit != 'true'
       uses: reactivecircus/android-emulator-runner@v2
@@ -87,9 +92,9 @@ jobs:
         force-avd-creation: false
         api-level: ${{ matrix.apiLevel }}
         disable-spellchecker: true
-        target: ${{ matrix.emuTag }}
+        target: ${{ env.EMU_TAG }}
         emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-        arch: ${{ matrix.arch }}
+        arch: ${{ env.EMU_ARCH }}
         disable-animations: true
         script: echo "Generated AVD snapshot for caching."
     - run: |
@@ -110,7 +115,9 @@ jobs:
     - run: nohup adb logcat > logcat.log &
       name: Capture logcat
     - uses: reactivecircus/android-emulator-runner@v2
-      name: e2e_api${{ matrix.apiLevel }}
+      name: e2e_api${{ matrix.apiLevel }}_batch${{ matrix.batch }}
+      env:
+        E2E_BATCH: ${{ matrix.batch }}
       with:
         script: bash -xe scripts/run-functional-tests.sh
         avd-name: ${{ env.ANDROID_AVD }}
@@ -119,17 +126,17 @@ jobs:
         disable-spellchecker: true
         disable-animations: true
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-        target: ${{ matrix.emuTag }}
-        arch: ${{ matrix.arch }}
+        target: ${{ env.EMU_TAG }}
+        arch: ${{ env.EMU_ARCH }}
     - name: Save logcat output
       if: ${{ always() }}
       uses: actions/upload-artifact@master
       with:
-        name: logcat-api${{ matrix.apiLevel }}
+        name: logcat-api${{ matrix.apiLevel }}-batch${{ matrix.batch }}
         path: logcat.log
     - name: Save server output
       if: ${{ always() }}
       uses: actions/upload-artifact@master
       with:
-        name: appium-api${{ matrix.apiLevel }}
+        name: appium-api${{ matrix.apiLevel }}-batch${{ matrix.batch }}
         path: appium.log

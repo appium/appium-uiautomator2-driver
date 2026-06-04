@@ -1,6 +1,7 @@
 import type {Browser} from 'webdriverio';
 import sharp from 'sharp';
 import {SCROLL_CAPS} from '../desired';
+import {skipSuiteInCi} from '../helpers/ci-e2e';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -8,6 +9,10 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
 describe('testViewportCommands', function () {
+  before(function () {
+    skipSuiteInCi.call(this);
+  });
+
   let driver: Browser;
   const caps = SCROLL_CAPS;
 

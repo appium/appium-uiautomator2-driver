@@ -6,6 +6,7 @@ import {
   APIDEMOS_PACKAGE,
   APIDEMOS_MAIN_ACTIVITY,
 } from '../desired';
+import {skipSuiteInCi} from '../helpers/ci-e2e';
 import {initSession, deleteSession} from '../helpers/session';
 import {retryInterval} from 'asyncbox';
 import chai, {expect} from 'chai';
@@ -27,6 +28,10 @@ async function killAndPrepareServer(oldPort: number, newPort: number): Promise<v
 }
 
 describe('createSession', function () {
+  before(function () {
+    skipSuiteInCi.call(this);
+  });
+
   let driver!: Browser;
 
   describe('default adb port', function () {

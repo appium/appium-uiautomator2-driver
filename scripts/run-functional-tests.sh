@@ -25,7 +25,15 @@ checkTestPrerequisites
 
 RESULTS_XML=test-results.xml
 echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
-ARGS=("./test/functional/**/*-e2e-specs.ts" \
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+mapfile -t SPEC_FILES < <("$SCRIPT_DIR/e2e-spec-batches.sh" "${E2E_BATCH:-}")
+
+if [[ -n "${E2E_BATCH:-}" ]]; then
+  echo "Running functional e2e batch ${E2E_BATCH} (${#SPEC_FILES[@]} spec files)"
+fi
+
+ARGS=("${SPEC_FILES[@]}" \
 --exit --timeout 10m \
 --reporter mocha-multi-reporters --reporter-options configFile=reporter_config.json)
 if ! npx mocha "${ARGS[@]}"; then

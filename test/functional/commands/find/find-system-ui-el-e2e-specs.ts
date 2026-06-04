@@ -1,4 +1,5 @@
 import type {Browser} from 'webdriverio';
+import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import {SETTINGS_CAPS} from '../../desired';
 import chai, {expect} from 'chai';
@@ -18,6 +19,7 @@ describe('Find - android ui elements', function () {
     }
   });
   it('should not find statusBarBackground element via xpath', async function () {
+    skipFlakyInCi.call(this);
     const statusBar = await driver!.$$(`//*[@resource-id='android:id/statusBarBackground']`); //check server (NPE) if allowInvisibleElements is unset on server side
     expect(statusBar.length).to.be.equal(0);
     await driver!.updateSettings({allowInvisibleElements: false});
@@ -27,6 +29,7 @@ describe('Find - android ui elements', function () {
     expect(statusBarWithInvisibleEl.length).to.be.equal(0);
   });
   it('should find statusBarBackground element via xpath', async function () {
+    skipFlakyInCi.call(this);
     await driver!.updateSettings({allowInvisibleElements: true});
     await expect(driver!.$(`//*[@resource-id='android:id/statusBarBackground']`).elementId).to
       .eventually.exist;

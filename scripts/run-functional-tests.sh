@@ -25,7 +25,7 @@ checkTestPrerequisites
 
 RESULTS_XML=test-results.xml
 echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
-ARGS=(./test/functional/**/*-e2e-specs.ts \
+ARGS=("./test/functional/**/*-e2e-specs.ts" \
 --exit --timeout 10m \
 --reporter mocha-multi-reporters --reporter-options configFile=reporter_config.json)
 if ! npx mocha "${ARGS[@]}"; then

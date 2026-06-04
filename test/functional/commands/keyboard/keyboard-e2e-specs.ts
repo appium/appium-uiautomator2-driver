@@ -7,6 +7,7 @@ import {
   APIDEMOS_TEXTFIELDS_ACTIVITY,
   amendCapabilities,
 } from '../../desired';
+import {isCi} from '../../helpers/ci-e2e';
 import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
@@ -203,9 +204,8 @@ const languageTests = [
 ];
 
 // Full suite is ~48 cases; in CI run a minimal smoke set in one session.
-const isCi = Boolean(process.env.CI);
 const ciAsciiSmokeTest = tests[0];
-const describeUnicode = isCi ? describe.skip : describe;
+const describeUnicode = isCi() ? describe.skip : describe;
 
 describe('keyboard', function () {
   describe('ascii', function () {
@@ -213,7 +213,7 @@ describe('keyboard', function () {
     before(async function () {
       driver = await initSession(defaultAsciiCaps);
 
-      if (!process.env.CI) {
+      if (!isCi()) {
         await activateLatinIme(driver);
       }
 
@@ -244,7 +244,7 @@ describe('keyboard', function () {
         els = elsResult;
       });
 
-      if (isCi) {
+      if (isCi()) {
         describe(ciAsciiSmokeTest.label, function () {
           it('should work with setValue', async function () {
             await runTextEditTest(driver, ciAsciiSmokeTest.text);
@@ -263,7 +263,7 @@ describe('keyboard', function () {
         }
       }
 
-      if (!isCi) {
+      if (!isCi()) {
         it('should be able to clear a password field', async function () {
           // this test is flakey
           this.retries(4);
@@ -301,7 +301,7 @@ describe('keyboard', function () {
       it('should be able to send keyevents', async function () {
         await runKeyEventTest(driver);
       });
-      if (!isCi) {
+      if (!isCi()) {
         it('should be able to send combination keyevents', async function () {
           await runCombinationKeyEventTest(driver);
         });

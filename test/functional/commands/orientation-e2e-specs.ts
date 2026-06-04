@@ -1,7 +1,7 @@
 import type {Browser} from 'webdriverio';
 import {waitForCondition} from 'asyncbox';
 import {APIDEMOS_CAPS, amendCapabilities} from '../desired';
-import {isCi, skipSuiteInCi} from '../helpers/ci-e2e';
+import {skipSuiteInCi, skipTestInCi} from '../helpers/ci-e2e';
 import {initSession, deleteSession} from '../helpers/session';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -83,8 +83,8 @@ describe('apidemo - orientation -', function () {
       await waitForOrientation('LANDSCAPE');
     });
     it('should rotate screen to portrait', async function () {
-      if (isCi()) {
-        return this.skip();
+      if (skipTestInCi.call(this)) {
+        return;
       }
       await driver.setOrientation('LANDSCAPE');
       await waitForOrientation('LANDSCAPE');
@@ -92,8 +92,8 @@ describe('apidemo - orientation -', function () {
       await waitForOrientation('PORTRAIT');
     });
     it('should not error when trying to rotate to portrait again', async function () {
-      if (isCi()) {
-        return this.skip();
+      if (skipTestInCi.call(this)) {
+        return;
       }
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');

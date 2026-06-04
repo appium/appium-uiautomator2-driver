@@ -1,3 +1,9 @@
+## [7.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.2...v7.6.0) (2026-06-04)
+
+### Features
+
+* Automatically terminate obsolete sessions using device id to be claimed by the current one ([#1006](https://github.com/appium/appium-uiautomator2-driver/issues/1006)) ([9f71e9f](https://github.com/appium/appium-uiautomator2-driver/commit/9f71e9f0d072dce2ec049fa219f57feb660c8bf6))
+
 ## [7.5.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.1...v7.5.2) (2026-05-24)
 
 ### Miscellaneous Chores

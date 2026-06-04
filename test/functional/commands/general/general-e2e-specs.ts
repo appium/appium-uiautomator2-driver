@@ -1,6 +1,5 @@
 import type {Browser} from 'webdriverio';
 import {APIDEMOS_CAPS} from '../../desired';
-import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import {waitForCondition} from 'asyncbox';
 import chai, {expect} from 'chai';
@@ -8,16 +7,31 @@ import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
 
+function normalizeActivityName(pkg: string, activity: string): string {
+  if (activity.startsWith('.')) {
+    return activity;
+  }
+  const pkgPrefix = `${pkg}.`;
+  if (activity.startsWith(pkgPrefix)) {
+    return `.${activity.slice(pkgPrefix.length)}`;
+  }
+  if (activity.startsWith(pkg)) {
+    return activity.slice(pkg.length);
+  }
+  return activity.startsWith('.') ? activity : `.${activity}`;
+}
+
 async function expectPackageAndActivity(
   driver: Browser,
   pkg: string,
   activity: string,
   timeoutMs = 5000,
 ): Promise<void> {
+  const expectedActivity = normalizeActivityName(pkg, activity);
   await waitForCondition(
     async () =>
       (await driver.getCurrentPackage()) === pkg &&
-      (await driver.getCurrentActivity()) === activity,
+      normalizeActivityName(pkg, await driver.getCurrentActivity()) === expectedActivity,
     {
       waitMs: timeoutMs,
       intervalMs: 300,
@@ -36,10 +50,6 @@ describe('general', function () {
   });
 
   describe('startActivity', function () {
-    beforeEach(function () {
-      skipFlakyInCi.call(this);
-    });
-
     it('should launch a new package and activity', async function () {
       const appPackage = await driver.getCurrentPackage();
       const appActivity = await driver.getCurrentActivity();

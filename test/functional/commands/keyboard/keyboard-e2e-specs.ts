@@ -1,7 +1,7 @@
 import type {Browser} from 'webdriverio';
 import {retryInterval, sleep} from 'asyncbox';
-import {APIDEMOS_CAPS} from '../../desired';
-import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
+import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
+import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
 import chai, {expect} from 'chai';
@@ -16,10 +16,10 @@ const PACKAGE = 'io.appium.android.apis';
 const TEXTFIELD_ACTIVITY = '.view.TextFields';
 const KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
-const defaultAsciiCaps = Object.assign({}, APIDEMOS_CAPS, {
-  newCommandTimeout: 90,
-  appPackage: PACKAGE,
-  appActivity: TEXTFIELD_ACTIVITY,
+const defaultAsciiCaps = amendCapabilities(APIDEMOS_CAPS, {
+  'appium:newCommandTimeout': 90,
+  'appium:appPackage': PACKAGE,
+  'appium:appActivity': TEXTFIELD_ACTIVITY,
 });
 
 const defaultUnicodeCaps = defaultAsciiCaps;
@@ -102,6 +102,38 @@ async function runTextEditTest(
  * positives from previously run tests. The page has a single button that
  * removes all text from within the main TextView.
  */
+async function activateLatinIme(driver: Browser): Promise<void> {
+  const engines = await driver.availableIMEEngines();
+  const selectedEngine = (engines || []).find((engine) =>
+    engine.includes('android.inputmethod'),
+  );
+  if (!selectedEngine) {
+    return;
+  }
+  try {
+    await driver.execute('mobile: shell', {
+      command: 'ime',
+      args: ['set', selectedEngine],
+    });
+  } catch {
+    // Best effort; the emulator may already use an acceptable IME.
+  }
+}
+
+async function startTextFieldsActivity(driver: Browser): Promise<void> {
+  await driver.startActivity(
+    defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+    defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+  );
+  if (await dismissSystemAlertIfPresent(driver)) {
+    await ensureUnlocked(driver);
+    await driver.startActivity(
+      defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+      defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+    );
+  }
+}
+
 async function clearKeyEvents(driver: Browser): Promise<void> {
   const el = await getElement(driver, BUTTON_CLASS);
   await el.click();
@@ -171,46 +203,16 @@ const languageTests = [
 ];
 
 describe('keyboard', function () {
-  before(function () {
-    skipFlakyInCi.call(this);
-  });
-
   describe('ascii', function () {
     let driver: Browser;
     before(async function () {
       driver = await initSession(defaultAsciiCaps);
 
       if (!process.env.CI) {
-        // sometimes the default ime is not what we are using
-        const engines = await driver.availableIMEEngines();
-        let selectedEngine = engines?.[0];
-        for (const engine of engines || []) {
-          // it seems that the latin ime has `android.inputmethod` in its package name
-          if (engine.indexOf('android.inputmethod') !== -1) {
-            selectedEngine = engine;
-          }
-        }
-        if (selectedEngine) {
-          await (driver as any).activateIME(selectedEngine);
-        }
+        await activateLatinIme(driver);
       }
 
-      await driver.startActivity(
-        defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-        defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-      );
-      try {
-        const okBtn = await driver.$('id=android:id/button1');
-        console.log('\n\nFound alert. Trying to dismiss'); // eslint-disable-line
-        await okBtn.click();
-        await ensureUnlocked(driver);
-        await driver.startActivity(
-          defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-          defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-        );
-      } catch {
-        // ignore
-      }
+      await startTextFieldsActivity(driver);
     });
     after(async function () {
       await deleteSession();
@@ -223,10 +225,7 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       let els: Awaited<ReturnType<Browser['$$']>>;
       beforeEach(async function () {
-        await driver.startActivity(
-          defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-          defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-        );
+        await startTextFieldsActivity(driver);
         const elsResult = await retryInterval(10, 1000, async function () {
           const elsPromise = driver.$$(EDITTEXT_CLASS);
           const elsArray = await elsPromise;
@@ -333,10 +332,7 @@ describe('keyboard', function () {
 
     describe('editing a text field', function () {
       beforeEach(async function () {
-        await driver.startActivity(
-          defaultUnicodeCaps.alwaysMatch?.['appium:appPackage'] as string,
-          defaultUnicodeCaps.alwaysMatch?.['appium:appActivity'] as string,
-        );
+        await startTextFieldsActivity(driver);
       });
 
       for (const testSet of [tests, unicodeTests, languageTests]) {

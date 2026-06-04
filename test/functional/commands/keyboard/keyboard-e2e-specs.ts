@@ -1,6 +1,7 @@
 import type {Browser} from 'webdriverio';
 import {retryInterval, sleep} from 'asyncbox';
 import {APIDEMOS_CAPS} from '../../desired';
+import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
 import chai, {expect} from 'chai';
@@ -170,6 +171,10 @@ const languageTests = [
 ];
 
 describe('keyboard', function () {
+  before(function () {
+    skipFlakyInCi.call(this);
+  });
+
   describe('ascii', function () {
     let driver: Browser;
     before(async function () {

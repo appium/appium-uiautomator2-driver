@@ -1,3 +1,4 @@
 import {logger} from 'appium/support';
+import type {AppiumLogger} from '@appium/types';
 
-export const log = logger.getLogger('UiAutomator2');
+export const log: AppiumLogger = logger.getLogger('UiAutomator2');

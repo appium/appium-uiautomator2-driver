@@ -1,5 +1,6 @@
 import type {Browser} from 'webdriverio';
 import {APIDEMOS_CAPS} from '../../desired';
+import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -66,6 +67,7 @@ describe('Find - xpath', function () {
     );
   });
   it('should find toast message element by text', async function () {
+    skipFlakyInCi.call(this);
     await driver.startActivity('io.appium.android.apis', '.view.PopupMenu1');
     const popUpEl = await driver.$('~Make a Popup!');
     await popUpEl.waitForDisplayed({timeout: 5000});

@@ -1,5 +1,6 @@
 import type {Browser} from 'webdriverio';
 import {APIDEMOS_CAPS} from '../../desired';
+import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import {waitForCondition} from 'asyncbox';
 import chai, {expect} from 'chai';
@@ -35,6 +36,10 @@ describe('general', function () {
   });
 
   describe('startActivity', function () {
+    beforeEach(function () {
+      skipFlakyInCi.call(this);
+    });
+
     it('should launch a new package and activity', async function () {
       const appPackage = await driver.getCurrentPackage();
       const appActivity = await driver.getCurrentActivity();

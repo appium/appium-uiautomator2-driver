@@ -121,6 +121,7 @@ import {
   mobileViewPortRect,
 } from './commands/viewport';
 import {executeMethodMap} from './execute-method-map';
+import {sessionClaimHandler} from './session-claim-handler';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.
@@ -426,6 +427,10 @@ class AndroidUiautomator2Driver
       this.opts.udid = udid;
       // @ts-expect-error do not put random stuff on opts
       this.opts.emPort = emPort;
+
+      await sessionClaimHandler.registerActiveSession(this);
+      await sessionClaimHandler.claimSessionUdid(this);
+
       // now that we know our java version and device info, we can create our
       // ADB instance
       this.adb = await this.createADB();
@@ -499,7 +504,13 @@ class AndroidUiautomator2Driver
     return {...sessionData, ...uia2Data};
   }
 
+  async onIpcInit(): Promise<void> {
+    await sessionClaimHandler.registerActiveSession(this);
+  }
+
   override async deleteSession() {
+    sessionClaimHandler.unregisterActiveSession(this);
+
     this.log.debug('Deleting UiAutomator2 session');
 
     const screenRecordingStopTasks = [

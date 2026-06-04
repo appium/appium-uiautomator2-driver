@@ -1,6 +1,12 @@
 import type {Browser} from 'webdriverio';
 import {retryInterval, sleep} from 'asyncbox';
-import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
+import {
+  APIDEMOS_CAPS,
+  APIDEMOS_KEYEVENT_ACTIVITY,
+  APIDEMOS_PACKAGE,
+  APIDEMOS_TEXTFIELDS_ACTIVITY,
+  amendCapabilities,
+} from '../../desired';
 import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
@@ -12,14 +18,10 @@ chai.use(chaiAsPromised);
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
 
-const PACKAGE = 'io.appium.android.apis';
-const TEXTFIELD_ACTIVITY = '.view.TextFields';
-const KEYEVENT_ACTIVITY = '.text.KeyEventText';
-
 const defaultAsciiCaps = amendCapabilities(APIDEMOS_CAPS, {
   'appium:newCommandTimeout': 90,
-  'appium:appPackage': PACKAGE,
-  'appium:appActivity': TEXTFIELD_ACTIVITY,
+  'appium:appPackage': APIDEMOS_PACKAGE,
+  'appium:appActivity': APIDEMOS_TEXTFIELDS_ACTIVITY,
 });
 
 const defaultUnicodeCaps = defaultAsciiCaps;
@@ -104,9 +106,7 @@ async function runTextEditTest(
  */
 async function activateLatinIme(driver: Browser): Promise<void> {
   const engines = await driver.availableIMEEngines();
-  const selectedEngine = (engines || []).find((engine) =>
-    engine.includes('android.inputmethod'),
-  );
+  const selectedEngine = (engines || []).find((engine) => engine.includes('android.inputmethod'));
   if (!selectedEngine) {
     return;
   }
@@ -202,6 +202,11 @@ const languageTests = [
   {label: 'should be able to send Hebrew', text: 'בדיקות'},
 ];
 
+// Full suite is ~48 cases; in CI run a minimal smoke set in one session.
+const isCi = Boolean(process.env.CI);
+const ciAsciiSmokeTest = tests[0];
+const describeUnicode = isCi ? describe.skip : describe;
+
 describe('keyboard', function () {
   describe('ascii', function () {
     let driver: Browser;
@@ -239,70 +244,72 @@ describe('keyboard', function () {
         els = elsResult;
       });
 
-      for (const test of tests) {
-        describe(test.label, function () {
+      if (isCi) {
+        describe(ciAsciiSmokeTest.label, function () {
           it('should work with setValue', async function () {
-            await runTextEditTest(driver, test.text);
-          });
-          it('should work with keys', async function () {
-            await runTextEditTest(driver, test.text, true);
+            await runTextEditTest(driver, ciAsciiSmokeTest.text);
           });
         });
+      } else {
+        for (const test of tests) {
+          describe(test.label, function () {
+            it('should work with setValue', async function () {
+              await runTextEditTest(driver, test.text);
+            });
+            it('should work with keys', async function () {
+              await runTextEditTest(driver, test.text, true);
+            });
+          });
+        }
       }
 
-      it('should be able to clear a password field', async function () {
-        // this test is flakey
-        this.retries(4);
+      if (!isCi) {
+        it('should be able to clear a password field', async function () {
+          // this test is flakey
+          this.retries(4);
 
-        // there is currently no way to directly assert anything about the contents
-        // of a password field, since there is no way to access the contents
-        const password = 'super-duper password';
-        const passwordTextField = els[1];
-        const passwordOutput = await driver.$('id=io.appium.android.apis:id/edit1Text');
-        const elementId = await passwordTextField.elementId;
-        await driver.elementSendKeys(elementId, password);
-        await waitForText(passwordOutput, password);
-        await passwordTextField.clearValue();
-        await waitForText(passwordOutput, '');
-      });
+          // there is currently no way to directly assert anything about the contents
+          // of a password field, since there is no way to access the contents
+          const password = 'super-duper password';
+          const passwordTextField = els[1];
+          const passwordOutput = await driver.$('id=io.appium.android.apis:id/edit1Text');
+          const elementId = await passwordTextField.elementId;
+          await driver.elementSendKeys(elementId, password);
+          await waitForText(passwordOutput, password);
+          await passwordTextField.clearValue();
+          await waitForText(passwordOutput, '');
+        });
 
-      it('should be able to type in length-limited field', async function () {
-        const charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const adb = new ADB();
-        const apiLevelStr = await adb.getApiLevel();
-        const apiLevel = parseInt(String(apiLevelStr), 10);
-        if (apiLevel < 24 || (process.env.CI && apiLevel < 28)) {
-          // below Android 7.0 (API level 24) typing too many characters in a
-          // length-limited field will either throw a NullPointerException or
-          // crash the app
-          // also can be flakey in CI for SDK < 28
-          return this.skip();
-        }
-        const el = els[3];
-        await el.setValue(charactersToType);
+        it('should be able to type in length-limited field', async function () {
+          const charactersToType = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          const el = els[3];
+          await el.setValue(charactersToType);
 
-        // expect first 11 characters (limit of the field) to be in the field
-        const text = await el.getText();
-        expect(text).to.eql('0123456789a');
-      });
+          // expect first 11 characters (limit of the field) to be in the field
+          const text = await el.getText();
+          expect(text).to.eql('0123456789a');
+        });
+      }
     });
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
         await sleep(500);
       });
 
-      it('should be able to send combination keyevents', async function () {
-        await runCombinationKeyEventTest(driver);
-      });
       it('should be able to send keyevents', async function () {
         await runKeyEventTest(driver);
       });
+      if (!isCi) {
+        it('should be able to send combination keyevents', async function () {
+          await runCombinationKeyEventTest(driver);
+        });
+      }
     });
   });
 
-  describe('unicode', function () {
+  describeUnicode('unicode', function () {
     const adb = new ADB();
     let initialIME: string | null | undefined;
     let driver: Browser;
@@ -351,7 +358,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(PACKAGE, KEYEVENT_ACTIVITY);
+        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
       });
 
       it('should be able to send combination keyevents', async function () {

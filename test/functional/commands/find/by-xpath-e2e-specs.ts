@@ -75,10 +75,7 @@ describe('Find - xpath', function () {
     const searchEl = await driver.$(`.//*[@text='Search']`);
     await searchEl.waitForDisplayed({timeout: 5000});
     await searchEl.click();
-    await waitForElementByXpath(
-      driver,
-      `//*[@text='Clicked popup menu item Search']`,
-    );
+    await waitForElementByXpath(driver, `//*[@text='Clicked popup menu item Search']`);
 
     await popUpEl.click();
     const addEl = await driver.$(`.//*[@text='Add']`);

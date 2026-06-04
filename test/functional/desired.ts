@@ -14,6 +14,8 @@ const API_DEMOS_APK_URL =
 export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 export const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
 export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
+export const APIDEMOS_TEXTFIELDS_ACTIVITY = '.view.TextFields';
+export const APIDEMOS_KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
 export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
   return deepFreeze({

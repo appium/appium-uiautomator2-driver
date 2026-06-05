@@ -1,3 +1,6 @@
+import os from 'node:os';
+import path from 'node:path';
+
 const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
@@ -11,6 +14,8 @@ const API_DEMOS_APK_URL =
 export const APIDEMOS_PACKAGE = 'io.appium.android.apis';
 export const APIDEMOS_MAIN_ACTIVITY = '.ApiDemos';
 export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
+export const APIDEMOS_TEXTFIELDS_ACTIVITY = '.view.TextFields';
+export const APIDEMOS_KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
 export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
   return deepFreeze({
@@ -56,8 +61,16 @@ export const SCROLL_CAPS = amendCapabilities(GENERIC_CAPS, {
   'appium:appActivity': APIDEMOS_SCROLL_ACTIVITY,
 });
 
+export const CHROMEDRIVER_EXECUTABLE_DIR = path.join(
+  os.tmpdir(),
+  'appium-uiautomator2-chromedrivers',
+);
+
 export const BROWSER_CAPS = amendCapabilities(GENERIC_CAPS, {
   browserName: 'Chrome',
+  // Frozen caps cannot be mutated when webdriver opts into WebDriver Bidi by default.
+  'wdio:enforceWebDriverClassic': true,
+  'appium:chromedriverExecutableDir': CHROMEDRIVER_EXECUTABLE_DIR,
 });
 
 export const SETTINGS_CAPS = amendCapabilities(GENERIC_CAPS, {

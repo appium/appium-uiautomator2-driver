@@ -1,6 +1,6 @@
 import type {Browser} from 'webdriverio';
 import {BROWSER_CAPS} from '../../desired';
-import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
+import {skipSuiteInCi} from '../../helpers/ci-e2e';
 import {initSession, deleteSession} from '../../helpers/session';
 import {ADB} from 'appium-adb';
 import chai, {expect} from 'chai';
@@ -12,7 +12,9 @@ describe('setUrl', function () {
   let driver: Browser | undefined;
 
   before(async function () {
-    skipFlakyInCi.call(this);
+    if (skipSuiteInCi.call(this)) {
+      return;
+    }
     const adb = new ADB();
     const hasChrome = await adb.isAppInstalled('com.android.chrome');
     if (!hasChrome) {

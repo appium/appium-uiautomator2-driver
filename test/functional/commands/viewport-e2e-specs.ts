@@ -1,6 +1,7 @@
 import type {Browser} from 'webdriverio';
 import sharp from 'sharp';
 import {SCROLL_CAPS} from '../desired';
+import {skipSuiteInCi} from '../helpers/ci-e2e';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -12,6 +13,9 @@ describe('testViewportCommands', function () {
   const caps = SCROLL_CAPS;
 
   before(async function () {
+    if (skipSuiteInCi.call(this)) {
+      return;
+    }
     driver = await initSession(caps);
   });
 
@@ -26,10 +30,6 @@ describe('testViewportCommands', function () {
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
-    if (process.env.CI) {
-      return this.skip();
-    }
-
     const {viewportRect, statBarHeight, pixelRatio} = (await driver.getSession()) as any;
 
     expect(pixelRatio).not.to.be.empty;
@@ -42,10 +42,6 @@ describe('testViewportCommands', function () {
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
-    if (process.env.CI) {
-      return this.skip();
-    }
-
     const scrollableEl = await driver.$('//*[@scrollable="true"]');
     const contentSize = await scrollableEl.getAttribute('contentSize');
     expect(contentSize).to.exist;
@@ -53,10 +49,6 @@ describe('testViewportCommands', function () {
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
-    if (process.env.CI) {
-      return this.skip();
-    }
-
     const scrollableEl = await driver.$('//android.widget.ScrollView');
     const contentSize = await scrollableEl.getAttribute('contentSize');
     expect(contentSize).to.exist;
@@ -64,19 +56,12 @@ describe('testViewportCommands', function () {
   });
 
   it('should get first element from scrollable element', async function () {
-    if (process.env.CI) {
-      return this.skip();
-    }
-
     const scrollableEl = await driver.$('//*[@scrollable="true"]');
     await expect(scrollableEl.$('/*[@firstVisible="true"]').elementId).to.eventually.exist;
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
     // TODO: fails on CI with a `Does the current view have 'secure' flag set?` error
-    if (process.env.CI) {
-      return this.skip();
-    }
     const {viewportRect, statBarHeight} = (await driver.getSession()) as any;
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');

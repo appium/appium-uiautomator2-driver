@@ -1,11 +1,14 @@
 import type {Browser} from 'webdriverio';
-import {skipFlakyInCi} from '../../helpers/ci-flaky-skip';
 import {initSession, deleteSession} from '../../helpers/session';
 import {SETTINGS_CAPS} from '../../desired';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
+
+// statusBarBackground is not exposed on recent Android releases; use displayed=false instead.
+const INVISIBLE_ELEMENTS_XPATH = `//*[@displayed='false']`;
+const XPATH_FIND_TIMEOUT_MS = 500;
 
 describe('Find - android ui elements', function () {
   let driver: Browser | undefined;
@@ -18,20 +21,18 @@ describe('Find - android ui elements', function () {
       await deleteSession();
     }
   });
-  it('should not find statusBarBackground element via xpath', async function () {
-    skipFlakyInCi.call(this);
-    const statusBar = await driver!.$$(`//*[@resource-id='android:id/statusBarBackground']`); //check server (NPE) if allowInvisibleElements is unset on server side
-    expect(statusBar.length).to.be.equal(0);
-    await driver!.updateSettings({allowInvisibleElements: false});
-    const statusBarWithInvisibleEl = await driver!.$$(
-      `//*[@resource-id='android:id/statusBarBackground']`,
-    );
-    expect(statusBarWithInvisibleEl.length).to.be.equal(0);
+  beforeEach(async function () {
+    await driver!.setTimeout({implicit: XPATH_FIND_TIMEOUT_MS});
   });
-  it('should find statusBarBackground element via xpath', async function () {
-    skipFlakyInCi.call(this);
+
+  it('should not find invisible elements via xpath when allowInvisibleElements is false', async function () {
+    await driver!.updateSettings({allowInvisibleElements: false});
+    const invisibleEls = await driver!.$$(INVISIBLE_ELEMENTS_XPATH);
+    expect(invisibleEls.length).to.be.equal(0);
+  });
+  it('should find invisible elements via xpath when allowInvisibleElements is true', async function () {
     await driver!.updateSettings({allowInvisibleElements: true});
-    await expect(driver!.$(`//*[@resource-id='android:id/statusBarBackground']`).elementId).to
-      .eventually.exist;
+    const invisibleEls = await driver!.$$(INVISIBLE_ELEMENTS_XPATH);
+    expect(invisibleEls.length).to.be.at.least(1);
   });
 });

@@ -75,36 +75,38 @@ export async function initSession(
 export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
   // In CI environment, the alert "System UI isn't responding" may appear due to less machine resources.
   if (process.env.CI && driver) {
-    for (const btnId of ['android:id/button1', 'android:id/aerr_wait']) {
-      let alertFound = false;
-      await retryInterval(ALERT_CHECK_RETRIES, ALERT_CHECK_INTERVAL, async function () {
-        let btn;
-        try {
-          btn = await driver!.$(`id=${btnId}`);
+    const implicitMs = process.env.CI ? 30000 : 5000;
+    await driver.setTimeout({implicit: 500});
+    try {
+      for (const btnId of ['android:id/button1', 'android:id/aerr_wait']) {
+        let alertFound = false;
+        await retryInterval(ALERT_CHECK_RETRIES, ALERT_CHECK_INTERVAL, async function () {
+          const buttons = await driver!.$$(`id=${btnId}`);
+          if (!(await buttons.length)) {
+            return;
+          }
           alertFound = true;
-        } catch {
-          // no element found, so just finish
-          return;
+          logger.warn('*******************************************************');
+          logger.warn('*******************************************************');
+          logger.warn('*******************************************************');
+          logger.warn('Alert found on session startup. Trying to dismiss alert');
+          logger.warn('*******************************************************');
+          logger.warn('*******************************************************');
+          logger.warn('*******************************************************');
+          await buttons[0].click();
+          throw new Error('Alert was found, retry');
+        });
+        if (alertFound && driver) {
+          await driver.startActivity(
+            caps.alwaysMatch?.['appium:appPackage'] as string,
+            caps.alwaysMatch?.['appium:appActivity'] as string,
+            caps.alwaysMatch?.['appium:appWaitPackage'] as string | undefined,
+            caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined,
+          );
         }
-        logger.warn('*******************************************************');
-        logger.warn('*******************************************************');
-        logger.warn('*******************************************************');
-        logger.warn('Alert found on session startup. Trying to dismiss alert');
-        logger.warn('*******************************************************');
-        logger.warn('*******************************************************');
-        logger.warn('*******************************************************');
-        await btn.click();
-        throw new Error('Alert was found, retry');
-      });
-      // if an alert was ever found, try to start the activity that the session should have started
-      if (alertFound && driver) {
-        await driver.startActivity(
-          caps.alwaysMatch?.['appium:appPackage'] as string,
-          caps.alwaysMatch?.['appium:appActivity'] as string,
-          caps.alwaysMatch?.['appium:appWaitPackage'] as string | undefined,
-          caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined,
-        );
       }
+    } finally {
+      await driver.setTimeout({implicit: implicitMs});
     }
   }
 }

@@ -20,13 +20,7 @@ const BOOLEAN_ATTRS = new Set([
 
 const NUMERIC_ATTRS = new Set(['index', 'instance']);
 
-const STRING_ATTRS = new Set([
-  'description',
-  'resource-id',
-  'text',
-  'class-name',
-  'package-name',
-]);
+const STRING_ATTRS = new Set(['description', 'resource-id', 'text', 'class-name', 'package-name']);
 
 const ID_LOCATOR_PATTERN = /^[a-zA-Z_][a-zA-Z0-9._]*:id\/[\S]+$/;
 

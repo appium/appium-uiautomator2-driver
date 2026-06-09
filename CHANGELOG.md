@@ -1,3 +1,9 @@
+## [7.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.0...v7.6.1) (2026-06-09)
+
+### Miscellaneous Chores
+
+* Refactor css locator transformer ([#1009](https://github.com/appium/appium-uiautomator2-driver/issues/1009)) ([cba226a](https://github.com/appium/appium-uiautomator2-driver/commit/cba226a075cac199e7df3183f34e7266e1b51e19))
+
 ## [7.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.5.2...v7.6.0) (2026-06-04)
 
 ### Features

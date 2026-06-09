@@ -1,4 +1,4 @@
-import {CssConverter} from '../css-converter';
+import {cssToNativeLocator} from '../css';
 import type {Element as AppiumElement} from '@appium/types';
 import type {FindElementOpts} from 'appium-android-driver';
 import type {AndroidUiautomator2Driver} from '../driver';
@@ -42,11 +42,10 @@ export async function doFindElementOrEls(
     params.selector = MAGIC_SCROLLABLE_BY;
   }
   if (params.strategy === 'css selector') {
-    params.strategy = '-android uiautomator';
-    params.selector = new CssConverter(
+    ({strategy: params.strategy, selector: params.selector} = await cssToNativeLocator(
       params.selector,
       this.opts.appPackage,
-    ).toUiAutomatorSelector();
+    ));
   }
   return (await uiautomator2.jwproxy.command(
     `/element${params.multiple ? 's' : ''}`,

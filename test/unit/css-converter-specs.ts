@@ -1,5 +1,8 @@
-import {CssConverter} from '../../lib/css-converter';
-import {expect} from 'chai';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css';
+
+chai.use(chaiAsPromised);
 
 describe('css-converter.js', function () {
   describe('simple cases', function () {
@@ -50,8 +53,11 @@ describe('css-converter.js', function () {
       ],
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
-      it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, function () {
-        expect(new CssConverter(cssSelector).toUiAutomatorSelector()).to.equal(uiAutomatorSelector);
+      it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, async function () {
+        await expect(cssToNativeLocator(cssSelector)).to.eventually.deep.equal({
+          strategy: UI_AUTOMATOR_STRATEGY,
+          selector: uiAutomatorSelector,
+        });
       });
     }
   });
@@ -64,8 +70,8 @@ describe('css-converter.js', function () {
       'p ~ a',
     ];
     for (const cssSelector of testCases) {
-      it(`should reject '${cssSelector}'`, function () {
-        expect(() => new CssConverter(cssSelector).toUiAutomatorSelector()).to.throw();
+      it(`should reject '${cssSelector}'`, async function () {
+        await expect(cssToNativeLocator(cssSelector)).to.be.rejected;
       });
     }
   });

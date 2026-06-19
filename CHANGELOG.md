@@ -1,3 +1,9 @@
+## [7.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.1...v7.6.2) (2026-06-19)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 25.9.4 to 26.0.0 ([#1011](https://github.com/appium/appium-uiautomator2-driver/issues/1011)) ([6783d39](https://github.com/appium/appium-uiautomator2-driver/commit/6783d39dafe7d79ab0b4d5ad43f11004f9e745bb))
+
 ## [7.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.0...v7.6.1) (2026-06-09)
 
 ### Miscellaneous Chores

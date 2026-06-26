@@ -1,6 +1,7 @@
 import {describe, it, before, after} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {sleep} from 'asyncbox';
+import {node} from 'appium/support.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
@@ -10,10 +11,17 @@ import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
 
-const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
-const START_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'start-button.png');
-const STOP_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'stop-button.png');
-const SQUARES_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'checkered-squares.png');
+const MODULE_NAME = 'appium-uiautomator2-driver';
+const FILENAME = fileURLToPath(import.meta.url);
+const MODULE_ROOT = node.getModuleRootSync(MODULE_NAME, FILENAME);
+if (!MODULE_ROOT) {
+  throw new Error(`Cannot find the root folder of the ${MODULE_NAME} Node.js module`);
+}
+
+const ASSETS_DIR = path.resolve(MODULE_ROOT, 'test', 'functional', 'assets');
+const START_IMG = path.resolve(ASSETS_DIR, 'start-button.png');
+const STOP_IMG = path.resolve(ASSETS_DIR, 'stop-button.png');
+const SQUARES_IMG = path.resolve(ASSETS_DIR, 'checkered-squares.png');
 
 describe('Find - Image', {skip: true}, function () {
   let driver: Browser;

@@ -1,7 +1,7 @@
-import {cssToNativeLocator} from '../css';
+import {cssToNativeLocator} from '../css/index.js';
 import type {Element as AppiumElement} from '@appium/types';
 import type {FindElementOpts} from 'appium-android-driver';
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 // we override the xpath search for this first-visible-child selector, which
 // looks like /*[@firstVisible="true"]

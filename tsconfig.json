@@ -6,13 +6,16 @@
     "outDir": "build",
     "strict": true,
     "checkJs": true,
-    "types": ["node", "mocha"]
+    "types": [
+      "node",
+      "chai"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "."
   },
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "rootDir": "."
-    }
-  },
-  "include": ["lib", "test"]
+  "include": [
+    "lib",
+    "test"
+  ]
 }

@@ -1,10 +1,10 @@
 import {utils} from 'appium-android-driver';
-import {fs} from 'appium/support';
+import {fs} from 'appium/support.js';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
-import type {AndroidUiautomator2Driver} from '../driver';
-import {APKS_EXTENSION, APK_EXTENSION} from '../extensions';
-import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from '../uiautomator2-server';
-import {signApp} from '../utils';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import {APKS_EXTENSION, APK_EXTENSION} from '../extensions.js';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from '../uiautomator2-server/index.js';
+import {signApp} from '../utils/index.js';
 
 /** Configures the app capability and validates the APK path before session start. */
 export async function prepareSessionApp(this: AndroidUiautomator2Driver): Promise<void> {

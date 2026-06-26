@@ -1,6 +1,6 @@
 import type {StringRecord} from '@appium/types';
-import type {AndroidUiautomator2Driver} from '../driver';
-import type {ActionResult} from './types';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {ActionResult} from './types.js';
 
 /**
  * Schedules a recurring action to be performed at specified intervals.

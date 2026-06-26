@@ -1,8 +1,9 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
 import {ADB} from 'appium-adb';
 import sinon from 'sinon';
-import {UiAutomator2Server, INSTRUMENTATION_TARGET} from '../../lib/uiautomator2-server/core';
-import {SERVER_TEST_PACKAGE_ID} from '../../lib/uiautomator2-server/packages';
-import {log} from '../../lib/logger';
+import {UiAutomator2Server, INSTRUMENTATION_TARGET} from '../../lib/uiautomator2-server/core.js';
+import {SERVER_TEST_PACKAGE_ID} from '../../lib/uiautomator2-server/packages.js';
+import {log} from '../../lib/logger.js';
 import {expect} from 'chai';
 
 describe('UiAutomator2', function () {

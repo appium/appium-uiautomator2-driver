@@ -1,10 +1,11 @@
+import {describe, it, before, after} from 'node:test';
 import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS} from '../../desired';
-import {initSession, deleteSession} from '../../helpers/session';
-import chai, {expect} from 'chai';
+import {APIDEMOS_CAPS} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 describe('Find - CSS', function () {
   let driver: Browser;
@@ -36,10 +37,9 @@ describe('Find - CSS', function () {
     const text = await el.getText();
     expect(text.toLowerCase()).to.equal('api demos');
   });
-  it('should find an element with a chain of attributes and pseudo-classes', async function () {
+  it.skip('should find an element with a chain of attributes and pseudo-classes', async function () {
     // TODO: webdriver selects 'class name' strategy.
     // ref. https://github.com/webdriverio/webdriverio/blob/eba541a77dbc42173717e1c106a7c4d3ccb198f5/packages/webdriverio/src/utils/findStrategy.ts#L91-L96
-    this.skip();
     const el = await driver.$('android.widget.TextView[clickable=true]:nth-child(1)');
     await expect(el.getText()).to.eventually.equal('Accessibility');
   });

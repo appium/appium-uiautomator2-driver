@@ -1,7 +1,7 @@
-import {imageUtil} from 'appium/support';
-import {isEmpty} from '../utils';
-import type {AndroidUiautomator2Driver} from '../driver';
-import type {Screenshot} from './types';
+import {imageUtil} from 'appium/support.js';
+import {isEmpty} from '../utils/index.js';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {Screenshot} from './types.js';
 import type {StringRecord} from '@appium/types';
 
 // Matches SurfaceFlinger output format:

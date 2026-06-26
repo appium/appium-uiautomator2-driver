@@ -1,12 +1,12 @@
 import type {StringRecord} from '@appium/types';
 import type {Capabilities} from '@wdio/types';
 import type {Browser} from 'webdriverio';
-import {DEFAULT_HOST, DEFAULT_PORT} from './constants';
-import {log as logger} from '../../../lib/logger';
+import {DEFAULT_HOST, DEFAULT_PORT} from './constants.js';
+import {log as logger} from '../../../lib/logger.js';
 import {remote} from 'webdriverio';
 import {retry, retryInterval} from 'asyncbox';
 
-export const MOCHA_TIMEOUT = 60 * 1000 * 4;
+export const E2E_TEST_TIMEOUT = 60 * 1000 * 4;
 
 export type SessionCapabilities = Capabilities.RequestedStandaloneCapabilities;
 
@@ -29,7 +29,7 @@ export async function createRemoteSession(
     hostname: DEFAULT_HOST,
     port: DEFAULT_PORT,
     capabilities: caps,
-    connectionRetryTimeout: MOCHA_TIMEOUT,
+    connectionRetryTimeout: E2E_TEST_TIMEOUT,
     connectionRetryCount: 1,
     ...remoteOpts,
   });
@@ -65,7 +65,7 @@ export async function initSession(
   }
   driver = sessionDriver;
 
-  attemptToDismissAlert(caps);
+  await attemptToDismissAlert(caps);
 
   await sessionDriver.setTimeout({implicit: process.env.CI ? 30000 : 5000});
 
@@ -76,8 +76,18 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
   // In CI environment, the alert "System UI isn't responding" may appear due to less machine resources.
   if (process.env.CI && driver) {
     const implicitMs = process.env.CI ? 30000 : 5000;
-    await driver.setTimeout({implicit: 500});
+    let initialContext: string | undefined;
     try {
+      initialContext = (await driver.getContext()) as string;
+      if (initialContext && initialContext !== 'NATIVE_APP') {
+        await driver.switchContext('NATIVE_APP');
+      }
+    } catch {
+      // Alert dismissal is best-effort; some sessions may not support context commands yet.
+      initialContext = undefined;
+    }
+    try {
+      await driver.setTimeout({implicit: 500});
       for (const btnId of ['android:id/button1', 'android:id/aerr_wait']) {
         let alertFound = false;
         await retryInterval(ALERT_CHECK_RETRIES, ALERT_CHECK_INTERVAL, async function () {
@@ -107,6 +117,9 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
       }
     } finally {
       await driver.setTimeout({implicit: implicitMs});
+      if (initialContext && initialContext !== 'NATIVE_APP') {
+        await driver.switchContext(initialContext);
+      }
     }
   }
 }

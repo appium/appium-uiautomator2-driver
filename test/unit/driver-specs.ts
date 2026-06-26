@@ -1,12 +1,12 @@
-import {AndroidUiautomator2Driver} from '../../lib/driver';
+import {describe, it, before, beforeEach, afterEach} from 'node:test';
+import {AndroidUiautomator2Driver} from '../../lib/driver.js';
 import sinon from 'sinon';
 import * as path from 'node:path';
 import {ADB} from 'appium-adb';
-import chai from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-const {expect} = chai;
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 const sandbox = sinon.createSandbox();
 
@@ -28,7 +28,7 @@ function defaultStub(driver: AndroidUiautomator2Driver): ADB {
 }
 
 describe('driver.js', function () {
-  this.afterEach(function () {
+  afterEach(function () {
     sandbox.restore();
   });
 

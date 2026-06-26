@@ -1,10 +1,11 @@
+import {describe, it, before, after} from 'node:test';
 import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS, amendCapabilities} from '../desired';
-import {initSession, deleteSession} from '../helpers/session';
-import chai, {expect} from 'chai';
+import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
+import {initSession, deleteSession} from '../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 describe('strings', function () {
   let driver: Browser;
@@ -29,17 +30,18 @@ describe('strings', function () {
   });
 
   describe('device language', function () {
-    afterEach(async function () {
-      await deleteSession();
-    });
-
-    it('should return app strings with default locale/language', async function () {
+    before(async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
         'appium:language': 'en',
         'appium:locale': 'US',
       });
       driver = await initSession(caps);
+    });
+    after(async function () {
+      await deleteSession();
+    });
 
+    it('should return app strings with default locale/language', async function () {
       const strings = await driver.getStrings();
       expect(strings.hello_world).to.equal('Hello, World!');
     });

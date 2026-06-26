@@ -1,21 +1,19 @@
+import {describe, it, before, after, beforeEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 import sharp from 'sharp';
-import {SCROLL_CAPS} from '../desired';
-import {skipSuiteInCi} from '../helpers/ci-e2e';
-import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session';
-import chai, {expect} from 'chai';
+import {SCROLL_CAPS} from '../desired.js';
+import {isCi} from '../helpers/ci-e2e.js';
+import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
-describe('testViewportCommands', function () {
+describe('testViewportCommands', {skip: isCi()}, function () {
   let driver: Browser;
   const caps = SCROLL_CAPS;
 
   before(async function () {
-    if (skipSuiteInCi.call(this)) {
-      return;
-    }
     driver = await initSession(caps);
   });
 

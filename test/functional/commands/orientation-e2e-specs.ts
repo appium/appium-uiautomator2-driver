@@ -1,21 +1,18 @@
+import {describe, it, before, after, afterEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {waitForCondition} from 'asyncbox';
-import {APIDEMOS_CAPS, amendCapabilities} from '../desired';
-import {skipSuiteInCi, skipTestInCi} from '../helpers/ci-e2e';
-import {initSession, deleteSession} from '../helpers/session';
-import chai, {expect} from 'chai';
+import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
+import {isCi} from '../helpers/ci-e2e.js';
+import {initSession, deleteSession} from '../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 describe('apidemo - orientation -', function () {
   let driver: Browser;
 
-  describe('initial -', function () {
-    before(function () {
-      skipSuiteInCi.call(this);
-    });
-
+  describe('initial -', {skip: isCi()}, function () {
     afterEach(async function () {
       await driver.setOrientation('PORTRAIT');
       await deleteSession();
@@ -82,18 +79,18 @@ describe('apidemo - orientation -', function () {
       await driver.setOrientation('LANDSCAPE');
       await waitForOrientation('LANDSCAPE');
     });
-    it('should rotate screen to portrait', async function () {
-      if (skipTestInCi.call(this)) {
-        return;
+    it('should rotate screen to portrait', async function (t) {
+      if (isCi()) {
+        return t.skip();
       }
       await driver.setOrientation('LANDSCAPE');
       await waitForOrientation('LANDSCAPE');
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');
     });
-    it('should not error when trying to rotate to portrait again', async function () {
-      if (skipTestInCi.call(this)) {
-        return;
+    it('should not error when trying to rotate to portrait again', async function (t) {
+      if (isCi()) {
+        return t.skip();
       }
       await driver.setOrientation('PORTRAIT');
       await waitForOrientation('PORTRAIT');

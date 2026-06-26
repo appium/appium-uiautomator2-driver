@@ -1,3 +1,4 @@
+import {describe, it, before, after, beforeEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {retryInterval, sleep} from 'asyncbox';
 import {
@@ -6,15 +7,15 @@ import {
   APIDEMOS_PACKAGE,
   APIDEMOS_TEXTFIELDS_ACTIVITY,
   amendCapabilities,
-} from '../../desired';
-import {isCi} from '../../helpers/ci-e2e';
-import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui';
-import {initSession, deleteSession} from '../../helpers/session';
+} from '../../desired.js';
+import {isCi} from '../../helpers/ci-e2e.js';
+import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 import {ADB} from 'appium-adb';
-import chai, {expect} from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
@@ -266,8 +267,6 @@ describe('keyboard', function () {
       if (!isCi()) {
         it('should be able to clear a password field', async function () {
           // this test is flakey
-          this.retries(4);
-
           // there is currently no way to directly assert anything about the contents
           // of a password field, since there is no way to access the contents
           const password = 'super-duper password';

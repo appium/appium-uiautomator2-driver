@@ -35,11 +35,12 @@
     "build": "tsc -b",
     "clean": "npm run build -- --clean",
     "dev": "npm run build -- --watch",
-    "e2e-test:commands": "mocha --exit --timeout 10m \"./test/functional/commands/*-e2e-specs.ts\"",
-    "e2e-test:commands:find": "mocha --exit --timeout 10m \"./test/functional/commands/find/*-e2e-specs.ts\"",
-    "e2e-test:commands:general": "mocha --exit --timeout 10m \"./test/functional/commands/general/*-e2e-specs.ts\"",
-    "e2e-test:commands:keyboard": "mocha --exit --timeout 10m \"./test/functional/commands/keyboard/*-e2e-specs.ts\"",
-    "e2e-test:driver": "mocha --exit --timeout 10m \"./test/functional/driver/*-e2e-specs.ts\"",
+    "e2e-test:commands": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/commands/*-e2e-specs.js\"",
+    "e2e-test:commands:find": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/commands/find/*-e2e-specs.js\"",
+    "e2e-test:commands:general": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/commands/general/*-e2e-specs.js\"",
+    "e2e-test:commands:keyboard": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/commands/keyboard/*-e2e-specs.js\"",
+    "e2e-test:driver": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/driver/*-e2e-specs.js\"",
+    "e2e-test": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/**/*-e2e-specs.js\"",
     "lint": "eslint .",
     "lint:commit": "commitlint",
     "lint:fix": "npm run lint -- --fix",
@@ -47,8 +48,9 @@
     "rebuild": "npm run clean; npm run build",
     "format": "prettier -w ./lib ./test",
     "format:check": "prettier --check ./lib ./test",
-    "reset": "node ./scripts/reset.js",
-    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.ts\""
+    "reset": "node ./scripts/reset.mjs",
+    "test": "node --test --test-timeout=60000 \"build/test/unit/**/*-specs.js\"",
+    "pretest": "npm run build"
   },
   "prettier": {
     "bracketSpacing": false,
@@ -76,7 +78,6 @@
     "@semantic-release/git": "^10.0.1",
     "@types/chai": "^5.2.3",
     "@types/chai-as-promised": "^8.0.2",
-    "@types/mocha": "^10.0.1",
     "@types/node": "^26.0.0",
     "@types/portscanner": "^2.1.1",
     "@types/semver": "^7.5.0",
@@ -87,12 +88,10 @@
     "chai": "^6.0.0",
     "chai-as-promised": "^8.0.0",
     "conventional-changelog-conventionalcommits": "^9.0.0",
-    "mocha": "^11.0.1",
     "prettier": "^3.0.3",
     "semantic-release": "^25.0.2",
     "sharp": "^0.x",
     "sinon": "^22.0.0",
-    "ts-node": "^10.9.1",
     "typescript": "^6.0.2",
     "unzipper": "^0.x",
     "webdriverio": "^9.0.9",
@@ -113,7 +112,7 @@
     ],
     "mainClass": "AndroidUiautomator2Driver",
     "scripts": {
-      "reset": "scripts/reset.js"
+      "reset": "scripts/reset.mjs"
     },
     "doctor": {
       "checks": [
@@ -121,5 +120,13 @@
         "./build/lib/doctor/optional-checks.js"
       ]
     }
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./build/lib/index.d.ts",
+      "import": "./build/lib/index.js"
+    },
+    "./package.json": "./package.json"
   }
 }

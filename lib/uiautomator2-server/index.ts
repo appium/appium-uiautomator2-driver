@@ -1,5 +1,5 @@
-export {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages';
-export type {UiAutomator2Server} from './core';
+export {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
+export type {UiAutomator2Server} from './core.js';
 export {
   allocateMjpegServerPort,
   allocateSystemPort,
@@ -11,4 +11,4 @@ export {
   releaseSystemPort,
   requireServer,
   startSession,
-} from './session';
+} from './session.js';

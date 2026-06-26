@@ -1,9 +1,9 @@
 import type {AppiumLogger, IAppiumIpc, IIpcSubscription, IpcMessage} from '@appium/types';
-import {node, util} from 'appium/support';
+import {node, util} from 'appium/support.js';
 import {waitForCondition} from 'asyncbox';
 import {setTimeout as delay} from 'node:timers/promises';
-import type {AndroidUiautomator2Driver} from './driver';
-import {memoize} from './utils';
+import type {AndroidUiautomator2Driver} from './driver.js';
+import {memoize} from './utils/index.js';
 
 export type SessionUdidIpcMessage = {
   udid: string;

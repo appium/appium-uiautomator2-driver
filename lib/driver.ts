@@ -10,11 +10,11 @@ import type {
 } from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
-import {BaseDriver, DeviceSettings} from 'appium/driver';
-import {mjpeg, util} from 'appium/support';
-import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints';
-import {newMethodMap} from './method-map';
-import {assignDefaults, memoize} from './utils';
+import {BaseDriver, DeviceSettings} from 'appium/driver.js';
+import {mjpeg, util} from 'appium/support.js';
+import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints.js';
+import {newMethodMap} from './method-map.js';
+import {assignDefaults, memoize} from './utils/index.js';
 import type {
   Uiautomator2Settings,
   Uiautomator2DeviceDetails,
@@ -22,8 +22,8 @@ import type {
   Uiautomator2DriverOpts,
   Uiautomator2StartSessionOpts,
   W3CUiautomator2DriverCaps,
-} from './types';
-import type {UiAutomator2Server} from './uiautomator2-server';
+} from './types.js';
+import type {UiAutomator2Server} from './uiautomator2-server/index.js';
 import {
   allocateMjpegServerPort,
   allocateSystemPort,
@@ -35,25 +35,25 @@ import {
   releaseSystemPort,
   requireServer,
   startSession,
-} from './uiautomator2-server';
+} from './uiautomator2-server/index.js';
 import {
   mobileGetActionHistory,
   mobileScheduleAction,
   mobileUnscheduleAction,
   performActions,
   releaseActions,
-} from './commands/actions';
+} from './commands/actions.js';
 import {
   getAlertText,
   mobileAcceptAlert,
   mobileDismissAlert,
   postAcceptAlert,
   postDismissAlert,
-} from './commands/alert';
-import {mobileInstallMultipleApks} from './commands/app-management';
-import {checkAppPresent, ensureAppStarts, initAUT, prepareSessionApp} from './commands/aut';
-import {mobileGetBatteryInfo} from './commands/battery';
-import {getClipboard, setClipboard} from './commands/clipboard';
+} from './commands/alert.js';
+import {mobileInstallMultipleApks} from './commands/app-management.js';
+import {checkAppPresent, ensureAppStarts, initAUT, prepareSessionApp} from './commands/aut.js';
+import {mobileGetBatteryInfo} from './commands/battery.js';
+import {getClipboard, setClipboard} from './commands/clipboard.js';
 import {
   active,
   getAttribute,
@@ -71,8 +71,8 @@ import {
   click,
   clear,
   mobileReplaceElementValue,
-} from './commands/element';
-import {doFindElementOrEls} from './commands/find';
+} from './commands/element.js';
+import {doFindElementOrEls} from './commands/find.js';
 import {
   mobileClickGesture,
   mobileDoubleClickGesture,
@@ -85,7 +85,7 @@ import {
   mobileScrollBackTo,
   mobileScrollGesture,
   mobileSwipeGesture,
-} from './commands/gestures';
+} from './commands/gestures.js';
 import {
   pressKeyCode,
   longPressKeyCode,
@@ -93,7 +93,7 @@ import {
   mobileType,
   doSendKeys,
   keyevent,
-} from './commands/keyboard';
+} from './commands/keyboard.js';
 import {
   getPageSource,
   getOrientation,
@@ -102,15 +102,15 @@ import {
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
   mobileResetAccessibilityCache,
-} from './commands/misc';
-import {mobileListWindows, mobileListDisplays} from './commands/windows';
-import {setUrl, mobileDeepLink, back} from './commands/navigation';
+} from './commands/misc.js';
+import {mobileListWindows, mobileListDisplays} from './commands/windows.js';
+import {setUrl, mobileDeepLink, back} from './commands/navigation.js';
 import {
   mobileScreenshots,
   mobileViewportScreenshot,
   getScreenshot,
   getViewportScreenshot,
-} from './commands/screenshot';
+} from './commands/screenshot.js';
 import {
   getStatusBarHeight,
   getDevicePixelRatio,
@@ -119,9 +119,9 @@ import {
   getWindowRect,
   getWindowSize,
   mobileViewPortRect,
-} from './commands/viewport';
-import {executeMethodMap} from './execute-method-map';
-import {sessionClaimHandler} from './session-claim-handler';
+} from './commands/viewport.js';
+import {executeMethodMap} from './execute-method-map.js';
+import {sessionClaimHandler} from './session-claim-handler.js';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.

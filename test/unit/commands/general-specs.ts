@@ -1,11 +1,11 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
 import sinon from 'sinon';
-import {AndroidUiautomator2Driver} from '../../../lib/driver';
+import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
 import {ADB} from 'appium-adb';
-import chai from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-const {expect} = chai;
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 describe('General', function () {
   let driver: AndroidUiautomator2Driver;

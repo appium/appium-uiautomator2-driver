@@ -1,6 +1,6 @@
 import type {DriverCaps, DriverOpts, W3CDriverCaps} from '@appium/types';
-import type {RelativeRect} from './commands/types';
-import type {Uiautomator2Constraints} from './constraints';
+import type {RelativeRect} from './commands/types.js';
+import type {Uiautomator2Constraints} from './constraints.js';
 
 declare const emptyObjectSymbol: unique symbol;
 

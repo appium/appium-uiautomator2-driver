@@ -1,5 +1,5 @@
-const { ADB } = require('appium-adb');
-const {logger} = require('appium/support');
+import {ADB} from 'appium-adb';
+import {logger} from 'appium/support.js';
 
 const log = logger.getLogger('UIA2Reset');
 
@@ -9,7 +9,7 @@ const SERVER_PKGS = [
   'io.appium.settings',
 ];
 
-async function runReset () {
+async function runReset() {
   const adb = await ADB.createADB();
   const udids = (await adb.getConnectedDevices())
     .filter(({state}) => state === 'device')
@@ -23,9 +23,9 @@ async function runReset () {
   for (const udid of udids) {
     const deviceAdb = udids.length === 1 ? adb : await ADB.createADB();
     deviceAdb.setDeviceId(udid);
-    uninstallPromises.push(...(SERVER_PKGS.map((pkgId) => deviceAdb.uninstallApk(pkgId))));
+    uninstallPromises.push(...SERVER_PKGS.map((pkgId) => deviceAdb.uninstallApk(pkgId)));
   }
   await Promise.all(uninstallPromises);
 }
 
-(async () => await runReset())();
+await runReset();

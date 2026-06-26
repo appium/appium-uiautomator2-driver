@@ -23,9 +23,7 @@ checkTestPrerequisites() {
 
 checkTestPrerequisites
 
-RESULTS_XML=test-results.xml
-echo "{\"reporterEnabled\": \"spec, xunit\", \"xunitReporterOptions\": {\"output\": \"$RESULTS_XML\"}}" > reporter_config.json
-
+RESULTS_JSON=test-results.ndjson
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mapfile -t SPEC_FILES < <("$SCRIPT_DIR/e2e-spec-batches.sh" "${E2E_BATCH:-}")
 
@@ -33,20 +31,29 @@ if [[ -n "${E2E_BATCH:-}" ]]; then
   echo "Running functional e2e batch ${E2E_BATCH} (${#SPEC_FILES[@]} spec files)"
 fi
 
-ARGS=("${SPEC_FILES[@]}" \
---exit --timeout 10m \
---reporter mocha-multi-reporters --reporter-options configFile=reporter_config.json)
-if ! npx mocha "${ARGS[@]}"; then
-  if [[ ! -f "$RESULTS_XML" ]]; then
-    echo "Mocha failed before writing $RESULTS_XML"
+npm run build
+if ! node \
+  --test \
+  --test-concurrency=1 \
+  --test-timeout=600000 \
+  --test-reporter=spec \
+  --test-reporter-destination=stdout \
+  --test-reporter="./scripts/node-test-json-reporter.mjs" \
+  --test-reporter-destination="$RESULTS_JSON" \
+  "${SPEC_FILES[@]}"; then
+  if [[ ! -f "$RESULTS_JSON" ]]; then
+    echo "Node test runner failed before writing $RESULTS_JSON"
     exit 1
   fi
-  tests=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@tests')
-  errors=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@errors')
-  skipped=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@skipped')
-  failures=$(cat "$RESULTS_XML" | xq --xpath '//testsuite/@failures')
-  threshold=$(( (failures + errors) * 100 / (tests - skipped) ))
-  cat "$RESULTS_XML"
+  tests=$(jq -s 'map(select(.type == "test:summary" and (.data.file | not))) | last | .data.counts.tests' "$RESULTS_JSON")
+  errors=$(jq -s 'map(select(.type == "test:summary" and (.data.file | not))) | last | .data.counts.cancelled' "$RESULTS_JSON")
+  skipped=$(jq -s 'map(select(.type == "test:summary" and (.data.file | not))) | last | .data.counts.skipped' "$RESULTS_JSON")
+  failures=$(jq -s 'map(select(.type == "test:summary" and (.data.file | not))) | last | .data.counts.failed' "$RESULTS_JSON")
+  if [[ $tests -eq $skipped ]]; then
+    echo "All tests were skipped"
+    exit 0
+  fi
+  threshold=$(((failures + errors) * 100 / (tests - skipped)))
   if [[ $threshold -gt $TEST_PASS_THRESHOLD ]]; then
     echo "${threshold}% of tests failed"
     exit 1

@@ -1,5 +1,5 @@
-import type {AndroidUiautomator2Driver} from '../driver';
-import type {BatteryInfo} from './types';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {BatteryInfo} from './types.js';
 
 /**
  * Reads the battery information from the device under test.

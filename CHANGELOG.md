@@ -1,3 +1,13 @@
+## [8.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.2...v8.0.0) (2026-06-26)
+
+### ⚠ BREAKING CHANGES
+
+* This package now publishes as ESM only. CommonJS require('appium-uiautomator2-driver') consumers must migrate to ESM import.
+
+### Features
+
+* Migrate package to ESM ([#1013](https://github.com/appium/appium-uiautomator2-driver/issues/1013)) ([036c896](https://github.com/appium/appium-uiautomator2-driver/commit/036c896b577265bfdf4c9912bf97c8dc4f988107))
+
 ## [7.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.1...v7.6.2) (2026-06-19)
 
 ### Miscellaneous Chores

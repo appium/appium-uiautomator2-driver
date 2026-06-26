@@ -24,10 +24,7 @@ describe('strings', function () {
       expect(strings.hello_world).to.equal('Hello, World!');
     });
 
-    it('should return app strings for different language', async function (t) {
-      if (isCi()) {
-        return t.skip();
-      }
+    it('should return app strings for different language', async function () {
       const strings = await driver.getStrings('fr');
       expect(strings.hello_world).to.equal('Bonjour, Monde!');
     });

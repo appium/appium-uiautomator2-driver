@@ -1,51 +1,39 @@
 #!/bin/bash
 # Lists functional e2e spec files. With a batch number 1-5, prints that shard only.
-# Keep batches balanced when adding or removing spec files.
+# Specs are discovered from source and mapped to build paths because this script
+# runs before `npm run build` in CI.
 
 set -euo pipefail
 
 TOTAL_BATCHES=5
+SPEC_SOURCE_ROOT=${E2E_SPEC_SOURCE_ROOT:-test/functional}
 
-SPECS=(
-  build/test/functional/commands/file-movement-e2e-specs.js
-  build/test/functional/commands/find/by-accessibility-id-e2e-specs.js
-  build/test/functional/commands/find/by-css-e2e-specs.js
-  build/test/functional/commands/find/by-id-e2e-specs.js
-  build/test/functional/commands/find/by-image-e2e-specs.js
-  build/test/functional/commands/find/by-uiautomator-e2e-specs.js
-  build/test/functional/commands/find/by-xpath-e2e-specs.js
-  build/test/functional/commands/find/find-basic-e2e-specs.js
-  build/test/functional/commands/find/find-system-ui-el-e2e-specs.js
-  build/test/functional/commands/find/from-el-e2e-specs.js
-  build/test/functional/commands/find/invalid-strategy-e2e-specs.js
-  build/test/functional/commands/general/attribute-e2e-specs.js
-  build/test/functional/commands/general/context-e2e-specs.js
-  build/test/functional/commands/general/element-e2e-specs.js
-  build/test/functional/commands/general/general-e2e-specs.js
-  build/test/functional/commands/general/mobile-command-e2e-specs.js
-  build/test/functional/commands/general/network-e2e-specs.js
-  build/test/functional/commands/general/source-e2e-specs.js
-  build/test/functional/commands/general/url-e2e-specs.js
-  build/test/functional/commands/keyboard/keyboard-e2e-specs.js
-  build/test/functional/commands/orientation-e2e-specs.js
-  build/test/functional/commands/strings-e2e-specs.js
-  build/test/functional/commands/viewport-e2e-specs.js
-  build/test/functional/driver/driver-e2e-specs.js
-  build/test/functional/driver/session-claim-e2e-specs.js
-)
+list_specs() {
+  if [[ ! -d "$SPEC_SOURCE_ROOT" ]]; then
+    return
+  fi
+  find "$SPEC_SOURCE_ROOT" -type f -name '*-e2e-specs.ts' \
+    | LC_ALL=C sort \
+    | sed 's#^test/#build/test/#; s#\.ts$#.js#'
+}
+
+COUNT=$(list_specs | wc -l | tr -d '[:space:]')
+if [[ "$COUNT" -eq 0 ]]; then
+  echo "No functional e2e spec files found under ${SPEC_SOURCE_ROOT}" >&2
+  exit 1
+fi
 
 if [[ "${1:-}" == "" ]]; then
-  printf '%s\n' "${SPECS[@]}"
+  list_specs
   exit 0
 fi
 
 BATCH="$1"
-if ! [[ "$BATCH" =~ ^[1-5]$ ]]; then
+if ! [[ "$BATCH" =~ ^[0-9]+$ ]] || ((BATCH < 1 || BATCH > TOTAL_BATCHES)); then
   echo "Batch must be 1..${TOTAL_BATCHES}, got: $BATCH" >&2
   exit 1
 fi
 
-COUNT=${#SPECS[@]}
 PER_BATCH=$(( (COUNT + TOTAL_BATCHES - 1) / TOTAL_BATCHES ))
 START=$(( (BATCH - 1) * PER_BATCH ))
 END=$(( START + PER_BATCH ))
@@ -53,6 +41,4 @@ if [[ $END -gt $COUNT ]]; then
   END=$COUNT
 fi
 
-for ((i = START; i < END; i++)); do
-  echo "${SPECS[$i]}"
-done
+list_specs | awk -v start="$START" -v end="$END" 'NR > start && NR <= end {print}'

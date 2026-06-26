@@ -76,8 +76,18 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
   // In CI environment, the alert "System UI isn't responding" may appear due to less machine resources.
   if (process.env.CI && driver) {
     const implicitMs = process.env.CI ? 30000 : 5000;
-    await driver.setTimeout({implicit: 500});
+    let initialContext: string | undefined;
     try {
+      initialContext = (await driver.getContext()) as string;
+      if (initialContext && initialContext !== 'NATIVE_APP') {
+        await driver.switchContext('NATIVE_APP');
+      }
+    } catch {
+      // Alert dismissal is best-effort; some sessions may not support context commands yet.
+      initialContext = undefined;
+    }
+    try {
+      await driver.setTimeout({implicit: 500});
       for (const btnId of ['android:id/button1', 'android:id/aerr_wait']) {
         let alertFound = false;
         await retryInterval(ALERT_CHECK_RETRIES, ALERT_CHECK_INTERVAL, async function () {
@@ -107,6 +117,9 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
       }
     } finally {
       await driver.setTimeout({implicit: implicitMs});
+      if (initialContext && initialContext !== 'NATIVE_APP') {
+        await driver.switchContext(initialContext);
+      }
     }
   }
 }

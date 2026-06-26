@@ -54,7 +54,6 @@ if ! node \
     exit 0
   fi
   threshold=$(((failures + errors) * 100 / (tests - skipped)))
-  cat "$RESULTS_JSON"
   if [[ $threshold -gt $TEST_PASS_THRESHOLD ]]; then
     echo "${threshold}% of tests failed"
     exit 1

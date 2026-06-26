@@ -65,7 +65,7 @@ export async function initSession(
   }
   driver = sessionDriver;
 
-  attemptToDismissAlert(caps);
+  await attemptToDismissAlert(caps);
 
   await sessionDriver.setTimeout({implicit: process.env.CI ? 30000 : 5000});
 

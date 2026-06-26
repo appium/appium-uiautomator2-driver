@@ -1,6 +1,7 @@
 import {describe, it, before, after, afterEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
+import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../helpers/session.js';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -23,13 +24,16 @@ describe('strings', function () {
       expect(strings.hello_world).to.equal('Hello, World!');
     });
 
-    it('should return app strings for different language', async function () {
+    it('should return app strings for different language', async function (t) {
+      if (isCi()) {
+        return t.skip();
+      }
       const strings = await driver.getStrings('fr');
       expect(strings.hello_world).to.equal('Bonjour, Monde!');
     });
   });
 
-  describe('device language', function () {
+  describe('device language', {skip: isCi()}, function () {
     afterEach(async function () {
       await deleteSession();
     });

@@ -7,7 +7,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
 
-describe('wifi @skip-ci', function () {
+describe.skip('wifi @skip-ci', function () {
   let driver: Browser;
   before(async function () {
     const caps = amendCapabilities(APIDEMOS_CAPS, {

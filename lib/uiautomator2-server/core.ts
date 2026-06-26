@@ -1,11 +1,11 @@
-import {JWProxy, errors} from 'appium/driver';
+import {JWProxy, errors} from 'appium/driver.js';
 import {sleep, waitForCondition} from 'asyncbox';
 import {
   SERVER_APK_PATH as apkPath,
   TEST_APK_PATH as testApkPath,
   version as serverVersion,
 } from 'appium-uiautomator2-server';
-import {util, timing} from 'appium/support';
+import {util, timing} from 'appium/support.js';
 import type {
   AppiumLogger,
   StringRecord,
@@ -17,7 +17,7 @@ import type {
 import axios from 'axios';
 import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
-import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
 
 const SERVER_LAUNCH_TIMEOUT_MS = 30000;
 const SERVER_INSTALL_RETRIES = 20;

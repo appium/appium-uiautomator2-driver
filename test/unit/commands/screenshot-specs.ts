@@ -1,7 +1,8 @@
+import {describe, it} from 'node:test';
 // @ts-check
 
 import {expect} from 'chai';
-import {parseSurfaceFlingerDisplays} from '../../../lib/commands/screenshot';
+import {parseSurfaceFlingerDisplays} from '../../../lib/commands/screenshot.js';
 
 describe('Screenshot - parseSurfaceFlingerDisplays', function () {
   describe('physical displays', function () {

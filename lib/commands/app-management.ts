@@ -1,7 +1,7 @@
-import {errors} from 'appium/driver';
-import {APK_EXTENSION} from '../extensions';
-import type {AndroidUiautomator2Driver} from '../driver';
-import type {InstallOptions} from './types';
+import {errors} from 'appium/driver.js';
+import {APK_EXTENSION} from '../extensions.js';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {InstallOptions} from './types.js';
 
 /**
  * Installs multiple APKs with `install-multiple` option.

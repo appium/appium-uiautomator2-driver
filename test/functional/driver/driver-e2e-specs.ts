@@ -1,3 +1,4 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {ADB} from 'appium-adb';
 import {
@@ -5,14 +6,14 @@ import {
   amendCapabilities,
   APIDEMOS_PACKAGE,
   APIDEMOS_MAIN_ACTIVITY,
-} from '../desired';
-import {skipSuiteInCi} from '../helpers/ci-e2e';
-import {initSession, deleteSession} from '../helpers/session';
+} from '../desired.js';
+import {isCi} from '../helpers/ci-e2e.js';
+import {initSession, deleteSession} from '../helpers/session.js';
 import {retryInterval} from 'asyncbox';
-import chai, {expect} from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
 
@@ -27,11 +28,7 @@ async function killAndPrepareServer(oldPort: number, newPort: number): Promise<v
   });
 }
 
-describe('createSession', function () {
-  before(function () {
-    skipSuiteInCi.call(this);
-  });
-
+describe('createSession', {skip: isCi()}, function () {
   let driver!: Browser;
 
   describe('default adb port', function () {

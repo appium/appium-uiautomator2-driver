@@ -1,24 +1,22 @@
+import {describe, it, before, after} from 'node:test';
 import type {Browser} from 'webdriverio';
-import {BROWSER_CAPS} from '../../desired';
-import {skipSuiteInCi} from '../../helpers/ci-e2e';
-import {initSession, deleteSession} from '../../helpers/session';
+import {BROWSER_CAPS} from '../../desired.js';
+import {isCi} from '../../helpers/ci-e2e.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 import {ADB} from 'appium-adb';
-import chai, {expect} from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
-describe('setUrl', function () {
+describe('setUrl', {skip: isCi()}, function () {
   let driver: Browser | undefined;
 
   before(async function () {
-    if (skipSuiteInCi.call(this)) {
-      return;
-    }
     const adb = new ADB();
     const hasChrome = await adb.isAppInstalled('com.android.chrome');
     if (!hasChrome) {
-      return this.skip();
+      return;
     }
     driver = await initSession(BROWSER_CAPS);
   });
@@ -28,7 +26,10 @@ describe('setUrl', function () {
     }
   });
 
-  it('should be able to start a data uri via setUrl', async function () {
+  it('should be able to start a data uri via setUrl', async function (t) {
+    if (!driver) {
+      return t.skip();
+    }
     try {
       // on some chrome systems, we always get the terms and conditions page
       let btn = await driver!.$('id=com.android.chrome:id/terms_accept');

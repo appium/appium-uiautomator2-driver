@@ -1,10 +1,11 @@
+import {describe, it, before, after, afterEach} from 'node:test';
 import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
-import {initSession, deleteSession} from '../../helpers/session';
-import chai, {expect} from 'chai';
+import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 const WEBVIEW = 'WEBVIEW_io.appium.android.apis';
 const NATIVE = 'NATIVE_APP';

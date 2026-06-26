@@ -1,12 +1,12 @@
 import type {StringRecord} from '@appium/types';
 import type {Capabilities} from '@wdio/types';
 import type {Browser} from 'webdriverio';
-import {DEFAULT_HOST, DEFAULT_PORT} from './constants';
-import {log as logger} from '../../../lib/logger';
+import {DEFAULT_HOST, DEFAULT_PORT} from './constants.js';
+import {log as logger} from '../../../lib/logger.js';
 import {remote} from 'webdriverio';
 import {retry, retryInterval} from 'asyncbox';
 
-export const MOCHA_TIMEOUT = 60 * 1000 * 4;
+export const E2E_TEST_TIMEOUT = 60 * 1000 * 4;
 
 export type SessionCapabilities = Capabilities.RequestedStandaloneCapabilities;
 
@@ -29,7 +29,7 @@ export async function createRemoteSession(
     hostname: DEFAULT_HOST,
     port: DEFAULT_PORT,
     capabilities: caps,
-    connectionRetryTimeout: MOCHA_TIMEOUT,
+    connectionRetryTimeout: E2E_TEST_TIMEOUT,
     connectionRetryCount: 1,
     ...remoteOpts,
   });

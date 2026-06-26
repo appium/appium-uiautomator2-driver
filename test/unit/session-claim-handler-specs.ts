@@ -1,17 +1,21 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
 import type {IAppiumIpc, IpcData, IpcMessage} from '@appium/types';
-import {node} from 'appium/support';
+import {node} from 'appium/support.js';
 import {EventEmitter} from 'node:events';
 import {createSandbox} from 'sinon';
 import type sinon from 'sinon';
 import type {SinonSandbox} from 'sinon';
-import {expect} from 'chai';
+import {expect, use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import {
   resetDriverInstanceIpcForTesting,
   SessionClaimHandler,
   sessionClaimHandler,
   setSharedIpcForTesting,
-} from '../../lib/session-claim-handler';
-import type {AndroidUiautomator2Driver} from '../../lib/driver';
+} from '../../lib/session-claim-handler.js';
+import type {AndroidUiautomator2Driver} from '../../lib/driver.js';
+
+use(chaiAsPromised);
 
 class MockIpcSubscription extends EventEmitter {
   isActive = true;

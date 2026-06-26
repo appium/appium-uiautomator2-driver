@@ -1,8 +1,9 @@
-import chai, {expect} from 'chai';
+import {describe, it} from 'node:test';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css';
+import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 describe('css-converter.js', function () {
   describe('simple cases', function () {

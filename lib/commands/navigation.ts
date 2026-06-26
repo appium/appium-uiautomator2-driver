@@ -1,4 +1,4 @@
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Sets the URL for the current app.

@@ -1,6 +1,6 @@
 import type {Rect, Size} from '@appium/types';
-import type {AndroidUiautomator2Driver} from '../driver';
-import type {RelativeRect} from './types';
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {RelativeRect} from './types.js';
 
 /**
  * Gets the status bar height in pixels.

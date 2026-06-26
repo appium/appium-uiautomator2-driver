@@ -1,23 +1,25 @@
+import {describe, it, before, after} from 'node:test';
 import type {Browser} from 'webdriverio';
 import {sleep} from 'asyncbox';
 import path from 'node:path';
-import {APIDEMOS_CAPS, amendCapabilities} from '../../desired';
-import {initSession, deleteSession} from '../../helpers/session';
-import chai, {expect} from 'chai';
+import {fileURLToPath} from 'node:url';
+import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
-const START_IMG = path.resolve(__dirname, '..', '..', 'assets', 'start-button.png');
-const STOP_IMG = path.resolve(__dirname, '..', '..', 'assets', 'stop-button.png');
-const SQUARES_IMG = path.resolve(__dirname, '..', '..', 'assets', 'checkered-squares.png');
+const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
+const START_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'start-button.png');
+const STOP_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'stop-button.png');
+const SQUARES_IMG = path.resolve(DIRNAME, '..', '..', 'assets', 'checkered-squares.png');
 
-describe('Find - Image', function () {
+describe('Find - Image', {skip: true}, function () {
   let driver: Browser;
 
   before(async function () {
     // TODO: @appium/images-plugin needs to be installed
-    this.skip();
     const caps = amendCapabilities(APIDEMOS_CAPS, {
       'appium:appActivity': '.view.ChronometerDemo',
     });

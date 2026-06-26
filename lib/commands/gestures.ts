@@ -1,8 +1,8 @@
-import {errors} from 'appium/driver';
-import {util} from 'appium/support';
+import {errors} from 'appium/driver.js';
+import {util} from 'appium/support.js';
 import type {Element as AppiumElement, Position} from '@appium/types';
-import type {RelativeRect} from './types';
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {RelativeRect} from './types.js';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Performs a simple click/tap gesture.

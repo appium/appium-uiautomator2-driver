@@ -1,10 +1,11 @@
+import {describe, it, before, after, beforeEach} from 'node:test';
 import type {Browser} from 'webdriverio';
-import {initSession, deleteSession} from '../../helpers/session';
-import {SETTINGS_CAPS} from '../../desired';
-import chai, {expect} from 'chai';
+import {initSession, deleteSession} from '../../helpers/session.js';
+import {SETTINGS_CAPS} from '../../desired.js';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 // statusBarBackground is not exposed on recent Android releases; use displayed=false instead.
 const INVISIBLE_ELEMENTS_XPATH = `//*[@displayed='false']`;

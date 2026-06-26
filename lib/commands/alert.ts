@@ -1,4 +1,4 @@
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Gets the text of the currently displayed alert.

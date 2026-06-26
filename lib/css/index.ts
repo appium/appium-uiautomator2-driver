@@ -1,11 +1,11 @@
-import {errors} from 'appium/driver';
-import {memoize} from '../utils';
-import {UI_AUTOMATOR_EMITTER_KEY, UI_AUTOMATOR_STRATEGY} from './constants';
-import {ATTRIBUTE_SCHEMA} from './schema';
-import {UiAutomatorEmitter} from './ui-automator-emitter';
+import {errors} from 'appium/driver.js';
+import {memoize} from '../utils/index.js';
+import {UI_AUTOMATOR_EMITTER_KEY, UI_AUTOMATOR_STRATEGY} from './constants.js';
+import {ATTRIBUTE_SCHEMA} from './schema.js';
+import {UiAutomatorEmitter} from './ui-automator-emitter.js';
 import type {CssTransformer, NativeLocator, StrategyKey} from '@appium/css-locator-to-native';
 
-export {UI_AUTOMATOR_STRATEGY} from './constants';
+export {UI_AUTOMATOR_STRATEGY} from './constants.js';
 
 const emitters = {
   [UI_AUTOMATOR_EMITTER_KEY]: new UiAutomatorEmitter(UI_AUTOMATOR_STRATEGY),

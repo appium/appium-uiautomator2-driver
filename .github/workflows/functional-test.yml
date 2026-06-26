@@ -36,7 +36,6 @@ jobs:
       with:
         node-version: lts/*
         check-latest: true
-    - run: curl -sSL https://bit.ly/install-xq | sudo bash
     - run: |
         appium_ver=$(node -p "require('./package.json').peerDependencies?.appium")
         pushd "$(pwd)"
@@ -46,7 +45,6 @@ jobs:
       name: Install Appium Server
     - run: |
         npm install
-        npm install mocha-multi-reporters --save-dev
         npm install --no-save mjpeg-consumer
       name: Install dev dependencies
     - uses: actions/setup-java@v5

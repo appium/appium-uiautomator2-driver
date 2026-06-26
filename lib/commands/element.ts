@@ -1,7 +1,7 @@
-import {PROTOCOLS} from 'appium/driver';
+import {PROTOCOLS} from 'appium/driver.js';
 import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {Chromedriver} from 'appium-chromedriver';
 
 /**

@@ -1,21 +1,21 @@
 import type {Orientation, StringRecord} from '@appium/types';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
-import {util} from 'appium/support';
+import {util} from 'appium/support.js';
 import {retryInterval} from 'asyncbox';
 import os from 'node:os';
 import path from 'node:path';
 import {checkPortStatus, findAPortNotInUse} from 'portscanner';
 import type {ExecError} from 'teen_process';
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {
   EmptyObject,
   Uiautomator2DeviceDetails,
   Uiautomator2SessionCaps,
   Uiautomator2SessionInfo,
   Uiautomator2StartSessionOpts,
-} from '../types';
-import {UiAutomator2Server, type UiAutomator2ServerOptions} from './core';
-import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages';
+} from '../types.js';
+import {UiAutomator2Server, type UiAutomator2ServerOptions} from './core.js';
+import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
 
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device

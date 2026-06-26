@@ -1,5 +1,5 @@
 import type {Orientation, StringRecord} from '@appium/types';
-import type {AndroidUiautomator2Driver} from '../driver';
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Retrieves the current page source.

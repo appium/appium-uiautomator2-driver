@@ -1,3 +1,9 @@
+## [8.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.0.0...v8.0.1) (2026-07-01)
+
+### Miscellaneous Chores
+
+* downgrade conventional-changelog-conventionalcommits to v9 ([#1016](https://github.com/appium/appium-uiautomator2-driver/issues/1016)) ([00a56e9](https://github.com/appium/appium-uiautomator2-driver/commit/00a56e95fd98615f1cdf94cf044324a59187ad81))
+
 ## [8.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v7.6.2...v8.0.0) (2026-06-26)
 
 ### ⚠ BREAKING CHANGES

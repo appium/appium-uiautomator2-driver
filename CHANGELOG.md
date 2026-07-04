@@ -1,3 +1,9 @@
+## [8.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.0.1...v8.1.0) (2026-07-04)
+
+### Features
+
+* bump android driver to support chromedriverGrantPermissions ([5eb3016](https://github.com/appium/appium-uiautomator2-driver/commit/5eb30163b9555f73745ded908b28e3b28fc119bb))
+
 ## [8.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.0.0...v8.0.1) (2026-07-01)
 
 ### Miscellaneous Chores

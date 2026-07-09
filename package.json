@@ -92,7 +92,7 @@
     "semantic-release": "^25.0.2",
     "sharp": "^0.x",
     "sinon": "^22.0.0",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.2",
     "unzipper": "^0.x",
     "webdriverio": "^9.0.9",
     "xpath": "^0.x"

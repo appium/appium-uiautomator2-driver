@@ -1,3 +1,9 @@
+## [8.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.1.0...v8.1.1) (2026-07-22)
+
+### Miscellaneous Chores
+
+* Bump appium-android-driver ([#1024](https://github.com/appium/appium-uiautomator2-driver/issues/1024)) ([8148fc0](https://github.com/appium/appium-uiautomator2-driver/commit/8148fc0333a9ae1e88c53b45c6475f3c508dc268))
+
 ## [8.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.0.1...v8.1.0) (2026-07-04)
 
 ### Features

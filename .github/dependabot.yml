@@ -6,6 +6,9 @@ updates:
     interval: daily
     time: "11:00"
   open-pull-requests-limit: 10
+  commit-message:
+    prefix: "chore"
+    include: "scope"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -13,5 +16,5 @@ updates:
     time: "11:00"
   open-pull-requests-limit: 10
   commit-message:
-    prefix: "chore"
+    prefix: "ci"
     include: "scope"

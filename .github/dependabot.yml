@@ -13,5 +13,5 @@ updates:
     time: "11:00"
   open-pull-requests-limit: 10
   commit-message:
-    prefix: "ci"
+    prefix: "chore"
     include: "scope"

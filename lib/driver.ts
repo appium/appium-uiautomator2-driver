@@ -11,10 +11,10 @@ import type {
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
 import {BaseDriver, DeviceSettings} from 'appium/driver.js';
-import {mjpeg, util} from 'appium/support.js';
+import {util} from 'appium/support.js';
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints.js';
 import {newMethodMap} from './method-map.js';
-import {assignDefaults, memoize} from './utils/index.js';
+import {assignDefaults, memoize, MJpegStream} from './utils/index.js';
 import type {
   Uiautomator2Settings,
   Uiautomator2DeviceDetails,
@@ -233,7 +233,7 @@ class AndroidUiautomator2Driver
 
   _originalIme: string | null;
 
-  mjpegStream?: mjpeg.MJpegStream;
+  mjpegStream?: MJpegStream;
 
   override caps: Uiautomator2DriverCaps;
 
@@ -457,7 +457,7 @@ class AndroidUiautomator2Driver
 
       if (this.opts.mjpegScreenshotUrl) {
         this.log.info(`Starting MJPEG stream reading URL: '${this.opts.mjpegScreenshotUrl}'`);
-        this.mjpegStream = new mjpeg.MJpegStream(this.opts.mjpegScreenshotUrl);
+        this.mjpegStream = new MJpegStream(this.opts.mjpegScreenshotUrl);
         await this.mjpegStream.start();
       }
       return [sessionId, result];

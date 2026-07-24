@@ -180,4 +180,23 @@ describe('MjpegFrameParser', function () {
       });
     });
   });
+
+  it('should not truncate the current frame when a later chunk also contains a stray SOI marker after the EOI', function (_t, done) {
+    // Frame is split across two writes: the first only carries the SOI (2 of the 4
+    // declared bytes), the second completes it with the EOI, followed by unrelated
+    // trailing bytes that happen to look like another frame's SOI (no Content-Length
+    // alongside them, so they must not be parsed as a new frame).
+    const chunk1 = Buffer.concat([
+      Buffer.from('Content-Length: 4\r\n\r\n'),
+      Buffer.from([0xff, 0xd8]),
+    ]);
+    const chunk2 = Buffer.from([0xff, 0xd9, 0xff, 0xd8, 0x01]);
+    parser.write(chunk1, () => {
+      parser.write(chunk2, () => {
+        expect(frames).to.have.lengthOf(1);
+        expect(frames[0]).to.deep.equal(Buffer.from([0xff, 0xd8, 0xff, 0xd9]));
+        done();
+      });
+    });
+  });
 });

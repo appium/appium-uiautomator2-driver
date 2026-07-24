@@ -34,7 +34,7 @@ export class MjpegFrameParser extends Transform {
     const lengthMatch = CONTENT_LENGTH_RE.exec(chunk.toString('latin1'));
 
     if (this.buffer && (this.isReading || startIdx > -1)) {
-      this.appendChunk(chunk, startIdx, endIdx);
+      this.appendChunk(chunk, endIdx);
     }
     if (lengthMatch) {
       this.startFrame(Number(lengthMatch[1]), chunk, startIdx, endIdx);
@@ -65,15 +65,19 @@ export class MjpegFrameParser extends Transform {
     }
   }
 
-  private appendChunk(chunk: Buffer, start: number, end: number): void {
+  private appendChunk(chunk: Buffer, end: number): void {
     if (!this.buffer) {
       return;
     }
-    const copyStart = start > -1 ? start : 0;
+    // We are continuing a frame that is already open, so the whole chunk belongs to it
+    // and must be copied starting at offset 0. A JPEG SOI marker found anywhere in this
+    // chunk can only belong to the *next* frame (it necessarily comes after our own EOI),
+    // so it must never be used as the copy start here, or the current frame's tail bytes
+    // between offset 0 and that marker would be skipped, truncating it.
     const copyEnd = end > -1 ? end + JPEG_EOI.length : chunk.length;
     // Buffer.copy() silently truncates if the destination has less room than requested,
     // so bytesWritten must track what was actually copied, not the requested range size.
-    this.bytesWritten += chunk.copy(this.buffer, this.bytesWritten, copyStart, copyEnd);
+    this.bytesWritten += chunk.copy(this.buffer, this.bytesWritten, 0, copyEnd);
 
     if (end > -1 || this.bytesWritten === this.expectedLength) {
       this.emitFrame();

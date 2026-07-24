@@ -49,8 +49,7 @@
     "format": "prettier -w ./lib ./test",
     "format:check": "prettier --check ./lib ./test",
     "reset": "node ./scripts/reset.mjs",
-    "test": "node --test --test-timeout=60000 \"build/test/unit/**/*-specs.js\"",
-    "pretest": "npm run build"
+    "test": "node --test --test-timeout=60000 \"build/test/unit/**/*-specs.js\""
   },
   "prettier": {
     "bracketSpacing": false,

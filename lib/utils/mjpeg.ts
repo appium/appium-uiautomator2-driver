@@ -14,10 +14,6 @@ const CONTENT_LENGTH_RE = /Content-Length:\s*(\d+)/i;
 /**
  * Extracts individual JPEG frames out of a multipart MJPEG-over-HTTP byte stream by
  * scanning for JPEG start/end-of-image markers and the multipart `Content-Length` header.
- *
- * `@appium/support`'s `mjpeg` helper (which used to provide this via the external
- * `mjpeg-consumer` package) is deprecated and slated for removal, so this driver
- * implements the parsing on its own.
  */
 class MjpegFrameParser extends Transform {
   private buffer: Buffer | null = null;
@@ -113,9 +109,6 @@ const noop = () => {};
 /**
  * Connects to an MJPEG-over-HTTP stream and keeps track of the last JPEG frame received,
  * so that it can be used as a cheap, low-latency screenshot source.
- *
- * This is vendored from `@appium/support`'s deprecated `mjpeg.MJpegStream`, which is
- * slated for removal ("Consumers are expected to implement MJpegStream class on their side").
  */
 export class MJpegStream extends Writable {
   readonly errorHandler: (err: Error) => void;

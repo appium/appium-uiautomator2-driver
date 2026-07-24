@@ -151,10 +151,7 @@ describe('MjpegFrameParser', function () {
     parser.on('data', (frame: Buffer) => frames.push(frame));
   });
 
-  it('should not leak trailing zero bytes when Content-Length overstates the actual frame size', function (
-    _t,
-    done,
-  ) {
+  it('should not leak trailing zero bytes when Content-Length overstates the actual frame size', function (_t, done) {
     // Declares a 10-byte frame, but the actual SOI..EOI span is only 4 bytes.
     const chunk = Buffer.concat([
       Buffer.from('Content-Length: 10\r\n\r\n'),
@@ -167,10 +164,7 @@ describe('MjpegFrameParser', function () {
     });
   });
 
-  it('should not corrupt an already-emitted frame with a later stray SOI chunk lacking Content-Length', function (
-    _t,
-    done,
-  ) {
+  it('should not corrupt an already-emitted frame with a later stray SOI chunk lacking Content-Length', function (_t, done) {
     const firstFrame = Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
     const chunk1 = Buffer.concat([Buffer.from('Content-Length: 10\r\n\r\n'), firstFrame]);
     parser.write(chunk1, () => {

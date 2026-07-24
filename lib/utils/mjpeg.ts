@@ -234,7 +234,9 @@ export class MJpegStream extends Writable {
       this.lastChunk = null;
       // No-op if start() has already resolved; only rejects a still-pending start().
       this.registerStartFailure?.(
-        new Error(`The connection to the MJPEG stream at ${url} has been closed before any frame was received`),
+        new Error(
+          `The connection to the MJPEG stream at ${url} has been closed before any frame was received`,
+        ),
       );
     };
 

@@ -21,7 +21,7 @@ const CONTENT_LENGTH_RE = /Content-Length:\s*(\d+)/i;
  * Extracts individual JPEG frames out of a multipart MJPEG-over-HTTP byte stream by
  * scanning for JPEG start/end-of-image markers and the multipart `Content-Length` header.
  */
-class MjpegFrameParser extends Transform {
+export class MjpegFrameParser extends Transform {
   private buffer: Buffer | null = null;
   private expectedLength = 0;
   private bytesWritten = 0;
@@ -85,8 +85,17 @@ class MjpegFrameParser extends Transform {
   private emitFrame(): void {
     this.isReading = false;
     if (this.buffer) {
-      this.push(this.buffer);
+      // Only push what was actually copied: the buffer is allocated to `expectedLength`
+      // up front, so pushing it as-is would leak trailing zero bytes whenever fewer
+      // bytes were actually written (e.g. a mismatched/truncated Content-Length).
+      this.push(this.buffer.subarray(0, this.bytesWritten));
     }
+    // Clear the frame state so an unrelated later chunk (e.g. one with a JPEG SOI
+    // marker but no Content-Length header) cannot be appended onto a buffer that
+    // has already been pushed downstream.
+    this.buffer = null;
+    this.expectedLength = 0;
+    this.bytesWritten = 0;
   }
 }
 
@@ -223,6 +232,10 @@ export class MJpegStream extends Writable {
     const onClose = () => {
       log.debug(`The connection to MJPEG server at ${url} has been closed`);
       this.lastChunk = null;
+      // No-op if start() has already resolved; only rejects a still-pending start().
+      this.registerStartFailure?.(
+        new Error(`The connection to the MJPEG stream at ${url} has been closed before any frame was received`),
+      );
     };
 
     let timeoutId: NodeJS.Timeout | undefined;
@@ -244,6 +257,10 @@ export class MJpegStream extends Writable {
 
     try {
       await startPromise;
+    } catch (err) {
+      // Do not leak the underlying HTTP connection/pipes if we never reached a usable state.
+      this.stop();
+      throw err;
     } finally {
       clearTimeout(timeoutId);
     }

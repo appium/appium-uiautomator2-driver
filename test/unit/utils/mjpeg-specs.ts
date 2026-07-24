@@ -5,7 +5,7 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
 
-import {MJpegStream} from '../../../lib/utils/mjpeg.js';
+import {MJpegStream, MjpegFrameParser} from '../../../lib/utils/mjpeg.js';
 
 use(chaiAsPromised);
 
@@ -115,5 +115,75 @@ describe('MJpegStream', function () {
     // The server flushes headers immediately, so axios resolves well within the deadline;
     // the rejection comes from MJpegStream's own "no frame yet" guard.
     await expect(stream.start(300)).to.be.rejectedWith(/never sent any images/);
+    // start() must not leak the underlying connection/pipes after failing.
+    expect((stream as any).responseStream).to.be.null;
+  });
+
+  it('should reject quickly if the connection closes before any frame arrives', async function () {
+    const closingServer = http.createServer((_req, res) => {
+      res.writeHead(200, {'Content-Type': 'multipart/x-mixed-replace; boundary=frame'});
+      res.end();
+    });
+    await new Promise<void>((resolve) => closingServer.listen(0, '127.0.0.1', resolve));
+    try {
+      const address = closingServer.address();
+      const port = typeof address === 'object' && address ? address.port : 0;
+      stream = new MJpegStream(`http://127.0.0.1:${port}`);
+      const startedAt = Date.now();
+      // The server timeout is generous; the rejection must come from the close handler,
+      // long before the timeout would otherwise fire.
+      await expect(stream.start(20000)).to.be.rejectedWith(/has been closed/);
+      expect(Date.now() - startedAt).to.be.lessThan(5000);
+      expect((stream as any).responseStream).to.be.null;
+    } finally {
+      await new Promise<void>((resolve) => closingServer.close(() => resolve()));
+    }
+  });
+});
+
+describe('MjpegFrameParser', function () {
+  let parser: MjpegFrameParser;
+  let frames: Buffer[];
+
+  beforeEach(function () {
+    parser = new MjpegFrameParser();
+    frames = [];
+    parser.on('data', (frame: Buffer) => frames.push(frame));
+  });
+
+  it('should not leak trailing zero bytes when Content-Length overstates the actual frame size', function (
+    _t,
+    done,
+  ) {
+    // Declares a 10-byte frame, but the actual SOI..EOI span is only 4 bytes.
+    const chunk = Buffer.concat([
+      Buffer.from('Content-Length: 10\r\n\r\n'),
+      Buffer.from([0xff, 0xd8, 0xff, 0xd9]),
+    ]);
+    parser.write(chunk, () => {
+      expect(frames).to.have.lengthOf(1);
+      expect(frames[0]).to.deep.equal(Buffer.from([0xff, 0xd8, 0xff, 0xd9]));
+      done();
+    });
+  });
+
+  it('should not corrupt an already-emitted frame with a later stray SOI chunk lacking Content-Length', function (
+    _t,
+    done,
+  ) {
+    const firstFrame = Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
+    const chunk1 = Buffer.concat([Buffer.from('Content-Length: 10\r\n\r\n'), firstFrame]);
+    parser.write(chunk1, () => {
+      expect(frames).to.have.lengthOf(1);
+      const emitted = frames[0];
+      // No Content-Length header here on purpose: this must not be appended onto
+      // the buffer that was already pushed downstream.
+      const strayChunk = Buffer.from([0xff, 0xd8, 0x01, 0x02, 0x03]);
+      parser.write(strayChunk, () => {
+        expect(frames).to.have.lengthOf(1);
+        expect(emitted).to.deep.equal(firstFrame);
+        done();
+      });
+    });
   });
 });

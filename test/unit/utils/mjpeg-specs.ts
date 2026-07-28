@@ -153,10 +153,7 @@ describe('MjpegFrameParser', function () {
 
   it('should not leak trailing zero bytes when Content-Length overstates the actual frame size', function (_t, done) {
     // Declares a 10-byte frame, but the actual SOI..EOI span is only 4 bytes.
-    const chunk = Buffer.concat([
-      Buffer.from('Content-Length: 10\r\n\r\n'),
-      Buffer.from([0xff, 0xd8, 0xff, 0xd9]),
-    ]);
+    const chunk = Buffer.concat([Buffer.from('Content-Length: 10\r\n\r\n'), Buffer.from([0xff, 0xd8, 0xff, 0xd9])]);
     parser.write(chunk, () => {
       expect(frames).to.have.lengthOf(1);
       expect(frames[0]).to.deep.equal(Buffer.from([0xff, 0xd8, 0xff, 0xd9]));
@@ -186,10 +183,7 @@ describe('MjpegFrameParser', function () {
     // declared bytes), the second completes it with the EOI, followed by unrelated
     // trailing bytes that happen to look like another frame's SOI (no Content-Length
     // alongside them, so they must not be parsed as a new frame).
-    const chunk1 = Buffer.concat([
-      Buffer.from('Content-Length: 4\r\n\r\n'),
-      Buffer.from([0xff, 0xd8]),
-    ]);
+    const chunk1 = Buffer.concat([Buffer.from('Content-Length: 4\r\n\r\n'), Buffer.from([0xff, 0xd8])]);
     const chunk2 = Buffer.from([0xff, 0xd9, 0xff, 0xd8, 0x01]);
     parser.write(chunk1, () => {
       parser.write(chunk2, () => {

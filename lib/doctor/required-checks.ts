@@ -1,5 +1,5 @@
-import {doctor} from 'appium-android-driver';
 import type {IDoctorCheck} from '@appium/types';
+import {doctor} from 'appium-android-driver';
 
 export const androidHomeCheck: IDoctorCheck = doctor.androidHomeCheck;
 export const javaHomeCheck: IDoctorCheck = doctor.javaHomeCheck;

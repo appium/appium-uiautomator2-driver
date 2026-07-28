@@ -1,9 +1,11 @@
 import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS} from '../../desired.js';
-import {initSession, deleteSession} from '../../helpers/session.js';
+
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 
 use(chaiAsPromised);
 
@@ -29,8 +31,7 @@ describe('Find - CSS', function () {
     expect(els).to.have.length(1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    await expect(driver.$('*[content-description="Access\'ibility"]').elementId).to.eventually
-      .exist;
+    await expect(driver.$('*[content-description="Access\'ibility"]').elementId).to.eventually.exist;
   });
   it('should find an element by class name', async function () {
     const el = await driver.$('android.widget.TextView');

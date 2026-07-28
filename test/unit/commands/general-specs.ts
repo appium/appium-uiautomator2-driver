@@ -1,9 +1,11 @@
 import {describe, it, beforeEach, afterEach} from 'node:test';
-import sinon from 'sinon';
-import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
+
 import {ADB} from 'appium-adb';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+
+import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
 
 use(chaiAsPromised);
 
@@ -74,10 +76,7 @@ describe('General', function () {
     });
 
     it('should call mobileInstallMultipleApks', async function () {
-      mockAdb
-        .expects('installMultipleApks')
-        .once()
-        .withExactArgs(['/path/to/test/apk.apk'], undefined);
+      mockAdb.expects('installMultipleApks').once().withExactArgs(['/path/to/test/apk.apk'], undefined);
       await driver.execute('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
     });
 

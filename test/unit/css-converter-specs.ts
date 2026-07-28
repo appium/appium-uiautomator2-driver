@@ -1,6 +1,8 @@
 import {describe, it} from 'node:test';
+
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+
 import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
 
 use(chaiAsPromised);
@@ -24,10 +26,7 @@ describe('css-converter.js', function () {
       ['*[description^=blah]', 'new UiSelector().descriptionStartsWith("blah")'],
       ['*[description$=bar]', 'new UiSelector().descriptionMatches("bar$")'],
       ['*[description*=bar]', 'new UiSelector().descriptionContains("bar")'],
-      [
-        '#identifier[description=foo]',
-        'new UiSelector().resourceId("android:id/identifier").description("foo")',
-      ],
+      ['#identifier[description=foo]', 'new UiSelector().resourceId("android:id/identifier").description("foo")'],
       ['*[id=foo]', 'new UiSelector().resourceId("android:id/foo")'],
       [
         '*[description$="hello [ ^ $ . | ? * + ( ) world"]',

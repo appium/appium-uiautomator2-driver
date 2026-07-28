@@ -1,5 +1,6 @@
-import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {SendKeysOpts} from 'appium-android-driver';
+
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Presses a key code with optional metastate and flags.
@@ -57,16 +58,12 @@ export async function mobilePressKey(
   isLongPress: boolean = false,
   source?: number,
 ): Promise<void> {
-  await this.uiautomator2.jwproxy.command(
-    `/appium/device/${isLongPress ? 'long_' : ''}press_keycode`,
-    'POST',
-    {
-      keycode,
-      metastate,
-      flags,
-      source,
-    },
-  );
+  await this.uiautomator2.jwproxy.command(`/appium/device/${isLongPress ? 'long_' : ''}press_keycode`, 'POST', {
+    keycode,
+    metastate,
+    flags,
+    source,
+  });
 }
 
 /**
@@ -75,10 +72,7 @@ export async function mobilePressKey(
  * @returns True if the input text has been successfully sent to adb.
  * @throws {errors.InvalidArgumentError} If the text argument is not provided.
  */
-export async function mobileType(
-  this: AndroidUiautomator2Driver,
-  text: string | number | boolean,
-): Promise<boolean> {
+export async function mobileType(this: AndroidUiautomator2Driver, text: string | number | boolean): Promise<boolean> {
   return await this.settingsApp.typeUnicode(String(text));
 }
 
@@ -86,10 +80,7 @@ export async function mobileType(
  * Sends keys to the current element.
  * @param params - Options containing the text to send and optional replace flag.
  */
-export async function doSendKeys(
-  this: AndroidUiautomator2Driver,
-  params: SendKeysOpts,
-): Promise<void> {
+export async function doSendKeys(this: AndroidUiautomator2Driver, params: SendKeysOpts): Promise<void> {
   await this.uiautomator2.jwproxy.command('/keys', 'POST', params);
 }
 

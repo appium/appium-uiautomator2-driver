@@ -1,24 +1,22 @@
 {
   "name": "appium-uiautomator2-driver",
+  "version": "8.2.0",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
+    "android",
     "appium",
-    "uiautomator2",
     "automated testing",
-    "android"
+    "uiautomator2"
   ],
-  "version": "8.2.0",
   "bugs": {
     "url": "https://github.com/appium/appium-uiautomator2-driver/issues"
   },
-  "author": "Appium Contributors",
   "license": "Apache-2.0",
+  "author": "Appium Contributors",
   "repository": {
     "type": "git",
     "url": "https://github.com/appium/appium-uiautomator2-driver.git"
   },
-  "main": "./build/lib/index.js",
-  "types": "./build/lib/index.d.ts",
   "bin": {},
   "directories": {
     "lib": "lib"
@@ -31,6 +29,16 @@
     "LICENSE",
     "npm-shrinkwrap.json"
   ],
+  "type": "module",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/lib/index.d.ts",
+      "import": "./build/lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc -b",
     "clean": "npm run build -- --clean",
@@ -41,20 +49,15 @@
     "e2e-test:commands:keyboard": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/commands/keyboard/*-e2e-specs.js\"",
     "e2e-test:driver": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/driver/*-e2e-specs.js\"",
     "e2e-test": "node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/**/*-e2e-specs.js\"",
-    "lint": "eslint .",
+    "lint": "oxlint -c oxlint.config.mjs .",
     "lint:commit": "commitlint",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "oxlint -c oxlint.config.mjs --fix .",
     "prepare": "npm run rebuild",
     "rebuild": "npm run clean; npm run build",
-    "format": "prettier -w ./lib ./test",
-    "format:check": "prettier --check ./lib ./test",
+    "format": "oxfmt -c oxfmt.config.mjs .",
+    "format:check": "oxfmt -c oxfmt.config.mjs --check .",
     "reset": "node ./scripts/reset.mjs",
     "test": "node --test --test-timeout=60000 \"build/test/unit/**/*-specs.js\""
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 100,
-    "singleQuote": true
   },
   "dependencies": {
     "@appium/css-locator-to-native": "^1.0.1",
@@ -69,12 +72,11 @@
   },
   "devDependencies": {
     "@appium/docutils": "^2.0.0-rc.1",
-    "@appium/eslint-config-appium-ts": "^3.0.0",
+    "@appium/oxc-config": "^1.1.0",
+    "@appium/semantic-release-config": "^1.1.0",
     "@appium/support": "^7.0.0-rc.1",
-    "@appium/tsconfig": "^1.0.0-rc.1",
+    "@appium/tsconfig": "^1.2.0",
     "@appium/types": "^1.5.0",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/git": "^10.0.1",
     "@types/chai": "^5.2.3",
     "@types/chai-as-promised": "^8.0.2",
     "@types/node": "^26.0.0",
@@ -86,12 +88,8 @@
     "@xmldom/xmldom": "^0.x",
     "chai": "^6.0.0",
     "chai-as-promised": "^8.0.0",
-    "conventional-changelog-conventionalcommits": "^9.3.1",
-    "prettier": "^3.0.3",
-    "semantic-release": "^25.0.2",
     "sharp": "^0.x",
     "sinon": "^22.0.0",
-    "typescript": "^6.0.2",
     "unzipper": "^0.x",
     "webdriverio": "^9.0.9",
     "xpath": "^0.x"
@@ -122,13 +120,5 @@
         "./build/lib/doctor/optional-checks.js"
       ]
     }
-  },
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./build/lib/index.d.ts",
-      "import": "./build/lib/index.js"
-    },
-    "./package.json": "./package.json"
   }
 }

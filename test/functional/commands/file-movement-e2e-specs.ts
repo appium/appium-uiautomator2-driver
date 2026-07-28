@@ -1,11 +1,13 @@
-import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
 import stream from 'node:stream';
-import unzipper from 'unzipper';
-import {APIDEMOS_CAPS} from '../desired.js';
-import {initSession, deleteSession} from '../helpers/session.js';
+import {describe, it, before, after} from 'node:test';
+
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import unzipper from 'unzipper';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS} from '../desired.js';
+import {initSession, deleteSession} from '../helpers/session.js';
 
 use(chaiAsPromised);
 

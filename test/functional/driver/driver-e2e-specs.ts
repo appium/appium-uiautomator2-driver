@@ -1,17 +1,14 @@
 import {describe, it, beforeEach, afterEach} from 'node:test';
-import type {Browser} from 'webdriverio';
+
 import {ADB} from 'appium-adb';
-import {
-  APIDEMOS_CAPS,
-  amendCapabilities,
-  APIDEMOS_PACKAGE,
-  APIDEMOS_MAIN_ACTIVITY,
-} from '../desired.js';
-import {isCi} from '../helpers/ci-e2e.js';
-import {initSession, deleteSession} from '../helpers/session.js';
 import {retryInterval} from 'asyncbox';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS, amendCapabilities, APIDEMOS_PACKAGE, APIDEMOS_MAIN_ACTIVITY} from '../desired.js';
+import {isCi} from '../helpers/ci-e2e.js';
+import {initSession, deleteSession} from '../helpers/session.js';
 
 use(chaiAsPromised);
 
@@ -56,9 +53,7 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await expect(initSession(caps)).to.eventually.be.rejectedWith(
-        /does not exist or is not accessible/,
-      );
+      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
     it('should error out for invalid app path', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -66,9 +61,7 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await expect(initSession(caps)).to.eventually.be.rejectedWith(
-        /does not exist or is not accessible/,
-      );
+      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
     });
   });
 

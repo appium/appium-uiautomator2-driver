@@ -1,5 +1,7 @@
 import {describe, it} from 'node:test';
+
 import {expect} from 'chai';
+
 import {assignDefaults, escapeRegExp, isEmpty, memoize} from '../../lib/utils/index.js';
 
 describe('utils/lang', function () {
@@ -54,8 +56,7 @@ describe('utils/lang', function () {
     });
 
     it('supports plain-record checks with explicit object/array guards', function () {
-      const active = (v: unknown) =>
-        v != null && typeof v === 'object' && !Array.isArray(v) && !isEmpty(v);
+      const active = (v: unknown) => v != null && typeof v === 'object' && !Array.isArray(v) && !isEmpty(v);
       expect(active({a: 1})).to.be.true;
       expect(active({})).to.be.false;
       expect(active([])).to.be.false;

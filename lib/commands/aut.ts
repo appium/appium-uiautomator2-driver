@@ -1,6 +1,7 @@
 import {utils} from 'appium-android-driver';
 import {fs} from 'appium/support.js';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import {APKS_EXTENSION, APK_EXTENSION} from '../extensions.js';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from '../uiautomator2-server/index.js';
@@ -17,10 +18,7 @@ export async function prepareSessionApp(this: AndroidUiautomator2Driver): Promis
     // assume is on the device and just launch via the appPackage
     this.log.info(`Starting '${this.opts.appPackage}' directly on the device`);
   } else {
-    this.log.info(
-      `Neither 'app' nor 'appPackage' was set. Starting UiAutomator2 ` +
-        'without the target application',
-    );
+    this.log.info(`Neither 'app' nor 'appPackage' was set. Starting UiAutomator2 ` + 'without the target application');
   }
 }
 
@@ -49,9 +47,7 @@ export async function initAUT(this: AndroidUiautomator2Driver): Promise<void> {
     try {
       otherApps = utils.parseArray(this.opts.otherApps);
     } catch (e) {
-      throw this.log.errorWithException(
-        `Could not parse "otherApps" capability: ${(e as Error).message}`,
-      );
+      throw this.log.errorWithException(`Could not parse "otherApps" capability: ${(e as Error).message}`);
     }
     otherApps = await Promise.all(
       otherApps.map((app) => this.helpers.configureApp(app, [APK_EXTENSION, APKS_EXTENSION])),
@@ -80,9 +76,7 @@ export async function initAUT(this: AndroidUiautomator2Driver): Promise<void> {
     }
   } else {
     if (this.opts.fullReset) {
-      throw this.log.errorWithException(
-        'Full reset requires an app capability, use fastReset if app is not provided',
-      );
+      throw this.log.errorWithException('Full reset requires an app capability, use fastReset if app is not provided');
     }
     this.log.debug('No app capability. Assuming it is already on the device');
     if (this.opts.fastReset && this.opts.appPackage) {

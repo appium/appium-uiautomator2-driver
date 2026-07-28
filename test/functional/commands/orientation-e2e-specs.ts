@@ -1,11 +1,13 @@
 import {describe, it, before, after, afterEach} from 'node:test';
-import type {Browser} from 'webdriverio';
+
 import {waitForCondition} from 'asyncbox';
+import {expect, use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
 import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
 import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../helpers/session.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
 

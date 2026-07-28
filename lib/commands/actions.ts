@@ -1,4 +1,5 @@
 import type {StringRecord} from '@appium/types';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {ActionResult} from './types.js';
 
@@ -39,10 +40,7 @@ export async function mobileScheduleAction(
  * @param name - Name of the scheduled action.
  * @returns The action execution history containing repeats and step results.
  */
-export async function mobileGetActionHistory(
-  this: AndroidUiautomator2Driver,
-  name: string,
-): Promise<ActionResult> {
+export async function mobileGetActionHistory(this: AndroidUiautomator2Driver, name: string): Promise<ActionResult> {
   return (await this.uiautomator2.jwproxy.command('/appium/action_history', 'POST', {
     name,
   })) as ActionResult;
@@ -53,10 +51,7 @@ export async function mobileGetActionHistory(
  * @param name - Name of the scheduled action to unschedule.
  * @returns The result of unscheduling the action.
  */
-export async function mobileUnscheduleAction(
-  this: AndroidUiautomator2Driver,
-  name: string,
-): Promise<any> {
+export async function mobileUnscheduleAction(this: AndroidUiautomator2Driver, name: string): Promise<any> {
   return await this.uiautomator2.jwproxy.command('/appium/unschedule_action', 'POST', {name});
 }
 
@@ -64,10 +59,7 @@ export async function mobileUnscheduleAction(
  * Performs a sequence of actions.
  * @param actions - Array of action objects to perform. Pointer actions are automatically converted to touch type.
  */
-export async function performActions(
-  this: AndroidUiautomator2Driver,
-  actions: StringRecord[],
-): Promise<void> {
+export async function performActions(this: AndroidUiautomator2Driver, actions: StringRecord[]): Promise<void> {
   // This is mandatory, since Selenium API uses MOUSE as the default pointer type
   const preprocessedActions = actions.map((action) =>
     Object.assign(

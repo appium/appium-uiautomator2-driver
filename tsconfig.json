@@ -6,16 +6,10 @@
     "outDir": "build",
     "strict": true,
     "checkJs": true,
-    "types": [
-      "node",
-      "chai"
-    ],
+    "types": ["node", "chai"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "rootDir": "."
   },
-  "include": [
-    "lib",
-    "test"
-  ]
+  "include": ["lib", "test"]
 }

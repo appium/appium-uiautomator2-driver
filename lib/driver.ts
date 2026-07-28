@@ -12,30 +12,7 @@ import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
 import {BaseDriver, DeviceSettings} from 'appium/driver.js';
 import {util} from 'appium/support.js';
-import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints.js';
-import {newMethodMap} from './method-map.js';
-import {assignDefaults, memoize, MJpegStream} from './utils/index.js';
-import type {
-  Uiautomator2Settings,
-  Uiautomator2DeviceDetails,
-  Uiautomator2DriverCaps,
-  Uiautomator2DriverOpts,
-  Uiautomator2StartSessionOpts,
-  W3CUiautomator2DriverCaps,
-} from './types.js';
-import type {UiAutomator2Server} from './uiautomator2-server/index.js';
-import {
-  allocateMjpegServerPort,
-  allocateSystemPort,
-  initServer,
-  performExecution,
-  performPostExecSetup,
-  performPreExecSetup,
-  releaseMjpegServerPort,
-  releaseSystemPort,
-  requireServer,
-  startSession,
-} from './uiautomator2-server/index.js';
+
 import {
   mobileGetActionHistory,
   mobileScheduleAction,
@@ -86,14 +63,7 @@ import {
   mobileScrollGesture,
   mobileSwipeGesture,
 } from './commands/gestures.js';
-import {
-  pressKeyCode,
-  longPressKeyCode,
-  mobilePressKey,
-  mobileType,
-  doSendKeys,
-  keyevent,
-} from './commands/keyboard.js';
+import {pressKeyCode, longPressKeyCode, mobilePressKey, mobileType, doSendKeys, keyevent} from './commands/keyboard.js';
 import {
   getPageSource,
   getOrientation,
@@ -103,7 +73,6 @@ import {
   mobileGetDeviceInfo,
   mobileResetAccessibilityCache,
 } from './commands/misc.js';
-import {mobileListWindows, mobileListDisplays} from './commands/windows.js';
 import {setUrl, mobileDeepLink, back} from './commands/navigation.js';
 import {
   mobileScreenshots,
@@ -120,8 +89,33 @@ import {
   getWindowSize,
   mobileViewPortRect,
 } from './commands/viewport.js';
+import {mobileListWindows, mobileListDisplays} from './commands/windows.js';
+import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints.js';
 import {executeMethodMap} from './execute-method-map.js';
+import {newMethodMap} from './method-map.js';
 import {sessionClaimHandler} from './session-claim-handler.js';
+import type {
+  Uiautomator2Settings,
+  Uiautomator2DeviceDetails,
+  Uiautomator2DriverCaps,
+  Uiautomator2DriverOpts,
+  Uiautomator2StartSessionOpts,
+  W3CUiautomator2DriverCaps,
+} from './types.js';
+import type {UiAutomator2Server} from './uiautomator2-server/index.js';
+import {
+  allocateMjpegServerPort,
+  allocateSystemPort,
+  initServer,
+  performExecution,
+  performPostExecSetup,
+  performPreExecSetup,
+  releaseMjpegServerPort,
+  releaseSystemPort,
+  requireServer,
+  startSession,
+} from './uiautomator2-server/index.js';
+import {assignDefaults, memoize, MJpegStream} from './utils/index.js';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.
@@ -348,14 +342,7 @@ class AndroidUiautomator2Driver
 
     super(opts, shouldValidateCaps);
 
-    this.locatorStrategies = [
-      'xpath',
-      'id',
-      'class name',
-      'accessibility id',
-      'css selector',
-      '-android uiautomator',
-    ];
+    this.locatorStrategies = ['xpath', 'id', 'class name', 'accessibility id', 'css selector', '-android uiautomator'];
     this.desiredCapConstraints = structuredClone(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
@@ -442,9 +429,7 @@ class AndroidUiautomator2Driver
         try {
           activity = await this.adb.resolveLaunchableActivity(pkg);
         } catch (e) {
-          this.log.warn(
-            `Using the default ${pkg} activity ${activity}. Original error: ${(e as Error).message}`,
-          );
+          this.log.warn(`Using the default ${pkg} activity ${activity}. Original error: ${(e as Error).message}`);
         }
         this.opts.appPackage = this.caps.appPackage = pkg;
         this.opts.appActivity = this.caps.appActivity = activity;
@@ -496,11 +481,7 @@ class AndroidUiautomator2Driver
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
     const sessionData = await BaseDriver.prototype.getSession.call(this);
     this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.requireUiautomator2().jwproxy.command(
-      '/',
-      'GET',
-      {},
-    )) as StringRecord;
+    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
     return {...sessionData, ...uia2Data};
   }
 
@@ -560,8 +541,7 @@ class AndroidUiautomator2Driver
       if (this.opts.appPackage) {
         if (
           !this.isChromeSession &&
-          ((!this.opts.dontStopAppOnReset && !this.opts.noReset) ||
-            (this.opts.noReset && this.opts.shouldTerminateApp))
+          ((!this.opts.dontStopAppOnReset && !this.opts.noReset) || (this.opts.noReset && this.opts.shouldTerminateApp))
         ) {
           try {
             await this.adb.forceStop(this.opts.appPackage);
@@ -570,9 +550,7 @@ class AndroidUiautomator2Driver
           }
         }
         if (this.opts.fullReset && !this.opts.skipUninstall) {
-          this.log.debug(
-            `Capability 'fullReset' set to 'true', Uninstalling '${this.opts.appPackage}'`,
-          );
+          this.log.debug(`Capability 'fullReset' set to 'true', Uninstalling '${this.opts.appPackage}'`);
           try {
             await this.adb.uninstallApk(this.opts.appPackage);
           } catch (err) {
@@ -647,10 +625,7 @@ class AndroidUiautomator2Driver
       this.jwpProxyAvoid = NO_PROXY;
     }
     if (this.opts.nativeWebScreenshot) {
-      this.jwpProxyAvoid = [
-        ...this.jwpProxyAvoid,
-        ['GET', new RegExp('^/session/[^/]+/screenshot')],
-      ];
+      this.jwpProxyAvoid = [...this.jwpProxyAvoid, ['GET', new RegExp('^/session/[^/]+/screenshot')]];
     }
 
     return this.jwpProxyAvoid;
@@ -672,9 +647,7 @@ class AndroidUiautomator2Driver
   }
 
   // needed to make the typechecker happy
-  override async getAppiumSessionCapabilities(): Promise<
-    SessionCapabilities<Uiautomator2Constraints>
-  > {
+  override async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
     return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
   }
 

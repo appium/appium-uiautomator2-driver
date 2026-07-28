@@ -1,5 +1,5 @@
-import type {Browser} from 'webdriverio';
 import {waitForCondition} from 'asyncbox';
+import type {Browser} from 'webdriverio';
 
 const ALERT_BUTTON_IDS = ['android:id/button1', 'android:id/aerr_wait'];
 

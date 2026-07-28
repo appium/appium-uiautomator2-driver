@@ -1,11 +1,13 @@
 import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
-import {initSession, deleteSession} from '../../helpers/session.js';
-import {retryInterval} from 'asyncbox';
+
 import {util} from 'appium/support.js';
+import {retryInterval} from 'asyncbox';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 
 use(chaiAsPromised);
 

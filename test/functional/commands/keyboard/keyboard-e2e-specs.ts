@@ -1,6 +1,11 @@
 import {describe, it, before, after, beforeEach} from 'node:test';
-import type {Browser} from 'webdriverio';
+
+import {ADB} from 'appium-adb';
 import {retryInterval, sleep} from 'asyncbox';
+import {expect, use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
 import {
   APIDEMOS_CAPS,
   APIDEMOS_KEYEVENT_ACTIVITY,
@@ -9,11 +14,8 @@ import {
   amendCapabilities,
 } from '../../desired.js';
 import {isCi} from '../../helpers/ci-e2e.js';
-import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-import {ADB} from 'appium-adb';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui.js';
 
 use(chaiAsPromised);
 
@@ -46,10 +48,7 @@ function deSamsungify(text: string): string {
   return text.replace('. Editing.', '');
 }
 
-async function getElement(
-  driver: Browser,
-  className: string,
-): Promise<Awaited<ReturnType<Browser['$']>>> {
+async function getElement(driver: Browser, className: string): Promise<Awaited<ReturnType<Browser['$']>>> {
   const result = await retryInterval(10, 1000, async () => {
     const el = await driver.$(className);
     if (!el) {

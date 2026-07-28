@@ -1,10 +1,4 @@
-import {
-  Transform,
-  Writable,
-  type Readable,
-  type TransformCallback,
-  type WritableOptions,
-} from 'node:stream';
+import {Transform, Writable, type Readable, type TransformCallback, type WritableOptions} from 'node:stream';
 
 import {logger} from 'appium/support.js';
 import axios from 'axios';
@@ -144,11 +138,7 @@ export class MJpegStream extends Writable {
    * @param errorHandler - additional function that will be called in the case of any errors
    * @param options - Options to pass to the Writable constructor
    */
-  constructor(
-    mJpegUrl: string,
-    errorHandler: (err: Error) => void = noop,
-    options: WritableOptions = {},
-  ) {
+  constructor(mJpegUrl: string, errorHandler: (err: Error) => void = noop, options: WritableOptions = {}) {
     super(options);
     this.errorHandler = errorHandler;
     this.url = mJpegUrl;
@@ -216,12 +206,9 @@ export class MJpegStream extends Writable {
         } else {
           message = String(e);
         }
-        throw new Error(
-          `Cannot connect to the MJPEG stream at ${url}. Original error: ${message}`,
-          {
-            cause: e,
-          },
-        );
+        throw new Error(`Cannot connect to the MJPEG stream at ${url}. Original error: ${message}`, {
+          cause: e,
+        });
       }
     } finally {
       clearTimeout(connectTimeoutId);
@@ -238,9 +225,7 @@ export class MJpegStream extends Writable {
       this.lastChunk = null;
       // No-op if start() has already resolved; only rejects a still-pending start().
       this.registerStartFailure?.(
-        new Error(
-          `The connection to the MJPEG stream at ${url} has been closed before any frame was received`,
-        ),
+        new Error(`The connection to the MJPEG stream at ${url} has been closed before any frame was received`),
       );
     };
 
@@ -249,8 +234,7 @@ export class MJpegStream extends Writable {
       this.registerStartSuccess = resolve;
       this.registerStartFailure = reject;
       timeoutId = setTimeout(
-        () =>
-          reject(new Error(`Waited ${serverTimeout}ms but the MJPEG server never sent any images`)),
+        () => reject(new Error(`Waited ${serverTimeout}ms but the MJPEG server never sent any images`)),
         serverTimeout,
       );
     });
@@ -286,11 +270,7 @@ export class MJpegStream extends Writable {
   }
 
   /* eslint-disable promise/prefer-await-to-callbacks -- Writable._write is callback-based */
-  override _write(
-    chunk: Buffer | string,
-    _encoding: BufferEncoding,
-    callback: (error?: Error | null) => void,
-  ): void {
+  override _write(chunk: Buffer | string, _encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
     this.lastChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
     this.updateCount++;
     if (this.registerStartSuccess) {

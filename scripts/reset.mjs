@@ -3,17 +3,11 @@ import {logger} from 'appium/support.js';
 
 const log = logger.getLogger('UIA2Reset');
 
-const SERVER_PKGS = [
-  'io.appium.uiautomator2.server',
-  'io.appium.uiautomator2.server.test',
-  'io.appium.settings',
-];
+const SERVER_PKGS = ['io.appium.uiautomator2.server', 'io.appium.uiautomator2.server.test', 'io.appium.settings'];
 
 async function runReset() {
   const adb = await ADB.createADB();
-  const udids = (await adb.getConnectedDevices())
-    .filter(({state}) => state === 'device')
-    .map(({udid}) => udid);
+  const udids = (await adb.getConnectedDevices()).filter(({state}) => state === 'device').map(({udid}) => udid);
   if (0 === udids.length) {
     return;
   }

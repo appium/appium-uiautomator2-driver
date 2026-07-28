@@ -1,8 +1,9 @@
-import {PROTOCOLS} from 'appium/driver.js';
-import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
-import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Chromedriver} from 'appium-chromedriver';
+import {PROTOCOLS} from 'appium/driver.js';
+
+import type {AndroidUiautomator2Driver} from '../driver.js';
 
 /**
  * Gets the currently active element.
@@ -23,13 +24,7 @@ export async function getAttribute(
   attribute: string,
   elementId: string,
 ): Promise<string> {
-  return String(
-    await this.uiautomator2.jwproxy.command(
-      `/element/${elementId}/attribute/${attribute}`,
-      'GET',
-      {},
-    ),
-  );
+  return String(await this.uiautomator2.jwproxy.command(`/element/${elementId}/attribute/${attribute}`, 'GET', {}));
 }
 
 /**
@@ -37,10 +32,7 @@ export async function getAttribute(
  * @param elementId - ID of the element.
  * @returns True if the element is displayed, false otherwise.
  */
-export async function elementDisplayed(
-  this: AndroidUiautomator2Driver,
-  elementId: string,
-): Promise<boolean> {
+export async function elementDisplayed(this: AndroidUiautomator2Driver, elementId: string): Promise<boolean> {
   return toBool(await this.getAttribute('displayed', elementId));
 }
 
@@ -49,10 +41,7 @@ export async function elementDisplayed(
  * @param elementId - ID of the element.
  * @returns True if the element is enabled, false otherwise.
  */
-export async function elementEnabled(
-  this: AndroidUiautomator2Driver,
-  elementId: string,
-): Promise<boolean> {
+export async function elementEnabled(this: AndroidUiautomator2Driver, elementId: string): Promise<boolean> {
   return toBool(await this.getAttribute('enabled', elementId));
 }
 
@@ -61,10 +50,7 @@ export async function elementEnabled(
  * @param elementId - ID of the element.
  * @returns True if the element is selected, false otherwise.
  */
-export async function elementSelected(
-  this: AndroidUiautomator2Driver,
-  elementId: string,
-): Promise<boolean> {
+export async function elementSelected(this: AndroidUiautomator2Driver, elementId: string): Promise<boolean> {
   return toBool(await this.getAttribute('selected', elementId));
 }
 
@@ -74,11 +60,7 @@ export async function elementSelected(
  * @returns The element tag name.
  */
 export async function getName(this: AndroidUiautomator2Driver, elementId: string): Promise<string> {
-  return (await this.uiautomator2.jwproxy.command(
-    `/element/${elementId}/name`,
-    'GET',
-    {},
-  )) as string;
+  return (await this.uiautomator2.jwproxy.command(`/element/${elementId}/name`, 'GET', {})) as string;
 }
 
 /**
@@ -86,15 +68,8 @@ export async function getName(this: AndroidUiautomator2Driver, elementId: string
  * @param elementId - ID of the element.
  * @returns The element position coordinates (x, y).
  */
-export async function getLocation(
-  this: AndroidUiautomator2Driver,
-  elementId: string,
-): Promise<Position> {
-  return (await this.uiautomator2.jwproxy.command(
-    `/element/${elementId}/location`,
-    'GET',
-    {},
-  )) as Position;
+export async function getLocation(this: AndroidUiautomator2Driver, elementId: string): Promise<Position> {
+  return (await this.uiautomator2.jwproxy.command(`/element/${elementId}/location`, 'GET', {})) as Position;
 }
 
 /**
@@ -110,10 +85,7 @@ export async function getSize(this: AndroidUiautomator2Driver, elementId: string
  * Sets the value of an element using the upstream driver API.
  * @param params - Options containing the element ID and value to set.
  */
-export async function doSetElementValue(
-  this: AndroidUiautomator2Driver,
-  params: DoSetElementValueOpts,
-): Promise<void> {
+export async function doSetElementValue(this: AndroidUiautomator2Driver, params: DoSetElementValueOpts): Promise<void> {
   await this.uiautomator2.jwproxy.command(`/element/${params.elementId}/value`, 'POST', params);
 }
 
@@ -156,13 +128,8 @@ export async function click(this: AndroidUiautomator2Driver, element: string): P
  * @param element - ID of the element.
  * @returns Base64-encoded PNG screenshot of the element.
  */
-export async function getElementScreenshot(
-  this: AndroidUiautomator2Driver,
-  element: string,
-): Promise<string> {
-  return String(
-    await this.uiautomator2.jwproxy.command(`/element/${element}/screenshot`, 'GET', {}),
-  );
+export async function getElementScreenshot(this: AndroidUiautomator2Driver, element: string): Promise<string> {
+  return String(await this.uiautomator2.jwproxy.command(`/element/${element}/screenshot`, 'GET', {}));
 }
 
 /**
@@ -178,10 +145,7 @@ export async function clear(this: AndroidUiautomator2Driver, elementId: string):
  * @param elementId - ID of the element.
  * @returns The element rectangle (x, y, width, height).
  */
-export async function getElementRect(
-  this: AndroidUiautomator2Driver,
-  elementId: string,
-): Promise<Rect> {
+export async function getElementRect(this: AndroidUiautomator2Driver, elementId: string): Promise<Rect> {
   if (!this.isWebContext()) {
     return (await this.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
   }

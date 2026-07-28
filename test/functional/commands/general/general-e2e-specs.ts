@@ -1,10 +1,12 @@
 import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS} from '../../desired.js';
-import {initSession, deleteSession} from '../../helpers/session.js';
+
 import {waitForCondition} from 'asyncbox';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 
 use(chaiAsPromised);
 
@@ -69,13 +71,7 @@ describe('general', function () {
       const startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       const startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
 
-      await driver.startActivity(
-        startAppPackage,
-        startAppActivity,
-        undefined,
-        undefined,
-        startIntentCategory,
-      );
+      await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });

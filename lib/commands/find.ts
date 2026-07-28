@@ -1,6 +1,7 @@
-import {cssToNativeLocator} from '../css/index.js';
 import type {Element as AppiumElement} from '@appium/types';
 import type {FindElementOpts} from 'appium-android-driver';
+
+import {cssToNativeLocator} from '../css/index.js';
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
 // we override the xpath search for this first-visible-child selector, which
@@ -47,9 +48,7 @@ export async function doFindElementOrEls(
       this.opts.appPackage,
     ));
   }
-  return (await uiautomator2.jwproxy.command(
-    `/element${params.multiple ? 's' : ''}`,
-    'POST',
-    params,
-  )) as AppiumElement | AppiumElement[];
+  return (await uiautomator2.jwproxy.command(`/element${params.multiple ? 's' : ''}`, 'POST', params)) as
+    | AppiumElement
+    | AppiumElement[];
 }

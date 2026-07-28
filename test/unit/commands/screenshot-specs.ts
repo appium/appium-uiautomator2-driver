@@ -1,13 +1,13 @@
 import {describe, it} from 'node:test';
 
 import {expect} from 'chai';
+
 import {parseSurfaceFlingerDisplays} from '../../../lib/commands/screenshot.js';
 
 describe('Screenshot - parseSurfaceFlingerDisplays', function () {
   describe('physical displays', function () {
     it('should parse physical display with HWC display ID 0 (default)', function () {
-      const output =
-        'Display 4619827259835644672 (HWC display 0): port=0 pnpId=GGL displayName="EMU_display_0"';
+      const output = 'Display 4619827259835644672 (HWC display 0): port=0 pnpId=GGL displayName="EMU_display_0"';
       const result = parseSurfaceFlingerDisplays(output);
 
       expect(result).to.have.property('4619827259835644672');
@@ -19,8 +19,7 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
     });
 
     it('should parse physical display with non-default HWC display ID', function () {
-      const output =
-        'Display 4619827259835644672 (HWC display 1): port=0 pnpId=GGL displayName="External Display"';
+      const output = 'Display 4619827259835644672 (HWC display 1): port=0 pnpId=GGL displayName="External Display"';
       const result = parseSurfaceFlingerDisplays(output);
 
       expect(result).to.have.property('4619827259835644672');
@@ -32,8 +31,7 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
     });
 
     it('should parse physical display with HWC display ID 2', function () {
-      const output =
-        'Display 4619827259835644672 (HWC display 2): port=1 pnpId=HDMI displayName="HDMI Display"';
+      const output = 'Display 4619827259835644672 (HWC display 2): port=1 pnpId=HDMI displayName="HDMI Display"';
       const result = parseSurfaceFlingerDisplays(output);
 
       expect(result).to.have.property('4619827259835644672');
@@ -136,8 +134,7 @@ Display 11529215049243506836 (Virtual display): displayName="Virtual 2" uniqueId
     });
 
     it('should handle displayName at different positions in the line', function () {
-      const output =
-        'Display 4619827259835644672 (HWC display 0): displayName="Early Name" port=0 pnpId=GGL';
+      const output = 'Display 4619827259835644672 (HWC display 0): displayName="Early Name" port=0 pnpId=GGL';
       const result = parseSurfaceFlingerDisplays(output);
 
       expect(result['4619827259835644672'].name).to.equal('Early Name');

@@ -1,22 +1,16 @@
-import {JWProxy, errors} from 'appium/driver.js';
-import {sleep, waitForCondition} from 'asyncbox';
+import type {AppiumLogger, StringRecord, HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
+import type {ADB, InstallState} from 'appium-adb';
 import {
   SERVER_APK_PATH as apkPath,
   TEST_APK_PATH as testApkPath,
   version as serverVersion,
 } from 'appium-uiautomator2-server';
+import {JWProxy, errors} from 'appium/driver.js';
 import {util, timing} from 'appium/support.js';
-import type {
-  AppiumLogger,
-  StringRecord,
-  HTTPMethod,
-  HTTPBody,
-  ProxyResponse,
-  ProxyOptions,
-} from '@appium/types';
+import {sleep, waitForCondition} from 'asyncbox';
 import axios from 'axios';
-import type {ADB, InstallState} from 'appium-adb';
 import type {SubProcess} from 'teen_process';
+
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
 
 const SERVER_LAUNCH_TIMEOUT_MS = 30000;
@@ -147,11 +141,8 @@ export class UiAutomator2Server {
     const shouldUninstallServerPackages = this.shouldUninstallServerPackages(packagesInfo);
     // Install must always follow uninstall. Also, perform the install if
     // any of server packages is not installed or is outdated
-    const shouldInstallServerPackages =
-      shouldUninstallServerPackages || this.shouldInstallServerPackages(packagesInfo);
-    this.log.info(
-      `Server packages are ${shouldInstallServerPackages ? '' : 'not '}going to be (re)installed`,
-    );
+    const shouldInstallServerPackages = shouldUninstallServerPackages || this.shouldInstallServerPackages(packagesInfo);
+    this.log.info(`Server packages are ${shouldInstallServerPackages ? '' : 'not '}going to be (re)installed`);
     if (shouldInstallServerPackages && shouldUninstallServerPackages) {
       this.log.info('Full packages reinstall is going to be performed');
     }
@@ -183,9 +174,7 @@ export class UiAutomator2Server {
   async startSession(caps: StringRecord): Promise<void> {
     await this.cleanupAutomationLeftovers();
     if (caps.skipServerInstallation) {
-      this.log.info(
-        `'skipServerInstallation' is set. Attempting to use UIAutomator2 server from the device`,
-      );
+      this.log.info(`'skipServerInstallation' is set. Attempting to use UIAutomator2 server from the device`);
     } else {
       this.log.info(`Starting UIAutomator2 server ${serverVersion}`);
       this.log.info(`Using UIAutomator2 server from '${apkPath}' and test from '${testApkPath}'`);
@@ -248,8 +237,7 @@ export class UiAutomator2Server {
     }
 
     this.log.debug(
-      `The initialization of the instrumentation process took ` +
-        `${timer.getDuration().asMilliSeconds.toFixed(0)}ms`,
+      `The initialization of the instrumentation process took ` + `${timer.getDuration().asMilliSeconds.toFixed(0)}ms`,
     );
     await this.jwproxy.command('/session', 'POST', {
       capabilities: {
@@ -266,8 +254,7 @@ export class UiAutomator2Server {
       await this.jwproxy.command('/', 'DELETE');
     } catch (err: any) {
       this.log.warn(
-        `Did not get the confirmation of UiAutomator2 server session deletion. ` +
-          `Original error: ${err.message}`,
+        `Did not get the confirmation of UiAutomator2 server session deletion. ` + `Original error: ${err.message}`,
       );
     }
 
@@ -283,10 +270,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await Promise.all([
-        this.adb.forceStop(SERVER_PACKAGE_ID),
-        this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
-      ]);
+      await Promise.all([this.adb.forceStop(SERVER_PACKAGE_ID), this.adb.forceStop(SERVER_TEST_PACKAGE_ID)]);
     } catch {}
   }
 
@@ -302,10 +286,7 @@ export class UiAutomator2Server {
       // since it does not contain any version info
       resultInfo.installState = this.adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED;
     } else if (appId === SERVER_PACKAGE_ID) {
-      resultInfo.installState = await this.adb.getApplicationInstallState(
-        resultInfo.appPath,
-        appId,
-      );
+      resultInfo.installState = await this.adb.getApplicationInstallState(resultInfo.appPath, appId);
     }
 
     return resultInfo;
@@ -330,10 +311,9 @@ export class UiAutomator2Server {
       ({installState}) => installState !== this.adb.APP_INSTALL_STATE.NOT_INSTALLED,
     );
     const isAnyComponentNotInstalledOrNewer = packagesInfo.some(({installState}) =>
-      [
-        this.adb.APP_INSTALL_STATE.NOT_INSTALLED,
-        this.adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED,
-      ].includes(installState),
+      [this.adb.APP_INSTALL_STATE.NOT_INSTALLED, this.adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED].includes(
+        installState,
+      ),
     );
     return isAnyComponentInstalled && isAnyComponentNotInstalledOrNewer;
   }
@@ -347,10 +327,9 @@ export class UiAutomator2Server {
    */
   private shouldInstallServerPackages(packagesInfo: PackageInfo[] = []): boolean {
     return packagesInfo.some(({installState}) =>
-      [
-        this.adb.APP_INSTALL_STATE.NOT_INSTALLED,
-        this.adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED,
-      ].includes(installState),
+      [this.adb.APP_INSTALL_STATE.NOT_INSTALLED, this.adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED].includes(
+        installState,
+      ),
     );
   }
 
@@ -390,9 +369,7 @@ export class UiAutomator2Server {
       );
     } catch {
       const errorMessage = (pmError as any)?.message || 'Unknown error';
-      this.log.error(
-        `Unable to find instrumentation target '${INSTRUMENTATION_TARGET}': ${errorMessage}`,
-      );
+      this.log.error(`Unable to find instrumentation target '${INSTRUMENTATION_TARGET}': ${errorMessage}`);
       if (pmOutput) {
         this.log.debug('Available targets:');
         for (const line of pmOutput.split('\n')) {
@@ -408,11 +385,7 @@ export class UiAutomator2Server {
       cmd.push('--no-window-animation');
     }
     if (typeof this.disableSuppressAccessibilityService === 'boolean') {
-      cmd.push(
-        '-e',
-        'DISABLE_SUPPRESS_ACCESSIBILITY_SERVICES',
-        `${this.disableSuppressAccessibilityService}`,
-      );
+      cmd.push('-e', 'DISABLE_SUPPRESS_ACCESSIBILITY_SERVICES', `${this.disableSuppressAccessibilityService}`);
     }
     // Disable Google analytics to prevent possible fatal exception
     cmd.push('-e', 'disableAnalytics', 'true');
@@ -424,9 +397,7 @@ export class UiAutomator2Server {
       );
     }
     this.instrumentationProcess.once('exit', (code: number | null, signal: string | null) => {
-      this.log.debug(
-        `[Instrumentation] The process has exited with code ${code}, signal ${signal}`,
-      );
+      this.log.debug(`[Instrumentation] The process has exited with code ${code}, signal ${signal}`);
       this.jwproxy.didInstrumentationExit = true;
     });
     await this.instrumentationProcess.start(0);
@@ -444,9 +415,7 @@ export class UiAutomator2Server {
   }
 
   private async cleanupAutomationLeftovers(strictCleanup: boolean = false): Promise<void> {
-    this.log.debug(
-      `Performing ${strictCleanup ? 'strict' : 'shallow'} cleanup of automation leftovers`,
-    );
+    this.log.debug(`Performing ${strictCleanup ? 'strict' : 'shallow'} cleanup of automation leftovers`);
 
     const serverBase = `http://${this.host}:${this.systemPort}`;
     try {
@@ -459,9 +428,7 @@ export class UiAutomator2Server {
       const activeSessionIds = value.map(({id}) => id).filter(Boolean);
       if (activeSessionIds.length) {
         this.log.debug(`The following obsolete sessions are still running: ${activeSessionIds}`);
-        this.log.debug(
-          `Cleaning up ${util.pluralize('obsolete session', activeSessionIds.length, true)}`,
-        );
+        this.log.debug(`Cleaning up ${util.pluralize('obsolete session', activeSessionIds.length, true)}`);
         await Promise.all(
           activeSessionIds.map((id: string) =>
             axios.delete(`${serverBase}/session/${id}`, {
@@ -479,10 +446,7 @@ export class UiAutomator2Server {
     }
 
     try {
-      await Promise.all([
-        this.adb.forceStop(SERVER_PACKAGE_ID),
-        this.adb.forceStop(SERVER_TEST_PACKAGE_ID),
-      ]);
+      await Promise.all([this.adb.forceStop(SERVER_PACKAGE_ID), this.adb.forceStop(SERVER_TEST_PACKAGE_ID)]);
     } catch {}
     if (strictCleanup) {
       // https://github.com/appium/appium/issues/10749

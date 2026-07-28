@@ -1,4 +1,5 @@
 import type {Rect, Size} from '@appium/types';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {RelativeRect} from './types.js';
 
@@ -7,11 +8,7 @@ import type {RelativeRect} from './types.js';
  * @returns The status bar height in pixels.
  */
 export async function getStatusBarHeight(this: AndroidUiautomator2Driver): Promise<number> {
-  const {statusBar} = (await this.uiautomator2.jwproxy.command(
-    `/appium/device/system_bars`,
-    'GET',
-    {},
-  )) as {
+  const {statusBar} = (await this.uiautomator2.jwproxy.command(`/appium/device/system_bars`, 'GET', {})) as {
     statusBar: number;
   };
   return statusBar;
@@ -69,11 +66,7 @@ export async function getWindowRect(this: AndroidUiautomator2Driver): Promise<Re
  * @returns The display density value.
  */
 export async function getDisplayDensity(this: AndroidUiautomator2Driver): Promise<number> {
-  return (await this.uiautomator2.jwproxy.command(
-    '/appium/device/display_density',
-    'GET',
-    {},
-  )) as number;
+  return (await this.uiautomator2.jwproxy.command('/appium/device/display_density', 'GET', {})) as number;
 }
 
 /**

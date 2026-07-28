@@ -1,23 +1,21 @@
-import {imageUtil} from 'appium/support.js';
-import {isEmpty} from '../utils/index.js';
-import type {AndroidUiautomator2Driver} from '../driver.js';
-import type {Screenshot} from './types.js';
 import type {StringRecord} from '@appium/types';
+import {imageUtil} from 'appium/support.js';
+
+import type {AndroidUiautomator2Driver} from '../driver.js';
+import {isEmpty} from '../utils/index.js';
+import type {Screenshot} from './types.js';
 
 // Matches SurfaceFlinger output format:
 // Physical: Display 4619827259835644672 (HWC display 0): port=0 pnpId=GGL displayName="EMU_display_0"
 // Virtual: Display 11529215049243506835 (Virtual display): displayName="Emulator 2D Display" uniqueId="..."
-const DISPLAY_PATTERN =
-  /^Display\s+(\d+)\s+\((?:HWC\s+display\s+(\d+)|Virtual\s+display)\):.*?displayName="([^"]*)"/gm;
+const DISPLAY_PATTERN = /^Display\s+(\d+)\s+\((?:HWC\s+display\s+(\d+)|Virtual\s+display)\):.*?displayName="([^"]*)"/gm;
 
 /**
  * Parses SurfaceFlinger display output to extract display information.
  * @param displaysInfo - The raw output from `adb shell dumpsys SurfaceFlinger --display-id`
  * @returns A record mapping display IDs to their information (without payload)
  */
-export function parseSurfaceFlingerDisplays(
-  displaysInfo: string,
-): Record<string, Partial<Screenshot>> {
+export function parseSurfaceFlingerDisplays(displaysInfo: string): Record<string, Partial<Screenshot>> {
   const infos: Record<string, Partial<Screenshot>> = {};
   const lines = displaysInfo.split('\n');
 
@@ -30,9 +28,7 @@ export function parseSurfaceFlingerDisplays(
 
       // Determine if default: HWC display 0 is default, or first physical display if no HWC info
       const isDefault =
-        hwcId !== undefined
-          ? hwcId === '0'
-          : !line.includes('Virtual') && Object.keys(infos).length === 0;
+        hwcId !== undefined ? hwcId === '0' : !line.includes('Virtual') && Object.keys(infos).length === 0;
 
       infos[matchedDisplayId] = {
         id: matchedDisplayId,
@@ -103,8 +99,7 @@ export async function mobileScreenshots(
   const toB64Screenshot = async (dispId: string): Promise<string> =>
     (await this.adb.takeScreenshot(dispId)).toString('base64');
 
-  const displayIdStr: string | null =
-    displayId == null || displayId === '' ? null : String(displayId);
+  const displayIdStr: string | null = displayId == null || displayId === '' ? null : String(displayId);
 
   if (displayIdStr) {
     if (!infos[displayIdStr]) {
@@ -121,9 +116,7 @@ export async function mobileScreenshots(
     };
   }
 
-  const allInfos = Object.values(infos).filter(
-    (info): info is Partial<Screenshot> & {id: string} => !!info?.id,
-  );
+  const allInfos = Object.values(infos).filter((info): info is Partial<Screenshot> & {id: string} => !!info?.id);
   const screenshots = await Promise.all(allInfos.map((info) => toB64Screenshot(info.id)));
   for (let i = 0; i < allInfos.length; i++) {
     const info = allInfos[i];

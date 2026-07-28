@@ -1,10 +1,12 @@
 import {describe, it, before, after} from 'node:test';
+
+import {expect, use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
+
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
 import {waitForElementByXpath} from '../../helpers/wait-for-ui.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
 
@@ -63,9 +65,7 @@ describe('Find - xpath', function () {
     const elementsWithoutCompression = await driver.$$(`//*`);
     await driver.updateSettings({ignoreUnimportantViews: true});
     const elementsWithCompression = await driver.$$(`//*`);
-    expect(elementsWithoutCompression.length).to.be.greaterThan(
-      await elementsWithCompression.length,
-    );
+    expect(elementsWithoutCompression.length).to.be.greaterThan(await elementsWithCompression.length);
   });
   it('should find toast message element by text', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.PopupMenu1');

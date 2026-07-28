@@ -1,10 +1,12 @@
-import {describe, it, before, beforeEach, afterEach} from 'node:test';
-import {AndroidUiautomator2Driver} from '../../lib/driver.js';
-import sinon from 'sinon';
 import * as path from 'node:path';
+import {describe, it, before, beforeEach, afterEach} from 'node:test';
+
 import {ADB} from 'appium-adb';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+
+import {AndroidUiautomator2Driver} from '../../lib/driver.js';
 
 use(chaiAsPromised);
 
@@ -126,9 +128,7 @@ describe('driver.js', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       defaultStub(driver);
       const app = path.resolve('asdfasdf');
-      const checkAppPresentStub = sandbox
-        .stub(driver, 'checkAppPresent')
-        .returns(Promise.resolve());
+      const checkAppPresentStub = sandbox.stub(driver, 'checkAppPresent').returns(Promise.resolve());
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
       sandbox.mock(driver.helpers).expects('configureApp').returns(app);
 
@@ -190,11 +190,7 @@ describe('driver.js', function () {
           const adb = defaultStub(driver);
           sandbox.mock(driver).expects('checkAppPresent').once().returns(Promise.resolve());
           sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
-          sandbox
-            .mock(driver)
-            .expects('startUiAutomator2Session')
-            .once()
-            .returns(Promise.resolve());
+          sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(Promise.resolve());
         });
 
         describe('on webview mode', function () {

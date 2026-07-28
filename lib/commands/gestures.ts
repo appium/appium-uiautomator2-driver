@@ -1,8 +1,9 @@
+import type {Element as AppiumElement, Position} from '@appium/types';
 import {errors} from 'appium/driver.js';
 import {util} from 'appium/support.js';
-import type {Element as AppiumElement, Position} from '@appium/types';
-import type {RelativeRect} from './types.js';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
+import type {RelativeRect} from './types.js';
 
 /**
  * Performs a simple click/tap gesture.
@@ -247,9 +248,7 @@ export async function mobileScrollBackTo(
   elementToId?: string,
 ): Promise<void> {
   if (!elementId || !elementToId) {
-    throw new errors.InvalidArgumentError(
-      `Both elementId and elementToId arguments must be provided`,
-    );
+    throw new errors.InvalidArgumentError(`Both elementId and elementToId arguments must be provided`);
   }
   await this.uiautomator2.jwproxy.command(
     `/appium/element/${util.unwrapElement(elementId)}/scroll_to/${util.unwrapElement(elementToId)}`,
@@ -290,12 +289,7 @@ function toPoint(x?: number, y?: number): Partial<Position> | undefined {
   return Number.isFinite(x) && Number.isFinite(y) ? {x, y} : undefined;
 }
 
-function toRect(
-  left?: number,
-  top?: number,
-  width?: number,
-  height?: number,
-): RelativeRect | undefined {
+function toRect(left?: number, top?: number, width?: number, height?: number): RelativeRect | undefined {
   return [left, top, width, height].some((v) => !Number.isFinite(v))
     ? undefined
     : ({left, top, width, height} as RelativeRect);

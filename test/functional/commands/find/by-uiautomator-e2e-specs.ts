@@ -1,9 +1,11 @@
 import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
-import {APIDEMOS_CAPS} from '../../desired.js';
-import {initSession, deleteSession} from '../../helpers/session.js';
+
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import type {Browser} from 'webdriverio';
+
+import {APIDEMOS_CAPS} from '../../desired.js';
+import {initSession, deleteSession} from '../../helpers/session.js';
 
 use(chaiAsPromised);
 
@@ -60,9 +62,7 @@ describe('Find - uiautomator', function () {
     expect(els).to.have.length.at.least(8);
   });
   it('should find an element with a long chain of methods', async function () {
-    const el = await driver.$(
-      'android=new UiSelector().clickable(true).className(android.widget.TextView).index(1)',
-    );
+    const el = await driver.$('android=new UiSelector().clickable(true).className(android.widget.TextView).index(1)');
     await expect(el.getText()).to.eventually.equal('Accessibility');
   });
   it('should find an element with recursive UiSelectors', async function () {
@@ -82,9 +82,7 @@ describe('Find - uiautomator', function () {
     expect(clickableEls.length).to.be.above(0);
     const notClickableEls = await driver.$$('android=new UiSelector().clickable(false)');
     expect(notClickableEls.length).to.be.above(0);
-    const both = await driver.$$(
-      'android=new UiSelector().clickable(true); new UiSelector().clickable(false);',
-    );
+    const both = await driver.$$('android=new UiSelector().clickable(true); new UiSelector().clickable(false);');
     const clickableLength = await clickableEls.length;
     const notClickableLength = await notClickableEls.length;
     const bothLength = await both.length;
@@ -100,8 +98,7 @@ describe('Find - uiautomator', function () {
     expect(clickableClickableEl).to.have.length(await clickableEls.length);
   });
   it('should find an element in the second selector if the first finds no elements (when finding multiple elements)', async function () {
-    const selector =
-      'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
+    const selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     const els = await driver.$$(`android=${selector}`);
     expect(els.length).to.be.above(0);
   });
@@ -110,8 +107,7 @@ describe('Find - uiautomator', function () {
     //  * The test above this one works and it proxies to 'POST /elements'.
     //  * This test doesn't work and the only difference is that it proxies to 'POST /element'
     //  (see find.js for reference)
-    const selector =
-      'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
+    const selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     const el = await driver.$(`android=${selector}`);
     expect(el.elementId).to.exist;
   });

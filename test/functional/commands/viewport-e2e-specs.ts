@@ -1,11 +1,13 @@
 import {describe, it, before, after, beforeEach} from 'node:test';
-import type {Browser} from 'webdriverio';
+
+import {expect, use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
+import type {Browser} from 'webdriverio';
+
 import {SCROLL_CAPS} from '../desired.js';
 import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
 

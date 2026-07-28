@@ -1,10 +1,12 @@
 import {describe, it, beforeEach, afterEach} from 'node:test';
+
 import {ADB} from 'appium-adb';
+import {expect} from 'chai';
 import sinon from 'sinon';
+
+import {log} from '../../lib/logger.js';
 import {UiAutomator2Server, INSTRUMENTATION_TARGET} from '../../lib/uiautomator2-server/core.js';
 import {SERVER_TEST_PACKAGE_ID} from '../../lib/uiautomator2-server/packages.js';
-import {log} from '../../lib/logger.js';
-import {expect} from 'chai';
 
 describe('UiAutomator2', function () {
   let uiautomator2: UiAutomator2Server;
@@ -217,70 +219,46 @@ describe('UiAutomator2', function () {
 
     it('new server and server.test are older than installed version', async function () {
       // SERVER_PACKAGE_ID
-      mockAdb
-        .expects('getApplicationInstallState')
-        .once()
-        .returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.NEWER_VERSION_INSTALLED);
 
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
       mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are newer than installed version', async function () {
       // SERVER_PACKAGE_ID
-      mockAdb
-        .expects('getApplicationInstallState')
-        .once()
-        .returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.OLDER_VERSION_INSTALLED);
 
       mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').twice();
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are the same as installed version', async function () {
       // SERVER_PACKAGE_ID
-      mockAdb
-        .expects('getApplicationInstallState')
-        .once()
-        .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
       mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(true);
 
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').never();
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('new server and server.test are not installed', async function () {
       // SERVER_PACKAGE_ID
-      mockAdb
-        .expects('getApplicationInstallState')
-        .once()
-        .returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.NOT_INSTALLED);
 
       // SERVER_TEST_PACKAGE_ID
       mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(false);
@@ -288,11 +266,7 @@ describe('UiAutomator2', function () {
       mockAdb.expects('uninstallApk').never();
       mockAdb.expects('install').twice();
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
@@ -305,31 +279,20 @@ describe('UiAutomator2', function () {
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
 
     it('a server is installed but server.test is not', async function () {
       // SERVER_PACKAGE_ID
-      mockAdb
-        .expects('getApplicationInstallState')
-        .once()
-        .returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
+      mockAdb.expects('getApplicationInstallState').once().returns(adb.APP_INSTALL_STATE.SAME_VERSION_INSTALLED);
 
       mockAdb.expects('isAppInstalled').withExactArgs(SERVER_TEST_PACKAGE_ID).once().returns(false);
 
       mockAdb.expects('uninstallApk').twice();
       mockAdb.expects('install').twice();
 
-      mockAdb
-        .expects('shell')
-        .withExactArgs(['pm', 'list', 'instrumentation'])
-        .once()
-        .returns(INSTRUMENTATION_TARGET);
+      mockAdb.expects('shell').withExactArgs(['pm', 'list', 'instrumentation']).once().returns(INSTRUMENTATION_TARGET);
       await uiautomator2.installServerApk();
     });
   });

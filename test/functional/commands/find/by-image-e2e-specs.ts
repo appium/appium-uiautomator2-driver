@@ -44,7 +44,7 @@ describe('Find - Image', {skip: true}, function () {
 
   it('should find image elements', async function () {
     const els = await driver.$$(START_IMG);
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find an image element', async function () {
     const el = await driver.$(START_IMG);

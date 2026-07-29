@@ -25,7 +25,7 @@ describe('Find - CSS', function () {
   it('should return an array with findElements', async function () {
     const els = await driver.$$('*[content-desc="Animation"]');
     assert.ok(Array.isArray(els));
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
     assert.ok(await driver.$('*[content-description="Access\'ibility"]').elementId);
@@ -43,7 +43,7 @@ describe('Find - CSS', function () {
   });
   it('should find an element with recursive UiSelectors', async function () {
     const els = await driver.$$('*[focused=true] *[clickable=true]');
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find an element by a non-fully qualified class name using CSS tag name', async function () {
     const els = await driver.$$('android.widget.TextView');

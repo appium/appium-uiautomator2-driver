@@ -21,7 +21,7 @@ describe('Find - accessibility ID', function () {
   it('should return an array of one element with findElements', async function () {
     const els = await driver.$$('~Animation');
     assert.ok(Array.isArray(els));
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
     assert.ok(await driver.$("~Access'ibility").elementId);

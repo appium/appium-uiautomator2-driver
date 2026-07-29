@@ -31,7 +31,7 @@ describe('Find - basic', function () {
   });
   it('should not find multiple elements that doesnt exist', async function () {
     const els = await driver.$$('blargimarg');
-    assert.strictEqual(els.length, 0);
+    assert.strictEqual(await els.length, 0);
   });
   it('should fail on empty locator', async function () {
     await assert.rejects(async () => {
@@ -48,7 +48,7 @@ describe('Find - basic', function () {
   });
   it('should find multiple elements by resource-id even when theres just one', async function () {
     const els = await driver.$$(`id=android:id/${singleResourceId}`);
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
 
   describe('implicit wait', function () {
@@ -59,7 +59,7 @@ describe('Find - basic', function () {
     it('should respect implicit wait with multiple elements', async function () {
       const beforeMs = Date.now();
       const els = await driver.$$('id=android:id/there_is_nothing_called_this');
-      assert.strictEqual(els.length, 0);
+      assert.strictEqual(await els.length, 0);
       const afterMs = Date.now();
       assert.ok(afterMs - beforeMs < implicitWaitTimeout * 2);
     });

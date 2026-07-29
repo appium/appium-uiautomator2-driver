@@ -30,11 +30,11 @@ describe('Find - xpath', function () {
   });
   it('should find element by attribute', async function () {
     const els = await driver.$$(`//*[@enabled='true' and @focused='true']`);
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find exactly one element via elementsByXPath', async function () {
     const els = await driver.$$(`//${atv}[@text='Accessibility']`);
-    assert.strictEqual(els.length, 1);
+    assert.strictEqual(await els.length, 1);
     assert.strictEqual(await els[0].getText(), 'Accessibility');
   });
   it('should find element by partial text', async function () {

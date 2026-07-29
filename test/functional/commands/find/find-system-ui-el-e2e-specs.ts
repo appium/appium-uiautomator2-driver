@@ -28,7 +28,7 @@ describe('Find - android ui elements', function () {
   it('should not find invisible elements via xpath when allowInvisibleElements is false', async function () {
     await driver!.updateSettings({allowInvisibleElements: false});
     const invisibleEls = await driver!.$$(INVISIBLE_ELEMENTS_XPATH);
-    assert.strictEqual(invisibleEls.length, 0);
+    assert.strictEqual(await invisibleEls.length, 0);
   });
   it('should find invisible elements via xpath when allowInvisibleElements is true', async function () {
     await driver!.updateSettings({allowInvisibleElements: true});

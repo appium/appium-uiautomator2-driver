@@ -21,6 +21,6 @@ describe('Find - ID', function () {
   it('should return an array of one element with findElements', async function () {
     const els = await driver.$$('id=android:id/text1');
     assert.ok(Array.isArray(els));
-    assert.ok(els.length > 1);
+    assert.ok((await els.length) > 1);
   });
 });

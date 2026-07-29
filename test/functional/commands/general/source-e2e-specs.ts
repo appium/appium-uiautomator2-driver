@@ -45,6 +45,6 @@ describe('apidemo - source', function () {
     const sourceWithoutCompression = await getSourceWithoutCompression();
     const sourceWithCompression = await getSourceWithCompression();
     assert.ok(sourceWithoutCompression.length > sourceWithCompression.length);
-    assert.deepStrictEqual(await getSourceWithoutCompression(), sourceWithoutCompression);
+    assert.strictEqual(await getSourceWithoutCompression(), sourceWithoutCompression);
   });
 });

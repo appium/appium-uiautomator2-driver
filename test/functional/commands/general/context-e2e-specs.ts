@@ -41,14 +41,14 @@ describe('apidemo - context', function () {
       await driver.terminateApp('io.appium.android.apis');
       await driver.activateApp('io.appium.android.apis');
       await driver.switchContext(NATIVE);
-      assert.ok((await driver.$(NATIVE_LOCATOR).elementId) != null);
+      assert.ok(await driver.$(NATIVE_LOCATOR).elementId);
     });
     it.skip('should be able to go into webview context and interact with it after resetting app', async function () {
       await driver.terminateApp('io.appium.android.apis');
       await driver.activateApp('io.appium.android.apis');
       // TODO: WEBVIEW context doesn't exist at this point
       await driver.switchContext(WEBVIEW);
-      assert.ok((await driver.$(WEBVIEW_LOCATOR).elementId) != null);
+      assert.ok(await driver.$(WEBVIEW_LOCATOR).elementId);
     });
   });
 
@@ -67,7 +67,7 @@ describe('apidemo - context', function () {
       });
       driver = await initSession(caps);
       const context = await driver.getContext();
-      assert.notDeepStrictEqual(context, 'NATIVE_APP');
+      assert.notStrictEqual(context, 'NATIVE_APP');
     });
   });
 });

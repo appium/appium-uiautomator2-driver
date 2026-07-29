@@ -282,7 +282,7 @@ describe('keyboard', function () {
 
           // expect first 11 characters (limit of the field) to be in the field
           const text = await el.getText();
-          assert.deepStrictEqual(text, '0123456789a');
+          assert.strictEqual(text, '0123456789a');
         });
       }
     });
@@ -312,7 +312,7 @@ describe('keyboard', function () {
       // save the initial ime so we can make sure it is restored
       if (adb) {
         initialIME = await adb.defaultIME();
-        assert.notDeepStrictEqual(initialIME, 'io.appium.settings/.UnicodeIME');
+        assert.notStrictEqual(initialIME, 'io.appium.settings/.UnicodeIME');
       }
 
       driver = await initSession(defaultUnicodeCaps);
@@ -323,8 +323,8 @@ describe('keyboard', function () {
       // make sure the IME has been restored
       if (adb) {
         const ime = await adb.defaultIME();
-        assert.deepStrictEqual(ime, initialIME);
-        assert.notDeepStrictEqual(ime, 'io.appium.settings/.UnicodeIME');
+        assert.strictEqual(ime, initialIME);
+        assert.notStrictEqual(ime, 'io.appium.settings/.UnicodeIME');
       }
     });
 

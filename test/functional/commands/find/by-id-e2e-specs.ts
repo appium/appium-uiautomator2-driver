@@ -16,7 +16,7 @@ describe('Find - ID', function () {
     await deleteSession();
   });
   it('should find an element by id', async function () {
-    assert.ok((await driver.$('id=android:id/text1').elementId) != null);
+    assert.ok(await driver.$('id=android:id/text1').elementId);
   });
   it('should return an array of one element with findElements', async function () {
     const els = await driver.$$('id=android:id/text1');

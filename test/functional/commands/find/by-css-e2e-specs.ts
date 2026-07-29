@@ -15,12 +15,12 @@ describe('Find - CSS', function () {
     await deleteSession();
   });
   it('should find an element by id (android resource-id)', async function () {
-    assert.ok((await driver.$('#android\\:id\\/text1').elementId) != null);
-    assert.ok((await driver.$('*[id="android:id/text1"]').elementId) != null);
-    assert.ok((await driver.$('*[resource-id="android:id/text1"]').elementId) != null);
+    assert.ok(await driver.$('#android\\:id\\/text1').elementId);
+    assert.ok(await driver.$('*[id="android:id/text1"]').elementId);
+    assert.ok(await driver.$('*[resource-id="android:id/text1"]').elementId);
   });
   it('should find an element by content description', async function () {
-    assert.ok((await driver.$('*[description="Animation"]').elementId) != null);
+    assert.ok(await driver.$('*[description="Animation"]').elementId);
   });
   it('should return an array with findElements', async function () {
     const els = await driver.$$('*[content-desc="Animation"]');
@@ -28,7 +28,7 @@ describe('Find - CSS', function () {
     assert.strictEqual(els.length, 1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    assert.ok((await driver.$('*[content-description="Access\'ibility"]').elementId) != null);
+    assert.ok(await driver.$('*[content-description="Access\'ibility"]').elementId);
   });
   it('should find an element by class name', async function () {
     const el = await driver.$('android.widget.TextView');
@@ -50,16 +50,16 @@ describe('Find - CSS', function () {
     assert.ok((await els.length) > 0);
   });
   it('should find elements using starts with attribute', async function () {
-    assert.ok((await driver.$('*[description^="Animation"]').elementId) != null);
+    assert.ok(await driver.$('*[description^="Animation"]').elementId);
   });
   it('should find elements using ends with attribute', async function () {
-    assert.ok((await driver.$('*[description$="Animation"]').elementId) != null);
+    assert.ok(await driver.$('*[description$="Animation"]').elementId);
   });
   it('should find elements using word match attribute', async function () {
-    assert.ok((await driver.$('*[description~="Animation"]').elementId) != null);
+    assert.ok(await driver.$('*[description~="Animation"]').elementId);
   });
   it('should find elements using wildcard attribute', async function () {
-    assert.ok((await driver.$('*[description*="Animation"]').elementId) != null);
+    assert.ok(await driver.$('*[description*="Animation"]').elementId);
   });
   it('should allow UiScrollable with unicode string', async function () {
     await driver.startActivity('io.appium.android.apis', '.text.Unicode');

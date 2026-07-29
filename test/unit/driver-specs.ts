@@ -34,8 +34,8 @@ describe('driver.js', function () {
   describe('constructor', function () {
     it('calls BaseDriver constructor with opts', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
-      assert.ok(driver != null);
-      assert.ok(driver.opts != null);
+      assert.ok(driver);
+      assert.ok(driver.opts);
     });
   });
 
@@ -78,7 +78,7 @@ describe('driver.js', function () {
           },
         } as any,
       );
-      assert.ok(driver.sessionId != null);
+      assert.ok(driver.sessionId);
     });
 
     it('should set the default context', async function () {

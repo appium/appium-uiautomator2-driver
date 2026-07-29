@@ -40,7 +40,7 @@ describe('Find - basic', function () {
   });
   it('should find a single element by resource-id', async function () {
     const el = await driver.$(`id=android:id/${singleResourceId}`);
-    assert.ok(el.elementId != null);
+    assert.ok(el.elementId);
   });
   it('should find multiple elements by resource-id', async function () {
     const els = await driver.$$('id=android:id/text1');

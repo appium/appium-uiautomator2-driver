@@ -35,7 +35,7 @@ describe('testViewportCommands', {skip: isCi()}, function () {
   });
 
   it('should get scrollable element', async function () {
-    assert.ok((await driver.$('//*[@scrollable="true"]').elementId) != null);
+    assert.ok(await driver.$('//*[@scrollable="true"]').elementId);
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
@@ -54,7 +54,7 @@ describe('testViewportCommands', {skip: isCi()}, function () {
 
   it('should get first element from scrollable element', async function () {
     const scrollableEl = await driver.$('//*[@scrollable="true"]');
-    assert.ok((await scrollableEl.$('/*[@firstVisible="true"]').elementId) != null);
+    assert.ok(await scrollableEl.$('/*[@firstVisible="true"]').elementId);
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
@@ -66,9 +66,9 @@ describe('testViewportCommands', {skip: isCi()}, function () {
     const viewB64 = Buffer.from(viewScreen as string, 'base64');
     const fullImgMeta = await sharp(fullB64).metadata();
     const viewImgMeta = await sharp(viewB64).metadata();
-    assert.deepStrictEqual(viewportRect.top, statBarHeight);
-    assert.deepStrictEqual(viewImgMeta.height, viewportRect.height);
-    assert.deepStrictEqual(viewImgMeta.width, fullImgMeta.width);
+    assert.strictEqual(viewportRect.top, statBarHeight);
+    assert.strictEqual(viewImgMeta.height, viewportRect.height);
+    assert.strictEqual(viewImgMeta.width, fullImgMeta.width);
     assert.ok(fullImgMeta.height > viewImgMeta.height!);
   });
 });

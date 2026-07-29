@@ -19,22 +19,22 @@ describe('apidemo - attributes', function () {
     await deleteSession();
   });
   it('should be able to find resourceId attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('resourceId'), 'android:id/text1');
+    assert.strictEqual(await animationEl.getAttribute('resourceId'), 'android:id/text1');
   });
   it('should be able to find text attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('text'), 'Animation');
+    assert.strictEqual(await animationEl.getAttribute('text'), 'Animation');
   });
   it('should be able to find name attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('name'), 'Animation');
+    assert.strictEqual(await animationEl.getAttribute('name'), 'Animation');
   });
   it('should be able to find content description attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('contentDescription'), 'Animation');
+    assert.strictEqual(await animationEl.getAttribute('contentDescription'), 'Animation');
   });
   it('should be able to find displayed attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('displayed'), 'true');
+    assert.strictEqual(await animationEl.getAttribute('displayed'), 'true');
   });
   it('should be able to find enabled attribute', async function () {
-    assert.deepStrictEqual(await animationEl.getAttribute('enabled'), 'true');
+    assert.strictEqual(await animationEl.getAttribute('enabled'), 'true');
   });
   it('should be able to find displayed attribute through normal func', async function () {
     const displayed = await animationEl.isDisplayed();

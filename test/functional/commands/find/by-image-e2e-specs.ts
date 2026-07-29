@@ -60,7 +60,7 @@ describe('Find - Image', {skip: true}, function () {
     const {imageMatchThreshold} = await driver.getSettings();
     await driver.updateSettings({imageMatchThreshold: 0});
     try {
-      assert.ok((await driver.$(SQUARES_IMG).elementId) != null);
+      assert.ok(await driver.$(SQUARES_IMG).elementId);
     } finally {
       await driver.updateSettings({imageMatchThreshold});
     }

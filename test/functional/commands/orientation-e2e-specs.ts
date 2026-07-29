@@ -23,7 +23,7 @@ describe('apidemo - orientation -', function () {
           'appium:orientation': 'PORTRAIT',
         }),
       );
-      assert.deepStrictEqual(await driver.getOrientation(), 'PORTRAIT');
+      assert.strictEqual(await driver.getOrientation(), 'PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
       driver = await initSession(
@@ -32,7 +32,7 @@ describe('apidemo - orientation -', function () {
           'appium:orientation': 'LANDSCAPE',
         }),
       );
-      assert.deepStrictEqual(await driver.getOrientation(), 'LANDSCAPE');
+      assert.strictEqual(await driver.getOrientation(), 'LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
       driver = await initSession(
@@ -40,7 +40,7 @@ describe('apidemo - orientation -', function () {
           'appium:appActivity': '.view.TextFields',
         }),
       );
-      assert.deepStrictEqual(await driver.getOrientation(), 'PORTRAIT');
+      assert.strictEqual(await driver.getOrientation(), 'PORTRAIT');
     });
   });
   describe('setting -', function () {

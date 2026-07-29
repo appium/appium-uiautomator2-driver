@@ -48,7 +48,7 @@ describe('Find - uiautomator', function () {
   });
   it('should find an element with a string argument', async function () {
     const el = await driver.$('android=new UiSelector().description("Animation")');
-    assert.ok(el.elementId != null);
+    assert.ok(el.elementId);
   });
   it('should find an element with an overloaded method argument', async function () {
     const els = await driver.$$('android=new UiSelector().className("android.widget.TextView")');
@@ -106,13 +106,13 @@ describe('Find - uiautomator', function () {
     //  (see find.js for reference)
     const selector = 'new UiSelector().className("not.a.class"); new UiSelector().className("android.widget.TextView")';
     const el = await driver.$(`android=${selector}`);
-    assert.ok(el.elementId != null);
+    assert.ok(el.elementId);
   });
   it('should allow selectors using fromParent contruct', async function () {
     const selector =
       'new UiSelector().className("android.widget.ListView").fromParent(new UiSelector().resourceId("android:id/text1"))';
     const el = await driver.$(`android=${selector}`);
-    assert.ok(el.elementId != null);
+    assert.ok(el.elementId);
   });
   it('should scroll to, and return elements using UiScrollable', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.List1');
@@ -126,7 +126,7 @@ describe('Find - uiautomator', function () {
     const selector =
       'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     const el = await driver.$(`android=${selector}`);
-    assert.ok(el.elementId != null);
+    assert.ok(el.elementId);
   });
   it('should allow UiScrollable scrollIntoView', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.List1');

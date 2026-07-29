@@ -55,7 +55,7 @@ describe('Find - xpath', function () {
     assert.ok((await els.length) > 2);
   });
   it('should find the first element when searching for all elements', async function () {
-    assert.ok((await driver.$(`//*`).elementId) != null);
+    assert.ok(await driver.$(`//*`).elementId);
   });
   it('should find less elements with compression turned on', async function () {
     await driver.updateSettings({ignoreUnimportantViews: false});

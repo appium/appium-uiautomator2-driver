@@ -1,16 +1,13 @@
+import assert from 'node:assert/strict';
 import {describe, it, beforeEach, afterEach} from 'node:test';
 
 import {ADB} from 'appium-adb';
 import {retryInterval} from 'asyncbox';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities, APIDEMOS_PACKAGE, APIDEMOS_MAIN_ACTIVITY} from '../desired.js';
 import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../helpers/session.js';
-
-use(chaiAsPromised);
 
 const APIDEMOS_SPLIT_TOUCH_ACTIVITY = '.view.SplitTouchView';
 
@@ -35,8 +32,8 @@ describe('createSession', {skip: isCi()}, function () {
 
     it('should start android session focusing on default pkg and act', async function () {
       driver = await initSession(APIDEMOS_CAPS);
-      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
-      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      assert.strictEqual(await driver.getCurrentPackage(), APIDEMOS_PACKAGE);
+      assert.strictEqual(await driver.getCurrentActivity(), APIDEMOS_MAIN_ACTIVITY);
     });
     it('should start android session focusing on custom pkg and act', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -44,8 +41,8 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
       driver = await initSession(caps);
-      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
-      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_SPLIT_TOUCH_ACTIVITY);
+      assert.strictEqual(await driver.getCurrentPackage(), APIDEMOS_PACKAGE);
+      assert.strictEqual(await driver.getCurrentActivity(), APIDEMOS_SPLIT_TOUCH_ACTIVITY);
     });
     it('should error out for not apk extension', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -53,7 +50,7 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
+      await assert.rejects(initSession(caps), /does not exist or is not accessible/);
     });
     it('should error out for invalid app path', async function () {
       const caps = amendCapabilities(APIDEMOS_CAPS, {
@@ -61,7 +58,7 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:appPackage': APIDEMOS_PACKAGE,
         'appium:appActivity': APIDEMOS_SPLIT_TOUCH_ACTIVITY,
       });
-      await expect(initSession(caps)).to.eventually.be.rejectedWith(/does not exist or is not accessible/);
+      await assert.rejects(initSession(caps), /does not exist or is not accessible/);
     });
   });
 
@@ -84,8 +81,8 @@ describe('createSession', {skip: isCi()}, function () {
         'appium:allowOfflineDevices': true,
       });
       driver = await initSession(caps, {adbPort} as any);
-      await expect(driver.getCurrentPackage()).to.eventually.equal(APIDEMOS_PACKAGE);
-      await expect(driver.getCurrentActivity()).to.eventually.equal(APIDEMOS_MAIN_ACTIVITY);
+      assert.strictEqual(await driver.getCurrentPackage(), APIDEMOS_PACKAGE);
+      assert.strictEqual(await driver.getCurrentActivity(), APIDEMOS_MAIN_ACTIVITY);
     });
   });
 });

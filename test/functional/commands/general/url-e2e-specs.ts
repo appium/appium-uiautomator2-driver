@@ -1,15 +1,12 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
 import {ADB} from 'appium-adb';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {BROWSER_CAPS} from '../../desired.js';
 import {isCi} from '../../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('setUrl', {skip: isCi()}, function () {
   let driver: Browser | undefined;
@@ -47,6 +44,6 @@ describe('setUrl', {skip: isCi()}, function () {
 
     const el = await driver!.$('<title />');
     await el.waitForExist({timeout: 5000});
-    await expect(el.getHTML()).to.eventually.include('Autify');
+    assert.ok((await el.getHTML()).includes('Autify'));
   });
 });

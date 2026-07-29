@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe.skip('wifi @skip-ci', function () {
   let driver: Browser;
@@ -24,6 +21,6 @@ describe.skip('wifi @skip-ci', function () {
     // TODO: This is returning Permission Denial: not allowed to send broadcast android.intent.action.AIRPLANE_MODE from pid=25928, uid=2000; also isWifiOn is not a method
     const WIFI = 2;
     await driver.setNetworkConnection({type: WIFI} as any);
-    await expect((driver as any).isWifiOn()).to.eventually.equal(true);
+    assert.strictEqual(await (driver as any).isWifiOn(), true);
   });
 });

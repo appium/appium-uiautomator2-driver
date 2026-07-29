@@ -1,15 +1,12 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
 import {util} from 'appium/support.js';
 import {retryInterval} from 'asyncbox';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 const textFieldsActivity = '.view.TextFields';
 
@@ -26,7 +23,7 @@ describe('apidemo - element', function () {
       const elsPromise = driver.$$('android.widget.EditText');
       const elsArray = await elsPromise;
       const length = await elsArray.length;
-      expect(length).to.be.at.least(1);
+      assert.ok(length >= 1);
       return elsArray[length - 1];
     });
     if (!elResult) {
@@ -41,7 +38,7 @@ describe('apidemo - element', function () {
   describe('setValue', function () {
     it('should set the text on the element', async function () {
       await el.setValue('original value');
-      await expect(el.getText()).to.eventually.equal('original value');
+      assert.strictEqual(await el.getText(), 'original value');
     });
   });
 
@@ -49,7 +46,7 @@ describe('apidemo - element', function () {
     it('should active element be equal to clicked element', async function () {
       await el.click();
       const activeElement = await driver.getActiveElement();
-      expect(util.unwrapElement(activeElement as any)).to.equal(el.elementId);
+      assert.strictEqual(util.unwrapElement(activeElement as any), el.elementId);
     });
   });
 });

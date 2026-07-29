@@ -1,7 +1,7 @@
+import assert from 'node:assert/strict';
 import {describe, it, beforeEach, afterEach} from 'node:test';
 
 import {ADB} from 'appium-adb';
-import {expect} from 'chai';
 import sinon from 'sinon';
 
 import {log} from '../../lib/logger.js';
@@ -34,7 +34,7 @@ describe('UiAutomator2', function () {
       });
     });
     (it('with newer servers are installed', function () {
-      expect(
+      assert.strictEqual(
         // @ts-expect-error - private method
         uiautomator2.shouldUninstallServerPackages([
           {
@@ -46,11 +46,12 @@ describe('UiAutomator2', function () {
             ...serverTestApk,
           },
         ]),
-      ).to.be.true;
+        true,
+      );
     }),
       it('with newer server is installed but the other could be old one', function () {
         // Then, enforce to uninstall all apks
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
@@ -62,10 +63,11 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.true;
+          true,
+        );
       }),
       it('with newer server is installed', function () {
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
@@ -77,11 +79,12 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.false;
+          false,
+        );
       }),
       it('with older servers are installed', function () {
         // then, installing newer serves are sufficient.
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
@@ -93,10 +96,11 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.false;
+          false,
+        );
       }),
       it('with no server are installed', function () {
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldUninstallServerPackages([
             {
@@ -108,7 +112,8 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.false;
+          false,
+        );
       }));
   });
 
@@ -120,7 +125,7 @@ describe('UiAutomator2', function () {
       });
     });
     (it('with newer servers are installed', function () {
-      expect(
+      assert.strictEqual(
         // @ts-expect-error - private method
         uiautomator2.shouldInstallServerPackages([
           {
@@ -133,11 +138,12 @@ describe('UiAutomator2', function () {
           },
           // since installation may fail
         ]),
-      ).to.be.false;
+        false,
+      );
     }),
       it('with newer server is installed but the other could be old one', function () {
         // Then, enforce to uninstall all apks
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
@@ -149,10 +155,11 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.true;
+          true,
+        );
       }),
       it('with newer server is installed', function () {
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
@@ -164,11 +171,12 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.false;
+          false,
+        );
       }),
       it('with older servers are installed', function () {
         // then, installing newer serves are sufficient.
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
@@ -180,10 +188,11 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.true;
+          true,
+        );
       }),
       it('with no server are installed', function () {
-        expect(
+        assert.strictEqual(
           // @ts-expect-error - private method
           uiautomator2.shouldInstallServerPackages([
             {
@@ -195,7 +204,8 @@ describe('UiAutomator2', function () {
               ...serverTestApk,
             },
           ]),
-        ).to.be.true;
+          true,
+        );
       }));
   });
 

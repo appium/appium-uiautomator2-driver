@@ -1,15 +1,12 @@
+import assert from 'node:assert/strict';
 import stream from 'node:stream';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import unzipper from 'unzipper';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../desired.js';
 import {initSession, deleteSession} from '../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('file movement', function () {
   let driver: Browser;
@@ -35,7 +32,7 @@ describe('file movement', function () {
     // get the file and its contents, to check
     const remoteData64 = await driver.pullFile(remotePath);
     const remoteData = Buffer.from(remoteData64, 'base64').toString();
-    expect(remoteData).to.equal(stringData);
+    assert.strictEqual(remoteData, stringData);
   });
 
   it('should pull a folder', async function () {
@@ -71,6 +68,6 @@ describe('file movement', function () {
       zipStream.push(null);
     });
 
-    expect(await zipPromise).to.equal(2);
+    assert.strictEqual(await zipPromise, 2);
   });
 });

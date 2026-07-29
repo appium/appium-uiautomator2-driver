@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
 import {initSession, deleteSession} from '../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('strings', function () {
   let driver: Browser;
@@ -22,12 +19,12 @@ describe('strings', function () {
 
     it('should return app strings', async function () {
       const strings = await driver.getStrings('en');
-      expect(strings.hello_world).to.equal('Hello, World!');
+      assert.strictEqual(strings.hello_world, 'Hello, World!');
     });
 
     it('should return app strings for different language', async function () {
       const strings = await driver.getStrings('fr');
-      expect(strings.hello_world).to.equal('Bonjour, Monde!');
+      assert.strictEqual(strings.hello_world, 'Bonjour, Monde!');
     });
   });
 
@@ -45,7 +42,7 @@ describe('strings', function () {
 
     it('should return app strings with default locale/language', async function () {
       const strings = await driver.getStrings();
-      expect(strings.hello_world).to.equal('Hello, World!');
+      assert.strictEqual(strings.hello_world, 'Hello, World!');
     });
   });
 });

@@ -1,15 +1,12 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after, beforeEach} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sharp from 'sharp';
 import type {Browser} from 'webdriverio';
 
 import {SCROLL_CAPS} from '../desired.js';
 import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession, attemptToDismissAlert} from '../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('testViewportCommands', {skip: isCi()}, function () {
   let driver: Browser;
@@ -32,32 +29,32 @@ describe('testViewportCommands', {skip: isCi()}, function () {
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
     const {viewportRect, statBarHeight, pixelRatio} = (await driver.getSession()) as any;
 
-    expect(pixelRatio).not.to.be.empty;
-    expect(statBarHeight).to.be.greaterThan(0);
-    expect(viewportRect).to.have.keys(['left', 'top', 'width', 'height']);
+    assert.ok(pixelRatio.length > 0);
+    assert.ok(statBarHeight > 0);
+    assert.deepStrictEqual(Object.keys(viewportRect).sort(), ['left', 'top', 'width', 'height'].sort());
   });
 
   it('should get scrollable element', async function () {
-    await expect(driver.$('//*[@scrollable="true"]').elementId).to.eventually.exist;
+    assert.ok((await driver.$('//*[@scrollable="true"]').elementId) != null);
   });
 
   it('should get content size from scrollable element found as uiobject', async function () {
     const scrollableEl = await driver.$('//*[@scrollable="true"]');
     const contentSize = await scrollableEl.getAttribute('contentSize');
-    expect(contentSize).to.exist;
-    expect(JSON.parse(contentSize as string).scrollableOffset).to.exist;
+    assert.ok(contentSize != null);
+    assert.ok(JSON.parse(contentSize as string).scrollableOffset != null);
   });
 
   it('should get content size from scrollable element found as uiobject2', async function () {
     const scrollableEl = await driver.$('//android.widget.ScrollView');
     const contentSize = await scrollableEl.getAttribute('contentSize');
-    expect(contentSize).to.exist;
-    expect(JSON.parse(contentSize as string).scrollableOffset).to.exist;
+    assert.ok(contentSize != null);
+    assert.ok(JSON.parse(contentSize as string).scrollableOffset != null);
   });
 
   it('should get first element from scrollable element', async function () {
     const scrollableEl = await driver.$('//*[@scrollable="true"]');
-    await expect(scrollableEl.$('/*[@firstVisible="true"]').elementId).to.eventually.exist;
+    assert.ok((await scrollableEl.$('/*[@firstVisible="true"]').elementId) != null);
   });
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
@@ -69,9 +66,9 @@ describe('testViewportCommands', {skip: isCi()}, function () {
     const viewB64 = Buffer.from(viewScreen as string, 'base64');
     const fullImgMeta = await sharp(fullB64).metadata();
     const viewImgMeta = await sharp(viewB64).metadata();
-    expect(viewportRect.top).to.eql(statBarHeight);
-    expect(viewImgMeta.height).to.eql(viewportRect.height);
-    expect(viewImgMeta.width).to.eql(fullImgMeta.width);
-    expect(fullImgMeta.height).to.be.above(viewImgMeta.height!);
+    assert.deepStrictEqual(viewportRect.top, statBarHeight);
+    assert.deepStrictEqual(viewImgMeta.height, viewportRect.height);
+    assert.deepStrictEqual(viewImgMeta.width, fullImgMeta.width);
+    assert.ok(fullImgMeta.height > viewImgMeta.height!);
   });
 });

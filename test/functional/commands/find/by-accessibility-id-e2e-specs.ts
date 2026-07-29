@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('Find - accessibility ID', function () {
   let driver: Browser;
@@ -19,14 +16,14 @@ describe('Find - accessibility ID', function () {
     await deleteSession();
   });
   it('should find an element by name', async function () {
-    await expect(driver.$('~Animation').elementId).to.eventually.exist;
+    assert.ok((await driver.$('~Animation').elementId) != null);
   });
   it('should return an array of one element with findElements', async function () {
     const els = await driver.$$('~Animation');
-    expect(els).to.be.an.instanceof(Array);
-    expect(els).to.have.length(1);
+    assert.ok(Array.isArray(els));
+    assert.strictEqual(els.length, 1);
   });
   it('should find an element with a content-desc property containing an apostrophe', async function () {
-    await expect(driver.$("~Access'ibility").elementId).to.eventually.exist;
+    assert.ok((await driver.$("~Access'ibility").elementId) != null);
   });
 });

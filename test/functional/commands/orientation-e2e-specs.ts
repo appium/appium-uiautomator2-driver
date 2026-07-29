@@ -1,15 +1,12 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after, afterEach} from 'node:test';
 
 import {waitForCondition} from 'asyncbox';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../desired.js';
 import {isCi} from '../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('apidemo - orientation -', function () {
   let driver: Browser;
@@ -26,7 +23,7 @@ describe('apidemo - orientation -', function () {
           'appium:orientation': 'PORTRAIT',
         }),
       );
-      await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
+      assert.deepStrictEqual(await driver.getOrientation(), 'PORTRAIT');
     });
     it('should have landscape orientation if requested', async function () {
       driver = await initSession(
@@ -35,7 +32,7 @@ describe('apidemo - orientation -', function () {
           'appium:orientation': 'LANDSCAPE',
         }),
       );
-      await expect(driver.getOrientation()).to.eventually.eql('LANDSCAPE');
+      assert.deepStrictEqual(await driver.getOrientation(), 'LANDSCAPE');
     });
     it('should have portrait orientation if nothing requested', async function () {
       driver = await initSession(
@@ -43,7 +40,7 @@ describe('apidemo - orientation -', function () {
           'appium:appActivity': '.view.TextFields',
         }),
       );
-      await expect(driver.getOrientation()).to.eventually.eql('PORTRAIT');
+      assert.deepStrictEqual(await driver.getOrientation(), 'PORTRAIT');
     });
   });
   describe('setting -', function () {

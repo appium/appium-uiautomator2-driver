@@ -1,11 +1,7 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
 import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
-
-use(chaiAsPromised);
 
 describe('css-converter.js', function () {
   describe('simple cases', function () {
@@ -54,7 +50,7 @@ describe('css-converter.js', function () {
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, async function () {
-        await expect(cssToNativeLocator(cssSelector)).to.eventually.deep.equal({
+        assert.deepStrictEqual(await cssToNativeLocator(cssSelector), {
           strategy: UI_AUTOMATOR_STRATEGY,
           selector: uiAutomatorSelector,
         });
@@ -71,7 +67,7 @@ describe('css-converter.js', function () {
     ];
     for (const cssSelector of testCases) {
       it(`should reject '${cssSelector}'`, async function () {
-        await expect(cssToNativeLocator(cssSelector)).to.be.rejected;
+        await assert.rejects(cssToNativeLocator(cssSelector));
       });
     }
   });

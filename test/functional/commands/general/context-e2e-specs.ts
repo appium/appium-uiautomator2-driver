@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after, afterEach} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 const WEBVIEW = 'WEBVIEW_io.appium.android.apis';
 const NATIVE = 'NATIVE_APP';
@@ -30,11 +27,11 @@ describe('apidemo - context', function () {
     });
     it('should find webview context', async function () {
       const contexts = await driver.getContexts();
-      expect(contexts.length).to.be.at.least(2);
+      assert.ok(contexts.length >= 2);
 
       // make sure the process was found, otherwise it comes out as "undefined"
-      expect(contexts.join('')).to.not.include('undefined');
-      expect(contexts.join('')).to.include(WEBVIEW);
+      assert.ok(!contexts.join('').includes('undefined'));
+      assert.ok(contexts.join('').includes(WEBVIEW));
     });
     it('should go into the webview', async function () {
       const contexts = await driver.getContexts();
@@ -44,14 +41,14 @@ describe('apidemo - context', function () {
       await driver.terminateApp('io.appium.android.apis');
       await driver.activateApp('io.appium.android.apis');
       await driver.switchContext(NATIVE);
-      await expect(driver.$(NATIVE_LOCATOR).elementId).to.eventually.exist;
+      assert.ok((await driver.$(NATIVE_LOCATOR).elementId) != null);
     });
     it.skip('should be able to go into webview context and interact with it after resetting app', async function () {
       await driver.terminateApp('io.appium.android.apis');
       await driver.activateApp('io.appium.android.apis');
       // TODO: WEBVIEW context doesn't exist at this point
       await driver.switchContext(WEBVIEW);
-      await expect(driver.$(WEBVIEW_LOCATOR).elementId).to.eventually.exist;
+      assert.ok((await driver.$(WEBVIEW_LOCATOR).elementId) != null);
     });
   });
 
@@ -70,7 +67,7 @@ describe('apidemo - context', function () {
       });
       driver = await initSession(caps);
       const context = await driver.getContext();
-      expect(context).to.not.eql('NATIVE_APP');
+      assert.notDeepStrictEqual(context, 'NATIVE_APP');
     });
   });
 });

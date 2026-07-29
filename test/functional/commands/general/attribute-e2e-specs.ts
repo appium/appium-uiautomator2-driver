@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('apidemo - attributes', function () {
   let driver: Browser;
@@ -22,31 +19,31 @@ describe('apidemo - attributes', function () {
     await deleteSession();
   });
   it('should be able to find resourceId attribute', async function () {
-    await expect(animationEl.getAttribute('resourceId')).to.eventually.become('android:id/text1');
+    assert.deepStrictEqual(await animationEl.getAttribute('resourceId'), 'android:id/text1');
   });
   it('should be able to find text attribute', async function () {
-    await expect(animationEl.getAttribute('text')).to.eventually.become('Animation');
+    assert.deepStrictEqual(await animationEl.getAttribute('text'), 'Animation');
   });
   it('should be able to find name attribute', async function () {
-    await expect(animationEl.getAttribute('name')).to.eventually.become('Animation');
+    assert.deepStrictEqual(await animationEl.getAttribute('name'), 'Animation');
   });
   it('should be able to find content description attribute', async function () {
-    await expect(animationEl.getAttribute('contentDescription')).to.eventually.become('Animation');
+    assert.deepStrictEqual(await animationEl.getAttribute('contentDescription'), 'Animation');
   });
   it('should be able to find displayed attribute', async function () {
-    await expect(animationEl.getAttribute('displayed')).to.eventually.become('true');
+    assert.deepStrictEqual(await animationEl.getAttribute('displayed'), 'true');
   });
   it('should be able to find enabled attribute', async function () {
-    await expect(animationEl.getAttribute('enabled')).to.eventually.become('true');
+    assert.deepStrictEqual(await animationEl.getAttribute('enabled'), 'true');
   });
   it('should be able to find displayed attribute through normal func', async function () {
     const displayed = await animationEl.isDisplayed();
-    expect(String(displayed)).to.equal('true');
+    assert.strictEqual(String(displayed), 'true');
   });
   it('should be able to get element location using getLocation', async function () {
     const location = await animationEl.getLocation();
-    expect(location.x).to.be.at.least(0);
-    expect(location.y).to.be.at.least(0);
+    assert.ok(location.x >= 0);
+    assert.ok(location.y >= 0);
   });
   it.skip('should be able to get element location using getLocationInView', async function () {
     // TODO: 'getLocationInView' requires an argument - skipping implementation
@@ -56,7 +53,7 @@ describe('apidemo - attributes', function () {
   });
   it('should be able to get element size', async function () {
     const size = await animationEl.getSize();
-    expect(size.width).to.be.at.least(0);
-    expect(size.height).to.be.at.least(0);
+    assert.ok(size.width >= 0);
+    assert.ok(size.height >= 0);
   });
 });

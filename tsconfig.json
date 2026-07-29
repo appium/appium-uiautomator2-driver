@@ -6,7 +6,7 @@
     "outDir": "build",
     "strict": true,
     "checkJs": true,
-    "types": ["node", "chai"],
+    "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "rootDir": "."

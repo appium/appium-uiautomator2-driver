@@ -1,14 +1,11 @@
+import assert from 'node:assert/strict';
 import * as path from 'node:path';
 import {describe, it, before, beforeEach, afterEach} from 'node:test';
 
 import {ADB} from 'appium-adb';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 
 import {AndroidUiautomator2Driver} from '../../lib/driver.js';
-
-use(chaiAsPromised);
 
 const sandbox = sinon.createSandbox();
 
@@ -37,8 +34,8 @@ describe('driver.js', function () {
   describe('constructor', function () {
     it('calls BaseDriver constructor with opts', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
-      expect(driver).to.exist;
-      expect(driver.opts).to.exist;
+      assert.ok(driver != null);
+      assert.ok(driver.opts != null);
     });
   });
 
@@ -47,7 +44,7 @@ describe('driver.js', function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       const adb = defaultStub(driver);
       sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
-      await expect(
+      await assert.rejects(
         driver.createSession(
           {} as any,
           {} as any,
@@ -58,7 +55,11 @@ describe('driver.js', function () {
             },
           } as any,
         ),
-      ).to.be.rejectedWith('does not exist or is not accessible');
+        (err: Error) => {
+          assert.ok(err.message.includes('does not exist or is not accessible'));
+          return true;
+        },
+      );
     });
 
     it('should set sessionId', async function () {
@@ -77,7 +78,7 @@ describe('driver.js', function () {
           },
         } as any,
       );
-      expect(driver.sessionId).to.exist;
+      assert.ok(driver.sessionId != null);
     });
 
     it('should set the default context', async function () {
@@ -96,7 +97,7 @@ describe('driver.js', function () {
           },
         } as any,
       );
-      expect(driver.curContext).to.equal('NATIVE_APP');
+      assert.strictEqual(driver.curContext, 'NATIVE_APP');
     });
   });
 
@@ -142,7 +143,10 @@ describe('driver.js', function () {
       );
 
       checkAppPresentStub.restore();
-      await expect(driver.checkAppPresent()).to.be.rejectedWith('Could not find');
+      await assert.rejects(driver.checkAppPresent(), (err: Error) => {
+        assert.ok(err.message.includes('Could not find'));
+        return true;
+      });
     });
   });
 
@@ -155,31 +159,26 @@ describe('driver.js', function () {
     });
     describe('#proxyActive', function () {
       it('should exist', function () {
-        expect(driver.proxyActive).to.be.an.instanceof(Function);
+        assert.ok(driver.proxyActive instanceof Function);
       });
       it('should return true', function () {
-        expect(driver.proxyActive('abc')).to.be.true;
-      });
-      it('should throw an error if session id is wrong', function () {
-        expect(() => {
-          driver.proxyActive('aaa');
-        }).to.throw;
+        assert.strictEqual(driver.proxyActive('abc'), true);
       });
     });
 
     describe('#getProxyAvoidList', function () {
       it('should exist', function () {
-        expect(driver.getProxyAvoidList).to.be.an.instanceof(Function);
+        assert.ok(driver.getProxyAvoidList instanceof Function);
       });
       it('should return jwpProxyAvoid array', function () {
         const avoidList = driver.getProxyAvoidList();
-        expect(avoidList).to.be.an.instanceof(Array);
-        expect(avoidList).to.eql(driver.jwpProxyAvoid);
+        assert.ok(Array.isArray(avoidList));
+        assert.deepStrictEqual(avoidList, driver.jwpProxyAvoid);
       });
       it('should throw an error if session id is wrong', function () {
-        expect(() => {
+        assert.doesNotThrow(() => {
           driver.getProxyAvoidList();
-        }).to.not.throw;
+        });
       });
       describe('nativeWebScreenshot', function () {
         let proxyAvoidList: Array<[string, RegExp]>;
@@ -212,7 +211,7 @@ describe('driver.js', function () {
               } as any,
             );
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            expect(proxyAvoidList).to.be.empty;
+            assert.strictEqual(proxyAvoidList.length, 0);
           });
           it('should not proxy screenshot if nativeWebScreenshot is on on chromedriver mode', async function () {
             await driver.createSession(
@@ -229,7 +228,7 @@ describe('driver.js', function () {
               } as any,
             );
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            expect(proxyAvoidList).to.not.be.empty;
+            assert.ok(proxyAvoidList.length > 0);
           });
         });
 
@@ -250,7 +249,7 @@ describe('driver.js', function () {
               } as any,
             );
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            expect(proxyAvoidList).to.not.be.empty;
+            assert.ok(proxyAvoidList.length > 0);
           });
 
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (off)', async function () {
@@ -269,7 +268,7 @@ describe('driver.js', function () {
               } as any,
             );
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
-            expect(proxyAvoidList).to.not.be.empty;
+            assert.ok(proxyAvoidList.length > 0);
           });
         });
       });
@@ -277,15 +276,10 @@ describe('driver.js', function () {
 
     describe('#canProxy', function () {
       it('should exist', function () {
-        expect(driver.canProxy).to.be.an.instanceof(Function);
+        assert.ok(driver.canProxy instanceof Function);
       });
       it('should return true', function () {
-        expect(driver.canProxy('abc')).to.be.true;
-      });
-      it('should throw an error if session id is wrong', function () {
-        expect(() => {
-          driver.canProxy('aaa');
-        }).to.throw;
+        assert.strictEqual(driver.canProxy('abc'), true);
       });
     });
   });
@@ -302,7 +296,7 @@ describe('driver.js', function () {
         context: 'foo',
         multiple: false,
       });
-      expect(proxySpy.firstCall.args).to.eql([`/appium/element/foo/first_visible`, 'GET', {}]);
+      assert.deepStrictEqual(proxySpy.firstCall.args, [`/appium/element/foo/first_visible`, 'GET', {}]);
     });
   });
 
@@ -318,7 +312,7 @@ describe('driver.js', function () {
         context: 'foo',
         multiple: false,
       });
-      expect(proxySpy.firstCall.args).to.eql([
+      assert.deepStrictEqual(proxySpy.firstCall.args, [
         '/element',
         'POST',
         {
@@ -347,13 +341,13 @@ describe('driver.js', function () {
       sandbox.stub(driver.adb, 'getApiLevel').resolves(28);
       const setDefaultHiddenApiPolicyStub = sandbox.stub(driver.adb, 'setDefaultHiddenApiPolicy');
       await driver.deleteSession();
-      expect(setDefaultHiddenApiPolicyStub.calledOnce).to.be.true;
+      assert.strictEqual(setDefaultHiddenApiPolicyStub.calledOnce, true);
     });
     it('should not call setDefaultHiddenApiPolicy', async function () {
       sandbox.stub(driver.adb, 'getApiLevel').resolves(27);
       const setDefaultHiddenApiPolicyStub = sandbox.stub(driver.adb, 'setDefaultHiddenApiPolicy');
       await driver.deleteSession();
-      expect(setDefaultHiddenApiPolicyStub.calledOnce).to.be.false;
+      assert.strictEqual(setDefaultHiddenApiPolicyStub.calledOnce, false);
     });
   });
 });

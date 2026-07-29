@@ -1,13 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-
-use(chaiAsPromised);
 
 describe('mobile', function () {
   let driver: Browser;
@@ -23,7 +20,7 @@ describe('mobile', function () {
       try {
         await driver.execute('mobile: shell', {command: 'echo', args: ['hello']});
       } catch (e: any) {
-        expect(e.message).to.match(/Potentially insecure feature 'adb_shell' has not been enabled/);
+        assert.match(e.message, /Potentially insecure feature 'adb_shell' has not been enabled/);
       }
     });
   });
@@ -33,7 +30,7 @@ describe('mobile', function () {
         action: 'io.appium.settings.sms.read',
         extras: [['s', 'max', '10']],
       });
-      expect(output).to.include('result=-1');
+      assert.ok((output as string).includes('result=-1'));
     });
   });
   describe('mobile:batteryInfo', function () {
@@ -42,8 +39,8 @@ describe('mobile', function () {
         level: number;
         state: number;
       };
-      expect(level).to.be.greaterThan(0.0);
-      expect(state).to.be.greaterThan(1);
+      assert.ok(level > 0.0);
+      assert.ok(state > 1);
     });
   });
 });

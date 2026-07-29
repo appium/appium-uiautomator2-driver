@@ -10,18 +10,9 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
       const result = parseSurfaceFlingerDisplays(output);
 
       assert.ok('4619827259835644672' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['4619827259835644672'].id,
-          isDefault: result['4619827259835644672'].isDefault,
-          name: result['4619827259835644672'].name,
-        },
-        {
-          id: '4619827259835644672',
-          isDefault: true,
-          name: 'EMU_display_0',
-        },
-      );
+      assert.strictEqual(result['4619827259835644672'].id, '4619827259835644672');
+      assert.strictEqual(result['4619827259835644672'].isDefault, true);
+      assert.strictEqual(result['4619827259835644672'].name, 'EMU_display_0');
     });
 
     it('should parse physical display with non-default HWC display ID', function () {
@@ -29,18 +20,9 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
       const result = parseSurfaceFlingerDisplays(output);
 
       assert.ok('4619827259835644672' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['4619827259835644672'].id,
-          isDefault: result['4619827259835644672'].isDefault,
-          name: result['4619827259835644672'].name,
-        },
-        {
-          id: '4619827259835644672',
-          isDefault: false,
-          name: 'External Display',
-        },
-      );
+      assert.strictEqual(result['4619827259835644672'].id, '4619827259835644672');
+      assert.strictEqual(result['4619827259835644672'].isDefault, false);
+      assert.strictEqual(result['4619827259835644672'].name, 'External Display');
     });
 
     it('should parse physical display with HWC display ID 2', function () {
@@ -48,18 +30,9 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
       const result = parseSurfaceFlingerDisplays(output);
 
       assert.ok('4619827259835644672' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['4619827259835644672'].id,
-          isDefault: result['4619827259835644672'].isDefault,
-          name: result['4619827259835644672'].name,
-        },
-        {
-          id: '4619827259835644672',
-          isDefault: false,
-          name: 'HDMI Display',
-        },
-      );
+      assert.strictEqual(result['4619827259835644672'].id, '4619827259835644672');
+      assert.strictEqual(result['4619827259835644672'].isDefault, false);
+      assert.strictEqual(result['4619827259835644672'].name, 'HDMI Display');
     });
   });
 
@@ -70,18 +43,9 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
       const result = parseSurfaceFlingerDisplays(output);
 
       assert.ok('11529215049243506835' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['11529215049243506835'].id,
-          isDefault: result['11529215049243506835'].isDefault,
-          name: result['11529215049243506835'].name,
-        },
-        {
-          id: '11529215049243506835',
-          isDefault: false, // Virtual displays are never default
-          name: 'Emulator 2D Display',
-        },
-      );
+      assert.strictEqual(result['11529215049243506835'].id, '11529215049243506835');
+      assert.strictEqual(result['11529215049243506835'].isDefault, false); // Virtual displays are never default
+      assert.strictEqual(result['11529215049243506835'].name, 'Emulator 2D Display');
     });
 
     it('should parse virtual display with different uniqueId format', function () {
@@ -90,18 +54,9 @@ describe('Screenshot - parseSurfaceFlingerDisplays', function () {
       const result = parseSurfaceFlingerDisplays(output);
 
       assert.ok('11529215049243506835' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['11529215049243506835'].id,
-          isDefault: result['11529215049243506835'].isDefault,
-          name: result['11529215049243506835'].name,
-        },
-        {
-          id: '11529215049243506835',
-          isDefault: false,
-          name: 'Virtual Screen',
-        },
-      );
+      assert.strictEqual(result['11529215049243506835'].id, '11529215049243506835');
+      assert.strictEqual(result['11529215049243506835'].isDefault, false);
+      assert.strictEqual(result['11529215049243506835'].name, 'Virtual Screen');
     });
   });
 
@@ -124,30 +79,12 @@ Display 11529215049243506835 (Virtual display): displayName="Emulator 2D Display
 
       assert.ok('4619827259835644672' in result);
       assert.ok('11529215049243506835' in result);
-      assert.deepStrictEqual(
-        {
-          id: result['4619827259835644672'].id,
-          isDefault: result['4619827259835644672'].isDefault,
-          name: result['4619827259835644672'].name,
-        },
-        {
-          id: '4619827259835644672',
-          isDefault: true,
-          name: 'Physical Display',
-        },
-      );
-      assert.deepStrictEqual(
-        {
-          id: result['11529215049243506835'].id,
-          isDefault: result['11529215049243506835'].isDefault,
-          name: result['11529215049243506835'].name,
-        },
-        {
-          id: '11529215049243506835',
-          isDefault: false,
-          name: 'Emulator 2D Display',
-        },
-      );
+      assert.strictEqual(result['4619827259835644672'].id, '4619827259835644672');
+      assert.strictEqual(result['4619827259835644672'].isDefault, true);
+      assert.strictEqual(result['4619827259835644672'].name, 'Physical Display');
+      assert.strictEqual(result['11529215049243506835'].id, '11529215049243506835');
+      assert.strictEqual(result['11529215049243506835'].isDefault, false);
+      assert.strictEqual(result['11529215049243506835'].name, 'Emulator 2D Display');
     });
 
     it('should handle multiple virtual displays', function () {

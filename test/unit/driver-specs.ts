@@ -55,10 +55,7 @@ describe('driver.js', function () {
             },
           } as any,
         ),
-        (err: Error) => {
-          assert.ok(err.message.includes('does not exist or is not accessible'));
-          return true;
-        },
+        /does not exist or is not accessible/,
       );
     });
 
@@ -143,10 +140,7 @@ describe('driver.js', function () {
       );
 
       checkAppPresentStub.restore();
-      await assert.rejects(driver.checkAppPresent(), (err: Error) => {
-        assert.ok(err.message.includes('Could not find'));
-        return true;
-      });
+      await assert.rejects(driver.checkAppPresent(), /Could not find/);
     });
   });
 

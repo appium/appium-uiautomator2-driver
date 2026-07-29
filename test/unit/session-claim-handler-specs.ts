@@ -239,10 +239,7 @@ describe('SessionClaimHandler', function () {
     await sessionClaimHandler.registerActiveSession(newDriver);
     const activeSubscriptionsBeforeClaim = mockIpc.subscriptions.filter((subscription) => subscription.isActive).length;
 
-    await assert.rejects(sessionClaimHandler.claimSessionUdid(newDriver), (err: Error) => {
-      assert.ok(err.message.includes('publish failed'));
-      return true;
-    });
+    await assert.rejects(sessionClaimHandler.claimSessionUdid(newDriver), /publish failed/);
 
     assert.strictEqual(
       mockIpc.subscriptions.filter((subscription) => subscription.isActive).length,

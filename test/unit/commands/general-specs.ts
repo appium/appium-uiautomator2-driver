@@ -78,10 +78,7 @@ describe('General', function () {
     });
 
     it('should reject if no apks were given', async function () {
-      await assert.rejects(driver.execute('mobile: installMultipleApks', {apks: []}), (err: Error) => {
-        assert.ok(err.message.includes('No apks are given to install'));
-        return true;
-      });
+      await assert.rejects(driver.execute('mobile: installMultipleApks', {apks: []}), /No apks are given to install/);
     });
 
     it('should reject with default args', async function () {

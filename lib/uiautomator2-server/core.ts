@@ -5,7 +5,7 @@ import {
   TEST_APK_PATH as testApkPath,
   version as serverVersion,
 } from 'appium-uiautomator2-server';
-import {JWProxy, errors} from 'appium/driver.js';
+import {WebDriverProxy, errors} from 'appium/driver.js';
 import {util, timing} from 'appium/support.js';
 import {sleep, waitForCondition} from 'asyncbox';
 import axios from 'axios';
@@ -56,7 +56,7 @@ const REQUIRED_OPTIONS: RequiredKeysOf<UiAutomator2ServerOptions>[] = [
   'disableWindowAnimation',
 ] as const;
 
-class UIA2Proxy extends JWProxy {
+class UIA2Proxy extends WebDriverProxy {
   public didInstrumentationExit: boolean = false;
 
   override async proxyCommand(

@@ -48,7 +48,8 @@ describe('mobile', function () {
       const declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as
         | string
         | null;
-      expect(declaredOrientation).to.match(/^SCREEN_ORIENTATION_.+/);
+      assert.ok(declaredOrientation);
+      assert.match(declaredOrientation, /^SCREEN_ORIENTATION_.+/);
     });
   });
 });

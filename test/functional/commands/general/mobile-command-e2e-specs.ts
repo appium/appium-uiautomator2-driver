@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
+import {waitForCondition} from 'asyncbox';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../../desired.js';
@@ -45,9 +46,18 @@ describe('mobile', function () {
   });
   describe('mobile:getDeclaredOrientation', function () {
     it('should get declared orientation', async function () {
-      const declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as
-        | string
-        | null;
+      let declaredOrientation: string | null = null;
+      await waitForCondition(
+        async () => {
+          declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as string | null;
+          return Boolean(declaredOrientation?.match(/^SCREEN_ORIENTATION_.+/));
+        },
+        {
+          waitMs: 10000,
+          intervalMs: 500,
+          error: 'Declared orientation should be available after session start',
+        },
+      );
       assert.ok(declaredOrientation);
       assert.match(declaredOrientation, /^SCREEN_ORIENTATION_.+/);
     });

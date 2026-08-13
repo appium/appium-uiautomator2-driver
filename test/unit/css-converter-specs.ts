@@ -1,9 +1,7 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
 
-use(chaiAsPromised);
+import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
 
 describe('css-converter.js', function () {
   describe('simple cases', function () {
@@ -24,10 +22,7 @@ describe('css-converter.js', function () {
       ['*[description^=blah]', 'new UiSelector().descriptionStartsWith("blah")'],
       ['*[description$=bar]', 'new UiSelector().descriptionMatches("bar$")'],
       ['*[description*=bar]', 'new UiSelector().descriptionContains("bar")'],
-      [
-        '#identifier[description=foo]',
-        'new UiSelector().resourceId("android:id/identifier").description("foo")',
-      ],
+      ['#identifier[description=foo]', 'new UiSelector().resourceId("android:id/identifier").description("foo")'],
       ['*[id=foo]', 'new UiSelector().resourceId("android:id/foo")'],
       [
         '*[description$="hello [ ^ $ . | ? * + ( ) world"]',
@@ -55,7 +50,7 @@ describe('css-converter.js', function () {
     ];
     for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
       it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, async function () {
-        await expect(cssToNativeLocator(cssSelector)).to.eventually.deep.equal({
+        assert.deepStrictEqual(await cssToNativeLocator(cssSelector), {
           strategy: UI_AUTOMATOR_STRATEGY,
           selector: uiAutomatorSelector,
         });
@@ -72,7 +67,7 @@ describe('css-converter.js', function () {
     ];
     for (const cssSelector of testCases) {
       it(`should reject '${cssSelector}'`, async function () {
-        await expect(cssToNativeLocator(cssSelector)).to.be.rejected;
+        await assert.rejects(cssToNativeLocator(cssSelector));
       });
     }
   });

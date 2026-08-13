@@ -1,4 +1,5 @@
 import type {DriverCaps, DriverOpts, W3CDriverCaps} from '@appium/types';
+
 import type {RelativeRect} from './commands/types.js';
 import type {Uiautomator2Constraints} from './constraints.js';
 
@@ -41,8 +42,7 @@ export interface Uiautomator2ServerInfo {
   desired: Uiautomator2DriverCaps;
 }
 
-export interface Uiautomator2StartSessionOpts
-  extends Uiautomator2DriverCaps, Uiautomator2ServerInfo {}
+export interface Uiautomator2StartSessionOpts extends Uiautomator2DriverCaps, Uiautomator2ServerInfo {}
 
 export interface Uiautomator2SessionCaps
   extends Uiautomator2ServerInfo, Uiautomator2SessionInfo, Partial<Uiautomator2DeviceDetails> {}

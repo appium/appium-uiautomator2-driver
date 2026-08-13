@@ -1,3 +1,49 @@
+## [8.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.3.0...v8.4.0) (2026-08-12)
+
+### Features
+
+* bump minimum appium-uiautomator2-server version and document mapTestTagToResourceId setting ([#1035](https://github.com/appium/appium-uiautomator2-driver/issues/1035)) ([d5f4d77](https://github.com/appium/appium-uiautomator2-driver/commit/d5f4d773df653a627ed3dbc9dc68f61545442520))
+
+## [8.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.2.2...v8.3.0) (2026-08-12)
+
+### Features
+
+* bump minimum appium-uiautomator2-server version and document collection attributes ([#1034](https://github.com/appium/appium-uiautomator2-driver/issues/1034)) ([ee6979a](https://github.com/appium/appium-uiautomator2-driver/commit/ee6979a840adbc3a287566a3c67550df4829a737))
+
+### Miscellaneous Chores
+
+* rename safe occurrences of JWProxy ([#1032](https://github.com/appium/appium-uiautomator2-driver/issues/1032)) ([0ea46a3](https://github.com/appium/appium-uiautomator2-driver/commit/0ea46a3b4f06992ba2417c988be5d4be5a97ad0e))
+
+## [8.2.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.2.1...v8.2.2) (2026-07-29)
+
+### Miscellaneous Chores
+
+* Drop chai ([#1031](https://github.com/appium/appium-uiautomator2-driver/issues/1031)) ([06494be](https://github.com/appium/appium-uiautomator2-driver/commit/06494be71f06070f05e75a77d23a1f0147116764))
+
+## [8.2.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.2.0...v8.2.1) (2026-07-29)
+
+### Miscellaneous Chores
+
+* Integrate oxc and release configs ([#1030](https://github.com/appium/appium-uiautomator2-driver/issues/1030)) ([31ef9f7](https://github.com/appium/appium-uiautomator2-driver/commit/31ef9f741d5be008fb607638fecc00a8ae69ded3))
+
+## [8.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.1.2...v8.2.0) (2026-07-27)
+
+### Features
+
+* Isolate MJPEG helpers in the driver ([#1028](https://github.com/appium/appium-uiautomator2-driver/issues/1028)) ([f32c5b7](https://github.com/appium/appium-uiautomator2-driver/commit/f32c5b7c5a7bff1918ed19ccdf3db56a326c30cb))
+
+## [8.1.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.1.1...v8.1.2) (2026-07-23)
+
+### Miscellaneous Chores
+
+* Bump android driver ([4c18b63](https://github.com/appium/appium-uiautomator2-driver/commit/4c18b63f195006a13ec1519743d10ff9fc1eee4a))
+
+## [8.1.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.1.0...v8.1.1) (2026-07-22)
+
+### Miscellaneous Chores
+
+* Bump appium-android-driver ([#1024](https://github.com/appium/appium-uiautomator2-driver/issues/1024)) ([8148fc0](https://github.com/appium/appium-uiautomator2-driver/commit/8148fc0333a9ae1e88c53b45c6475f3c508dc268))
+
 ## [8.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.0.1...v8.1.0) (2026-07-04)
 
 ### Features

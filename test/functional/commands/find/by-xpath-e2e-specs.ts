@@ -1,12 +1,11 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
+
 import type {Browser} from 'webdriverio';
+
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
 import {waitForElementByXpath} from '../../helpers/wait-for-ui.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised);
 
 const atv = 'android.widget.TextView';
 const f = 'android.widget.FrameLayout';
@@ -23,49 +22,47 @@ describe('Find - xpath', function () {
   it('should find element by type', async function () {
     const el = await driver.$(`//${atv}`);
     const text = await el.getText();
-    expect(text.toLowerCase()).to.equal('api demos');
+    assert.strictEqual(text.toLowerCase(), 'api demos');
   });
   it('should find element by text', async function () {
     const el = await driver.$(`//${atv}[@text='Accessibility']`);
-    await expect(el.getText()).to.eventually.equal('Accessibility');
+    assert.strictEqual(await el.getText(), 'Accessibility');
   });
   it('should find element by attribute', async function () {
     const els = await driver.$$(`//*[@enabled='true' and @focused='true']`);
-    expect(els).to.have.length(1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find exactly one element via elementsByXPath', async function () {
     const els = await driver.$$(`//${atv}[@text='Accessibility']`);
-    expect(els.length).to.equal(1);
-    await expect(els[0].getText()).to.eventually.equal('Accessibility');
+    assert.strictEqual(await els.length, 1);
+    assert.strictEqual(await els[0].getText(), 'Accessibility');
   });
   it('should find element by partial text', async function () {
     const el = await driver.$(`//${atv}[contains(@text, 'Accessibility')]`);
-    await expect(el.getText()).to.eventually.equal('Accessibility');
+    assert.strictEqual(await el.getText(), 'Accessibility');
   });
   it('should find the last element', async function () {
     const el = await driver.$(`(//${atv})[last()]`);
     const text = await el.getText();
-    expect(['OS', 'Text', 'Views', 'Preference']).to.include(text);
+    assert.ok(['OS', 'Text', 'Views', 'Preference'].includes(text));
   });
   it('should find element by index and embedded desc', async function () {
     const el = await driver.$(`//${f}//${atv}[5]`);
-    await expect(el.getText()).to.eventually.equal('Content');
+    assert.strictEqual(await el.getText(), 'Content');
   });
   it('should find all elements', async function () {
     const els = await driver.$$(`//*`);
-    expect(els.length).to.be.above(2);
+    assert.ok((await els.length) > 2);
   });
   it('should find the first element when searching for all elements', async function () {
-    await expect(driver.$(`//*`).elementId).to.eventually.exist;
+    assert.ok(await driver.$(`//*`).elementId);
   });
   it('should find less elements with compression turned on', async function () {
     await driver.updateSettings({ignoreUnimportantViews: false});
     const elementsWithoutCompression = await driver.$$(`//*`);
     await driver.updateSettings({ignoreUnimportantViews: true});
     const elementsWithCompression = await driver.$$(`//*`);
-    expect(elementsWithoutCompression.length).to.be.greaterThan(
-      await elementsWithCompression.length,
-    );
+    assert.ok((await elementsWithoutCompression.length) > (await elementsWithCompression.length));
   });
   it('should find toast message element by text', async function () {
     await driver.startActivity('io.appium.android.apis', '.view.PopupMenu1');

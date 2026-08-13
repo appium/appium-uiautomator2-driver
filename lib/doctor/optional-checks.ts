@@ -1,5 +1,5 @@
-import {doctor} from 'appium-android-driver';
 import type {IDoctorCheck} from '@appium/types';
+import {doctor} from 'appium-android-driver';
 
 export const optionalBundletoolCheck: IDoctorCheck = doctor.optionalBundletoolCheck;
 export const optionalGstreamerCheck: IDoctorCheck = doctor.optionalGstreamerCheck;

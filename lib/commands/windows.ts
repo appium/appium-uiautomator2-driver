@@ -21,9 +21,5 @@ export async function mobileListWindows(
  * Gets a list of all displays available on the device.
  */
 export async function mobileListDisplays(this: AndroidUiautomator2Driver): Promise<DisplayInfo[]> {
-  return (await this.uiautomator2.jwproxy.command(
-    '/appium/list_displays',
-    'POST',
-    {},
-  )) as DisplayInfo[];
+  return (await this.uiautomator2.jwproxy.command('/appium/list_displays', 'POST', {})) as DisplayInfo[];
 }

@@ -1,15 +1,14 @@
-import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
-import {sleep} from 'asyncbox';
-import {node} from 'appium/support.js';
+import assert from 'node:assert/strict';
 import path from 'node:path';
+import {describe, it, before, after} from 'node:test';
 import {fileURLToPath} from 'node:url';
+
+import {node} from 'appium/support.js';
+import {sleep} from 'asyncbox';
+import type {Browser} from 'webdriverio';
+
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised);
 
 const MODULE_NAME = 'appium-uiautomator2-driver';
 const FILENAME = fileURLToPath(import.meta.url);
@@ -45,34 +44,36 @@ describe('Find - Image', {skip: true}, function () {
 
   it('should find image elements', async function () {
     const els = await driver.$$(START_IMG);
-    expect(els).to.have.length(1);
+    assert.strictEqual(await els.length, 1);
   });
   it('should find an image element', async function () {
     const el = await driver.$(START_IMG);
     const value = await el.getValue();
-    expect(value).to.match(/appium-image-element/);
+    assert.match(value, /appium-image-element/);
   });
   it('should not find an image element that is not matched', async function () {
-    await expect(driver.$(SQUARES_IMG)).to.eventually.be.rejectedWith(/Error response status: 7/);
+    await assert.rejects(async () => {
+      await driver.$(SQUARES_IMG);
+    }, /Error response status: 7/);
   });
   it('should find anything with a threshold low enough', async function () {
     const {imageMatchThreshold} = await driver.getSettings();
     await driver.updateSettings({imageMatchThreshold: 0});
     try {
-      await expect(driver.$(SQUARES_IMG).elementId).to.eventually.exist;
+      assert.ok(await driver.$(SQUARES_IMG).elementId);
     } finally {
       await driver.updateSettings({imageMatchThreshold});
     }
   });
   it('should be able to get basic element properties', async function () {
     const el = await driver.$(START_IMG);
-    await expect(el.isDisplayed()).to.eventually.be.true;
+    assert.strictEqual(await el.isDisplayed(), true);
     const size = await el.getSize();
-    expect(size.width).to.be.above(0);
-    expect(size.height).to.be.above(0);
+    assert.ok(size.width > 0);
+    assert.ok(size.height > 0);
     const loc = await el.getLocation();
-    expect(loc.x).to.be.at.least(0);
-    expect(loc.y).to.be.at.least(0);
+    assert.ok(loc.x >= 0);
+    assert.ok(loc.y >= 0);
     // TODO: getLocationInView requires an argument - skipping for now
     // const locInView = await el.getLocationInView();
     // expect(locInView.x).to.eql(loc.x);
@@ -87,7 +88,7 @@ describe('Find - Image', {skip: true}, function () {
     const text = await readout.getText();
     const match = /Initial format: \d\d:(\d\d)/.exec(text);
     const secs = parseInt(match![1], 10);
-    expect(secs).to.be.above(2);
-    expect(secs).to.be.below(20);
+    assert.ok(secs > 2);
+    assert.ok(secs < 20);
   });
 });

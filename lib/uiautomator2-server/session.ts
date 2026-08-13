@@ -1,11 +1,13 @@
-import type {Orientation, StringRecord} from '@appium/types';
-import {SETTINGS_HELPER_ID} from 'io.appium.settings';
-import {util} from 'appium/support.js';
-import {retryInterval} from 'asyncbox';
 import os from 'node:os';
 import path from 'node:path';
+
+import type {Orientation, StringRecord} from '@appium/types';
+import {util} from 'appium/support.js';
+import {retryInterval} from 'asyncbox';
+import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import {checkPortStatus, findAPortNotInUse} from 'portscanner';
 import type {ExecError} from 'teen_process';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {
   EmptyObject,
@@ -23,10 +25,10 @@ const DEVICE_PORT_RANGE = [8200, 8299];
 
 // The guard is needed to avoid dynamic system port allocation conflicts for
 // parallel driver sessions
-const DEVICE_PORT_ALLOCATION_GUARD = util.getLockFileGuard(
-  path.resolve(os.tmpdir(), 'uia2_device_port_guard'),
-  {timeout: 25, tryRecovery: true},
-);
+const DEVICE_PORT_ALLOCATION_GUARD = util.getLockFileGuard(path.resolve(os.tmpdir(), 'uia2_device_port_guard'), {
+  timeout: 25,
+  tryRecovery: true,
+});
 
 // This is the port that UiAutomator2 listens to on the device. We will forward
 // one of the ports above on the system to this port on the device.
@@ -112,9 +114,7 @@ export async function releaseMjpegServerPort(this: AndroidUiautomator2Driver) {
 }
 
 /** Runs device preparation steps before the UiAutomator2 server session starts. */
-export async function performPreExecSetup(
-  this: AndroidUiautomator2Driver,
-): Promise<StringRecord | undefined> {
+export async function performPreExecSetup(this: AndroidUiautomator2Driver): Promise<StringRecord | undefined> {
   const apiLevel = await this.adb.getApiLevel();
   if (apiLevel < MIN_SUPPORTED_API_LEVEL) {
     throw this.log.errorWithException('UIAutomator2 only supports Android 8.0 (Oreo) and above');
@@ -144,9 +144,7 @@ export async function performPreExecSetup(
   if (util.hasValue(this.opts.gpsEnabled)) {
     preflightPromises.push(
       (async () => {
-        this.log.info(
-          `Trying to ${this.opts.gpsEnabled ? 'enable' : 'disable'} gps location provider`,
-        );
+        this.log.info(`Trying to ${this.opts.gpsEnabled ? 'enable' : 'disable'} gps location provider`);
         await this.adb.toggleGPSLocationProvider(Boolean(this.opts.gpsEnabled));
       })(),
     );
@@ -327,17 +325,10 @@ export async function initServer(this: AndroidUiautomator2Driver) {
   } else {
     await this.uiautomator2.installServerApk(this.opts.uiautomator2ServerInstallTimeout);
     try {
-      await this.requireAdb().addToDeviceIdleWhitelist(
-        SETTINGS_HELPER_ID,
-        SERVER_PACKAGE_ID,
-        SERVER_TEST_PACKAGE_ID,
-      );
+      await this.requireAdb().addToDeviceIdleWhitelist(SETTINGS_HELPER_ID, SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID);
     } catch (e) {
       const err = e as ExecError;
-      this.log.warn(
-        `Cannot add server packages to the Doze whitelist. Original error: ` +
-          (err.stderr || err.message),
-      );
+      this.log.warn(`Cannot add server packages to the Doze whitelist. Original error: ` + (err.stderr || err.message));
     }
   }
 

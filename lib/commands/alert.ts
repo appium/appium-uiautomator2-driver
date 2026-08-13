@@ -12,10 +12,7 @@ export async function getAlertText(this: AndroidUiautomator2Driver): Promise<str
  * Accepts the currently displayed alert.
  * @param buttonLabel - Optional label of the button to click. If not provided, the button will be detected automatically.
  */
-export async function mobileAcceptAlert(
-  this: AndroidUiautomator2Driver,
-  buttonLabel?: string,
-): Promise<void> {
+export async function mobileAcceptAlert(this: AndroidUiautomator2Driver, buttonLabel?: string): Promise<void> {
   await this.uiautomator2.jwproxy.command('/alert/accept', 'POST', {buttonLabel});
 }
 
@@ -30,10 +27,7 @@ export async function postAcceptAlert(this: AndroidUiautomator2Driver): Promise<
  * Dismisses the currently displayed alert.
  * @param buttonLabel - Optional label of the button to click. If not provided, the button will be detected automatically.
  */
-export async function mobileDismissAlert(
-  this: AndroidUiautomator2Driver,
-  buttonLabel?: string,
-): Promise<void> {
+export async function mobileDismissAlert(this: AndroidUiautomator2Driver, buttonLabel?: string): Promise<void> {
   await this.uiautomator2.jwproxy.command('/alert/dismiss', 'POST', {buttonLabel});
 }
 

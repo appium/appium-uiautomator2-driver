@@ -1,6 +1,7 @@
 import {errors} from 'appium/driver.js';
-import {APK_EXTENSION} from '../extensions.js';
+
 import type {AndroidUiautomator2Driver} from '../driver.js';
+import {APK_EXTENSION} from '../extensions.js';
 import type {InstallOptions} from './types.js';
 
 /**
@@ -17,8 +18,6 @@ export async function mobileInstallMultipleApks(
   if (!Array.isArray(apks) || apks.length === 0) {
     throw new errors.InvalidArgumentError('No apks are given to install');
   }
-  const configuredApks = await Promise.all(
-    apks.map((app) => this.helpers.configureApp(app, [APK_EXTENSION])),
-  );
+  const configuredApks = await Promise.all(apks.map((app) => this.helpers.configureApp(app, [APK_EXTENSION])));
   await this.adb.installMultipleApks(configuredApks, options);
 }

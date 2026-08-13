@@ -1,11 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, beforeEach, afterEach} from 'node:test';
-import sinon from 'sinon';
-import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
-import {ADB} from 'appium-adb';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
-use(chaiAsPromised);
+import {ADB} from 'appium-adb';
+import sinon from 'sinon';
+
+import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
 
 describe('General', function () {
   let driver: AndroidUiautomator2Driver;
@@ -24,7 +23,7 @@ describe('General', function () {
     it('should get window size', async function () {
       mockDriver.expects('getWindowSize').once().returns({width: 300, height: 400});
       const result = await driver.getWindowRect();
-      expect(result).to.eql({
+      assert.deepStrictEqual(result, {
         width: 300,
         height: 400,
         x: 0,
@@ -35,7 +34,7 @@ describe('General', function () {
 
   describe('mobile command', function () {
     it('should raise error on non-existent mobile command', async function () {
-      await expect(driver.execute('mobile: fruta', {})).to.be.rejectedWith(/Unsupported/);
+      await assert.rejects(driver.execute('mobile: fruta', {}), /Unsupported/);
     });
   });
 
@@ -74,21 +73,16 @@ describe('General', function () {
     });
 
     it('should call mobileInstallMultipleApks', async function () {
-      mockAdb
-        .expects('installMultipleApks')
-        .once()
-        .withExactArgs(['/path/to/test/apk.apk'], undefined);
+      mockAdb.expects('installMultipleApks').once().withExactArgs(['/path/to/test/apk.apk'], undefined);
       await driver.execute('mobile: installMultipleApks', {apks: ['/path/to/test/apk.apk']});
     });
 
     it('should reject if no apks were given', async function () {
-      await expect(driver.execute('mobile: installMultipleApks', {apks: []})).to.be.rejectedWith(
-        'No apks are given to install',
-      );
+      await assert.rejects(driver.execute('mobile: installMultipleApks', {apks: []}), /No apks are given to install/);
     });
 
     it('should reject with default args', async function () {
-      await expect(driver.execute('mobile: installMultipleApks')).to.be.rejected;
+      await assert.rejects(driver.execute('mobile: installMultipleApks'));
     });
   });
 });

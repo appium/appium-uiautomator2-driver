@@ -1,6 +1,10 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after, beforeEach} from 'node:test';
-import type {Browser} from 'webdriverio';
+
+import {ADB} from 'appium-adb';
 import {retryInterval, sleep} from 'asyncbox';
+import type {Browser} from 'webdriverio';
+
 import {
   APIDEMOS_CAPS,
   APIDEMOS_KEYEVENT_ACTIVITY,
@@ -9,13 +13,8 @@ import {
   amendCapabilities,
 } from '../../desired.js';
 import {isCi} from '../../helpers/ci-e2e.js';
-import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-import {ADB} from 'appium-adb';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised);
+import {dismissSystemAlertIfPresent} from '../../helpers/wait-for-ui.js';
 
 const BUTTON_CLASS = 'android.widget.Button';
 const EDITTEXT_CLASS = 'android.widget.EditText';
@@ -46,10 +45,7 @@ function deSamsungify(text: string): string {
   return text.replace('. Editing.', '');
 }
 
-async function getElement(
-  driver: Browser,
-  className: string,
-): Promise<Awaited<ReturnType<Browser['$']>>> {
+async function getElement(driver: Browser, className: string): Promise<Awaited<ReturnType<Browser['$']>>> {
   const result = await retryInterval(10, 1000, async () => {
     const el = await driver.$(className);
     if (!el) {
@@ -95,7 +91,7 @@ async function runTextEditTest(
   await retryInterval(10, 1000, async () => {
     const text = await el.getText();
     const textStr = text as string;
-    expect(deSamsungify(textStr)).to.be.equal(testText);
+    assert.strictEqual(deSamsungify(textStr), testText);
   });
 
   return el;
@@ -164,7 +160,7 @@ async function keyEventTest(
     text = await runTest();
   }
   for (const expectedText of expectedTextArray) {
-    expect(text).to.include(expectedText);
+    assert.ok(text.includes(expectedText));
   }
 }
 
@@ -236,7 +232,7 @@ describe('keyboard', function () {
           const elsPromise = driver.$$(EDITTEXT_CLASS);
           const elsArray = await elsPromise;
           const length = await elsArray.length;
-          expect(length).to.be.at.least(1);
+          assert.ok(length >= 1);
           return elsArray;
         });
         if (!elsResult) {
@@ -286,7 +282,7 @@ describe('keyboard', function () {
 
           // expect first 11 characters (limit of the field) to be in the field
           const text = await el.getText();
-          expect(text).to.eql('0123456789a');
+          assert.strictEqual(text, '0123456789a');
         });
       }
     });
@@ -316,7 +312,7 @@ describe('keyboard', function () {
       // save the initial ime so we can make sure it is restored
       if (adb) {
         initialIME = await adb.defaultIME();
-        expect(initialIME).to.not.eql('io.appium.settings/.UnicodeIME');
+        assert.notStrictEqual(initialIME, 'io.appium.settings/.UnicodeIME');
       }
 
       driver = await initSession(defaultUnicodeCaps);
@@ -327,8 +323,8 @@ describe('keyboard', function () {
       // make sure the IME has been restored
       if (adb) {
         const ime = await adb.defaultIME();
-        expect(ime).to.eql(initialIME);
-        expect(ime).to.not.eql('io.appium.settings/.UnicodeIME');
+        assert.strictEqual(ime, initialIME);
+        assert.notStrictEqual(ime, 'io.appium.settings/.UnicodeIME');
       }
     });
 

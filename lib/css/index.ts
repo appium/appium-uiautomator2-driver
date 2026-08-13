@@ -1,9 +1,10 @@
+import type {CssTransformer, NativeLocator, StrategyKey} from '@appium/css-locator-to-native';
 import {errors} from 'appium/driver.js';
+
 import {memoize} from '../utils/index.js';
 import {UI_AUTOMATOR_EMITTER_KEY, UI_AUTOMATOR_STRATEGY} from './constants.js';
 import {ATTRIBUTE_SCHEMA} from './schema.js';
 import {UiAutomatorEmitter} from './ui-automator-emitter.js';
-import type {CssTransformer, NativeLocator, StrategyKey} from '@appium/css-locator-to-native';
 
 export {UI_AUTOMATOR_STRATEGY} from './constants.js';
 
@@ -29,10 +30,7 @@ const getTransformCss = memoize(async function loadTransformCss(): Promise<CssTr
  * @param appPackage - Optional application package used to qualify resource ids
  * @returns Native locator strategy name and selector string
  */
-export async function cssToNativeLocator(
-  css: string,
-  appPackage?: string | null,
-): Promise<NativeLocator> {
+export async function cssToNativeLocator(css: string, appPackage?: string | null): Promise<NativeLocator> {
   try {
     const transformCss = await getTransformCss();
     return transformCss(css, {appPackage});

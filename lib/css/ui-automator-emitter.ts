@@ -1,10 +1,6 @@
+import type {ParsedAttribute, ParsedRule, ParsedSelector, StrategyEmitter} from '@appium/css-locator-to-native';
+
 import {escapeRegExp} from '../utils/index.js';
-import type {
-  ParsedAttribute,
-  ParsedRule,
-  ParsedSelector,
-  StrategyEmitter,
-} from '@appium/css-locator-to-native';
 
 const BOOLEAN_ATTRS = new Set([
   'checkable',
@@ -136,9 +132,7 @@ export class UiAutomatorEmitter implements StrategyEmitter<UiAutomatorEmitterCon
 }
 
 function toSnakeCase(str: string): string {
-  const tokens = str
-    .split('-')
-    .map((token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase());
+  const tokens = str.split('-').map((token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase());
   const out = tokens.join('');
   return out.charAt(0).toLowerCase() + out.slice(1);
 }

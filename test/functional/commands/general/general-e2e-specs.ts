@@ -1,12 +1,11 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
+
+import {waitForCondition} from 'asyncbox';
 import type {Browser} from 'webdriverio';
+
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-import {waitForCondition} from 'asyncbox';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised);
 
 function normalizeActivityName(pkg: string, activity: string): string {
   if (activity.startsWith('.')) {
@@ -54,8 +53,8 @@ describe('general', function () {
     it('should launch a new package and activity', async function () {
       const appPackage = await driver.getCurrentPackage();
       const appActivity = await driver.getCurrentActivity();
-      expect(appPackage).to.equal('io.appium.android.apis');
-      expect(appActivity).to.equal('.ApiDemos');
+      assert.strictEqual(appPackage, 'io.appium.android.apis');
+      assert.strictEqual(appActivity, '.ApiDemos');
 
       const startAppPackage = 'io.appium.android.apis';
       const startAppActivity = '.view.SplitTouchView';
@@ -69,13 +68,7 @@ describe('general', function () {
       const startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       const startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
 
-      await driver.startActivity(
-        startAppPackage,
-        startAppActivity,
-        undefined,
-        undefined,
-        startIntentCategory,
-      );
+      await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });

@@ -1,13 +1,12 @@
+import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
-import type {Browser} from 'webdriverio';
+
 import {DOMParser} from '@xmldom/xmldom';
+import type {Browser} from 'webdriverio';
 import xpath from 'xpath';
+
 import {APIDEMOS_CAPS} from '../../desired.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-
-use(chaiAsPromised);
 
 describe('apidemo - source', function () {
   let driver: Browser;
@@ -20,13 +19,13 @@ describe('apidemo - source', function () {
   });
 
   function assertSource(source: string): void {
-    expect(source).to.exist;
+    assert.ok(source != null);
     const dom = new DOMParser().parseFromString(source, 'text/xml');
     const nodes = xpath.select('//hierarchy', dom as unknown as Node);
     if (nodes && Array.isArray(nodes)) {
-      expect(nodes.length).to.equal(1);
+      assert.strictEqual(nodes.length, 1);
     } else {
-      expect(nodes).to.exist;
+      assert.ok(nodes != null);
     }
   }
 
@@ -45,7 +44,7 @@ describe('apidemo - source', function () {
     };
     const sourceWithoutCompression = await getSourceWithoutCompression();
     const sourceWithCompression = await getSourceWithCompression();
-    expect(sourceWithoutCompression.length).to.be.greaterThan(sourceWithCompression.length);
-    await expect(getSourceWithoutCompression()).to.eventually.eql(sourceWithoutCompression);
+    assert.ok(sourceWithoutCompression.length > sourceWithCompression.length);
+    assert.strictEqual(await getSourceWithoutCompression(), sourceWithoutCompression);
   });
 });

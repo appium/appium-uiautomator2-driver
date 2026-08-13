@@ -113,6 +113,10 @@ export const executeMethodMap = {
     command: 'mobileGetDeviceInfo',
   },
 
+  'mobile: getDeclaredOrientation': {
+    command: 'mobileGetDeclaredOrientation',
+  },
+
   'mobile: openNotifications': {
     command: 'openNotifications',
   },

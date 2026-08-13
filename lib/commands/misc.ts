@@ -61,6 +61,20 @@ export async function mobileGetDeviceInfo(this: AndroidUiautomator2Driver): Prom
 }
 
 /**
+ * Retrieves the manifest-declared screen orientation of the current foreground activity.
+ * @returns The ActivityInfo screen orientation constant name (e.g. SCREEN_ORIENTATION_PORTRAIT), or null if unknown.
+ */
+export async function mobileGetDeclaredOrientation(
+  this: AndroidUiautomator2Driver,
+): Promise<string | null> {
+  return (await this.uiautomator2.jwproxy.command(
+    '/appium/device/declared_orientation',
+    'GET',
+    {},
+  )) as string | null;
+}
+
+/**
  * Resets the accessibility cache on the device.
  */
 export async function mobileResetAccessibilityCache(

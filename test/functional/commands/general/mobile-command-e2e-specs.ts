@@ -44,4 +44,12 @@ describe('mobile', function () {
       expect(state).to.be.greaterThan(1);
     });
   });
+  describe('mobile:getDeclaredOrientation', function () {
+    it('should get declared orientation', async function () {
+      const declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as
+        | string
+        | null;
+      expect(declaredOrientation).to.match(/^SCREEN_ORIENTATION_.+/);
+    });
+  });
 });

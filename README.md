@@ -533,6 +533,14 @@ Retrieves the information about the device under test, like the device model, se
 
 The extension returns a dictionary whose entries are the device properties. Check https://github.com/appium/appium-uiautomator2-server/blob/master/app/src/main/java/io/appium/uiautomator2/handler/GetDeviceInfo.java to get the full list of returned keys and their corresponding values.
 
+### mobile: getDeclaredOrientation
+
+Retrieves the manifest-declared `screenOrientation` of the current foreground activity. This reflects the value from the activity's AndroidManifest.xml (`android:screenOrientation`), not runtime orientation overrides (for example `Activity.setRequestedOrientation()`) and not the current display orientation (`PORTRAIT`/`LANDSCAPE`) returned by the standard Get Orientation API. Available since driver version 8.2.0
+
+#### Returned Result
+
+The extension returns a string containing the [`ActivityInfo`](https://developer.android.com/reference/android/content/pm/ActivityInfo#screenOrientation) screen orientation constant name (e.g. `SCREEN_ORIENTATION_PORTRAIT`, `SCREEN_ORIENTATION_SENSOR`, `SCREEN_ORIENTATION_UNSPECIFIED`), or `null` if the current activity is unknown or its manifest orientation cannot be resolved.
+
 ### mobile: resetAccessibilityCache
 
 Resets the accessibility cache on the device. This can be useful when the accessibility

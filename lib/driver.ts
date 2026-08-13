@@ -101,6 +101,7 @@ import {
   openNotifications,
   suspendChromedriverProxy,
   mobileGetDeviceInfo,
+  mobileGetDeclaredOrientation,
   mobileResetAccessibilityCache,
 } from './commands/misc.js';
 import {mobileListWindows, mobileListDisplays} from './commands/windows.js';
@@ -301,6 +302,7 @@ class AndroidUiautomator2Driver
   openNotifications = openNotifications as AndroidDriver['openNotifications'];
   suspendChromedriverProxy = suspendChromedriverProxy as AndroidDriver['suspendChromedriverProxy'];
   mobileGetDeviceInfo = mobileGetDeviceInfo;
+  mobileGetDeclaredOrientation = mobileGetDeclaredOrientation;
   mobileResetAccessibilityCache = mobileResetAccessibilityCache;
   mobileListWindows = mobileListWindows;
   mobileListDisplays = mobileListDisplays;

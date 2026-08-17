@@ -49,8 +49,12 @@ describe('mobile', function () {
       let declaredOrientation: string | null = null;
       await waitForCondition(
         async () => {
-          declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as string | null;
-          return Boolean(declaredOrientation?.match(/^SCREEN_ORIENTATION_.+/));
+          try {
+            declaredOrientation = (await driver.execute('mobile: getDeclaredOrientation', {})) as string | null;
+            return Boolean(declaredOrientation?.match(/^SCREEN_ORIENTATION_.+/));
+          } catch {
+            return false;
+          }
         },
         {
           waitMs: 10000,

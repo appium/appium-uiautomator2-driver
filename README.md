@@ -540,7 +540,7 @@ The extension returns a dictionary whose entries are the device properties. Chec
 
 ### mobile: getDeclaredOrientation
 
-Retrieves the manifest-declared `screenOrientation` of the current foreground activity. This reflects the value from the activity's AndroidManifest.xml (`android:screenOrientation`), not runtime orientation overrides (for example `Activity.setRequestedOrientation()`) and not the current display orientation (`PORTRAIT`/`LANDSCAPE`) returned by the standard Get Orientation API. Available since driver version 8.2.0
+Retrieves the manifest-declared `screenOrientation` of the current foreground activity. This reflects the value from the activity's AndroidManifest.xml (`android:screenOrientation`), not runtime orientation overrides (for example `Activity.setRequestedOrientation()`) and not the current display orientation (`PORTRAIT`/`LANDSCAPE`) returned by the standard Get Orientation API. Available since driver version 8.2.0.
 
 #### Returned Result
 

@@ -48,12 +48,7 @@ describe('General', function () {
       } as any;
       const result = await driver.execute('mobile: getDeclaredOrientation', {});
       assert.equal(result, 'SCREEN_ORIENTATION_PORTRAIT');
-      sinon.assert.calledOnceWithExactly(
-        commandStub,
-        '/appium/device/declared_orientation',
-        'GET',
-        {},
-      );
+      sinon.assert.calledOnceWithExactly(commandStub, '/appium/device/declared_orientation', 'GET', {});
     });
   });
 

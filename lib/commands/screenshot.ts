@@ -1,8 +1,7 @@
 import type {StringRecord} from '@appium/types';
-import {imageUtil} from 'appium/support.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
-import {isEmpty} from '../utils/index.js';
+import {cropBase64Image, isEmpty} from '../utils/index.js';
 import type {Screenshot} from './types.js';
 
 // Matches SurfaceFlinger output format:
@@ -57,7 +56,7 @@ export async function mobileViewportScreenshot(this: AndroidUiautomator2Driver):
 export async function getViewportScreenshot(this: AndroidUiautomator2Driver): Promise<string> {
   const screenshot = await this.getScreenshot();
   const rect = await this.getViewPortRect();
-  return await imageUtil.cropBase64Image(screenshot, rect);
+  return await cropBase64Image(screenshot, rect);
 }
 
 /**

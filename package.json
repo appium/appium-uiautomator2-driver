@@ -61,20 +61,20 @@
   },
   "dependencies": {
     "@appium/css-locator-to-native": "^1.0.1",
-    "appium-adb": "^16.0.0",
-    "appium-android-driver": "^14.0.2",
+    "appium-adb": "^16.0.4",
+    "appium-android-driver": "^14.0.7",
     "appium-uiautomator2-server": "^10.6.0",
-    "asyncbox": "^6.0.1",
-    "axios": "^1.16.0",
+    "asyncbox": "^6.4.3",
+    "axios": "^1.18.0",
     "io.appium.settings": "^8.0.1",
     "portscanner": "^2.2.0",
-    "teen_process": "^4.0.4"
+    "teen_process": "^4.2.0"
   },
   "devDependencies": {
-    "@appium/docutils": "^2.0.0-rc.1",
+    "@appium/docutils": "^3.0.0",
     "@appium/oxc-config": "^1.1.0",
     "@appium/semantic-release-config": "^1.1.0",
-    "@appium/support": "^7.0.0-rc.1",
+    "@appium/support": "^7.2.6",
     "@appium/tsconfig": "^1.2.0",
     "@appium/types": "^1.5.0",
     "@types/node": "^26.0.0",

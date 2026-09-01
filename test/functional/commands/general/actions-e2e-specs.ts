@@ -45,10 +45,7 @@ describe('w3c actions - webview', {skip: isCi()}, function () {
     // confirm the driver actually proxied us into the Chrome web content and not native context;
     // a pure browserName session reports 'CHROMIUM', an app's embedded webview reports 'WEBVIEW_<pkg>'
     const context = String(await driver!.getContext());
-    assert.ok(
-      context === 'CHROMIUM' || context.startsWith('WEBVIEW'),
-      `Expected a web context, got "${context}"`,
-    );
+    assert.ok(context === 'CHROMIUM' || context.startsWith('WEBVIEW'), `Expected a web context, got "${context}"`);
 
     const columnA = await driver!.$('#column-a');
     const columnB = await driver!.$('#column-b');

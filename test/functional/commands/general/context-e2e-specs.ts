@@ -4,6 +4,7 @@ import {describe, it, before, after, afterEach} from 'node:test';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
+import {isCiApiLevel} from '../../helpers/ci-e2e.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
 
 const WEBVIEW = 'WEBVIEW_io.appium.android.apis';
@@ -11,7 +12,8 @@ const NATIVE = 'NATIVE_APP';
 const NATIVE_LOCATOR = "//*[@class='android.widget.TextView']";
 const WEBVIEW_LOCATOR = "//*[text()='This page is a Selenium sandbox']";
 
-describe('apidemo - context', function () {
+// WebView1 activity reliably times out to launch on the API 26 CI emulator (no hw acceleration).
+describe('apidemo - context', {skip: isCiApiLevel(26)}, function () {
   describe('general', function () {
     let driver: Browser;
     before(async function () {

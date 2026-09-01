@@ -116,6 +116,7 @@ jobs:
       name: e2e_api${{ matrix.apiLevel }}_batch${{ matrix.batch }}
       env:
         E2E_BATCH: ${{ matrix.batch }}
+        E2E_API_LEVEL: ${{ matrix.apiLevel }}
       with:
         script: bash -xe scripts/run-functional-tests.sh
         avd-name: ${{ env.ANDROID_AVD }}

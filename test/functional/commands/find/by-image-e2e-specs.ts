@@ -1,26 +1,16 @@
 import assert from 'node:assert/strict';
-import path from 'node:path';
 import {describe, it, before, after} from 'node:test';
-import {fileURLToPath} from 'node:url';
 
-import {node} from 'appium/support.js';
 import {sleep} from 'asyncbox';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS, amendCapabilities} from '../../desired.js';
+import {getAssetPath} from '../../helpers/fixtures.js';
 import {initSession, deleteSession} from '../../helpers/session.js';
 
-const MODULE_NAME = 'appium-uiautomator2-driver';
-const FILENAME = fileURLToPath(import.meta.url);
-const MODULE_ROOT = node.getModuleRootSync(MODULE_NAME, FILENAME);
-if (!MODULE_ROOT) {
-  throw new Error(`Cannot find the root folder of the ${MODULE_NAME} Node.js module`);
-}
-
-const ASSETS_DIR = path.resolve(MODULE_ROOT, 'test', 'functional', 'assets');
-const START_IMG = path.resolve(ASSETS_DIR, 'start-button.png');
-const STOP_IMG = path.resolve(ASSETS_DIR, 'stop-button.png');
-const SQUARES_IMG = path.resolve(ASSETS_DIR, 'checkered-squares.png');
+const START_IMG = getAssetPath('start-button.png');
+const STOP_IMG = getAssetPath('stop-button.png');
+const SQUARES_IMG = getAssetPath('checkered-squares.png');
 
 describe('Find - Image', {skip: true}, function () {
   let driver: Browser;

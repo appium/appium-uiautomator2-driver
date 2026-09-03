@@ -460,6 +460,20 @@ strategy | string | yes | The following strategies are supported: `accessibility
 selector | string | yes | The corresponding lookup value for the selected strategy. | 'com.mycompany:id/table'
 maxSwipes | number | no | The maximum number of swipes to perform on the target scrollable view in order to reach the destination element. In case this value is unset then it would be retrieved from the scrollable element itself (vua `getMaxSearchSwipes()` property). | 10
 
+### mobile: viewportElementRect
+
+Gets the rectangle of an element located in the current web view context, translated into native device screen coordinates. Chromedriver reports element geometry in CSS pixels relative to the web view's own viewport; this combines that rectangle with the web view's device pixel ratio and the on-screen bounding rectangle of the WebView that hosts it (which may be offset by e.g. a toolbar or action bar) to compute where the element actually is on the device screen, for example in order to interact with it via native gestures or to compare it against a device screenshot. The returned rectangle is clamped to the WebView's own on-screen bounds, so it never reports coordinates outside of the screen (e.g. for an element that's scrolled out of view or that overflows the viewport). The current context must be a web view, and the element must be visible on screen once clamped, or else this throws an `element not interactable` error.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId | string | yes | The identifier of an element found in the current web view context. | 123456-3456-3435-3453453
+
+#### Returned Result
+
+A dictionary with `x`, `y`, `width` and `height` entries, in native device screen coordinates, for example `{x: 20, y: 140, width: 60, height: 80}`.
+
 ### mobile: deepLink
 
 Start URI that may take users directly to the specific content in the app. Read [Reliably Opening Deep Links Across Platforms and Devices](https://appiumpro.com/editions/84-reliably-opening-deep-links-across-platforms-and-devices) for more details.

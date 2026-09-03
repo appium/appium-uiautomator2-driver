@@ -89,6 +89,7 @@ import {
   getWindowRect,
   getWindowSize,
   mobileViewPortRect,
+  mobileViewportElementRect,
 } from './commands/viewport.js';
 import {mobileListWindows, mobileListDisplays} from './commands/windows.js';
 import UIAUTOMATOR2_CONSTRAINTS, {type Uiautomator2Constraints} from './constraints.js';
@@ -320,6 +321,7 @@ class AndroidUiautomator2Driver
   getWindowRect = getWindowRect as AndroidDriver['getWindowRect'];
   getWindowSize = getWindowSize as AndroidDriver['getWindowSize'];
   mobileViewPortRect = mobileViewPortRect;
+  mobileViewportElementRect = mobileViewportElementRect;
 
   prepareSessionApp = prepareSessionApp;
   checkAppPresent = checkAppPresent;

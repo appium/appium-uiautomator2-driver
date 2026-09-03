@@ -83,6 +83,12 @@ export const executeMethodMap = {
   'mobile: viewportRect': {
     command: 'mobileViewPortRect',
   },
+  'mobile: viewportElementRect': {
+    command: 'mobileViewportElementRect',
+    params: {
+      required: ['elementId'],
+    },
+  },
 
   'mobile: deepLink': {
     command: 'mobileDeepLink',

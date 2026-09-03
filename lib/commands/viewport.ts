@@ -223,12 +223,20 @@ async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2
     throw new errors.NoSuchElementError('Could not find a native WebView element on screen');
   }
 
-  const rects = await Promise.all(
+  // fetched independently per element: one going stale (e.g. the view hierarchy
+  // changed between the find and this lookup) must not fail the others
+  const settled = await Promise.allSettled(
     webViewElements.map((el) => {
       const elementId = util.unwrapElement(el);
       return driver.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET') as Promise<Rect>;
     }),
   );
+  const rects = settled
+    .filter((result): result is PromiseFulfilledResult<Rect> => result.status === 'fulfilled')
+    .map((result) => result.value);
+  if (!rects.length) {
+    throw new errors.NoSuchElementError('Could not determine the bounds of any native WebView element on screen');
+  }
   return rects.reduce((largest, rect) => (rect.width * rect.height > largest.width * largest.height ? rect : largest));
 }
 

@@ -204,5 +204,41 @@ describe('Viewport', function () {
 
       await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /WebView/);
     });
+
+    it('should ignore a stale WebView element whose rect lookup fails, rather than failing the whole call', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
+      stubChromedriverPixelRatio(2);
+      stubCdpWebviewRect(null);
+      mockDriver
+        .expects('findElOrEls')
+        .once()
+        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .returns(['stale-webview', 'visible-webview']);
+      const commandStub = sinon.stub();
+      commandStub.withArgs('/element/stale-webview/rect', 'GET').rejects(new Error('stale element reference'));
+      commandStub.withArgs('/element/visible-webview/rect', 'GET').resolves({x: 0, y: 100, width: 1080, height: 1700});
+      driver.uiautomator2 = {jwproxy: {command: commandStub}} as any;
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
+    });
+
+    it('should throw if every native WebView element rect lookup fails', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
+      stubChromedriverPixelRatio(2);
+      stubCdpWebviewRect(null);
+      mockDriver
+        .expects('findElOrEls')
+        .once()
+        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .returns(['stale-webview']);
+      driver.uiautomator2 = {
+        jwproxy: {command: sinon.stub().rejects(new Error('stale element reference'))},
+      } as any;
+
+      await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /WebView/);
+    });
   });
 });

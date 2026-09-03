@@ -7,17 +7,6 @@ import {util} from 'appium/support.js';
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {RelativeRect} from './types.js';
 
-// broad match so custom/vendor WebView subclasses (hybrid frameworks, etc.) are still found
-const NATIVE_WEBVIEW_CLASS_SELECTOR = "//*[contains(@class,'WebView')]";
-
-interface CdpPageDescription {
-  screenX?: number;
-  screenY?: number;
-  width?: number;
-  height?: number;
-  visible?: boolean;
-}
-
 /**
  * Gets the status bar height in pixels.
  * @returns The status bar height in pixels.
@@ -60,101 +49,6 @@ export async function getViewPortRect(this: AndroidUiautomator2Driver): Promise<
  */
 export async function mobileViewPortRect(this: AndroidUiautomator2Driver): Promise<RelativeRect> {
   return await this.getViewPortRect();
-}
-
-/**
- * Finds the on-screen bounding rectangle of the currently active web view,
- * as self-reported by Chromium's own WebView embedding layer: each page
- * listed by the CDP `/json/list` endpoint carries a `description` field with
- * its `screenX`/`screenY`/`width`/`height` in native device screen
- * coordinates. This is authoritative and independent of whatever native
- * Android view class actually hosts the WebView, unlike scanning the view
- * hierarchy for a specific class name.
- *
- * @returns The rectangle, or `null` if this data isn't available (e.g. the
- * page didn't report a `description`, or the CDP lookup failed).
- */
-async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise<Rect | null> {
-  let mapping: WebviewsMapping[];
-  try {
-    mapping = await driver.mobileGetContexts();
-  } catch {
-    return null;
-  }
-
-  const pages = mapping.find((m) => m.webviewName === driver.curContext)?.pages;
-  for (const page of pages ?? []) {
-    const raw = (page as StringRecord).description;
-    if (typeof raw !== 'string' || !raw) {
-      continue;
-    }
-    let parsed: CdpPageDescription;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      continue;
-    }
-    const {screenX: x, screenY: y, width, height, visible} = parsed;
-    if (visible === false) {
-      continue;
-    }
-    if ([x, y, width, height].every((v) => typeof v === 'number')) {
-      return {x, y, width, height} as Rect;
-    }
-  }
-  return null;
-}
-
-/**
- * Finds the on-screen bounding rectangle of the native Android WebView that
- * hosts web content, in native device screen coordinates, via an XPath scan
- * of the native view hierarchy for a class name containing "WebView".
- *
- * Apps may keep more than one (possibly hidden or zero-sized) WebView node in
- * their view hierarchy, so the largest one by area is assumed to be the one
- * that is actually visible and hosting the active web view context. This call
- * bypasses the active web view context, since it must query the native view
- * hierarchy rather than the DOM. Used only as a fallback when the CDP-reported
- * bounds (see `getWebviewRectFromCdp`) aren't available.
- */
-async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2Driver): Promise<Rect> {
-  const webViewElements = await driver.findElOrEls('xpath', NATIVE_WEBVIEW_CLASS_SELECTOR, true);
-  if (!webViewElements.length) {
-    throw new errors.NoSuchElementError('Could not find a native WebView element on screen');
-  }
-
-  const rects = await Promise.all(
-    webViewElements.map((el) => {
-      const elementId = util.unwrapElement(el);
-      return driver.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET') as Promise<Rect>;
-    }),
-  );
-  return rects.reduce((largest, rect) => (rect.width * rect.height > largest.width * largest.height ? rect : largest));
-}
-
-/**
- * Finds the on-screen bounding rectangle of the currently active web view, in
- * native device screen coordinates. Prefers the bounds Chromium itself
- * reports over CDP; falls back to scanning the native view hierarchy only if
- * that data isn't available.
- */
-async function getNativeWebViewRect(driver: AndroidUiautomator2Driver): Promise<Rect> {
-  return (await getWebviewRectFromCdp(driver)) ?? (await getNativeWebViewRectFromViewHierarchy(driver));
-}
-
-/**
- * Reads `window.devicePixelRatio` from the current web view context, i.e. the
- * ratio between native device pixels and the CSS pixels Chromium itself is
- * using to render the page. Asking Chromium directly (rather than the OS-level
- * display density) avoids any assumption that the two necessarily agree.
- */
-async function getWebviewDevicePixelRatio(driver: AndroidUiautomator2Driver): Promise<number> {
-  const chromedriver = driver.chromedriver as Chromedriver;
-  const endpoint = chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP ? '/execute' : '/execute/sync';
-  return (await chromedriver.jwproxy.command(endpoint, 'POST', {
-    script: 'return window.devicePixelRatio;',
-    args: [],
-  })) as number;
 }
 
 /**
@@ -255,4 +149,110 @@ export async function getDisplayDensity(this: AndroidUiautomator2Driver): Promis
  */
 export async function getWindowSize(this: AndroidUiautomator2Driver): Promise<Size> {
   return (await this.uiautomator2.jwproxy.command('/window/current/size', 'GET', {})) as Size;
+}
+
+// broad match so custom/vendor WebView subclasses (hybrid frameworks, etc.) are still found
+const NATIVE_WEBVIEW_CLASS_SELECTOR = "//*[contains(@class,'WebView')]";
+
+interface CdpPageDescription {
+  screenX?: number;
+  screenY?: number;
+  width?: number;
+  height?: number;
+  visible?: boolean;
+}
+
+/**
+ * Finds the on-screen bounding rectangle of the currently active web view,
+ * as self-reported by Chromium's own WebView embedding layer: each page
+ * listed by the CDP `/json/list` endpoint carries a `description` field with
+ * its `screenX`/`screenY`/`width`/`height` in native device screen
+ * coordinates. This is authoritative and independent of whatever native
+ * Android view class actually hosts the WebView, unlike scanning the view
+ * hierarchy for a specific class name.
+ *
+ * @returns The rectangle, or `null` if this data isn't available (e.g. the
+ * page didn't report a `description`, or the CDP lookup failed).
+ */
+async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise<Rect | null> {
+  let mapping: WebviewsMapping[];
+  try {
+    mapping = await driver.mobileGetContexts();
+  } catch {
+    return null;
+  }
+
+  const pages = mapping.find((m) => m.webviewName === driver.curContext)?.pages;
+  for (const page of pages ?? []) {
+    const raw = (page as StringRecord).description;
+    if (typeof raw !== 'string' || !raw) {
+      continue;
+    }
+    let parsed: CdpPageDescription;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      continue;
+    }
+    const {screenX: x, screenY: y, width, height, visible} = parsed;
+    if (visible === false) {
+      continue;
+    }
+    if ([x, y, width, height].every((v) => typeof v === 'number')) {
+      return {x, y, width, height} as Rect;
+    }
+  }
+  return null;
+}
+
+/**
+ * Finds the on-screen bounding rectangle of the native Android WebView that
+ * hosts web content, in native device screen coordinates, via an XPath scan
+ * of the native view hierarchy for a class name containing "WebView".
+ *
+ * Apps may keep more than one (possibly hidden or zero-sized) WebView node in
+ * their view hierarchy, so the largest one by area is assumed to be the one
+ * that is actually visible and hosting the active web view context. This call
+ * bypasses the active web view context, since it must query the native view
+ * hierarchy rather than the DOM. Used only as a fallback when the CDP-reported
+ * bounds (see `getWebviewRectFromCdp`) aren't available.
+ */
+async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2Driver): Promise<Rect> {
+  const webViewElements = await driver.findElOrEls('xpath', NATIVE_WEBVIEW_CLASS_SELECTOR, true);
+  if (!webViewElements.length) {
+    throw new errors.NoSuchElementError('Could not find a native WebView element on screen');
+  }
+
+  const rects = await Promise.all(
+    webViewElements.map((el) => {
+      const elementId = util.unwrapElement(el);
+      return driver.uiautomator2.jwproxy.command(`/element/${elementId}/rect`, 'GET') as Promise<Rect>;
+    }),
+  );
+  return rects.reduce((largest, rect) => (rect.width * rect.height > largest.width * largest.height ? rect : largest));
+}
+
+/**
+ * Finds the on-screen bounding rectangle of the currently active web view, in
+ * native device screen coordinates. Prefers the bounds Chromium itself
+ * reports over CDP; falls back to scanning the native view hierarchy only if
+ * that data isn't available.
+ */
+async function getNativeWebViewRect(driver: AndroidUiautomator2Driver): Promise<Rect> {
+  return (await getWebviewRectFromCdp(driver)) ?? (await getNativeWebViewRectFromViewHierarchy(driver));
+}
+
+/**
+ * Reads `window.devicePixelRatio` from the current web view context, i.e. the
+ * ratio between native device pixels and the CSS pixels Chromium itself is
+ * using to render the page. Asking Chromium directly (rather than the OS-level
+ * display density) avoids any assumption that the two necessarily agree.
+ */
+async function getWebviewDevicePixelRatio(driver: AndroidUiautomator2Driver): Promise<number> {
+  const chromedriver = driver.chromedriver as Chromedriver;
+  const endpoint = chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP ? '/execute' : '/execute/sync';
+  return (await chromedriver.jwproxy.command(endpoint, 'POST', {
+    script: 'return window.devicePixelRatio;',
+    args: [],
+  })) as number;
 }

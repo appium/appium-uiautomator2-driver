@@ -50,11 +50,30 @@ describe('Viewport', function () {
     mockDriver.verify();
   });
 
-  function stubChromedriverPixelRatio(pixelRatio: number) {
-    const command = sinon
-      .stub()
-      .withArgs('/execute/sync', 'POST', {script: 'return window.devicePixelRatio;', args: []})
-      .resolves(pixelRatio);
+  interface GeometryOverrides {
+    pixelRatio?: number;
+    scrollX?: number;
+    scrollY?: number;
+    frameOffsetX?: number;
+    frameOffsetY?: number;
+    visualScale?: number;
+    visualOffsetLeft?: number;
+    visualOffsetTop?: number;
+  }
+
+  function stubGeometryContext(overrides: GeometryOverrides = {}) {
+    const geometry = {
+      pixelRatio: 2,
+      scrollX: 0,
+      scrollY: 0,
+      frameOffsetX: 0,
+      frameOffsetY: 0,
+      visualScale: 1,
+      visualOffsetLeft: 0,
+      visualOffsetTop: 0,
+      ...overrides,
+    };
+    const command = sinon.stub().withArgs('/execute/sync', 'POST', sinon.match.has('script')).resolves(geometry);
     driver.chromedriver = {jwproxy: {downstreamProtocol: PROTOCOLS.W3C, command}} as any;
     return command;
   }
@@ -80,30 +99,63 @@ describe('Viewport', function () {
     it('should translate the element rect using the CDP-reported WebView bounds', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
 
       const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
       assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
     });
 
-    it('should clamp the translated rect to the WebView bounds for an element scrolled past the viewport edge', async function () {
+    it('should convert document-relative getElementRect coordinates using the current scroll offset', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
-      // css rect puts the element mostly above the top of the viewport (negative y)
-      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: -15, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      // per the WebDriver spec, getElementRect is relative to the document, not the viewport;
+      // an element at document y=1200 while scrolled to y=1180 is 20px from the visible top
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 1200, width: 30, height: 40});
+      stubGeometryContext({scrollY: 1180});
       stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
 
       const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
-      // native y would be 100 + (-15 * 2) = 70, below the WebView's top edge of 100
+      assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
+    });
+
+    it('should accumulate ancestor frame offsets for an element inside an iframe', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      // rect is relative to the iframe's own document; the iframe itself sits at (50, 80)
+      // within its parent's layout viewport
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 5, y: 5, width: 20, height: 20});
+      stubGeometryContext({frameOffsetX: 50, frameOffsetY: 80});
+      stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      assert.deepStrictEqual(result, {x: 110, y: 270, width: 40, height: 40});
+    });
+
+    it('should account for the visual viewport scale and pan offset under pinch zoom', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 15, y: 110, width: 30, height: 40});
+      stubGeometryContext({visualScale: 2, visualOffsetLeft: 10, visualOffsetTop: 20});
+      stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      // layout (15, 110) -> visual ((15-10)*2, (110-20)*2) = (10, 180) -> native (0+10*2, 100+180*2)
+      assert.deepStrictEqual(result, {x: 20, y: 460, width: 120, height: 160});
+    });
+
+    it('should clamp the translated rect to the WebView bounds for an element scrolled past the viewport edge', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 1165, width: 30, height: 40});
+      stubGeometryContext({scrollY: 1180});
+      stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      // layout y = 1165 - 1180 = -15 -> native y would be 100 + (-15 * 2) = 70, above the WebView's top edge of 100
       assert.deepStrictEqual(result, {x: 20, y: 100, width: 60, height: 50});
     });
 
     it('should throw ElementNotInteractableError if the element is entirely outside the WebView bounds', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
-      // css rect puts the element entirely above the top of the viewport
-      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: -100, width: 30, height: 10});
-      stubChromedriverPixelRatio(2);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 1200, width: 30, height: 10});
+      stubGeometryContext({scrollY: 1300});
       stubCdpWebviewRect({screenX: 0, screenY: 100, width: 1080, height: 1700});
 
       await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /not visible/i);
@@ -112,7 +164,7 @@ describe('Viewport', function () {
     it('should ignore a non-visible page when reading the CDP-reported bounds', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       mockDriver
         .expects('mobileGetContexts')
         .once()
@@ -133,7 +185,7 @@ describe('Viewport', function () {
     it('should fall back to the native view hierarchy when CDP reports no usable bounds', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
         .expects('findElOrEls')
@@ -156,7 +208,7 @@ describe('Viewport', function () {
     it('should fall back to the native view hierarchy when the CDP lookup throws', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       mockDriver.expects('mobileGetContexts').once().rejects(new Error('devtools unreachable'));
       mockDriver
         .expects('findElOrEls')
@@ -176,10 +228,10 @@ describe('Viewport', function () {
       assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
     });
 
-    it('should pick the largest native WebView element when falling back with more than one present', async function () {
+    it('should ignore hidden/zero-area WebView elements and use the one remaining candidate', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
         .expects('findElOrEls')
@@ -195,10 +247,28 @@ describe('Viewport', function () {
       assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
     });
 
+    it('should throw as ambiguous if more than one visible native WebView element is found in the fallback', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
+      stubGeometryContext();
+      stubCdpWebviewRect(null);
+      mockDriver
+        .expects('findElOrEls')
+        .once()
+        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .returns(['webview1', 'webview2']);
+      const commandStub = sinon.stub();
+      commandStub.withArgs('/element/webview1/rect', 'GET').resolves({x: 0, y: 100, width: 500, height: 1700});
+      commandStub.withArgs('/element/webview2/rect', 'GET').resolves({x: 500, y: 100, width: 580, height: 1700});
+      driver.uiautomator2 = {jwproxy: {command: commandStub}} as any;
+
+      await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /multiple/i);
+    });
+
     it('should throw if no native WebView element can be found in the fallback', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver.expects('findElOrEls').once().returns([]);
 
@@ -208,7 +278,7 @@ describe('Viewport', function () {
     it('should ignore a stale WebView element whose rect lookup fails, rather than failing the whole call', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
         .expects('findElOrEls')
@@ -227,7 +297,7 @@ describe('Viewport', function () {
     it('should throw if every native WebView element rect lookup fails', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
-      stubChromedriverPixelRatio(2);
+      stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
         .expects('findElOrEls')

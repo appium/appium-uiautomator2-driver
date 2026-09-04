@@ -75,25 +75,12 @@ export function clampRectToBounds(rect: Rect, bounds: Rect): Rect {
 
 /**
  * Gets the rectangle of an element located in the current web view context,
- * translated into native device screen coordinates.
- *
- * `getElementRect` reports element geometry relative to the top-left corner
- * of its own document (per the WebDriver spec), not relative to what's
- * currently visible in the viewport, and relative to the innermost frame's
- * own document if the element is inside an iframe. This subtracts the
- * current frame's scroll offset and walks up the frame chain (accumulating
- * each ancestor frame's own on-screen offset) to recover the element's
- * position within the top-level page's layout viewport, then applies the
- * page's visual viewport scale/offset (which diverge from the layout
- * viewport under pinch zoom or an automatic input zoom) and the device pixel
- * ratio to arrive at the on-screen position within the native WebView that
- * hosts it (which may itself be offset by e.g. a toolbar or action bar).
- * Frame-chain accumulation stops at the first cross-origin ancestor frame,
- * since its geometry can't be measured from script.
- *
- * The result is clamped to the WebView's own on-screen bounds, so it never
- * reports coordinates outside of the screen (e.g. for an element that's
- * scrolled out of view or that overflows the viewport).
+ * translated into native device screen coordinates. `getElementRect` is
+ * relative to the element's own (possibly nested-frame) document and ignores
+ * scroll/zoom, so this corrects for scroll offset, ancestor frame offsets,
+ * and the visual viewport (pinch/input zoom) before applying the device
+ * pixel ratio and the hosting WebView's on-screen bounds (see
+ * `getWebviewGeometryContext`). The result is clamped to those bounds.
  *
  * @param elementId - ID of an element found in the current web view context.
  * @returns The element rectangle (x, y, width, height) in native screen coordinates.

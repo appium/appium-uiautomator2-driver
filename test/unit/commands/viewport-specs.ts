@@ -205,6 +205,49 @@ describe('Viewport', function () {
       assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
     });
 
+    it('should fall back to the native view hierarchy when the CDP-reported page is empty/zero-area', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
+      stubGeometryContext();
+      mockDriver
+        .expects('mobileGetContexts')
+        .once()
+        .returns([
+          {
+            webviewName: 'WEBVIEW_com.example.app',
+            pages: [
+              {description: JSON.stringify({screenX: 0, screenY: 0, width: 0, height: 0, visible: true})},
+              {
+                description: JSON.stringify({
+                  screenX: 0,
+                  screenY: 0,
+                  width: 100,
+                  height: 100,
+                  visible: true,
+                  empty: true,
+                }),
+              },
+            ],
+          },
+        ]);
+      mockDriver
+        .expects('findElOrEls')
+        .once()
+        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .returns(['webview1']);
+      driver.uiautomator2 = {
+        jwproxy: {
+          command: sinon
+            .stub()
+            .withArgs('/element/webview1/rect', 'GET')
+            .resolves({x: 0, y: 100, width: 1080, height: 1700}),
+        },
+      } as any;
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
+    });
+
     it('should fall back to the native view hierarchy when the CDP lookup throws', async function () {
       mockDriver.expects('isWebContext').once().returns(true);
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});

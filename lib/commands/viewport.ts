@@ -165,6 +165,7 @@ interface CdpPageDescription {
   width?: number;
   height?: number;
   visible?: boolean;
+  empty?: boolean;
 }
 
 /**
@@ -199,12 +200,19 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
     } catch {
       continue;
     }
-    const {screenX: x, screenY: y, width, height, visible} = parsed;
-    if (visible === false) {
+    const {screenX: x, screenY: y, width, height, visible, empty} = parsed;
+    if (visible === false || empty === true) {
       continue;
     }
-    if ([x, y, width, height].every((v) => typeof v === 'number')) {
-      return {x, y, width, height} as Rect;
+    if (
+      typeof x === 'number' &&
+      typeof y === 'number' &&
+      typeof width === 'number' &&
+      typeof height === 'number' &&
+      width > 0 &&
+      height > 0
+    ) {
+      return {x, y, width, height};
     }
   }
   return null;

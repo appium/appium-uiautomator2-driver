@@ -4,6 +4,7 @@ import type {
   ExternalDriver,
   InitialOpts,
   RouteMatcher,
+  SingularSessionData,
   StringRecord,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
@@ -478,6 +479,19 @@ class AndroidUiautomator2Driver
       deviceScreenSize: realDisplaySize,
       deviceScreenDensity: displayDensity,
     };
+  }
+
+  /**
+   * @deprecated Appium's base-driver deprecated `getSession`/`GET /session/:sessionId` in favor
+   * of `getAppiumSessionCapabilities`, but third-party drivers may still call this method
+   * directly. Keep it around until it is removed along with other Appium 4-related breaking
+   * changes.
+   */
+  override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
+    const sessionData = await BaseDriver.prototype.getSession.call(this);
+    this.log.debug('Getting session details from server to mix in');
+    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
+    return {...sessionData, ...uia2Data};
   }
 
   async onIpcInit(): Promise<void> {

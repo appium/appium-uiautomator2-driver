@@ -4,7 +4,6 @@ import type {
   ExternalDriver,
   InitialOpts,
   RouteMatcher,
-  SingularSessionData,
   StringRecord,
   SessionCapabilities,
 } from '@appium/types';
@@ -482,13 +481,6 @@ class AndroidUiautomator2Driver
     };
   }
 
-  override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
-    const sessionData = await BaseDriver.prototype.getSession.call(this);
-    this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
-    return {...sessionData, ...uia2Data};
-  }
-
   async onIpcInit(): Promise<void> {
     await sessionClaimHandler.registerActiveSession(this);
   }
@@ -650,9 +642,11 @@ class AndroidUiautomator2Driver
     return {...driverSettings, ...serverSettings};
   }
 
-  // needed to make the typechecker happy
   override async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
-    return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
+    const {capabilities} = await super.getAppiumSessionCapabilities();
+    this.log.debug('Getting session details from server to mix in');
+    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
+    return {capabilities: {...capabilities, ...uia2Data}} as SessionCapabilities<Uiautomator2Constraints>;
   }
 
   requireAdb(): ADB {

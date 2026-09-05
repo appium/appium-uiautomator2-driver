@@ -27,7 +27,7 @@ describe('testViewportCommands', {skip: isCi()}, function () {
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
-    const {viewportRect, statBarHeight, pixelRatio} = (await driver.getSession()) as any;
+    const {pixelRatio, statBarHeight, viewportRect} = driver.capabilities as any;
 
     assert.ok(pixelRatio.length > 0);
     assert.ok(statBarHeight > 0);
@@ -59,7 +59,7 @@ describe('testViewportCommands', {skip: isCi()}, function () {
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
     // TODO: fails on CI with a `Does the current view have 'secure' flag set?` error
-    const {viewportRect, statBarHeight} = (await driver.getSession()) as any;
+    const {viewportRect, statBarHeight} = driver.capabilities as any;
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');

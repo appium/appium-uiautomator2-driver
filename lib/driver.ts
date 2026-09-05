@@ -6,7 +6,6 @@ import type {
   RouteMatcher,
   SingularSessionData,
   StringRecord,
-  SessionCapabilities,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
@@ -217,7 +216,7 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
 ];
 
 class AndroidUiautomator2Driver
-  extends AndroidDriver
+  extends AndroidDriver<Uiautomator2Constraints>
   implements ExternalDriver<Uiautomator2Constraints, string, StringRecord>
 {
   static newMethodMap = newMethodMap;
@@ -482,6 +481,12 @@ class AndroidUiautomator2Driver
     };
   }
 
+  /**
+   * @deprecated Appium's base-driver deprecated `getSession`/`GET /session/:sessionId` in favor
+   * of `getAppiumSessionCapabilities`, but third-party drivers may still call this method
+   * directly. Keep it around until it is removed along with other Appium 4-related breaking
+   * changes.
+   */
   override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
     const sessionData = await BaseDriver.prototype.getSession.call(this);
     this.log.debug('Getting session details from server to mix in');
@@ -648,11 +653,6 @@ class AndroidUiautomator2Driver
       'GET',
     )) as Partial<Uiautomator2Settings>;
     return {...driverSettings, ...serverSettings};
-  }
-
-  // needed to make the typechecker happy
-  override async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
-    return (await super.getAppiumSessionCapabilities()) as SessionCapabilities<Uiautomator2Constraints>;
   }
 
   requireAdb(): ADB {

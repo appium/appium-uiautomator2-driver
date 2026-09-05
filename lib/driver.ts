@@ -216,7 +216,7 @@ const CHROME_NO_PROXY: RouteMatcher[] = [
 ];
 
 class AndroidUiautomator2Driver
-  extends AndroidDriver
+  extends AndroidDriver<Uiautomator2Constraints>
   implements ExternalDriver<Uiautomator2Constraints, string, StringRecord>
 {
   static newMethodMap = newMethodMap;

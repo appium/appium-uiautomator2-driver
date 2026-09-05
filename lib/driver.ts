@@ -5,7 +5,6 @@ import type {
   InitialOpts,
   RouteMatcher,
   StringRecord,
-  SessionCapabilities,
 } from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
@@ -640,13 +639,6 @@ class AndroidUiautomator2Driver
       'GET',
     )) as Partial<Uiautomator2Settings>;
     return {...driverSettings, ...serverSettings};
-  }
-
-  override async getAppiumSessionCapabilities(): Promise<SessionCapabilities<Uiautomator2Constraints>> {
-    const {capabilities} = await super.getAppiumSessionCapabilities();
-    this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
-    return {capabilities: {...capabilities, ...uia2Data}} as SessionCapabilities<Uiautomator2Constraints>;
   }
 
   requireAdb(): ADB {

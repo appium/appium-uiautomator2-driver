@@ -1,3 +1,9 @@
+## [8.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.0...v8.6.1) (2026-09-05)
+
+### Miscellaneous Chores
+
+* mark the deprecated BaseDriver.getSession ([#1045](https://github.com/appium/appium-uiautomator2-driver/issues/1045)) ([fe38ed5](https://github.com/appium/appium-uiautomator2-driver/commit/fe38ed59c944bbc5495484754e00408ec7cff8c6))
+
 ## [8.6.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.5.2...v8.6.0) (2026-09-04)
 
 ### Features

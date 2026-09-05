@@ -27,14 +27,10 @@ describe('testViewportCommands', {skip: isCi()}, function () {
   });
 
   it('should get device pixel ratio, status bar height, and viewport rect', async function () {
-    const [pixelRatio, statusBarHeight, viewportRect] = (await Promise.all([
-      driver.execute('mobile: pixelRatio'),
-      driver.execute('mobile: statusBarHeight'),
-      driver.execute('mobile: viewportRect'),
-    ])) as [string, number, Record<string, number>];
+    const {pixelRatio, statBarHeight, viewportRect} = driver.capabilities as any;
 
     assert.ok(pixelRatio.length > 0);
-    assert.ok(statusBarHeight > 0);
+    assert.ok(statBarHeight > 0);
     assert.deepStrictEqual(Object.keys(viewportRect).sort(), ['left', 'top', 'width', 'height'].sort());
   });
 
@@ -63,17 +59,14 @@ describe('testViewportCommands', {skip: isCi()}, function () {
 
   it('should get a cropped screenshot of the viewport without statusbar', async function () {
     // TODO: fails on CI with a `Does the current view have 'secure' flag set?` error
-    const [viewportRect, statusBarHeight] = (await Promise.all([
-      driver.execute('mobile: viewportRect'),
-      driver.execute('mobile: statusBarHeight'),
-    ])) as [Record<string, number>, number];
+    const {viewportRect, statBarHeight} = driver.capabilities as any;
     const fullScreen = await driver.takeScreenshot();
     const viewScreen = await driver.execute('mobile: viewportScreenshot');
     const fullB64 = Buffer.from(fullScreen, 'base64');
     const viewB64 = Buffer.from(viewScreen as string, 'base64');
     const fullImgMeta = await sharp(fullB64).metadata();
     const viewImgMeta = await sharp(viewB64).metadata();
-    assert.strictEqual(viewportRect.top, statusBarHeight);
+    assert.strictEqual(viewportRect.top, statBarHeight);
     assert.strictEqual(viewImgMeta.height, viewportRect.height);
     assert.strictEqual(viewImgMeta.width, fullImgMeta.width);
     assert.ok(fullImgMeta.height > viewImgMeta.height!);

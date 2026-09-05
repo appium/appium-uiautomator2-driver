@@ -83,12 +83,6 @@ export const executeMethodMap = {
   'mobile: viewportRect': {
     command: 'mobileViewPortRect',
   },
-  'mobile: statusBarHeight': {
-    command: 'getStatusBarHeight',
-  },
-  'mobile: pixelRatio': {
-    command: 'getDevicePixelRatio',
-  },
   'mobile: viewportElementRect': {
     command: 'mobileViewportElementRect',
     params: {

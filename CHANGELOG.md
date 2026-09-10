@@ -1,3 +1,9 @@
+## [8.6.3](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.2...v8.6.3) (2026-09-10)
+
+### Miscellaneous Chores
+
+* Tune release script ([8075656](https://github.com/appium/appium-uiautomator2-driver/commit/8075656241cddd08a7402b1c41ea9e2d959d71be))
+
 ## [8.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.1...v8.6.2) (2026-09-10)
 
 ### Miscellaneous Chores

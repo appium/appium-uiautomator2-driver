@@ -39,5 +39,5 @@ jobs:
     - uses: appium/appium-workflows/.github/actions/publish-npm-bundle@main
       if: env.PREV_VERSION != env.NEW_VERSION
       with:
-        unbundled-packages: appium-adb appium-android-driver sharp
+        unbundled-packages: sharp
 

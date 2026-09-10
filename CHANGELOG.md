@@ -1,3 +1,9 @@
+## [8.6.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.1...v8.6.2) (2026-09-10)
+
+### Miscellaneous Chores
+
+* **ci:** publish via bundled dependencies instead of npm-shrinkwrap ([#1046](https://github.com/appium/appium-uiautomator2-driver/issues/1046)) ([3a4087a](https://github.com/appium/appium-uiautomator2-driver/commit/3a4087a98f7badde6ba7adb26fce8310a0855d14))
+
 ## [8.6.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.0...v8.6.1) (2026-09-05)
 
 ### Miscellaneous Chores

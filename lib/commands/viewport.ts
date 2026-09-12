@@ -156,6 +156,44 @@ export async function getWindowSize(this: AndroidUiautomator2Driver): Promise<Si
   return (await this.uiautomator2.jwproxy.command('/window/current/size', 'GET', {})) as Size;
 }
 
+export type WebviewsMappingWithRect = WebviewsMapping & {
+  /** The webview's on-screen bounding rectangle, in native device screen coordinates, if it could be determined. */
+  rect?: Rect;
+};
+
+/**
+ * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`, so a client
+ * (e.g. Appium Inspector) doesn't need to re-detect webview bounds itself. Uses the same
+ * CDP-reported bounds as `getNativeWebViewRect` (see `parseWebviewRectFromPage`); only falls
+ * back to the native view hierarchy scan when there is exactly one webview and it reported no
+ * usable CDP bounds, since the scan cannot tell which native WebView node belongs to which
+ * webview when there is more than one candidate.
+ */
+export async function enrichWebviewsMappingWithRects(
+  driver: AndroidUiautomator2Driver,
+  mapping: WebviewsMapping[],
+): Promise<WebviewsMappingWithRect[]> {
+  let hasCdpRect = false;
+  for (const m of mapping as WebviewsMappingWithRect[]) {
+    for (const page of m.pages ?? []) {
+      const rect = parseWebviewRectFromPage(page as StringRecord);
+      if (rect) {
+        m.rect = rect;
+        hasCdpRect = true;
+        break;
+      }
+    }
+  }
+  if (!hasCdpRect && mapping.length === 1) {
+    try {
+      (mapping[0] as WebviewsMappingWithRect).rect = await getNativeWebViewRectFromViewHierarchy(driver);
+    } catch {
+      // no visible native WebView element found either; leave rect unattached
+    }
+  }
+  return mapping as WebviewsMappingWithRect[];
+}
+
 // broad match so custom/vendor WebView subclasses (hybrid frameworks, etc.) are still found
 const NATIVE_WEBVIEW_CLASS_SELECTOR = "//*[contains(@class,'WebView')]";
 
@@ -288,44 +326,6 @@ async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2
  */
 async function getNativeWebViewRect(driver: AndroidUiautomator2Driver): Promise<Rect> {
   return (await getWebviewRectFromCdp(driver)) ?? (await getNativeWebViewRectFromViewHierarchy(driver));
-}
-
-export type WebviewsMappingWithRect = WebviewsMapping & {
-  /** The webview's on-screen bounding rectangle, in native device screen coordinates, if it could be determined. */
-  rect?: Rect;
-};
-
-/**
- * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`, so a client
- * (e.g. Appium Inspector) doesn't need to re-detect webview bounds itself. Uses the same
- * CDP-reported bounds as `getNativeWebViewRect` (see `parseWebviewRectFromPage`); only falls
- * back to the native view hierarchy scan when there is exactly one webview and it reported no
- * usable CDP bounds, since the scan cannot tell which native WebView node belongs to which
- * webview when there is more than one candidate.
- */
-export async function enrichWebviewsMappingWithRects(
-  driver: AndroidUiautomator2Driver,
-  mapping: WebviewsMapping[],
-): Promise<WebviewsMappingWithRect[]> {
-  let hasCdpRect = false;
-  for (const m of mapping as WebviewsMappingWithRect[]) {
-    for (const page of m.pages ?? []) {
-      const rect = parseWebviewRectFromPage(page as StringRecord);
-      if (rect) {
-        m.rect = rect;
-        hasCdpRect = true;
-        break;
-      }
-    }
-  }
-  if (!hasCdpRect && mapping.length === 1) {
-    try {
-      (mapping[0] as WebviewsMappingWithRect).rect = await getNativeWebViewRectFromViewHierarchy(driver);
-    } catch {
-      // no visible native WebView element found either; leave rect unattached
-    }
-  }
-  return mapping as WebviewsMappingWithRect[];
 }
 
 interface WebviewGeometryContext {

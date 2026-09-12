@@ -1163,6 +1163,15 @@ waitForWebviewMs | number | no | Tells UiAutomator2 driver for how long (in mill
 The following json demonstrates the example of WebviewsMapping object.
 Note that `description` in `page` can be an empty string most likely when it comes to Mobile Chrome)
 
+Each entry also carries a `rect` property (`x`, `y`, `width`, `height`, in native device screen
+coordinates) with the webview's on-screen bounds, if they could be determined. This is read from
+the same CDP `description` data shown below when available; if it isn't (e.g. a plain Mobile
+Chrome tab), and this is the only webview currently present, it falls back to scanning the native
+view hierarchy for a `WebView`-classed element instead. `rect` is omitted when neither approach
+finds a usable rectangle, or when there is more than one webview and none of them report CDP
+bounds (the native view hierarchy scan cannot tell which native element corresponds to which
+webview in that case).
+
 ```json
  {
    "proc": "@webview_devtools_remote_22138",
@@ -1187,7 +1196,13 @@ Note that `description` in `page` can be an empty string most likely when it com
        "webSocketDebuggerUrl": "ws://127.0.0.1:10900/devtools/page/27325CC50B600D31B233F45E09487B1F"
      }
    ],
-   "webviewName": "WEBVIEW_com.io.appium.setting"
+   "webviewName": "WEBVIEW_com.io.appium.setting",
+   "rect": {
+     "x": 0,
+     "y": 336,
+     "width": 1080,
+     "height": 1458
+   }
  }
 ```
 

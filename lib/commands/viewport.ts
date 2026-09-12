@@ -169,13 +169,47 @@ interface CdpPageDescription {
 }
 
 /**
- * Finds the on-screen bounding rectangle of the currently active web view,
- * as self-reported by Chromium's own WebView embedding layer: each page
- * listed by the CDP `/json/list` endpoint carries a `description` field with
- * its `screenX`/`screenY`/`width`/`height` in native device screen
+ * Parses a CDP `/json/list` page entry's `description` field into its
+ * self-reported on-screen bounding rectangle, in native device screen
  * coordinates. This is authoritative and independent of whatever native
  * Android view class actually hosts the WebView, unlike scanning the view
  * hierarchy for a specific class name.
+ *
+ * @returns The rectangle, or `null` if this data isn't available (e.g. the
+ * page didn't report a `description`, or reported a non-visible/zero-area one).
+ */
+function parseWebviewRectFromPage(page: StringRecord): Rect | null {
+  const raw = page.description;
+  if (typeof raw !== 'string' || !raw) {
+    return null;
+  }
+  let parsed: CdpPageDescription;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  const {screenX: x, screenY: y, width, height, visible, empty} = parsed;
+  if (visible === false || empty === true) {
+    return null;
+  }
+  if (
+    typeof x === 'number' &&
+    typeof y === 'number' &&
+    typeof width === 'number' &&
+    typeof height === 'number' &&
+    width > 0 &&
+    height > 0
+  ) {
+    return {x, y, width, height};
+  }
+  return null;
+}
+
+/**
+ * Finds the on-screen bounding rectangle of the currently active web view,
+ * as self-reported by Chromium's own WebView embedding layer (see
+ * `parseWebviewRectFromPage`).
  *
  * @returns The rectangle, or `null` if this data isn't available (e.g. the
  * page didn't report a `description`, or the CDP lookup failed).
@@ -190,29 +224,9 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
 
   const pages = mapping.find((m) => m.webviewName === driver.curContext)?.pages;
   for (const page of pages ?? []) {
-    const raw = (page as StringRecord).description;
-    if (typeof raw !== 'string' || !raw) {
-      continue;
-    }
-    let parsed: CdpPageDescription;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      continue;
-    }
-    const {screenX: x, screenY: y, width, height, visible, empty} = parsed;
-    if (visible === false || empty === true) {
-      continue;
-    }
-    if (
-      typeof x === 'number' &&
-      typeof y === 'number' &&
-      typeof width === 'number' &&
-      typeof height === 'number' &&
-      width > 0 &&
-      height > 0
-    ) {
-      return {x, y, width, height};
+    const rect = parseWebviewRectFromPage(page as StringRecord);
+    if (rect) {
+      return rect;
     }
   }
   return null;
@@ -274,6 +288,44 @@ async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2
  */
 async function getNativeWebViewRect(driver: AndroidUiautomator2Driver): Promise<Rect> {
   return (await getWebviewRectFromCdp(driver)) ?? (await getNativeWebViewRectFromViewHierarchy(driver));
+}
+
+export type WebviewsMappingWithRect = WebviewsMapping & {
+  /** The webview's on-screen bounding rectangle, in native device screen coordinates, if it could be determined. */
+  rect?: Rect;
+};
+
+/**
+ * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`, so a client
+ * (e.g. Appium Inspector) doesn't need to re-detect webview bounds itself. Uses the same
+ * CDP-reported bounds as `getNativeWebViewRect` (see `parseWebviewRectFromPage`); only falls
+ * back to the native view hierarchy scan when there is exactly one webview and it reported no
+ * usable CDP bounds, since the scan cannot tell which native WebView node belongs to which
+ * webview when there is more than one candidate.
+ */
+export async function enrichWebviewsMappingWithRects(
+  driver: AndroidUiautomator2Driver,
+  mapping: WebviewsMapping[],
+): Promise<WebviewsMappingWithRect[]> {
+  let hasCdpRect = false;
+  for (const m of mapping as WebviewsMappingWithRect[]) {
+    for (const page of m.pages ?? []) {
+      const rect = parseWebviewRectFromPage(page as StringRecord);
+      if (rect) {
+        m.rect = rect;
+        hasCdpRect = true;
+        break;
+      }
+    }
+  }
+  if (!hasCdpRect && mapping.length === 1) {
+    try {
+      (mapping[0] as WebviewsMappingWithRect).rect = await getNativeWebViewRectFromViewHierarchy(driver);
+    } catch {
+      // no visible native WebView element found either; leave rect unattached
+    }
+  }
+  return mapping as WebviewsMappingWithRect[];
 }
 
 interface WebviewGeometryContext {

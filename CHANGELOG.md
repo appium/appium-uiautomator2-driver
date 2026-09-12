@@ -1,3 +1,9 @@
+## [8.6.4](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.3...v8.6.4) (2026-09-12)
+
+### Miscellaneous Chores
+
+* Add 'sharp' to unbundled-packages in publish workflow ([77427c4](https://github.com/appium/appium-uiautomator2-driver/commit/77427c402f6851bac5af260614d8d2bfe691a2c8))
+
 ## [8.6.3](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.2...v8.6.3) (2026-09-10)
 
 ### Miscellaneous Chores

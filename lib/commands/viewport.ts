@@ -1,4 +1,4 @@
-import type {Rect, Size, StringRecord} from '@appium/types';
+import type {Element as AppiumElement, Rect, Size, StringRecord} from '@appium/types';
 import type {WebviewsMapping} from 'appium-android-driver';
 import type {Chromedriver} from 'appium-chromedriver';
 import {errors, PROTOCOLS} from 'appium/driver.js';
@@ -260,14 +260,17 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
     return null;
   }
 
-  const pages = mapping.find((m) => m.webviewName === driver.curContext)?.pages;
-  for (const page of pages ?? []) {
+  const found = mapping.find((m) => m.webviewName === driver.curContext);
+  for (const page of found?.pages ?? []) {
     const rect = parseWebviewRectFromPage(page as StringRecord);
     if (rect) {
       return rect;
     }
   }
-  return null;
+  // `mobileGetContexts` above already ran its own native view hierarchy fallback
+  // scan if this was the only webview (see `enrichWebviewsMappingWithRects`);
+  // reuse that result instead of scanning again below
+  return (found as WebviewsMappingWithRect | undefined)?.rect ?? null;
 }
 
 /**
@@ -284,9 +287,20 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
  * This call bypasses the active web view context, since it must query the
  * native view hierarchy rather than the DOM. Used only as a fallback when the
  * CDP-reported bounds (see `getWebviewRectFromCdp`) aren't available.
+ *
+ * Searches via `doFindElementOrEls` directly, bypassing `findElOrEls`'s implicit
+ * wait retries: this is a one-shot, best-effort geometry lookup (e.g. embedded in
+ * `mobile: getContexts`), not a request for a specific element the caller expects
+ * to eventually appear, so it shouldn't block the caller for the implicit wait
+ * timeout if no WebView happens to be on screen yet.
  */
 async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2Driver): Promise<Rect> {
-  const webViewElements = await driver.findElOrEls('xpath', NATIVE_WEBVIEW_CLASS_SELECTOR, true);
+  const webViewElements = (await driver.doFindElementOrEls({
+    strategy: 'xpath',
+    selector: NATIVE_WEBVIEW_CLASS_SELECTOR,
+    context: '',
+    multiple: true,
+  })) as AppiumElement[];
   if (!webViewElements.length) {
     throw new errors.NoSuchElementError('Could not find a native WebView element on screen');
   }

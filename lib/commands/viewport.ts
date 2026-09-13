@@ -162,12 +162,9 @@ export type WebviewsMappingWithRect = WebviewsMapping & {
 };
 
 /**
- * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`, so a client
- * (e.g. Appium Inspector) doesn't need to re-detect webview bounds itself. Uses the same
- * CDP-reported bounds as `getNativeWebViewRect` (see `parseWebviewRectFromPage`); only falls
- * back to the native view hierarchy scan when there is exactly one webview and it reported no
- * usable CDP bounds, since the scan cannot tell which native WebView node belongs to which
- * webview when there is more than one candidate.
+ * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`. Prefers
+ * CDP-reported bounds; falls back to a native view hierarchy scan only when there's exactly
+ * one (otherwise ambiguous) webview with no CDP data.
  */
 export async function enrichWebviewsMappingWithRects(
   driver: AndroidUiautomator2Driver,
@@ -207,14 +204,9 @@ interface CdpPageDescription {
 }
 
 /**
- * Parses a CDP `/json/list` page entry's `description` field into its
- * self-reported on-screen bounding rectangle, in native device screen
- * coordinates. This is authoritative and independent of whatever native
- * Android view class actually hosts the WebView, unlike scanning the view
- * hierarchy for a specific class name.
- *
- * @returns The rectangle, or `null` if this data isn't available (e.g. the
- * page didn't report a `description`, or reported a non-visible/zero-area one).
+ * Parses a CDP `/json/list` page entry's `description` into its self-reported on-screen
+ * rect — authoritative regardless of which native view class hosts the WebView.
+ * @returns `null` if not reported, or reported as non-visible/zero-area.
  */
 function parseWebviewRectFromPage(page: StringRecord): Rect | null {
   const raw = page.description;
@@ -267,9 +259,7 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
       return rect;
     }
   }
-  // `mobileGetContexts` above already ran its own native view hierarchy fallback
-  // scan if this was the only webview (see `enrichWebviewsMappingWithRects`);
-  // reuse that result instead of scanning again below
+  // reuse mobileGetContexts' own native-hierarchy fallback rect instead of scanning again
   return (found as WebviewsMappingWithRect | undefined)?.rect ?? null;
 }
 
@@ -288,11 +278,8 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
  * native view hierarchy rather than the DOM. Used only as a fallback when the
  * CDP-reported bounds (see `getWebviewRectFromCdp`) aren't available.
  *
- * Searches via `doFindElementOrEls` directly, bypassing `findElOrEls`'s implicit
- * wait retries: this is a one-shot, best-effort geometry lookup (e.g. embedded in
- * `mobile: getContexts`), not a request for a specific element the caller expects
- * to eventually appear, so it shouldn't block the caller for the implicit wait
- * timeout if no WebView happens to be on screen yet.
+ * Uses `doFindElementOrEls` directly (skipping `findElOrEls`'s implicit wait), since this
+ * is a one-shot best-effort lookup rather than a wait-for-element request.
  */
 async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2Driver): Promise<Rect> {
   const webViewElements = (await driver.doFindElementOrEls({

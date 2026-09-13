@@ -212,9 +212,12 @@ describe('Viewport', function () {
       stubGeometryContext();
       // simulates mobileGetContexts' own enrichment (see enrichWebviewsMappingWithRects) having
       // already run its native view hierarchy fallback for this webview
-      mockDriver.expects('mobileGetContexts').once().returns([
-        {webviewName: 'WEBVIEW_com.example.app', pages: [], rect: {x: 0, y: 100, width: 1080, height: 1700}},
-      ]);
+      mockDriver
+        .expects('mobileGetContexts')
+        .once()
+        .returns([
+          {webviewName: 'WEBVIEW_com.example.app', pages: [], rect: {x: 0, y: 100, width: 1080, height: 1700}},
+        ]);
       mockDriver.expects('doFindElementOrEls').never();
 
       const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});

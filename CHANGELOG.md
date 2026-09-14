@@ -1,3 +1,9 @@
+## [8.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.4...v8.7.0) (2026-09-14)
+
+### Features
+
+* Expose webview on-screen rect via mobile: getContexts ([#1047](https://github.com/appium/appium-uiautomator2-driver/issues/1047)) ([ed885e5](https://github.com/appium/appium-uiautomator2-driver/commit/ed885e5091356ca020b2734999f9e1f2617d1041))
+
 ## [8.6.4](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.3...v8.6.4) (2026-09-12)
 
 ### Miscellaneous Chores

@@ -81,6 +81,7 @@ import {
   getViewportScreenshot,
 } from './commands/screenshot.js';
 import {
+  enrichWebviewsMappingWithRects,
   getStatusBarHeight,
   getDevicePixelRatio,
   getDisplayDensity,
@@ -363,6 +364,12 @@ class AndroidUiautomator2Driver
     // memoize functions here, so that they are done on a per-instance basis
     this.getStatusBarHeight = memoize(this.getStatusBarHeight);
     this.getDevicePixelRatio = memoize(this.getDevicePixelRatio);
+
+    // wrap (rather than replace) the inherited implementation, so `mobile: getContexts`
+    // transparently also returns each webview's on-screen rect
+    const baseMobileGetContexts = this.mobileGetContexts.bind(this);
+    this.mobileGetContexts = async (waitForWebviewMs?: number) =>
+      enrichWebviewsMappingWithRects(this, await baseMobileGetContexts(waitForWebviewMs));
   }
 
   override get driverData() {

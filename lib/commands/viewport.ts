@@ -1,4 +1,4 @@
-import type {Rect, Size, StringRecord} from '@appium/types';
+import type {Element as AppiumElement, Rect, Size, StringRecord} from '@appium/types';
 import type {WebviewsMapping} from 'appium-android-driver';
 import type {Chromedriver} from 'appium-chromedriver';
 import {errors, PROTOCOLS} from 'appium/driver.js';
@@ -156,6 +156,41 @@ export async function getWindowSize(this: AndroidUiautomator2Driver): Promise<Si
   return (await this.uiautomator2.jwproxy.command('/window/current/size', 'GET', {})) as Size;
 }
 
+export type WebviewsMappingWithRect = WebviewsMapping & {
+  /** The webview's on-screen bounding rectangle, in native device screen coordinates, if it could be determined. */
+  rect?: Rect;
+};
+
+/**
+ * Enriches a `mobile: getContexts` mapping with each webview's on-screen `rect`. Prefers
+ * CDP-reported bounds; falls back to a native view hierarchy scan only when there's exactly
+ * one (otherwise ambiguous) webview with no CDP data.
+ */
+export async function enrichWebviewsMappingWithRects(
+  driver: AndroidUiautomator2Driver,
+  mapping: WebviewsMapping[],
+): Promise<WebviewsMappingWithRect[]> {
+  let hasCdpRect = false;
+  for (const m of mapping as WebviewsMappingWithRect[]) {
+    for (const page of m.pages ?? []) {
+      const rect = parseWebviewRectFromPage(page as StringRecord);
+      if (rect) {
+        m.rect = rect;
+        hasCdpRect = true;
+        break;
+      }
+    }
+  }
+  if (!hasCdpRect && mapping.length === 1) {
+    try {
+      (mapping[0] as WebviewsMappingWithRect).rect = await getNativeWebViewRectFromViewHierarchy(driver);
+    } catch {
+      // no visible native WebView element found either; leave rect unattached
+    }
+  }
+  return mapping as WebviewsMappingWithRect[];
+}
+
 // broad match so custom/vendor WebView subclasses (hybrid frameworks, etc.) are still found
 const NATIVE_WEBVIEW_CLASS_SELECTOR = "//*[contains(@class,'WebView')]";
 
@@ -169,13 +204,42 @@ interface CdpPageDescription {
 }
 
 /**
+ * Parses a CDP `/json/list` page entry's `description` into its self-reported on-screen
+ * rect — authoritative regardless of which native view class hosts the WebView.
+ * @returns `null` if not reported, or reported as non-visible/zero-area.
+ */
+function parseWebviewRectFromPage(page: StringRecord): Rect | null {
+  const raw = page.description;
+  if (typeof raw !== 'string' || !raw) {
+    return null;
+  }
+  let parsed: CdpPageDescription;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  const {screenX: x, screenY: y, width, height, visible, empty} = parsed;
+  if (visible === false || empty === true) {
+    return null;
+  }
+  if (
+    typeof x === 'number' &&
+    typeof y === 'number' &&
+    typeof width === 'number' &&
+    typeof height === 'number' &&
+    width > 0 &&
+    height > 0
+  ) {
+    return {x, y, width, height};
+  }
+  return null;
+}
+
+/**
  * Finds the on-screen bounding rectangle of the currently active web view,
- * as self-reported by Chromium's own WebView embedding layer: each page
- * listed by the CDP `/json/list` endpoint carries a `description` field with
- * its `screenX`/`screenY`/`width`/`height` in native device screen
- * coordinates. This is authoritative and independent of whatever native
- * Android view class actually hosts the WebView, unlike scanning the view
- * hierarchy for a specific class name.
+ * as self-reported by Chromium's own WebView embedding layer (see
+ * `parseWebviewRectFromPage`).
  *
  * @returns The rectangle, or `null` if this data isn't available (e.g. the
  * page didn't report a `description`, or the CDP lookup failed).
@@ -188,34 +252,15 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
     return null;
   }
 
-  const pages = mapping.find((m) => m.webviewName === driver.curContext)?.pages;
-  for (const page of pages ?? []) {
-    const raw = (page as StringRecord).description;
-    if (typeof raw !== 'string' || !raw) {
-      continue;
-    }
-    let parsed: CdpPageDescription;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      continue;
-    }
-    const {screenX: x, screenY: y, width, height, visible, empty} = parsed;
-    if (visible === false || empty === true) {
-      continue;
-    }
-    if (
-      typeof x === 'number' &&
-      typeof y === 'number' &&
-      typeof width === 'number' &&
-      typeof height === 'number' &&
-      width > 0 &&
-      height > 0
-    ) {
-      return {x, y, width, height};
+  const found = mapping.find((m) => m.webviewName === driver.curContext);
+  for (const page of found?.pages ?? []) {
+    const rect = parseWebviewRectFromPage(page as StringRecord);
+    if (rect) {
+      return rect;
     }
   }
-  return null;
+  // reuse mobileGetContexts' own native-hierarchy fallback rect instead of scanning again
+  return (found as WebviewsMappingWithRect | undefined)?.rect ?? null;
 }
 
 /**
@@ -232,9 +277,17 @@ async function getWebviewRectFromCdp(driver: AndroidUiautomator2Driver): Promise
  * This call bypasses the active web view context, since it must query the
  * native view hierarchy rather than the DOM. Used only as a fallback when the
  * CDP-reported bounds (see `getWebviewRectFromCdp`) aren't available.
+ *
+ * Uses `doFindElementOrEls` directly (skipping `findElOrEls`'s implicit wait), since this
+ * is a one-shot best-effort lookup rather than a wait-for-element request.
  */
 async function getNativeWebViewRectFromViewHierarchy(driver: AndroidUiautomator2Driver): Promise<Rect> {
-  const webViewElements = await driver.findElOrEls('xpath', NATIVE_WEBVIEW_CLASS_SELECTOR, true);
+  const webViewElements = (await driver.doFindElementOrEls({
+    strategy: 'xpath',
+    selector: NATIVE_WEBVIEW_CLASS_SELECTOR,
+    context: '',
+    multiple: true,
+  })) as AppiumElement[];
   if (!webViewElements.length) {
     throw new errors.NoSuchElementError('Could not find a native WebView element on screen');
   }

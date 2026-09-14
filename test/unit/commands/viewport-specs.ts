@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import {describe, it, beforeEach, afterEach} from 'node:test';
 
+import {AndroidDriver} from 'appium-android-driver';
 import {PROTOCOLS} from 'appium/driver.js';
 import sinon from 'sinon';
 
-import {clampRectToBounds} from '../../../lib/commands/viewport.js';
+import {clampRectToBounds, enrichWebviewsMappingWithRects} from '../../../lib/commands/viewport.js';
 import {AndroidUiautomator2Driver} from '../../../lib/driver.js';
 
 describe('clampRectToBounds', function () {
@@ -188,9 +189,9 @@ describe('Viewport', function () {
       stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['webview1']);
       driver.uiautomator2 = {
         jwproxy: {
@@ -200,6 +201,24 @@ describe('Viewport', function () {
             .resolves({x: 0, y: 100, width: 1080, height: 1700}),
         },
       } as any;
+
+      const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
+      assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
+    });
+
+    it('should reuse a rect already attached by mobileGetContexts instead of scanning the native hierarchy again', async function () {
+      mockDriver.expects('isWebContext').once().returns(true);
+      mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
+      stubGeometryContext();
+      // simulates mobileGetContexts' own enrichment (see enrichWebviewsMappingWithRects) having
+      // already run its native view hierarchy fallback for this webview
+      mockDriver
+        .expects('mobileGetContexts')
+        .once()
+        .returns([
+          {webviewName: 'WEBVIEW_com.example.app', pages: [], rect: {x: 0, y: 100, width: 1080, height: 1700}},
+        ]);
+      mockDriver.expects('doFindElementOrEls').never();
 
       const result = await driver.execute('mobile: viewportElementRect', {elementId: 'el1'});
       assert.deepStrictEqual(result, {x: 20, y: 140, width: 60, height: 80});
@@ -231,9 +250,9 @@ describe('Viewport', function () {
           },
         ]);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['webview1']);
       driver.uiautomator2 = {
         jwproxy: {
@@ -254,9 +273,9 @@ describe('Viewport', function () {
       stubGeometryContext();
       mockDriver.expects('mobileGetContexts').once().rejects(new Error('devtools unreachable'));
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['webview1']);
       driver.uiautomator2 = {
         jwproxy: {
@@ -277,9 +296,9 @@ describe('Viewport', function () {
       stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['hidden-webview', 'visible-webview']);
       const commandStub = sinon.stub();
       commandStub.withArgs('/element/hidden-webview/rect', 'GET').resolves({x: 0, y: 0, width: 0, height: 0});
@@ -296,9 +315,9 @@ describe('Viewport', function () {
       stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['webview1', 'webview2']);
       const commandStub = sinon.stub();
       commandStub.withArgs('/element/webview1/rect', 'GET').resolves({x: 0, y: 100, width: 500, height: 1700});
@@ -313,7 +332,7 @@ describe('Viewport', function () {
       mockDriver.expects('getElementRect').once().withArgs('el1').returns({x: 10, y: 20, width: 30, height: 40});
       stubGeometryContext();
       stubCdpWebviewRect(null);
-      mockDriver.expects('findElOrEls').once().returns([]);
+      mockDriver.expects('doFindElementOrEls').once().returns([]);
 
       await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /WebView/);
     });
@@ -324,9 +343,9 @@ describe('Viewport', function () {
       stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['stale-webview', 'visible-webview']);
       const commandStub = sinon.stub();
       commandStub.withArgs('/element/stale-webview/rect', 'GET').rejects(new Error('stale element reference'));
@@ -343,15 +362,82 @@ describe('Viewport', function () {
       stubGeometryContext();
       stubCdpWebviewRect(null);
       mockDriver
-        .expects('findElOrEls')
+        .expects('doFindElementOrEls')
         .once()
-        .withArgs('xpath', "//*[contains(@class,'WebView')]", true)
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
         .returns(['stale-webview']);
       driver.uiautomator2 = {
         jwproxy: {command: sinon.stub().rejects(new Error('stale element reference'))},
       } as any;
 
       await assert.rejects(driver.execute('mobile: viewportElementRect', {elementId: 'el1'}), /WebView/);
+    });
+  });
+
+  describe('enrichWebviewsMappingWithRects', function () {
+    it('should attach the CDP-reported rect to each webview with usable bounds', async function () {
+      const mapping = [
+        {
+          webviewName: 'WEBVIEW_com.example.app',
+          pages: [{description: JSON.stringify({screenX: 0, screenY: 100, width: 1080, height: 1700})}],
+        },
+        {
+          webviewName: 'WEBVIEW_com.other.app',
+          pages: [{description: JSON.stringify({screenX: 0, screenY: 0, width: 500, height: 500, visible: false})}],
+        },
+      ];
+
+      const result = await enrichWebviewsMappingWithRects(driver, mapping as any);
+      assert.deepStrictEqual(result[0].rect, {x: 0, y: 100, width: 1080, height: 1700});
+      assert.strictEqual(result[1].rect, undefined);
+    });
+
+    it('should fall back to the native view hierarchy when there is exactly one webview with no CDP rect', async function () {
+      const mapping = [{webviewName: 'WEBVIEW_com.example.app', pages: []}];
+      mockDriver
+        .expects('doFindElementOrEls')
+        .once()
+        .withArgs({strategy: 'xpath', selector: "//*[contains(@class,'WebView')]", context: '', multiple: true})
+        .returns(['webview1']);
+      driver.uiautomator2 = {
+        jwproxy: {
+          command: sinon
+            .stub()
+            .withArgs('/element/webview1/rect', 'GET')
+            .resolves({x: 0, y: 100, width: 1080, height: 1700}),
+        },
+      } as any;
+
+      const result = await enrichWebviewsMappingWithRects(driver, mapping as any);
+      assert.deepStrictEqual(result[0].rect, {x: 0, y: 100, width: 1080, height: 1700});
+    });
+
+    it('should leave rect unattached when there are multiple webviews and none report CDP bounds', async function () {
+      const mapping = [
+        {webviewName: 'WEBVIEW_com.example.app', pages: []},
+        {webviewName: 'WEBVIEW_com.other.app', pages: []},
+      ];
+
+      const result = await enrichWebviewsMappingWithRects(driver, mapping as any);
+      assert.strictEqual(result[0].rect, undefined);
+      assert.strictEqual(result[1].rect, undefined);
+    });
+
+    it('should leave rect unattached when the lone webview has no CDP rect and no native WebView element is found', async function () {
+      const mapping = [{webviewName: 'WEBVIEW_com.example.app', pages: []}];
+      mockDriver.expects('doFindElementOrEls').once().returns([]);
+
+      const result = await enrichWebviewsMappingWithRects(driver, mapping as any);
+      assert.strictEqual(result[0].rect, undefined);
+    });
+  });
+
+  describe('mobile: getContexts', function () {
+    it('should install a rect-enriching wrapper around the inherited implementation', async function () {
+      const plainAndroidDriver = new AndroidDriver();
+      // the constructor must replace the inherited class field with its own wrapper closure,
+      // not leave it pointing at the same function AndroidDriver installed
+      assert.notStrictEqual(driver.mobileGetContexts, plainAndroidDriver.mobileGetContexts);
     });
   });
 });

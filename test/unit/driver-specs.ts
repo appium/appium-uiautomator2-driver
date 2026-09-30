@@ -45,16 +45,12 @@ describe('driver.js', function () {
       const adb = defaultStub(driver);
       sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
       await assert.rejects(
-        driver.createSession(
-          {} as any,
-          {} as any,
-          {
-            firstMatch: [{}],
-            alwaysMatch: {
-              'appium:app': 'foo.apk',
-            },
-          } as any,
-        ),
+        driver.createSession({
+          firstMatch: [{}],
+          alwaysMatch: {
+            'appium:app': 'foo.apk',
+          },
+        } as any),
         /does not exist or is not accessible/,
       );
     });
@@ -65,16 +61,12 @@ describe('driver.js', function () {
       sandbox.mock(driver).expects('checkAppPresent').once().returns(Promise.resolve());
       sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
       sandbox.mock(driver).expects('startUiAutomator2Session').once().returns(Promise.resolve());
-      await driver.createSession(
-        {} as any,
-        {} as any,
-        {
-          firstMatch: [{}],
-          alwaysMatch: {
-            browserName: 'chrome',
-          },
-        } as any,
-      );
+      await driver.createSession({
+        firstMatch: [{}],
+        alwaysMatch: {
+          browserName: 'chrome',
+        },
+      } as any);
       assert.ok(driver.sessionId);
     });
 
@@ -84,16 +76,12 @@ describe('driver.js', function () {
       sandbox.stub(adb, 'getApiLevel').onFirstCall().returns(Promise.resolve(24));
       sandbox.mock(driver).expects('checkAppPresent').returns(Promise.resolve());
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
-      await driver.createSession(
-        {} as any,
-        {} as any,
-        {
-          firstMatch: [{}],
-          alwaysMatch: {
-            browserName: 'chrome',
-          },
-        } as any,
-      );
+      await driver.createSession({
+        firstMatch: [{}],
+        alwaysMatch: {
+          browserName: 'chrome',
+        },
+      } as any);
       assert.strictEqual(driver.curContext, 'NATIVE_APP');
     });
   });
@@ -104,16 +92,15 @@ describe('driver.js', function () {
       defaultStub(driver);
       const app = path.resolve('.');
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
+      // `driver.helpers` is a frozen ES module namespace object shared across instances, so it
+      // can't be stubbed in place - swap in a mutable shallow copy on this instance first.
+      driver.helpers = {...driver.helpers};
       const configureAppStub = sandbox.stub(driver.helpers, 'configureApp').resolves(app);
 
-      await driver.createSession(
-        {} as any,
-        {} as any,
-        {
-          firstMatch: [{}],
-          alwaysMatch: {'appium:app': app},
-        } as any,
-      );
+      await driver.createSession({
+        firstMatch: [{}],
+        alwaysMatch: {'appium:app': app},
+      } as any);
 
       await driver.checkAppPresent(); // should not error
 
@@ -128,16 +115,13 @@ describe('driver.js', function () {
       const app = path.resolve('asdfasdf');
       const checkAppPresentStub = sandbox.stub(driver, 'checkAppPresent').returns(Promise.resolve());
       sandbox.mock(driver).expects('startUiAutomator2Session').returns(Promise.resolve());
+      driver.helpers = {...driver.helpers};
       sandbox.mock(driver.helpers).expects('configureApp').returns(app);
 
-      await driver.createSession(
-        {} as any,
-        {} as any,
-        {
-          firstMatch: [{}],
-          alwaysMatch: {'appium:app': app},
-        } as any,
-      );
+      await driver.createSession({
+        firstMatch: [{}],
+        alwaysMatch: {'appium:app': app},
+      } as any);
 
       checkAppPresentStub.restore();
       await assert.rejects(driver.checkAppPresent(), /Could not find/);
@@ -191,36 +175,28 @@ describe('driver.js', function () {
             driver.chromedriver = true as any;
           });
           it('should proxy screenshot if nativeWebScreenshot is off on chromedriver mode', async function () {
-            await driver.createSession(
-              {} as any,
-              {} as any,
-              {
-                firstMatch: [{}],
-                alwaysMatch: {
-                  platformName: 'Android',
-                  'appium:deviceName': 'device',
-                  browserName: 'chrome',
-                  'appium:nativeWebScreenshot': false,
-                },
-              } as any,
-            );
+            await driver.createSession({
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': false,
+              },
+            } as any);
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             assert.strictEqual(proxyAvoidList.length, 0);
           });
           it('should not proxy screenshot if nativeWebScreenshot is on on chromedriver mode', async function () {
-            await driver.createSession(
-              {} as any,
-              {} as any,
-              {
-                firstMatch: [{}],
-                alwaysMatch: {
-                  platformName: 'Android',
-                  'appium:deviceName': 'device',
-                  browserName: 'chrome',
-                  'appium:nativeWebScreenshot': true,
-                },
-              } as any,
-            );
+            await driver.createSession({
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': true,
+              },
+            } as any);
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             assert.ok(proxyAvoidList.length > 0);
           });
@@ -229,38 +205,30 @@ describe('driver.js', function () {
         describe('on native mode', function () {
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (on)', async function () {
             // nativeWebScreenshot on
-            await driver.createSession(
-              {} as any,
-              {} as any,
-              {
-                firstMatch: [{}],
-                alwaysMatch: {
-                  platformName: 'Android',
-                  'appium:deviceName': 'device',
-                  browserName: 'chrome',
-                  'appium:nativeWebScreenshot': true,
-                },
-              } as any,
-            );
+            await driver.createSession({
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': true,
+              },
+            } as any);
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             assert.ok(proxyAvoidList.length > 0);
           });
 
           it('should never proxy screenshot regardless of nativeWebScreenshot setting (off)', async function () {
             // nativeWebScreenshot off
-            await driver.createSession(
-              {} as any,
-              {} as any,
-              {
-                firstMatch: [{}],
-                alwaysMatch: {
-                  platformName: 'Android',
-                  'appium:deviceName': 'device',
-                  browserName: 'chrome',
-                  'appium:nativeWebScreenshot': false,
-                },
-              } as any,
-            );
+            await driver.createSession({
+              firstMatch: [{}],
+              alwaysMatch: {
+                platformName: 'Android',
+                'appium:deviceName': 'device',
+                browserName: 'chrome',
+                'appium:nativeWebScreenshot': false,
+              },
+            } as any);
             proxyAvoidList = driver.getProxyAvoidList().filter(nativeWebScreenshotFilter);
             assert.ok(proxyAvoidList.length > 0);
           });

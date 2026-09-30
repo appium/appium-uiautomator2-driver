@@ -61,7 +61,7 @@
   "dependencies": {
     "@appium/css-locator-to-native": "^1.0.1",
     "appium-adb": "^16.0.4",
-    "appium-android-driver": "^15.0.0-beta.0",
+    "appium-android-driver": "^15.0.0-beta.1",
     "appium-uiautomator2-server": "^10.6.0",
     "asyncbox": "^6.4.3",
     "axios": "^1.18.0",

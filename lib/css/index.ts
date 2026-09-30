@@ -1,7 +1,7 @@
 import type {CssTransformer, NativeLocator, StrategyKey} from '@appium/css-locator-to-native';
 import {errors} from 'appium/driver.js';
+import {util} from 'appium/support.js';
 
-import {memoize} from '../utils/index.js';
 import {UI_AUTOMATOR_EMITTER_KEY, UI_AUTOMATOR_STRATEGY} from './constants.js';
 import {ATTRIBUTE_SCHEMA} from './schema.js';
 import {UiAutomatorEmitter} from './ui-automator-emitter.js';
@@ -12,7 +12,7 @@ const emitters = {
   [UI_AUTOMATOR_EMITTER_KEY]: new UiAutomatorEmitter(UI_AUTOMATOR_STRATEGY),
 };
 
-const getTransformCss = memoize(async function loadTransformCss(): Promise<CssTransformer> {
+const getTransformCss = util.memoize(async function loadTransformCss(): Promise<CssTransformer> {
   const mod = await import('@appium/css-locator-to-native');
   return mod.createCssTransformer({
     schema: ATTRIBUTE_SCHEMA,

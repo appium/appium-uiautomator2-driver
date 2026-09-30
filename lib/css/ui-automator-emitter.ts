@@ -1,6 +1,5 @@
 import type {ParsedAttribute, ParsedRule, ParsedSelector, StrategyEmitter} from '@appium/css-locator-to-native';
-
-import {escapeRegExp} from '../utils/index.js';
+import {util} from 'appium/support.js';
 
 const BOOLEAN_ATTRS = new Set([
   'checkable',
@@ -111,14 +110,14 @@ export class UiAutomatorEmitter implements StrategyEmitter<UiAutomatorEmitterCon
         if (['description', 'text'].includes(attr.name)) {
           return `.${methodName}Contains("${value}")`;
         }
-        return `.${methodName}Matches("${escapeRegExp(value)}")`;
+        return `.${methodName}Matches("${util.escapeRegExp(value)}")`;
       case '^=':
         if (['description', 'text'].includes(attr.name)) {
           return `.${methodName}StartsWith("${value}")`;
         }
-        return `.${methodName}Matches("^${escapeRegExp(value)}")`;
+        return `.${methodName}Matches("^${util.escapeRegExp(value)}")`;
       case '$=':
-        return `.${methodName}Matches("${escapeRegExp(value)}$")`;
+        return `.${methodName}Matches("${util.escapeRegExp(value)}$")`;
       case '~=':
         return `.${methodName}Matches("${getWordMatcherRegex(value)}")`;
       default:
@@ -138,5 +137,5 @@ function toSnakeCase(str: string): string {
 }
 
 function getWordMatcherRegex(word: string): string {
-  return `\\b(\\w*${escapeRegExp(word)}\\w*)\\b`;
+  return `\\b(\\w*${util.escapeRegExp(word)}\\w*)\\b`;
 }

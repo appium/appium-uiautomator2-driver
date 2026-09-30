@@ -109,7 +109,7 @@ import {
   requireServer,
   startSession,
 } from './uiautomator2-server/index.js';
-import {assignDefaults, memoize, MJpegStream} from './utils/index.js';
+import {assignDefaults, MJpegStream} from './utils/index.js';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.
@@ -354,8 +354,8 @@ class AndroidUiautomator2Driver
     this.caps = {} as Uiautomator2DriverCaps;
     this.opts = opts as Uiautomator2DriverOpts;
     // memoize functions here, so that they are done on a per-instance basis
-    this.getStatusBarHeight = memoize(this.getStatusBarHeight);
-    this.getDevicePixelRatio = memoize(this.getDevicePixelRatio);
+    this.getStatusBarHeight = util.memoize(this.getStatusBarHeight);
+    this.getDevicePixelRatio = util.memoize(this.getDevicePixelRatio);
 
     // wrap (rather than replace) the inherited implementation, so `mobile: getContexts`
     // transparently also returns each webview's on-screen rect

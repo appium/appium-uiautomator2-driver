@@ -1,3 +1,15 @@
+## [9.0.0-beta.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.0...v9.0.0-beta.1) (2026-10-01)
+
+### ⚠ BREAKING CHANGES
+
+* requires Appium >=4.0.0-beta.0 and drops Node 20 support
+(minimum is now ^22.22.2 || ^24.15.0 || >=26.0.0), matching Appium 4's own
+minimum supported Node engine. Also requires appium-android-driver
+
+### Features
+
+* target Appium 4 beta ([#1048](https://github.com/appium/appium-uiautomator2-driver/issues/1048)) ([fd4e91e](https://github.com/appium/appium-uiautomator2-driver/commit/fd4e91ee9f83f2fed97a8f0ce2716d9d2b409767))
+
 ## [8.7.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.6.4...v8.7.0) (2026-09-14)
 
 ### Features

@@ -61,7 +61,7 @@
   "dependencies": {
     "@appium/css-locator-to-native": "^1.0.1",
     "appium-adb": "^16.0.4",
-    "appium-android-driver": "^14.0.8",
+    "appium-android-driver": "^15.0.0-beta.1",
     "appium-uiautomator2-server": "^10.6.0",
     "asyncbox": "^6.4.3",
     "axios": "^1.18.0",
@@ -70,12 +70,12 @@
     "teen_process": "^4.2.0"
   },
   "devDependencies": {
-    "@appium/docutils": "^3.0.0",
-    "@appium/oxc-config": "^1.1.0",
-    "@appium/semantic-release-config": "^1.1.0",
-    "@appium/support": "^7.2.6",
-    "@appium/tsconfig": "^1.2.0",
-    "@appium/types": "^1.5.0",
+    "@appium/docutils": "^4.0.0-beta.1",
+    "@appium/oxc-config": "^2.0.0-beta.0",
+    "@appium/semantic-release-config": "^2.0.0-beta.0",
+    "@appium/support": "^8.0.0-beta.1",
+    "@appium/tsconfig": "^2.0.0-beta.0",
+    "@appium/types": "^2.0.0-beta.1",
     "@types/node": "^26.0.0",
     "@types/portscanner": "^2.1.1",
     "@types/semver": "^7.5.0",
@@ -90,13 +90,13 @@
     "xpath": "^0.x"
   },
   "peerDependencies": {
-    "appium": "^3.0.0-rc.2"
+    "appium": "^4.0.0-beta.0"
   },
   "optionalDependencies": {
     "sharp": "^0.x"
   },
   "engines": {
-    "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0",
     "npm": ">=10"
   },
   "appium": {

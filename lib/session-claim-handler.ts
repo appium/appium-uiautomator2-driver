@@ -5,7 +5,6 @@ import {node, util} from 'appium/support.js';
 import {waitForCondition} from 'asyncbox';
 
 import type {AndroidUiautomator2Driver} from './driver.js';
-import {memoize} from './utils/index.js';
 
 export type SessionUdidIpcMessage = {
   udid: string;
@@ -241,7 +240,7 @@ export class SessionClaimHandler {
   }
 }
 
-const loadSharedIpc = memoize(async function loadSharedIpc(): Promise<IAppiumIpc | undefined> {
+const loadSharedIpc = util.memoize(async function loadSharedIpc(): Promise<IAppiumIpc | undefined> {
   try {
     const {AppiumIpc} = (await import('appium/driver.js')) as {AppiumIpc?: AppiumIpcConstructor};
     return AppiumIpc ? new AppiumIpc() : undefined;

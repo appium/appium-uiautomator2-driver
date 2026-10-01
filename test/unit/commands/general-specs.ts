@@ -77,6 +77,9 @@ describe('General', function () {
       driver = new AndroidUiautomator2Driver();
       driver.adb = adb;
 
+      // `driver.helpers` is a frozen ES module namespace object shared across instances, so it
+      // can't be stubbed in place - swap in a mutable shallow copy on this instance first.
+      driver.helpers = {...driver.helpers};
       mockHelpers = sinon.mock(driver.helpers);
       mockHelpers.expects('configureApp').returns('/path/to/test/apk.apk');
     });

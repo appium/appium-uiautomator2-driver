@@ -1,12 +1,4 @@
-import type {
-  DefaultCreateSessionResult,
-  DriverData,
-  ExternalDriver,
-  InitialOpts,
-  RouteMatcher,
-  SingularSessionData,
-  StringRecord,
-} from '@appium/types';
+import type {DefaultCreateSessionResult, ExternalDriver, InitialOpts, RouteMatcher, StringRecord} from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
 import {BaseDriver, DeviceSettings} from 'appium/driver.js';
@@ -117,7 +109,7 @@ import {
   requireServer,
   startSession,
 } from './uiautomator2-server/index.js';
-import {assignDefaults, memoize, MJpegStream} from './utils/index.js';
+import {assignDefaults, MJpegStream} from './utils/index.js';
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.
@@ -362,8 +354,8 @@ class AndroidUiautomator2Driver
     this.caps = {} as Uiautomator2DriverCaps;
     this.opts = opts as Uiautomator2DriverOpts;
     // memoize functions here, so that they are done on a per-instance basis
-    this.getStatusBarHeight = memoize(this.getStatusBarHeight);
-    this.getDevicePixelRatio = memoize(this.getDevicePixelRatio);
+    this.getStatusBarHeight = util.memoize(this.getStatusBarHeight);
+    this.getDevicePixelRatio = util.memoize(this.getDevicePixelRatio);
 
     // wrap (rather than replace) the inherited implementation, so `mobile: getContexts`
     // transparently also returns each webview's on-screen rect
@@ -372,29 +364,15 @@ class AndroidUiautomator2Driver
       enrichWebviewsMappingWithRects(this, await baseMobileGetContexts(waitForWebviewMs));
   }
 
-  override get driverData() {
-    // TODO fill out resource info here
-    return {};
-  }
-
   override validateDesiredCaps(caps: any): caps is Uiautomator2DriverCaps {
     return super.validateDesiredCaps(caps);
   }
 
-  async createSession(
-    w3cCaps1: W3CUiautomator2DriverCaps,
-    w3cCaps2?: W3CUiautomator2DriverCaps,
-    w3cCaps3?: W3CUiautomator2DriverCaps,
-    driverData?: DriverData[],
-  ): Promise<any> {
+  async createSession(w3cCapabilities: W3CUiautomator2DriverCaps): Promise<any> {
     try {
-      // TODO handle otherSessionData for multiple sessions
       const [sessionId, caps] = (await BaseDriver.prototype.createSession.call(
         this,
-        w3cCaps1,
-        w3cCaps2,
-        w3cCaps3,
-        driverData,
+        w3cCapabilities,
       )) as DefaultCreateSessionResult<Uiautomator2Constraints>;
 
       const startSessionOpts: Uiautomator2StartSessionOpts = {
@@ -486,19 +464,6 @@ class AndroidUiautomator2Driver
       deviceScreenSize: realDisplaySize,
       deviceScreenDensity: displayDensity,
     };
-  }
-
-  /**
-   * @deprecated Appium's base-driver deprecated `getSession`/`GET /session/:sessionId` in favor
-   * of `getAppiumSessionCapabilities`, but third-party drivers may still call this method
-   * directly. Keep it around until it is removed along with other Appium 4-related breaking
-   * changes.
-   */
-  override async getSession(): Promise<SingularSessionData<Uiautomator2Constraints>> {
-    const sessionData = await BaseDriver.prototype.getSession.call(this);
-    this.log.debug('Getting session details from server to mix in');
-    const uia2Data = (await this.requireUiautomator2().jwproxy.command('/', 'GET', {})) as StringRecord;
-    return {...sessionData, ...uia2Data};
   }
 
   async onIpcInit(): Promise<void> {

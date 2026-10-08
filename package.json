@@ -86,7 +86,7 @@
     "sharp": "^0.x",
     "sinon": "^22.0.0",
     "unzipper": "^0.x",
-    "webdriverio": "^9.0.9",
+    "webdriverio": "^10.0.0",
     "xpath": "^0.x"
   },
   "peerDependencies": {

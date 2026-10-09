@@ -12,7 +12,7 @@ async function runReset() {
     return;
   }
 
-  log.info(`About to perform reset for the following device${udids.length === 1 ? '' : 's'}: ${udids}`);
+  log.info(`About to perform reset for the following device${udids.length === 1 ? '' : 's'}: ${udids.join(', ')}`);
   const uninstallPromises = [];
   for (const udid of udids) {
     const deviceAdb = udids.length === 1 ? adb : await ADB.createADB();

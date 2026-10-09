@@ -9,7 +9,7 @@ import {DEFAULT_HOST, DEFAULT_PORT} from './constants.js';
 
 export const E2E_TEST_TIMEOUT = 60 * 1000 * 4;
 
-export type SessionCapabilities = Capabilities.RequestedStandaloneCapabilities;
+export type SessionCapabilities = Capabilities.RequestedStandaloneCapabilities | Capabilities.W3CCapabilities;
 
 type RemoteSessionOptions = Omit<
   Capabilities.WebdriverIOConfig,

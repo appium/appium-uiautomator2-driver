@@ -470,9 +470,13 @@ class AndroidUiautomator2Driver
     await sessionClaimHandler.registerActiveSession(this);
   }
 
-  override async deleteSession() {
+  override async deleteSession(): Promise<void> {
     sessionClaimHandler.unregisterActiveSession(this);
+    // A new session on the same device waits for the teardown to complete before it starts
+    await sessionClaimHandler.trackTeardown(this, async () => await this.teardownSession());
+  }
 
+  private async teardownSession(): Promise<void> {
     this.log.debug('Deleting UiAutomator2 session');
 
     const screenRecordingStopTasks = [

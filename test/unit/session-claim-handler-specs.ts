@@ -95,7 +95,7 @@ describe('SessionClaimHandler', function () {
         debug: sandbox.stub(),
         warn: sandbox.stub(),
       },
-      deleteSession: sandbox.stub().resolves(),
+      startUnexpectedShutdown: sandbox.stub().resolves(),
       ...overrides,
     } as unknown as AndroidUiautomator2Driver;
   }
@@ -105,7 +105,7 @@ describe('SessionClaimHandler', function () {
       sessionId: 'old-session',
       opts: {udid: 'device-1'} as any,
     });
-    oldDriver.deleteSession = sandbox.stub().callsFake(async () => {
+    oldDriver.startUnexpectedShutdown = sandbox.stub().callsFake(async () => {
       sessionClaimHandler.unregisterActiveSession(oldDriver);
     });
     await sessionClaimHandler.registerActiveSession(oldDriver);
@@ -115,9 +115,9 @@ describe('SessionClaimHandler', function () {
     await sessionClaimHandler.registerActiveSession(newDriver);
     await sessionClaimHandler.claimSessionUdid(newDriver);
 
-    assert.strictEqual((oldDriver.deleteSession as sinon.SinonStub).calledOnce, true);
+    assert.strictEqual((oldDriver.startUnexpectedShutdown as sinon.SinonStub).calledOnce, true);
     assert.strictEqual((oldDriver.log.warn as sinon.SinonStub).calledWithMatch(/highly discouraged/), true);
-    assert.strictEqual((newDriver.deleteSession as sinon.SinonStub).called, false);
+    assert.strictEqual((newDriver.startUnexpectedShutdown as sinon.SinonStub).called, false);
     assert.deepStrictEqual(mockIpc.getMessage(SessionClaimHandler.RELEASED_TOPIC)?.data, {
       udid: 'device-1',
       sessionId: 'old-session',
@@ -145,7 +145,7 @@ describe('SessionClaimHandler', function () {
           sessionId,
           opts: {udid: 'device-1'} as any,
         });
-        oldDriver.deleteSession = sandbox.stub().callsFake(async () => {
+        oldDriver.startUnexpectedShutdown = sandbox.stub().callsFake(async () => {
           sessionClaimHandler.unregisterActiveSession(oldDriver);
         });
         await sessionClaimHandler.registerActiveSession(oldDriver);
@@ -158,7 +158,7 @@ describe('SessionClaimHandler', function () {
     await sessionClaimHandler.claimSessionUdid(newDriver);
 
     for (const oldDriver of oldDrivers) {
-      assert.strictEqual((oldDriver.deleteSession as sinon.SinonStub).calledOnce, true);
+      assert.strictEqual((oldDriver.startUnexpectedShutdown as sinon.SinonStub).calledOnce, true);
     }
     assert.strictEqual(
       (newDriver.log.debug as sinon.SinonStub).calledWithMatch(
@@ -175,8 +175,8 @@ describe('SessionClaimHandler', function () {
       sessionId: 'old-session',
       opts: {udid: 'device-1'} as any,
     });
-    oldDriver.deleteSession = sandbox.stub().callsFake(async () => {
-      callOrder.push('deleteSession');
+    oldDriver.startUnexpectedShutdown = sandbox.stub().callsFake(async () => {
+      callOrder.push('startUnexpectedShutdown');
       sessionClaimHandler.unregisterActiveSession(oldDriver);
     });
     await sessionClaimHandler.registerActiveSession(oldDriver);
@@ -189,7 +189,7 @@ describe('SessionClaimHandler', function () {
       .getCalls()
       .findIndex((call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.CONTENDED_TOPIC);
     assert.ok(contendedCallIndex > -1);
-    assert.deepStrictEqual(callOrder, ['deleteSession']);
+    assert.deepStrictEqual(callOrder, ['startUnexpectedShutdown']);
     assert.ok(
       contendedCallIndex <
         publish.getCalls().findIndex((call: sinon.SinonSpyCall) => call.args[0] === SessionClaimHandler.RELEASED_TOPIC),
@@ -214,12 +214,44 @@ describe('SessionClaimHandler', function () {
     ]);
   });
 
+  it('should wait for a session on the same device that is still quitting', async function () {
+    const events: string[] = [];
+    const oldDriver = makeDriver({sessionId: 'old-session', opts: {udid: 'DEVICE-1'} as any});
+    const teardown = sessionClaimHandler.trackTeardown(oldDriver, async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      events.push('old-quit');
+    });
+
+    const newDriver = makeDriver();
+    await sessionClaimHandler.registerActiveSession(newDriver);
+    await sessionClaimHandler.claimSessionUdid(newDriver);
+    events.push('claimed');
+    await teardown;
+
+    assert.deepStrictEqual(events, ['old-quit', 'claimed']);
+  });
+
+  it('should not wait for a session quitting on another device', async function () {
+    const otherDriver = makeDriver({sessionId: 'other-session', opts: {udid: 'device-2'} as any});
+    let finishTeardown!: () => void;
+    const teardown = sessionClaimHandler.trackTeardown(
+      otherDriver,
+      () => new Promise<void>((resolve) => (finishTeardown = resolve)),
+    );
+
+    const newDriver = makeDriver();
+    await sessionClaimHandler.registerActiveSession(newDriver);
+    await sessionClaimHandler.claimSessionUdid(newDriver);
+    finishTeardown();
+    await teardown;
+  });
+
   it('should ignore udid publications from the same session', async function () {
     const driver = makeDriver({sessionId: 'session-1'});
     await sessionClaimHandler.registerActiveSession(driver);
     await sessionClaimHandler.claimSessionUdid(driver);
 
-    assert.strictEqual((driver.deleteSession as sinon.SinonStub).called, false);
+    assert.strictEqual((driver.startUnexpectedShutdown as sinon.SinonStub).called, false);
   });
 
   it('should unregister IPC subscriptions on session cleanup', async function () {

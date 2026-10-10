@@ -23,6 +23,7 @@ export class SessionClaimHandler {
   private static readonly CONTENTION_PROBE_MS = 10;
   private static readonly RELEASE_WAIT_MS = 15000;
 
+  private readonly pendingTeardownsByUdid = new Map<string, Set<Promise<void>>>();
   private readonly subscriptionsBySessionId = new Map<string, IIpcSubscription<SessionUdidIpcMessage>>();
 
   constructor(private readonly getIpc: IpcProvider) {}
@@ -61,6 +62,70 @@ export class SessionClaimHandler {
 
   /** Publish this session's udid so any existing session on the same device can terminate. */
   async claimSessionUdid(driver: AndroidUiautomator2Driver): Promise<void> {
+    await this.requestRelease(driver);
+    const udid = driver.opts.udid;
+    if (udid) {
+      await this.waitForPendingTeardowns(driver, udid);
+    }
+  }
+
+  /** Tracks a session teardown, so that a new session on the same device does not start before it is complete. */
+  async trackTeardown(driver: AndroidUiautomator2Driver, teardown: () => Promise<void>): Promise<void> {
+    const udid = driver.opts.udid?.toLowerCase();
+    if (!udid) {
+      return await teardown();
+    }
+
+    const promise = teardown();
+    const tracked = (async () => {
+      try {
+        await promise;
+      } catch {
+        // the failure is reported to the caller of trackTeardown()
+      }
+    })();
+    const pending = this.pendingTeardownsByUdid.get(udid) ?? new Set<Promise<void>>();
+    pending.add(tracked);
+    this.pendingTeardownsByUdid.set(udid, pending);
+    try {
+      await promise;
+    } finally {
+      pending.delete(tracked);
+      if (pending.size === 0 && this.pendingTeardownsByUdid.get(udid) === pending) {
+        this.pendingTeardownsByUdid.delete(udid);
+      }
+    }
+  }
+
+  private async waitForPendingTeardowns(driver: AndroidUiautomator2Driver, udid: string): Promise<void> {
+    const pending = this.pendingTeardownsByUdid.get(udid.toLowerCase());
+    if (!pending?.size) {
+      return;
+    }
+
+    driver.log.debug(`Waiting for ${util.pluralize('session', pending.size, true)} to finish quitting`);
+    const timer = new AbortController();
+    const timedOut = Symbol('timedOut');
+    const timeout = (async () => {
+      try {
+        return await delay(SessionClaimHandler.RELEASE_WAIT_MS, timedOut, {signal: timer.signal});
+      } catch {
+        return undefined; // aborted
+      }
+    })();
+    try {
+      if ((await Promise.race([Promise.all(pending), timeout])) === timedOut) {
+        driver.log.warn(
+          `Timed out after ${SessionClaimHandler.RELEASE_WAIT_MS}ms waiting for the previous session ` +
+            `to finish quitting. Proceeding with session startup.`,
+        );
+      }
+    } finally {
+      timer.abort();
+    }
+  }
+
+  private async requestRelease(driver: AndroidUiautomator2Driver): Promise<void> {
     const ipc = await this.getIpc();
     if (!ipc) {
       driver.log.debug('Driver-instance IPC is unavailable. Skipping publication of the session udid.');
@@ -135,6 +200,7 @@ export class SessionClaimHandler {
 
   /** @internal Exposed for unit tests. */
   resetForTesting(): void {
+    this.pendingTeardownsByUdid.clear();
     for (const subscription of this.subscriptionsBySessionId.values()) {
       subscription.unsubscribe();
     }

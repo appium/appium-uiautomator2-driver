@@ -214,6 +214,38 @@ describe('SessionClaimHandler', function () {
     ]);
   });
 
+  it('should wait for a session on the same device that is still quitting', async function () {
+    const events: string[] = [];
+    const oldDriver = makeDriver({sessionId: 'old-session', opts: {udid: 'DEVICE-1'} as any});
+    const teardown = sessionClaimHandler.trackTeardown(oldDriver, async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      events.push('old-quit');
+    });
+
+    const newDriver = makeDriver();
+    await sessionClaimHandler.registerActiveSession(newDriver);
+    await sessionClaimHandler.claimSessionUdid(newDriver);
+    events.push('claimed');
+    await teardown;
+
+    assert.deepStrictEqual(events, ['old-quit', 'claimed']);
+  });
+
+  it('should not wait for a session quitting on another device', async function () {
+    const otherDriver = makeDriver({sessionId: 'other-session', opts: {udid: 'device-2'} as any});
+    let finishTeardown!: () => void;
+    const teardown = sessionClaimHandler.trackTeardown(
+      otherDriver,
+      () => new Promise<void>((resolve) => (finishTeardown = resolve)),
+    );
+
+    const newDriver = makeDriver();
+    await sessionClaimHandler.registerActiveSession(newDriver);
+    await sessionClaimHandler.claimSessionUdid(newDriver);
+    finishTeardown();
+    await teardown;
+  });
+
   it('should ignore udid publications from the same session', async function () {
     const driver = makeDriver({sessionId: 'session-1'});
     await sessionClaimHandler.registerActiveSession(driver);

@@ -390,7 +390,6 @@ class AndroidUiautomator2Driver
 
       const defaultOpts = {
         fullReset: false,
-        autoLaunch: true,
         adbPort: DEFAULT_ADB_PORT,
         androidInstallTimeout: 90000,
       };

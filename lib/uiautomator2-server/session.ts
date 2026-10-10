@@ -233,7 +233,7 @@ export async function performPostExecSetup(this: AndroidUiautomator2Driver): Pro
   if (this.isChromeSession) {
     // start a chromedriver session
     await this.startChromeSession();
-  } else if (this.opts.autoLaunch && this.opts.appPackage) {
+  } else if (this.opts.appPackage) {
     await this.ensureAppStarts();
   }
 

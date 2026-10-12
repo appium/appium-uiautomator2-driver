@@ -57,9 +57,112 @@ from your client code:
 
 ### `mobile: scheduleAction`
 
-### `mobile: unscheduleAction`
+Adds a new action to the list of scheduled actions. Refer to [the Scheduled Actions guide](../guides/scheduled-actions.md)
+for more details.
+
+Available since driver version 2.26.0.
+
+#### Parameters
+
+|<div style="width:9em">Name</div>|<div style="width:10em">Type</div>|Description|
+|---|---|---|
+|`name`|`string`|Unique name of the action|
+|`steps`|`Array<ActionStep>`|One or more action steps to execute. See below for a detailed structure. Steps are executed in sequential order. All steps are executed even if any of them fails. The execution is considered failed if at least one step fails.|
+|`maxPass?`|`integer`|Number of successful action invocations after which it should automatically stop repeating|
+|`maxFail?`|`integer`|Number of unsuccessful action invocations after which it should automatically stop repeating|
+|`times?`|`integer`|Number of times the action should execute within a single invocation. Set to `1` by default|
+|`intervalMs?`|`integer`|Interval in milliseconds between subsequent action invocations. Set to `1000` by default|
+|`maxHistoryItems?`|`integer`|Maximum number of action invocation entries stored in history. All entries are sorted in descending order by action execution timestamp. If the number of entries exceeds this value, the oldest entry is deleted. Setting this parameter to a large value may cause out of memory issues. Set to `20` by default.|
+
+Each item in the `steps` array (`ActionStep`) must be an object with the following properties:
+
+|Name|<div style="width:11em">Type</div>|Description|
+|---|---|---|
+|`type`|`string`|Type of the step. Supported values are `gesture`, `source`, and `screenshot`.|
+|`name`|`string`|Name of the step. Does not need to be unique.|
+|`payload`|`Record<string, any>`|Payload of the step. See below for a detailed structure.|
+
+The contents of `payload` must be an object, and its properties depend on the value of `type`:
+
+=== "`gesture`"
+
+    The object properties generally matches the property set for [`mobile: clickGesture`](#mobile-clickgesture),
+    [`mobile: doubleClickGesture`](#mobile-doubleclickgesture), or [`mobile: longClickGesture`](#mobile-longclickgesture).
+
+    |<div style="width:6em">Name</div>|<div style="width:12em">Type</div>|Description|
+    |---|---|---|
+    |`subtype`|`string`|Can be set to `click`, `longClick` or `doubleClick`|
+    |`elementId?`|`string`|Element to use as the click origin|
+    |`x?`|`float`|X offset from the element origin or screen|
+    |`y?`|`float`|Y offset from the element origin or screen|
+    |`locator?`|`Record<string, string>`|Object with the `strategy` and `selector` keys. Useful for clicking dynamic elements|
+    |`duration?`|`float`|Click duration (only for `longClick` subtype)|
+
+=== "`source`"
+
+    |Name|Type|Description|
+    |---|---|---|
+    |`subtype`|`string`|Must be set to `xml`|
+
+=== "`screenshot`"
+
+    |Name|Type|Description|
+    |---|---|---|
+    |`subtype`|`string`|Must be set to `png`|
+
+#### Response
+
+`null`
 
 ### `mobile: getActionHistory`
+
+Returns the execution history for an action. Refer to [the Scheduled Actions guide](../guides/scheduled-actions.md)
+for more details.
+
+Available since driver version 2.26.0.
+
+#### Parameters
+
+|Name|Type|Description|
+|---|---|---|
+|`name`|`string`|Name of the action to retrieve history for|
+
+#### Response
+
+`ActionHistory` - an object with the following properties:
+
+|<div style="width:7em">Name</div>|<div style="width:13em">Type</div>|Description|
+|---|---|---|
+|`repeats`|`integer`|Number of times this action has been repeated so far|
+|`stepResults`|`Array<ActionInvocation>`|List of recorded action invocations, sorted by execution timestamp in descending order. See below for a detailed structure. The maximum length of the list is limited by [`maxHistoryItems`](#parameters).|
+
+Each item in `stepResults` array (`ActionInvocation`) is itself an array of objects, where each object has the following properties:
+
+|Name|<div style="width:8em">Type</div>|Description|
+|---|---|---|
+|`name`|`string`|Name of the step as per its original `ActionStep`|
+|`type`|`string`|Type of step as per its original `ActionStep`|
+|`timestamp`|`integer`|Unix timestamp in milliseconds of the step execution start time|
+|`passed`|`boolean`|Whether the step passed|
+|`result`|`any`|Result of the step. Depends on the step type and subtype, and can be `null`. Always `null` if `passed` is `false`.|
+|`exception`|`Record<string, string>` or `null`|Object with the `name`, `message` and `stacktrace` properties of the raised exception. Always `null` if `passed` is `true`.|
+
+### `mobile: unscheduleAction`
+
+Removes an action from the list of scheduled actions and returns its execution history. Refer to
+[the Scheduled Actions guide](../guides/scheduled-actions.md) for more details.
+
+Available since driver version 2.26.0.
+
+#### Parameters
+
+|Name|Type|Description|
+|---|---|---|
+|`name`|`string`|Name of the action to remove from scheduling|
+
+#### Response
+
+[`ActionHistory`](#response_1)
 
 ## Device Under Test
 

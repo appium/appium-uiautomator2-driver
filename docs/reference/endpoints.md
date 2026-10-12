@@ -756,8 +756,8 @@ Opens the notification tray on the device under test. Does nothing if the tray i
 
 !!! warning "Deprecated"
 
-    Please use the [`mobile: statusBar`](./execute-methods.md#mobile-statusbar) execute method
-    instead
+    Please use the [`mobile: openNotifications`](./execute-methods.md#mobile-opennotifications)
+    execute method instead
 
 #### Response
 

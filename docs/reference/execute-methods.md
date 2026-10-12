@@ -53,6 +53,14 @@ from your client code:
     }));
     ```
 
+## Driver
+
+### `mobile: scheduleAction`
+
+### `mobile: unscheduleAction`
+
+### `mobile: getActionHistory`
+
 ## Device Under Test
 
 ### `mobile: shell`
@@ -99,6 +107,16 @@ included:
 |`displayDensity`|Display density in Density Independent Pixel units (based on [`DisplayMetrics.density`](https://developer.android.com/reference/android/util/DisplayMetrics#density))|
 |`locale`|System locale ([`Locale.getDefault()`](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#getDefault--))|
 |`timeZone`|System timezone ([`TimeZone.getDefault()`](https://docs.oracle.com/javase/8/docs/api/java/util/TimeZone.html#getDefault--))|
+
+### `mobile: batteryInfo`
+
+### `mobile: getDeclaredOrientation`
+
+### `mobile: listDisplays`
+
+### `mobile: listWindows`
+
+### `mobile: viewportRect`
 
 ### `mobile: getDisplayDensity`
 
@@ -205,6 +223,8 @@ Available since driver version 2.37.0.
 
 `null`
 
+### `mobile: resetAccessibilityCache`
+
 ### `mobile: getUiMode`
 
 Retrieves the value for the specified device appearance mode. Only supported since Android 10 (Q /
@@ -263,6 +283,8 @@ of properties contains the following:
 |`name`|`string`|Display name|
 |`isDefault`|`boolean`|Whether this display is the default one|
 |`payload`|`string`|Base64-encoded PNG screenshot of the display|
+
+### `mobile: viewportScreenshot`
 
 ### `mobile: startScreenStreaming`
 
@@ -443,6 +465,8 @@ Retrieves the current system time on the device under test.
 #### Response
 
 `string` - the device timestamp in the specified format
+
+### `mobile: openNotifications`
 
 ### `mobile: getNotifications`
 
@@ -1234,6 +1258,8 @@ Available since driver version 2.10.0.
 
 `null`
 
+### `mobile: installMultipleApks`
+
 ### `mobile: clearApp`
 
 Clears all data associated with the application with the specified package identifier: user data,
@@ -1398,6 +1424,8 @@ under the hood.
 
 `string` - equal to `'true'` if the service was successfully stopped
 
+### `mobile: deepLink`
+
 ### `mobile: broadcast`
 
 Sends a broadcast Intent to the Android system. Invokes `adb shell am broadcast` under the hood.
@@ -1554,7 +1582,37 @@ Available since driver version 6.0.7.
 W3C WebDriver capabilities. The exact structure may depend on the Chrome/ChromeDriver version and
 the initial session capabilities.
 
+### `mobile: viewportElementRect`
+
+## Gestures
+
+### `mobile: dragGesture`
+
+### `mobile: flingGesture`
+
+### `mobile: doubleClickGesture`
+
+### `mobile: clickGesture`
+
+### `mobile: longClickGesture`
+
+### `mobile: pinchCloseGesture`
+
+### `mobile: pinchOpenGesture`
+
+### `mobile: swipeGesture`
+
+### `mobile: scrollGesture`
+
 ## Elements
+
+### `mobile: scroll`
+
+### `mobile: scrollBackTo`
+
+### `mobile: type`
+
+### `mobile: replaceElementValue`
 
 ### `mobile: performEditorAction`
 
@@ -1574,3 +1632,7 @@ invocation of such a callback on the focused element.
 #### Response
 
 `null`
+
+### `mobile: acceptAlert`
+
+### `mobile: dismissAlert`

@@ -2,6 +2,7 @@ import type {Constraints} from '@appium/types';
 import {commonCapConstraints} from 'appium-android-driver';
 
 const UIAUTOMATOR2_CONSTRAINTS = {
+  ...commonCapConstraints,
   launchTimeout: {
     isNumber: true,
   },
@@ -35,7 +36,9 @@ const UIAUTOMATOR2_CONSTRAINTS = {
   shouldTerminateApp: {
     isBoolean: true,
   },
-  ...commonCapConstraints,
+  autoLaunch: {
+    isBoolean: true,
+  },
 } as const satisfies Constraints;
 
 export default UIAUTOMATOR2_CONSTRAINTS;

@@ -53,7 +53,7 @@ from your client code:
     }));
     ```
 
-## Driver
+## Session
 
 ### `mobile: scheduleAction`
 
@@ -208,18 +208,143 @@ included:
 |`carrierName`|Network carrier name ([`TelephonyManager.getNetworkOperatorName()`](https://developer.android.com/reference/android/telephony/TelephonyManager#getNetworkOperatorName()))|
 |`realDisplaySize`|Real size of the default display, in `<width>x<height>` format (based on [`Display.getRealSize()`](https://developer.android.com/reference/android/view/Display#getRealSize(android.graphics.Point)))|
 |`displayDensity`|Display density in Density Independent Pixel units (based on [`DisplayMetrics.density`](https://developer.android.com/reference/android/util/DisplayMetrics#density))|
+|`networks`|Array of objects, where each object contains information related to an available network type (based on [`ConnectivityManager.getAllNetworks()`](https://developer.android.com/reference/android/net/ConnectivityManager#getAllNetworks()), [`ConnectivityManager.getNetworkInfo(network)`](https://developer.android.com/reference/android/net/ConnectivityManager#getNetworkInfo(android.net.Network)), and [`ConnectivityManager.getNetworkCapabilities(network)`](https://developer.android.com/reference/android/net/ConnectivityManager#getNetworkCapabilities(android.net.Network)))|
 |`locale`|System locale ([`Locale.getDefault()`](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#getDefault--))|
 |`timeZone`|System timezone ([`TimeZone.getDefault()`](https://docs.oracle.com/javase/8/docs/api/java/util/TimeZone.html#getDefault--))|
+|`bluetooth`|Object with Bluetooth-related information, such as its state ([`BluetoothAdapter.getState()`](https://developer.android.com/reference/android/bluetooth/BluetoothAdapter#getState()))|
 
 ### `mobile: batteryInfo`
 
+Retrieves battery-related information for the device under test.
+
+#### Response
+
+`Record<string, any>` - object with battery-related information, with the following properties:
+
+|Name|Type|Description|
+|--|--|--|
+|`level`|`float`|Current battery level fraction in range `[0..1]`, where `1.0` means 100% charge. Set to `-1` if the actual value cannot be retrieved from the system. ([`BatteryManager.EXTRA_LEVEL`](https://developer.android.com/reference/android/os/BatteryManager#EXTRA_LEVEL) and [`BatteryManager.EXTRA_SCALE`](https://developer.android.com/reference/android/os/BatteryManager#EXTRA_SCALE))|
+|`state`|`integer`|Current battery state, matching the value of a supported `BATTERY_STATUS` constant of the [`BatteryManager`](https://developer.android.com/reference/android/os/BatteryManager) class. Set to `-1` if the actual value cannot be retrieved from the system. ([`BatteryManager.EXTRA_STATE`](https://developer.android.com/reference/android/os/BatteryManager#EXTRA_STATE))|
+
 ### `mobile: getDeclaredOrientation`
+
+Retrieves the manifest-declared screen orientation of the current foreground activity ([`ActivityInfo.screenOrientation`](https://developer.android.com/reference/android/content/pm/ActivityInfo#screenOrientation)).
+
+This reflects the value set in the activity's `AndroidManifest.xml` file (`android:screenOrientation`),
+which may differ from any runtime orientation overrides (e.g. `Activity.setRequestedOrientation()`)
+or the current display orientation (`PORTRAIT`/`LANDSCAPE`) returned by
+[the Get Orientation API](https://appium.io/docs/en/latest/reference/api/appium/#getappiumorientation).
+
+Available since driver version 8.5.0.
+
+#### Response
+
+`string | null` - the name of the declared screen orientation constant (e.g. `SCREEN_ORIENTATION_PORTRAIT`),
+or `null` if the current activity is unknown or its manifest orientation cannot be resolved
 
 ### `mobile: listDisplays`
 
+Retrieves a list of all displays available on the device under test. Under the hood, calls [`DisplayManager.getDisplays()`](https://developer.android.com/reference/android/hardware/display/DisplayManager#getDisplays())
+for physical displays, and `adb shell dumpsys SurfaceFlinger --displays` for virtual displays.
+
+Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
+
+#### Response
+
+`Array<Record<string, any>>` - list of display information objects, where each object contains the
+following properties:
+
+|<div style="width:6em">Name</div>|<div style="width:11em">Type</div>|Description|
+|--|--|--|
+|`id`|`integer`|Logical identifier of the display. Used by the [`currentDisplayId`](./settings.md#currentdisplayid) setting.|
+|`name`|`string` or `null`|Name of the display|
+|`physicalId`|`string` or `null`|Physical identifier of the display. Returned as a string to avoid JavaScript number precision issues with large values. Can be used by the [`mobile: screenshots`](#mobile-screenshots) method.|
+|`virtualId`|`string` or `null`|Virtual identifier of the display. Only set for virtual displays. Can be used by the [`mobile: screenshots`](#mobile-screenshots) method.|
+|`metrics`|`Record<string, any>`|Display metrics such as size and density. See below for a detailed structure.|
+|`isDefault`|`boolean`|Whether this is the default display|
+
+The `metrics` item is an object with the following properties:
+
+|<div style="width:8em">Name</div>|Type|Description|
+|--|--|--|
+|`widthPixels`|`integer`|Display width in pixels|
+|`heightPixels`|`integer`|Display height in pixels|
+|`density`|`float`|Display density (logical density factor). This is the scaling factor for the display.|
+|`densityDpi`|`integer`|Display density in DPI (dots per inch)|
+|`scaledDensity`|`float`|Scaled density factor for fonts. Usually the same as `density`, but may be adjusted by the user's font size preference.|
+|`xdpi`|`integer`|Exact physical pixels per inch of the screen in the X dimension|
+|`ydpi`|`integer`|Exact physical pixels per inch of the screen in the Y dimension|
+
 ### `mobile: listWindows`
 
+Retrieves a list of all windows on the device under test.
+
+For devices running Android 11 (R / API level 30) or newer, this method retrieves all windows on
+all available displays (using [`UiAutomation.getWindowsOnAllDisplays()`](https://developer.android.com/reference/android/app/UiAutomation#getWindowsOnAllDisplays())).
+For older devices, only windows from the default display are retrieved (using [`UiAutomation.getWindows()`](https://developer.android.com/reference/android/app/UiAutomation#getWindows())).
+
+Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
+
+#### Parameters
+
+|<div style="width:9em">Name</div>|<div style="width:11em">Type</div>|Description|
+|---|---|---|
+|`filters?`|`Record<string, any>`|Conditions for filtering the returned list of windows. Specified conditions are applied using AND logic (all must match). See below for a detailed structure.|
+|`skipScreenshots?`|`boolean`|Whether to skip taking screenshots for each window. Screenshots are only supported since Android 14 (U / API level 34). Set to `false` by default. Setting this to `true` can improve performance.|
+
+The `filters` property is an object with the following properties:
+
+|<div style="width:14em">Name</div>|Type|Description|
+|---|---|---|
+|`packageName?`|`string`|Name of the application package which the window should belong to. Can be specified as a glob pattern.|
+|`windowId?`|`integer`|Window identifier|
+|`displayId?`|`integer`|Logical display identifier|
+|`physicalDisplayId?`|`string`|Physical display identifier|
+|`type?`|`integer`|Window type, matching the value of a supported [`AccessibilityWindowInfo`](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) `TYPE_` constant|
+|`title?`|`string`|Window title. Can be specified as a glob pattern.|
+|`layer?`|`number`|Z-order layer value of the window|
+|`isAccessibilityFocused?`|`boolean`|Whether the window has accessibility focus|
+|`isActive?`|`boolean`|Whether the window is active|
+|`isFocused?`|`boolean`|Whether the window has input focus|
+|`isInPictureInPictureMode?`|`boolean`|Whether the window is in picture-in-picture mode|
+
+#### Response
+
+`Array<Record<string, any>>` - list of window information objects, where each object contains the
+following properties:
+
+|<div style="width:13em">Name</div>|<div style="width:13em">Type</div>|Description|
+|--|--|--|
+|`windowId`|`integer` or `null`|Identifier of the window. Set to `null` if the identifier cannot be determined.|
+|`displayId`|`integer`|Logical identifier of the display that owns this window|
+|`physicalDisplayId`|`string` or `null`|Physical identifier of the display that owns this window. Returned as a string to avoid JavaScript number precision issues with large values.|
+|`virtualDisplayId`|`string` or `null`|Virtual identifier of the display that owns this window. Only set for virtual displays.|
+|`rect`|`Record<string, integer>`|Object with window bounds, containing the `left`, `top`, `right`, `bottom` properties|
+|`packageName`|`string`|Name of the application package which the window belongs to|
+|`screenshot`|`string` or `null`|Base64-encoded PNG screenshot of the window. Only supported since Android 14 (U / API level 34) if [`skipScreenshots`](#parameters_4) is set to `false`.|
+|`type`|`integer`|Window type, matching the value of a supported [`AccessibilityWindowInfo`](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo) `TYPE_` constant|
+|`title`|`string` or `null`|Window title|
+|`layer`|`number`|Z-order layer value of the window|
+|`isAccessibilityFocused`|`boolean`|Whether the window has accessibility focus|
+|`isActive`|`boolean`|Whether the window is active|
+|`isFocused`|`boolean`|Whether the window has input focus|
+|`isInPictureInPictureMode`|`boolean`|Whether the window is in picture-in-picture mode|
+
 ### `mobile: viewportRect`
+
+Retrieves the viewport bounds of the current window. This is equivalent to calling [the standard Get Window Rect endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#getwindowrect)
+and subtracting the dimensions of the device status bar.
+
+#### Response
+
+`Record<string, integer>` - an object with the following properties:
+
+|Name|Type|Description|
+|--|--|--|
+|`left`|`integer`|X-axis offset of the viewport|
+|`top`|`integer`|Y-axis offset of the viewport|
+|`width`|`integer`|Viewport width|
+|`height`|`integer`|Viewport height|
 
 ### `mobile: getDisplayDensity`
 

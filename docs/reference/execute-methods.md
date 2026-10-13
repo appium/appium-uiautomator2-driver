@@ -333,7 +333,7 @@ following properties:
 ### `mobile: viewportRect`
 
 Retrieves the viewport bounds of the current window. This is equivalent to calling [the standard Get Window Rect endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#getwindowrect)
-and subtracting the dimensions of the device status bar.
+and subtracting the dimensions of the device status and navigation bars.
 
 #### Response
 
@@ -350,6 +350,8 @@ and subtracting the dimensions of the device status bar.
 
 Retrieves the density of the current display in DPI.
 
+Available since driver version 2.21.0.
+
 #### Response
 
 `integer` - the display density in DPI
@@ -357,6 +359,8 @@ Retrieves the density of the current display in DPI.
 ### `mobile: getSystemBars`
 
 Retrieves properties of various bars in the system UI.
+
+Available since driver version 2.21.0.
 
 #### Response
 
@@ -427,6 +431,8 @@ receive logcat log lines as soon as they are visible to Appium.
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
 
+Consider using [log broadcast via BiDi](../reference/bidi.md#logentryadded) over this extension.
+
 #### Response
 
 `null`
@@ -439,18 +445,37 @@ The method will return immediately if no websocket server is running.
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
 
+Consider using [log broadcast via BiDi](../reference/bidi.md#logentryadded) over this extension.
+
 #### Response
 
 `null`
 
 ### `mobile: resetAccessibilityCache`
 
+Resets the accessibility cache on the device under test. This method can be useful if the cache
+becomes stale and needs to be refreshed in order to reflect the current UI state.
+
+The driver automatically resets this cache before any element lookup, as well as before retrieving
+the page source, but in case the application under test has highly dynamic elements, it may be
+beneficial to explicitly call this method, in order to avoid stale reference errors or interaction
+issues.
+
+Note that this method also waits until the app under test becomes idle, so it may affect test
+performance if called too often under dynamic circumstances.
+
+Available since driver version 6.4.0.
+
+#### Response
+
+`null`
+
 ### `mobile: getUiMode`
 
 Retrieves the value for the specified device appearance mode. Only supported since Android 10 (Q /
 API level 29). Calls `adb shell cmd uimode` under the hood.
 
-Available since driver version 2.29.0.
+Available since driver version 2.34.0.
 
 #### Parameters
 
@@ -467,7 +492,7 @@ Available since driver version 2.29.0.
 Sets the device appearance mode. Only supported since Android 10 (Q / API level 29). Calls
 `adb shell cmd uimode` under the hood.
 
-Available since driver version 2.29.0.
+Available since driver version 2.34.0.
 
 #### Parameters
 
@@ -484,13 +509,18 @@ Available since driver version 2.29.0.
 
 Retrieves a screenshot of all device displays. Only supported since Android 10 (Q / API level 29).
 
-Available since driver version 9.3.0.
+This method uses _physical or virtual_ display IDs, which are different from _logical_ display IDs
+used by the `currentDisplayId` setting. Physical/virtual display IDs can be obtained using the
+[`mobile: listDisplays`](#mobile-listdisplays) or [`mobile: listWindows`](#mobile-listwindows)
+execute methods, or the `adb shell dumpsys SurfaceFlinger --display-id` command.
+
+Available since driver version 2.29.0.
 
 #### Parameters
 
-|Name|Type|Description|
+|<div style="width:6em">Name</div>|Type|Description|
 |--|--|--|
-|`displayId`|`integer` or `string`|Display identifier to take a screenshot for. By default, all available displays are used. An error is thrown if a display with the specified ID does not exist. Available identifiers can be retrieved from the `adb shell dumpsys SurfaceFlinger --display-id` command output.|
+|`displayId?`|`integer` or `string`|Physical or virtual display identifier to take a screenshot for. By default, all available displays are used. An error is thrown if a display with the specified ID does not exist.|
 
 #### Response
 
@@ -506,6 +536,14 @@ of properties contains the following:
 
 ### `mobile: viewportScreenshot`
 
+Retrieves a screenshot of the current viewport. This is equivalent to calling
+[the standard Get Screenshot endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#getscreenshot)
+and cropping it to the visible viewport (returned by [`mobile: viewportRect`](#mobile-viewportrect)).
+
+#### Response
+
+`string` - a base64-encoded PNG image of the current viewport
+
 ### `mobile: startScreenStreaming`
 
 Starts an MJPEG server for broadcasting the screen of the device under test. The [`adb_screen_streaming`](./insecure-features.md#adb_screen_streaming)
@@ -516,6 +554,8 @@ installed and available on `PATH`, along with the `gst-plugins-base`, `gst-plugi
 Broadcasting can be stopped using the [`mobile: stopScreenStreaming`](#mobile-stopscreenstreaming)
 execute method. Repeated calls to this method have no effect unless the previous streaming session
 is stopped.
+
+For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../guides/mjpeg.md).
 
 #### Parameters
 
@@ -541,6 +581,8 @@ is stopped.
 Stops the MJPEG screen broadcasting server previously started using [`mobile: startScreenStreaming`](#mobile-startscreenstreaming).
 The method will return immediately if no streaming server is running.
 
+For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../guides/mjpeg.md).
+
 #### Response
 
 `null`
@@ -552,7 +594,7 @@ API. Only supported since Android 10 (Q / API level 29). Recording can be stoppe
 [`mobile: stopMediaProjectionRecording`](#mobile-stopmediaprojectionrecording)
 execute method.
 
-Available since driver version 2.7.0.
+Available since driver version 2.4.0.
 
 #### Parameters
 
@@ -576,7 +618,7 @@ either returning its payload or uploading it to a remote location. Only supporte
 If the recording process is not running, but another recording has previously finished, its data is
 used instead. If no previous recording was found, an error is thrown.
 
-Available since driver version 2.7.0.
+Available since driver version 2.4.0.
 
 #### Parameters
 
@@ -589,6 +631,7 @@ Available since driver version 2.7.0.
 |`headers?`|`Record<string, any>`|Additional headers to use for the HTTP(S) multipart upload|
 |`fileFieldName?`|`string`|Name of the form field for storing the file content blob for HTTP(S) uploads. Set to `file` by default.|
 |`formFields?`|`Record<string, any>` or `Array<[string, any]>`|Additional form fields to use for the HTTP(S) multipart upload|
+|`uploadTimeout?`|`integer`|Maximum timeout for uploading the file. Set to `240000` (4 minutes) by default. Available since driver version 2.18.0.|
 
 #### Response
 
@@ -600,7 +643,7 @@ set
 Determines whether a Media Projection-based recording is currently active. Only supported since
 Android 10 (Q / API level 29).
 
-Available since driver version 2.7.0.
+Available since driver version 2.4.0.
 
 #### Response
 
@@ -611,7 +654,7 @@ Available since driver version 2.7.0.
 Locks the device and optionally unlocks it after a specified duration. Only simple (e.g. without a
 password) locks are supported.
 
-Available since driver version 2.23.4.
+Available since driver version 2.26.3.
 
 #### Parameters
 
@@ -645,32 +688,9 @@ for more details.
 
 Determines whether the device is locked.
 
-Available since driver version 2.23.0.
-
 #### Response
 
 `boolean` - `true` if the device is locked, otherwise `false`
-
-### `mobile: fingerprint`
-
-Emulates authentication using a virtual fingerprint with the specified ID. Only supported on
-emulators running Android 6 (Marshmallow / API level 23) or later.
-
-Virtual fingerprints should first be registered by opening the Android fingerprint registration
-settings and running this command with the ID that the fingerprint should be assigned to. Once
-registered, the command and ID can be used in fingerprint authentication prompts.
-
-Available since driver version 2.23.0.
-
-#### Parameters
-
-|Name|Type|Description|
-|--|--|--|
-|`fingerprintId`|`integer` or `string`|Identifier of a virtual fingerprint|
-
-#### Response
-
-`null`
 
 ### `mobile: getDeviceTime`
 
@@ -687,6 +707,14 @@ Retrieves the current system time on the device under test.
 `string` - the device timestamp in the specified format
 
 ### `mobile: openNotifications`
+
+Opens the notification tray on the device under test. Does nothing if the tray is already opened.
+
+Available since driver version 2.23.0.
+
+#### Response
+
+`null`
 
 ### `mobile: getNotifications`
 
@@ -739,7 +767,7 @@ Example output:
 Performs the specified command on the system status bar. Calls `adb shell cmd statusbar` under the
 hood. Only supported since Android 8 (Oreo / API level 26).
 
-Available since driver version 2.23.0.
+Available since driver version 2.25.0.
 
 #### Parameters
 
@@ -768,7 +796,7 @@ The following values are supported for the `command` parameter:
 
 Retrieves the state of one or more connectivity-related system services.
 
-Available since driver version 2.23.0.
+Available since driver version 2.13.0.
 
 #### Parameters
 
@@ -785,7 +813,7 @@ Available since driver version 2.23.0.
 Sets the state of one or more connectivity-related system services. On real devices, switching WiFi
 only works reliably since Android 11 (R / API level 30).
 
-Available since driver version 2.23.0.
+Available since driver version 2.13.0.
 
 !!! warning
 
@@ -814,7 +842,7 @@ of its service remains unchanged.
 Performs the specified action on the Android system Bluetooth adapter. An error is thrown if the
 device under test does not have a Bluetooth adapter.
 
-Available since driver version 2.40.0.
+Available since driver version 3.4.0.
 
 #### Parameters
 
@@ -831,7 +859,7 @@ Available since driver version 2.40.0.
 Performs the specified action on the Android system NFC adapter. An error is thrown if the device
 under test does not have a NFC adapter.
 
-Available since driver version 2.40.0.
+Available since driver version 3.4.0.
 
 #### Parameters
 
@@ -888,7 +916,7 @@ The device under test must either have Google Play Services installed, or be run
 
 Retrieves the current location of the device under test.
 
-Available since driver version 3.5.0.
+Available since driver version 3.8.1.
 
 #### Response
 
@@ -904,7 +932,7 @@ Available since driver version 3.5.0.
 
 Sets the current location of the device under test.
 
-Available since driver version 3.5.0.
+Available since driver version 3.8.1.
 
 #### Parameters
 
@@ -927,7 +955,7 @@ Available since driver version 3.5.0.
 Resets the current location of the device under test to the default/system one. Only supported on
 real devices.
 
-Available since driver version 3.5.0.
+Available since driver version 3.8.1.
 
 #### Response
 
@@ -938,7 +966,7 @@ Available since driver version 3.5.0.
 Pushes data to a file on the device under test. If the target file already exists, its contents
 will be overwritten.
 
-Available since driver version 2.10.0.
+Available since driver version 2.6.0.
 
 #### Parameters
 
@@ -955,7 +983,7 @@ Available since driver version 2.10.0.
 
 Pulls the contents of a file from the device under test.
 
-Available since driver version 2.10.0.
+Available since driver version 2.6.0.
 
 #### Parameters
 
@@ -985,7 +1013,7 @@ Deletes a file from the device under test.
 
 Pulls the contents of a directory from the device under test.
 
-Available since driver version 2.10.0.
+Available since driver version 2.6.0.
 
 #### Parameters
 
@@ -1050,7 +1078,7 @@ Example output:
 
 Hides the on-screen keyboard. An error is thrown if the keyboard cannot be hidden.
 
-Available since driver version 2.21.0.
+Available since driver version 2.16.0.
 
 #### Response
 
@@ -1060,7 +1088,7 @@ Available since driver version 2.21.0.
 
 Determines whether the on-screen keyboard is shown.
 
-Available since driver version 2.21.0.
+Available since driver version 2.16.0.
 
 #### Response
 
@@ -1090,7 +1118,7 @@ Available since driver version 7.1.0.
 
 Retrieves the content of the primary clipboard on the device under test.
 
-Available since driver version 2.44.0.
+Available since driver version 3.7.0.
 
 #### Response
 
@@ -1102,7 +1130,7 @@ clipboard contains no data.
 Sets the contents of the primary device clipboard. Calls [`ClipboardManager.setPrimaryClip()`](https://developer.android.com/reference/android/content/ClipboardManager#setPrimaryClip(android.content.ClipData))
 under the hood.
 
-Available since driver version 2.44.0.
+Available since driver version 3.7.0.
 
 #### Parameters
 
@@ -1122,7 +1150,7 @@ Emulates a single key press of the specified key. Uses either [`pressKey()`](htt
 or a new [`KeyEvent`](https://developer.android.com/reference/android/view/KeyEvent#KeyEvent(long,%20long,%20int,%20int,%20int,%20int,%20int,%20int,%20int))
 under the hood.
 
-Available since driver version 2.23.3.
+Available since driver version 2.17.0.
 
 #### Parameters
 
@@ -1132,6 +1160,7 @@ Available since driver version 2.23.3.
 |`metastate`|`integer`|One or more meta keys that should be simultaneously pressed. Must match the combined numerical value for one or more supported KeyEvent `META_` constants.|
 |`flags`|`integer`|Flags to apply during the press. Must match the combined numerical value for one or more supported KeyEvent `FLAG_` constants.|
 |`isLongPress?`|`boolean`|Whether to emulate a long press. Set to `false` by default.|
+|`source?`|`integer`|Input device source. Must be set to the value of an [`InputDevice`](https://developer.android.com/reference/android/view/InputDevice) `SOURCE_` constant, or an bitwise OR combination of multiple such values. Set to `257` (`SOURCE_KEYBOARD`) by default.|
 
 #### Response
 
@@ -1329,6 +1358,27 @@ guide for more details.
 |--|--|--|
 |`sensorType`|`string`|Type of sensor to set the value for. Supported values can be found in the [`appium-adb` source code here](https://github.com/appium/appium-adb/blob/master/lib/tools/emu-constants.ts#L32).|
 |`value`|`string`|Value to set for the specified sensor. The supported format depends on `sensorType`.|
+
+#### Response
+
+`null`
+
+### `mobile: fingerprint`
+
+Emulates authentication using a virtual fingerprint with the specified ID. Only supported on
+emulators running Android 6 (Marshmallow / API level 23) or later.
+
+Virtual fingerprints should first be registered by opening the Android fingerprint registration
+settings and running this command with the ID that the fingerprint should be assigned to. Once
+registered, the command and ID can be used in fingerprint authentication prompts.
+
+Available since driver version 2.22.0.
+
+#### Parameters
+
+|Name|Type|Description|
+|--|--|--|
+|`fingerprintId`|`integer` or `string`|Identifier of a virtual fingerprint|
 
 #### Response
 

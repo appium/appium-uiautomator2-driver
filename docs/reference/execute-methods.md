@@ -350,8 +350,6 @@ and subtracting the dimensions of the device status bar.
 
 Retrieves the density of the current display in DPI.
 
-Available since driver version 2.23.0.
-
 #### Response
 
 `integer` - the display density in DPI
@@ -359,8 +357,6 @@ Available since driver version 2.23.0.
 ### `mobile: getSystemBars`
 
 Retrieves properties of various bars in the system UI.
-
-Available since driver version 2.23.0.
 
 #### Response
 
@@ -385,7 +381,7 @@ All system bars include the following properties:
 Retrieves performance data about the given Android subsystem. The data is parsed from the output of
 the `dumpsys` utility.
 
-Available since driver version 2.23.0.
+Available since driver version 2.24.0.
 
 #### Parameters
 
@@ -413,7 +409,7 @@ For example, a response for the `cpuinfo` datatype could look as follows:
 Retrieves supported performance data types, which can be used as the `dataType` argument for the
 [`mobile: getPerformanceData`](#mobile-getperformancedata) method.
 
-Available since driver version 2.23.0.
+Available since driver version 2.24.0.
 
 #### Response
 
@@ -431,8 +427,6 @@ receive logcat log lines as soon as they are visible to Appium.
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
 
-Available since driver version 2.37.0.
-
 #### Response
 
 `null`
@@ -444,8 +438,6 @@ The method will return immediately if no websocket server is running.
 
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
-
-Available since driver version 2.37.0.
 
 #### Response
 

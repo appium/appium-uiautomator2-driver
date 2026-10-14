@@ -1865,7 +1865,7 @@ include non-webview (e.g. native) contexts.
 
 |<div style="width:10em">Name</div>|Type|Description|
 |--|--|--|
-|`waitForWebviewMs?`|`integer`|Number of milliseconds for how long to retry retrieval of webview data. Set to `0` by default. Higher values can help prevent ChromeDriver errors such as `failed to connect to socket 'localabstract:chrome_devtools_remote'`. Refer to [this issue](https://github.com/appium/appium/issues/19251) for more details. Available since driver version 2.30.0.|
+|`waitForWebviewMs?`|`integer`|Number of milliseconds for how long to retry retrieval of webview data. Set to `0` by default. Higher values can help prevent ChromeDriver errors such as `failed to connect to socket 'localabstract:chrome_devtools_remote'`. Refer to [this issue](https://github.com/appium/appium/issues/19251) for more details. Available since driver version 2.35.0.|
 
 #### Response
 
@@ -1896,10 +1896,18 @@ include non-webview (e.g. native) contexts.
         "webSocketDebuggerUrl": "ws://127.0.0.1:10900/devtools/page/27325CC50B600D31B233F45E09487B1F"
       }
     ],
+    "rect": {
+      "x": 0,
+      "y": 100,
+      "width": 1080,
+      "height": 1700
+    },
     "webviewName": "WEBVIEW_com.io.appium.setting"
   }
 ]
 ```
+
+The `rect` property is included since driver version 8.7.0.
 
 ### `mobile: getChromeCapabilities`
 
@@ -1907,7 +1915,7 @@ Retrieves the current ChromeDriver session capabilities. Only supported in a web
 be useful for debugging Chrome/webview automation issues and understanding what capabilities are
 being applied to the Chromedriver instance.
 
-Available since driver version 6.0.7.
+Available since driver version 6.2.0.
 
 #### Response
 
@@ -1916,6 +1924,26 @@ W3C WebDriver capabilities. The exact structure may depend on the Chrome/ChromeD
 the initial session capabilities.
 
 ### `mobile: viewportElementRect`
+
+Retrieves the bounds of a webview element, as translated to native device screen coordinates.
+
+Unlike [the standard Get Element Rect endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect),
+this method adjusts the result depending on the visible viewport, zoom level, iframes, scroll
+offsets, ancestor frame offsets, webview bounds, and the device pixel ratio. An error is thrown if
+the element is fully located outside of the visible viewport.
+
+Available since driver version 8.6.0.
+
+#### Parameters
+
+|Name|Type|Description|
+|--|--|--|
+|`elementId`|`string`|The identifier of an element found in the current web view context|
+
+#### Response
+
+`Record<string, integer>` - object with the `x`, `y`, `width` and `height` properties, in native
+device screen coordinates
 
 ## Gestures
 

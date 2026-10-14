@@ -95,6 +95,8 @@ also explains how to set it.
 By default, the driver adds the above prefix automatically to all unprefixed `resource-id` locators,
 but this setting allows disabling this behavior.
 
+Available since driver version 2.0.6.
+
 ## `elementResponseAttributes`
 
 | Type | Default |

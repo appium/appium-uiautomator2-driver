@@ -510,8 +510,8 @@ Available since driver version 2.34.0.
 Retrieves a screenshot of all device displays. Only supported since Android 10 (Q / API level 29).
 
 This method uses _physical or virtual_ display IDs, which are different from _logical_ display IDs
-used by the `currentDisplayId` setting. Physical/virtual display IDs can be obtained using the
-[`mobile: listDisplays`](#mobile-listdisplays) or [`mobile: listWindows`](#mobile-listwindows)
+used by the [`currentDisplayId`](./settings.md#currentdisplayid) setting. Physical/virtual display
+IDs can be obtained using the [`mobile: listDisplays`](#mobile-listdisplays) or [`mobile: listWindows`](#mobile-listwindows)
 execute methods, or the `adb shell dumpsys SurfaceFlinger --display-id` command.
 
 Available since driver version 2.29.0.
@@ -1194,7 +1194,7 @@ Sets the specified image as the output of the camera viewfinder. Only supported 
 This functionality can be useful, for example, when testing QR code scanning functionality in the
 application under test.
 
-Available since driver version 2.38.3.
+Available since driver version 3.2.0.
 
 #### Preconditions
 
@@ -1236,7 +1236,7 @@ After that, make sure to (re)start the emulator to pick up the changes. The valu
 
 Emulates sending an SMS to the specified phone number. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1253,7 +1253,7 @@ Available since driver version 2.23.0.
 
 Emulates a GSM call action for the specified phone number. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1270,7 +1270,7 @@ Available since driver version 2.23.0.
 
 Emulates a change of the GSM signal strength profile. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1286,7 +1286,7 @@ Available since driver version 2.23.0.
 
 Emulates a change of the GSM voice state. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1302,7 +1302,7 @@ Available since driver version 2.23.0.
 
 Emulates a power state change on the device. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1318,7 +1318,7 @@ Available since driver version 2.23.0.
 
 Emulates a power capacity change on the device. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1334,7 +1334,7 @@ Available since driver version 2.23.0.
 
 Emulates a network connection speed mode change. Only supported on emulators.
 
-Available since driver version 2.23.0.
+Available since driver version 2.22.0.
 
 #### Parameters
 
@@ -1391,7 +1391,7 @@ Available since driver version 2.22.0.
 Retrieves information about installed applications on the device under test. Only supported since
 Android 8 (Oreo / API level 26).
 
-Available since driver version 6.4.0.
+Available since driver version 6.9.0.
 
 #### Parameters
 
@@ -1413,14 +1413,14 @@ names.
 Determines whether the application with the specified package identifier is installed on the device
 under test.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
 |Name|Type|Description|
 |---|---|---|
 |`appId`|`string`|Package identifier of the application|
-|`user?`|`integer` or `string`|ID of the user for which the app is installed. The `current` user is used by default. Available since driver version 2.39.0.|
+|`user?`|`integer` or `string`|ID of the user for which the app is installed. The `current` user is used by default. Available since driver version 3.3.0.|
 
 #### Response
 
@@ -1431,7 +1431,7 @@ Available since driver version 2.10.0.
 Retrieves the state of the application with the specified package identifier on the device under
 test.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
@@ -1455,7 +1455,7 @@ Available since driver version 2.10.0.
 Activates the application with the specified package identifier or launches it if necessary, by
 simulating a tap on the app icon on the Android UI.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
@@ -1472,14 +1472,14 @@ Available since driver version 2.10.0.
 Terminates the application with the specified package identifier and waits until its app process
 has stopped.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
 |Name|Type|Description|
 |--|--|--|
 |`appId`|`string`|Package identifier of the app to terminate|
-|`timeout?`|`integer`|Number of milliseconds to wait until the app is terminated. Set to `500` by default. Since driver version 2.13.0, setting this to `0` or a negative value skips the app state check.|
+|`timeout?`|`integer`|Number of milliseconds to wait until the app is terminated. Set to `500` by default. Since driver version 2.9.0, setting this to `0` or a negative value skips the app state check.|
 
 #### Response
 
@@ -1490,7 +1490,7 @@ Available since driver version 2.10.0.
 Moves the active app to the background and optionally restores it into the foreground after a
 specified duration. The call is blocking.
 
-Available since driver version 2.23.5.
+Available since driver version 2.19.0.
 
 #### Parameters
 
@@ -1509,14 +1509,14 @@ Installs the specified application on the device under test.
 If a newer version of the application was already installed, the `INSTALL_FAILED_VERSION_DOWNGRADE`
 error may be raised.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
 |<div style="width:10em">Name</div>|Type|Description|
 |--|--|--|
 |`appPath`|`string`|Full path to a file on the host machine, or URL to a remote location. The app must have the `.apk` or `.apks` extension.|
-|`checkVersion?`|`boolean`|Whether to skip installation if an identical or newer app version is already installed. Unset by default. Applied before `replace`. Available since driver version 2.36.0.|
+|`checkVersion?`|`boolean`|Whether to skip installation if an identical or newer app version is already installed. Unset by default. Applied before `replace`. Available since driver version 2.45.0.|
 |`timeout?`|`integer`|Number of milliseconds to wait until the app is installed. Set to `60000` by default, unless overridden using the [`appium:adbExecTimeout`](./capabilities.md#adbexectimeout) capability|
 |`allowTestPackages?`|`boolean`|Whether to allow installation of test packages. Set to `false` by default|
 |`useSdcard?`|`boolean`|Whether to install the app on the SD card instead of built-in storage. Set to `false` by default|
@@ -1530,12 +1530,35 @@ Available since driver version 2.10.0.
 
 ### `mobile: installMultipleApks`
 
+Installs one or more applications on the device under test. Uses the `install-multiple` option of
+`adb` under the hood.
+
+#### Parameters
+
+|Name|<div style="width:8em">Type</div>|Description|
+|--|--|--|
+|`apks`|`Array<string>`|List of full paths to files on the host machine, or URLs to remote locations. All apps must have the `.apk` extension.|
+|`options?`|`InstallOptions`|Installation options. See below for a detailed structure.|
+
+The `options` property is an object with the following properties:
+
+|<div style="width:10em">Name</div>|Type|Description|
+|---|---|---|
+|`allowTestPackages?`|`boolean`|Whether to allow installation of test packages. Set to `false` by default|
+|`useSdcard?`|`boolean`|Whether to install the apps on the SD card instead of built-in storage. Set to `false` by default|
+|`grantPermissions?`|`boolean`|Whether to automatically grant all permissions defined in the application manifests after installation. Set to `false` by default. Only supported on Android 6 (Marshmallow / API level 23) or later.|
+|`replace?`|`boolean`|Whether to replace any already existing app installations. Set to `true` by default. If set to `false` and any app is already installed, an error is thrown.|
+|`partialInstall?`|`boolean`|Whether to use partial application installs (i.e. non-standalone updates). [Refer to this StackExchange post](https://android.stackexchange.com/questions/111064/what-is-a-partial-application-install-via-adb) for more details.|
+|`timeout?`|`integer`|Timeout in milliseconds for installing the apps. Set to `20000` by default.|
+
+#### Response
+
+`null`
+
 ### `mobile: clearApp`
 
 Clears all data associated with the application with the specified package identifier: user data,
 cache, and settings. Calls `adb shell pm clear <appId>` under the hood.
-
-Available since driver version 2.10.0.
 
 #### Parameters
 
@@ -1551,7 +1574,7 @@ Available since driver version 2.10.0.
 
 Uninstalls the application with the specified package identifier from the device under test.
 
-Available since driver version 2.10.0.
+Available since driver version 2.5.0.
 
 #### Parameters
 
@@ -1571,14 +1594,14 @@ Available since driver version 2.10.0.
 Retrieves string resources for the specified app language. An error is thrown if strings cannot be
 fetched, or no strings exist for the specified language.
 
-Available since driver version 4.0.0.
+Available since driver version 2.15.0.
 
 #### Parameters
 
 |<div style="width:7em">Name</div>|Type|Description|
 |--|--|--|
 |`language?`|`string`|Language whose strings should be retrieved. If omitted, the default system language is used (affected by the [`appium:language`](./capabilities.md#language) capability)|
-|`stringFile?`|`string`|Path to the app whose strings should be retrieved. If not specified, the app under test is used.|
+|`stringFile?`|`string`|Path to the app whose strings should be retrieved. If not specified, the app under test is used. Available since driver version 8.3.0.|
 
 #### Response
 
@@ -1624,7 +1647,7 @@ parameter. Use of the `appops` mode requires driver version 2.13.7 or later, and
 
 Retrieves the package name of the currently focused app.
 
-Available since driver version 2.23.0.
+Available since driver version 2.20.0.
 
 #### Response
 
@@ -1634,7 +1657,7 @@ Available since driver version 2.23.0.
 
 Retrieves the name of the currently focused app activity.
 
-Available since driver version 2.23.0.
+Available since driver version 2.20.0.
 
 #### Response
 
@@ -1699,8 +1722,6 @@ under the hood.
 ### `mobile: broadcast`
 
 Sends a broadcast Intent to the Android system. Invokes `adb shell am broadcast` under the hood.
-
-Available since driver version 2.10.0.
 
 #### Parameters
 

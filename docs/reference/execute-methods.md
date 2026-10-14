@@ -76,13 +76,13 @@ Available since driver version 2.26.0.
 
 Each item in the `steps` array (`ActionStep`) must be an object with the following properties:
 
-|Name|<div style="width:11em">Type</div>|Description|
+|Name|<div style="width:10em">Type</div>|Description|
 |---|---|---|
 |`type`|`string`|Type of the step. Supported values are `gesture`, `source`, and `screenshot`.|
 |`name`|`string`|Name of the step. Does not need to be unique.|
-|`payload`|`Record<string, any>`|Payload of the step. See below for a detailed structure.|
+|`payload`|`ActionStepPayload`|Payload of the step. See below for a detailed structure.|
 
-The contents of `payload` must be an object, and its properties depend on the value of `type`:
+The contents of `payload` (`ActionStepPayload`) must be an object, and its properties depend on the value of `type`:
 
 === "`gesture`"
 
@@ -254,16 +254,16 @@ Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed
 `Array<Record<string, any>>` - list of display information objects, where each object contains the
 following properties:
 
-|<div style="width:6em">Name</div>|<div style="width:11em">Type</div>|Description|
+|<div style="width:6em">Name</div>|<div style="width:8em">Type</div>|Description|
 |--|--|--|
 |`id`|`integer`|Logical identifier of the display. Used by the [`currentDisplayId`](./settings.md#currentdisplayid) setting.|
 |`name`|`string` or `null`|Name of the display|
 |`physicalId`|`string` or `null`|Physical identifier of the display. Returned as a string to avoid JavaScript number precision issues with large values. Can be used by the [`mobile: screenshots`](#mobile-screenshots) method.|
 |`virtualId`|`string` or `null`|Virtual identifier of the display. Only set for virtual displays. Can be used by the [`mobile: screenshots`](#mobile-screenshots) method.|
-|`metrics`|`Record<string, any>`|Display metrics such as size and density. See below for a detailed structure.|
+|`metrics`|`DisplayMetrics`|Display metrics such as size and density. See below for a detailed structure.|
 |`isDefault`|`boolean`|Whether this is the default display|
 
-The `metrics` item is an object with the following properties:
+The `metrics` item (`DisplayMetrics`) is an object with the following properties:
 
 |<div style="width:8em">Name</div>|Type|Description|
 |--|--|--|
@@ -287,12 +287,12 @@ Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed
 
 #### Parameters
 
-|<div style="width:9em">Name</div>|<div style="width:11em">Type</div>|Description|
+|<div style="width:9em">Name</div>|<div style="width:8em">Type</div>|Description|
 |---|---|---|
-|`filters?`|`Record<string, any>`|Conditions for filtering the returned list of windows. Specified conditions are applied using AND logic (all must match). See below for a detailed structure.|
+|`filters?`|`WindowFilters`|Conditions for filtering the returned list of windows. Specified conditions are applied using AND logic (all must match). See below for a detailed structure.|
 |`skipScreenshots?`|`boolean`|Whether to skip taking screenshots for each window. Screenshots are only supported since Android 14 (U / API level 34). Set to `false` by default. Setting this to `true` can improve performance.|
 
-The `filters` property is an object with the following properties:
+The `filters` property (`WindowFilters`) is an object with the following properties:
 
 |<div style="width:14em">Name</div>|Type|Description|
 |---|---|---|
@@ -1627,7 +1627,7 @@ Retrieves runtime permissions for a specified application package.
 Changes runtime permissions for a specified application package.
 
 This function supports two modes, `pm` and `appops`, which can be distinguished using the `target`
-parameter. Use of the `appops` mode requires driver version 2.13.7 or later, and the
+parameter. Use of the `appops` mode requires driver version 2.11.0 or later, and the
 [`adb_shell`](./insecure-features.md#adb_shell) insecure feature to be enabled.
 
 #### Parameters
@@ -1665,84 +1665,32 @@ Available since driver version 2.20.0.
 
 ### `mobile: startActivity`
 
-Starts the specified app activity. The activity can only be executed in scope of the current app
-package.
-
-Available since driver version 2.8.0.
+Starts the specified app activity using `adb shell am start-activity`.
 
 #### Parameters
 
-|<div style="width:14em">Name</div>|<div style="width:12em">Type</div>|Description|
+|<div style="width:8em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
-|`appActivity`|`string`|Activity name to start|
-|`locale?`|`Record<string, string>`|Map of language-related identifiers to use for setting the app locale. Follows the same format as the [`appium:appLocale`](./capabilities.md#applocale) capability.|
-|`optionalIntentArguments?`|`Record<string, any>`|Map of options to be applied for the intent passed to the launchable app activity. Follows the same format as the [`appium:intentOptions`](./capabilities.md#intentoptions) capability.|
-|`optionalActivityArguments?`|`string`|Map of options to be applied for the launchable app activity. Follows the same format as the [`appium:activityOptions`](./capabilities.md#activityoptions) capability.|
+|`intent?`|`string`|Full name of the activity intent to start|
+|`user?`|`integer` or `string`|ID of the user to start the activity for. By default, the `default` user is used.|
+|`wait?`|`boolean`|Whether to block the call until the Activity Manager's process returns control to the system. Unset by default.|
+|`stop?`|`boolean`|Whether to stop the target app before starting the activity. Unset by default.|
+|`windowingMode?`|`integer`|Windowing mode to launch the activity intent into. Supported values can be found [in the Android source code](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) as `WINDOWING_MODE_` constants.|
+|`activityType?`|`integer`|Activity type to launch the intent as. Supported values can be found [in the Android source code](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) as `ACTIVITY_TYPE_` constants.|
+|`action?`|`string`|Name of the activity intent action|
+|`uri?`|`string`|Activity intent URI|
+|`mimeType?`|`string`|Activity intent MIME type|
+|`identifier?`|`string`|Activity intent identifier|
+|`categories?`|`string` or `Array<string>`|One or more activity intent categories|
+|`component?`|`string`|Activity intent component|
+|`package?`|`string`|Activity intent package name|
+|`display?`|`integer` or `string`|Display identifier to launch the activity intent on|
+|`extras?`|`ActivityExtras`|Extra activity intent arguments. See below for expected structure|
+|`flags?`|`string`|Flags in hexadecimal format to apply on activity intent start-up. Refer to the [Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for supported values. Multiple flags should be combined into one value using bitwise OR.|
 
-#### Response
-
-`null`
-
-### `mobile: startService`
-
-Starts a specified service intent. Calls [`Context.startService()`](https://developer.android.com/reference/android/content/Context#startService(android.content.Intent))
-/ [`Context.startForegroundService()`](https://developer.android.com/reference/android/content/Context#startForegroundService(android.content.Intent))
-under the hood.
-
-#### Parameters
-
-|<div style="width:7em">Name</div>|Type|Description|
-|--|--|--|
-|`intent`|`string`|Name of the service intent to start. Only services belonging to the app under test are supported.|
-|`user?`|`integer` or `string`|ID of the user to use for starting the intent. The `current` user is used by default.|
-|`foreground?`|`boolean`|Whether to start the service in the foreground. Set to `false` by default.|
-
-#### Response
-
-`string` - the fully qualified name of the component that was started due to the intent
-
-### `mobile: stopService`
-
-Stops the specified service intent. Calls [`Context.stopService()`](https://developer.android.com/reference/android/content/Context#stopService(android.content.Intent))
-under the hood.
-
-#### Parameters
-
-|Name|Type|Description|
-|--|--|--|
-|`intent`|`string`|Name of the service intent to stop. Only services belonging to the app under test are supported.|
-|`user?`|`integer` or `string`|ID of the user to use for starting the intent. The `current` user is used by default.|
-
-#### Response
-
-`string` - equal to `'true'` if the service was successfully stopped
-
-### `mobile: deepLink`
-
-### `mobile: broadcast`
-
-Sends a broadcast Intent to the Android system. Invokes `adb shell am broadcast` under the hood.
-
-#### Parameters
-
-|<div style="width:16em">Name</div>|<div style="width:11em">Type</div>|Description|
-|--|--|--|
-|`intent?`|`string`|Full name of the intent to broadcast|
-|`user?`|`integer` or `string`|ID of the user to send the broadcast to|
-|`action?`|`string`|Name of the intent action|
-|`uri?`|`string`|Intent URI|
-|`mimeType?`|`string`|Intent MIME type|
-|`identifier?`|`string`|Intent identifier|
-|`categories?`|`string` or `Array<string>`|One or more intent categories|
-|`component?`|`string`|Intent component|
-|`package?`|`string`|Intent package name|
-|`extras?`|`Array<Array<string>>`|Extra intent arguments. See below for expected structure|
-|`flags?`|`string`|Flags in hexadecimal format to apply on intent start-up. Refer to the [Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for supported values. Multiple flags should be merged into one value.|
-|`receiverPermission?`|`string`|Permission that the receiver must hold|
-|`allowBackgroundActivityStarts?`|`boolean`|Whether the receiver may start activities even if in the background|
-
-The `flags` parameter is an array of arrays, where each subarray contains 3 items: value category,
-key, and the value itself. Supported value categories and their value types are as follows:
+The `extras` parameter (`ActivityExtras`) is an array of arrays, where each subarray contains 3
+items: value category, key, and the value itself. Supported value categories and their value types
+are as follows:
 
 |<div style="width:7em">Value Category</div>|Value Type|
 |--|--|
@@ -1765,7 +1713,101 @@ key, and the value itself. Supported value categories and their value types are 
 
 #### Response
 
-`string` - output of the `adb shell am broadcast` command.
+`string` - output of the respective `adb` command
+
+### `mobile: startService`
+
+Starts a specified service intent using `adb shell am start-service`/`adb shell am start-foreground-service`.
+
+#### Parameters
+
+|<div style="width:8em">Name</div>|<div style="width:11em">Type</div>|Description|
+|--|--|--|
+|`foreground?`|`boolean`|Whether to start the service in the foreground. Unset by default. Ignored for devices running Android 8 (Oreo / API level 26) or earlier.|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+
+#### Response
+
+`string` - output of the respective `adb` command
+
+### `mobile: stopService`
+
+Stops the specified service intent using `adb shell am stop-service`.
+
+#### Parameters
+
+|Name|Type|Description|
+|--|--|--|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+
+#### Response
+
+`string` - output of the respective `adb` command
+
+### `mobile: broadcast`
+
+Sends a broadcast Intent to the Android system using `adb shell am broadcast`.
+
+#### Parameters
+
+|<div style="width:16em">Name</div>|<div style="width:11em">Type</div>|Description|
+|--|--|--|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`receiverPermission?`|`string`|Permission that the receiver must hold|
+|`allowBackgroundActivityStarts?`|`boolean`|Whether the receiver may start activities even if in the background. Unset by default.|
+
+#### Response
+
+`string` - output of the respective `adb` command
+
+### `mobile: deepLink`
+
+Opens an app-specific URI, leading directly to specific content inside the app.
+
+Refer to the [Reliably Opening Deep Links Across Platforms and Devices](https://www.headspin.io/blog/reliably-opening-deep-links-across-platforms-and-devices)
+guide for more details.
+
+#### Parameters
+
+|<div style="width:8em">Name</div>|Type|Description|
+|--|--|--|
+|`url`|`string`|Deep link URI to open|
+|`package?`|`string`|Name of the package to start the URI with. By default, the current app package is used. Required for driver versions before 3.9.3.|
+|`waitForLaunch?`|`boolean`|Whether to block the call until the activity returns control to the system. Set to `true` by default.|
+
+#### Response
+
+`null`
 
 ### `mobile: deviceidle`
 
@@ -1777,7 +1819,7 @@ since Android 6 (Marshmallow / API level 23).
 Refer to the [Diving Into Android 'M' Doze](https://www.protechtraining.com/blog/post/diving-into-android-m-doze-875)
 guide for more details.
 
-Available since driver version 2.40.0.
+Available since driver version 2.32.0.
 
 #### Parameters
 
@@ -1793,13 +1835,13 @@ Available since driver version 2.40.0.
 ### `mobile: sendTrimMemory`
 
 Simulates a system memory trimming-related event for the specified package, by calling
-[`ComponentCallbacks2.onTrimMemory()`](https://developer.android.com/reference/android/content/ComponentCallbacks2#onTrimMemory(int)).
+`adb shell am send-trim-memory`.
 
 This functionality can be useful to verify app functionality under different system memory usage
 levels. Refer to the Android [Manage your app's memory](https://developer.android.com/topic/performance/memory)
 guide for more details.
 
-Available since driver version 2.40.0.
+Available since driver version 2.41.0.
 
 #### Parameters
 

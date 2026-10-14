@@ -1947,6 +1947,10 @@ device screen coordinates
 
 ## Gestures
 
+For information about automating more complicated gestures than the ones listed below, refer to the
+[Automating Complex Gestures with the W3C Actions API](https://www.headspin.io/blog/automating-complex-gestures-with-the-w3c-actions-api)
+and [Android Input Events](../guides/input-events.md) guides.
+
 ### `mobile: clickGesture`
 
 Performs a click action on the specified element or coordinates.
@@ -2125,11 +2129,74 @@ Performs a pinch close gesture on the specified element or area using the W3C Ac
 
 ### `mobile: scroll`
 
+Scrolls a scrollable view until the element identified by `strategy` and `selector` becomes visible.
+The scroll direction is detected automatically.
+
+This function returns immediately if the destination element is already visible in the viewport.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `accessibility id`, `class name`, and `-android uiautomator`.|
+|`selector`|`string`|Element selector to use for the specified locator strategy|
+|`elementId?`|`string`|Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the `-android uiautomator` strategy. By default, the first currently available scrollable view is used.|
+|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`).|
+
+#### Response
+
+`null`
+
 ### `mobile: scrollBackTo`
+
+Scrolls a scrollable view until the target element becomes visible. The scroll direction is
+detected automatically.
+
+#### Parameters
+
+|<div style="width:7em">Name</div>|Type|Description|
+|--|--|--|
+|`elementId`|`string`|Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the `-android uiautomator` strategy.|
+|`elementToId`|`string`|Identifier of the element to scroll to. The element matching this identifier must be locatable using the `-android uiautomator` strategy.|
+
+#### Response
+
+`null`
 
 ### `mobile: type`
 
+Types the given string in the currently focused input field element.
+
+Unlike [the standard Element Send Keys endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#setvalue),
+this method emulates 'true' typing equivalent to an on-screen keyboard, and properly supports
+Unicode input characters.
+
+#### Parameters
+
+|Name|Type|Description|
+|--|--|--|
+|`text`|`string` or `float` or `boolean`|Text to type|
+
+#### Response
+
+`boolean` - `true` if text was successfully sent to `adb`, otherwise `false`
+
 ### `mobile: replaceElementValue`
+
+Sets the value of a given element, replacing its existing value.
+
+Available since driver version 2.22.0.
+
+#### Parameters
+
+|Name|Type|Description|
+|--|--|--|
+|`elementId`|`string`|Identifier of the element to set the value of|
+|`text`|`string`|New text value of the element. Can contain Unicode characters. If the text ends with `\\n` (the backslash must be escaped, so that it is not translated into `0x0A`), the Enter key press will be emulated instead.|
+
+#### Response
+
+`null`
 
 ### `mobile: performEditorAction`
 
@@ -2152,4 +2219,34 @@ invocation of such a callback on the focused element.
 
 ### `mobile: acceptAlert`
 
+Attempts to accept an Android alert. Wraps [the standard Accept Alert endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#postacceptalert).
+
+This method may not always be reliable, as there is no single standard for how Android alerts
+should look like within the accessibility representation.
+
+#### Parameters
+
+|<div style="width:7em">Name</div>|Type|Description|
+|---|---|---|
+|`buttonLabel?`|`string`|Optional label of the alert button to click. By default, the button will be detected automatically.|
+
+#### Response
+
+`null`
+
 ### `mobile: dismissAlert`
+
+Attempts to dismiss an Android alert. Wraps [the standard Dismiss Alert endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#postdismissalert).
+
+This method may not always be reliable, as there is no single standard for how Android alerts
+should look like within the accessibility representation.
+
+#### Parameters
+
+|<div style="width:7em">Name</div>|Type|Description|
+|---|---|---|
+|`buttonLabel?`|`string`|Optional label of the alert button to click. By default, the button will be detected automatically.|
+
+#### Response
+
+`null`

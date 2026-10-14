@@ -1947,23 +1947,179 @@ device screen coordinates
 
 ## Gestures
 
-### `mobile: dragGesture`
-
-### `mobile: flingGesture`
-
-### `mobile: doubleClickGesture`
-
 ### `mobile: clickGesture`
+
+Performs a click action on the specified element or coordinates.
+
+Unlike [the standard Element Click endpoint](https://appium.io/docs/en/latest/reference/api/webdriver/#click),
+this method uses the W3C Actions API, and can be used as a workaround for cases where the standard
+endpoint does not work properly.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`elementId?`|`string`|The identifier of an element to be clicked. If omitted, `x` and `y` must be provided.|
+|`x?`|`float`|Coordinate offset on the X-axis of either the element specified by `elementId` or the window|
+|`y?`|`float`|Coordinate offset on the Y-axis of either the element specified by `elementId` or the window|
+
+#### Response
+
+`null`
 
 ### `mobile: longClickGesture`
 
-### `mobile: pinchCloseGesture`
+Performs a long click action on the specified element or coordinates using the W3C Actions API.
 
-### `mobile: pinchOpenGesture`
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`elementId?`|`string`|The identifier of an element to be long clicked. If omitted, `x` and `y` must be provided.|
+|`x?`|`float`|Coordinate offset on the X-axis of either the element specified by `elementId` or the window|
+|`y?`|`float`|Coordinate offset on the Y-axis of either the element specified by `elementId` or the window|
+|`duration?`|`integer`|Click duration in milliseconds. Set to `500` by default.|
+
+#### Response
+
+`null`
+
+### `mobile: doubleClickGesture`
+
+Performs a double click action on the specified element or coordinates using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`elementId?`|`string`|The identifier of an element to be double clicked. If omitted, `x` and `y` must be provided.|
+|`x?`|`float`|Coordinate offset on the X-axis of either the element specified by `elementId` or the window|
+|`y?`|`float`|Coordinate offset on the Y-axis of either the element specified by `elementId` or the window|
+
+#### Response
+
+`null`
+
+### `mobile: scrollGesture`
+
+Performs a scroll action on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`direction`|`string`|Direction to scroll. Supported values are `up`, `down`, `left`, and `right` (case insensitive).|
+|`percent`|`float`|Fraction of the element/area to scroll. Must be in range `(0..1]`.|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the scroll area. Either this property or `left`/`top`/`width`/`height` must be provided.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`width?`|`float`|Width of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`height?`|`float`|Height of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`speed?`|`integer`|Speed of the scroll gesture in pixels per second. Set to `1500 * displayDensity` by default.|
+
+#### Response
+
+`boolean` - `true` if further scrolling is possible, otherwise `false`
+
+### `mobile: dragGesture`
+
+Performs a drag action on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`endX`|`float`|Absolute X-axis coordinate for the end of the drag gesture|
+|`endY`|`float`|Absolute Y-axis coordinate for the end of the drag gesture|
+|`elementId?`|`string`|The identifier of an element to drag. If omitted, `startX` and `startY` must be provided.|
+|`startX?`|`float`|Coordinate offset on the X-axis of either the element specified by `elementId` or the window, for the start of the drag gesture|
+|`startY?`|`float`|Coordinate offset on the Y-axis of either the element specified by `elementId` or the window, for the start of the drag gesture|
+|`speed?`|`integer`|Speed of the drag gesture in pixels per second. Set to `2500 * displayDensity` by default.|
+
+#### Response
+
+`null`
 
 ### `mobile: swipeGesture`
 
-### `mobile: scrollGesture`
+Performs a swipe action on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`direction`|`string`|Direction to swipe in. Supported values are `up`, `down`, `left`, and `right` (case insensitive).|
+|`percent`|`float`|Fraction of the element/area to swipe. Must be in range `(0..1]`.|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the swipe area. Either this property or `left`/`top`/`width`/`height` must be provided.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the swipe area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the swipe area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`width?`|`float`|Width of the swipe area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`height?`|`float`|Height of the swipe area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`speed?`|`integer`|Speed of the swipe gesture in pixels per second. Set to `5000 * displayDensity` by default.|
+
+#### Response
+
+`null`
+
+### `mobile: flingGesture`
+
+Performs a fling gesture on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`direction`|`string`|Direction to fling. Supported values are `up`, `down`, `left`, and `right` (case insensitive).|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the fling area. Either this property or `left`/`top`/`width`/`height` must be provided.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the fling area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the fling area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`width?`|`float`|Width of the fling area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`height?`|`float`|Height of the fling area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`speed?`|`integer`|Speed of the fling gesture in pixels per second. Must be greater than the minimum fling velocity for the given view (`50` by default). Set to `7500 * displayDensity` by default.|
+
+#### Response
+
+`boolean` - `true` if further scrolling is possible, otherwise `false`
+
+### `mobile: pinchOpenGesture`
+
+Performs a pinch open gesture on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`percent`|`float`|Fraction of the element/area to pinch. Must be in range `(0..1]`.|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the pinch area. Either this property or `left`/`top`/`width`/`height` must be provided.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`width?`|`float`|Width of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`height?`|`float`|Height of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`speed?`|`integer`|Speed of the pinch gesture in pixels per second. Set to `1000 * displayDensity` by default.|
+
+#### Response
+
+`null`
+
+### `mobile: pinchCloseGesture`
+
+Performs a pinch close gesture on the specified element or area using the W3C Actions API.
+
+#### Parameters
+
+|<div style="width:6em">Name</div>|Type|Description|
+|--|--|--|
+|`percent`|`float`|Fraction of the element/area to pinch. Must be in range `(0..1]`.|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the pinch area. Either this property or `left`/`top`/`width`/`height` must be provided.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`width?`|`float`|Width of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`height?`|`float`|Height of the pinch area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`speed?`|`integer`|Speed of the pinch gesture in pixels per second. Set to `1000 * displayDensity` by default.|
+
+#### Response
+
+`null`
 
 ## Elements
 

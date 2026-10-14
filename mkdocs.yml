@@ -59,7 +59,6 @@ nav:
       - Driver Actions:
           - guides/uiautomator-selector.md
           - guides/multiwindow.md
-          - guides/gestures.md
           - guides/unlock.md
           - guides/scheduled-actions.md
           - guides/input-events.md

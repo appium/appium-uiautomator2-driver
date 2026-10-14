@@ -413,12 +413,17 @@ Starts the specified app activity.
 
 #### Parameters
 
-|<div style="width:9em">Name</div>|Type|Description|
+|<div style="width:13em">Name</div>|Type|Description|
 |--|--|--|
-|`appPackage?`|`string`|Package of app whose activity should be started. If omitted, the `appPackage` value of the app under test is used.|
+|`appPackage`|`string`|Package of the app whose activity should be started|
 |`appActivity`|`string`|Activity to be started|
 |`appWaitPackage?`|`string`|Package to be waited on upon launching the specified activity. Set to `appPackage` if omitted.|
 |`appWaitActivity?`|`string`|Activity to be waited on upon launching the specified activity. Set to `appActivity` if omitted.|
+|`intentAction?`|`string`|Intent action to apply when launching the app. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `ACTION_`).|
+|`intentCategory?`|`string`|Intent category to apply when launching the app. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `CATEGORY_`).|
+|`intentFlags?`|`string`|Intent flags to apply when launching the app. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `FLAG_`).|
+|`optionalIntentArguments?`|`string`|Space-separated string of one or more intent arguments to apply to the launchable activity. The format should be `-flag1 key1`, `-flag2 key2 value2`, or a combination like `-flag1 key1 -flag2 key2 value2`.|
+|`dontStopAppOnReset?`|`boolean`|Whether to skip termination of the app, in case it is already running. By default, set to the value of the [`appium:dontStopAppOnReset`](./capabilities.md#dontstopapponreset) capability.|
 
 #### Response
 

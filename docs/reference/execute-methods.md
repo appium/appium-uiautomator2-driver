@@ -1677,16 +1677,16 @@ Starts the specified app activity using `adb shell am start-activity`.
 |`stop?`|`boolean`|Whether to stop the target app before starting the activity. Unset by default.|
 |`windowingMode?`|`integer`|Windowing mode to launch the activity intent into. Supported values can be found [in the Android source code](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) as `WINDOWING_MODE_` constants.|
 |`activityType?`|`integer`|Activity type to launch the intent as. Supported values can be found [in the Android source code](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/WindowConfiguration.java) as `ACTIVITY_TYPE_` constants.|
-|`action?`|`string`|Name of the activity intent action|
+|`action?`|`string`|Intent action to apply when launching the app. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `ACTION_`).|
 |`uri?`|`string`|Activity intent URI|
 |`mimeType?`|`string`|Activity intent MIME type|
 |`identifier?`|`string`|Activity intent identifier|
-|`categories?`|`string` or `Array<string>`|One or more activity intent categories|
+|`categories?`|`string` or `Array<string>`|One or more activity intent categories. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `CATEGORY_`).|
 |`component?`|`string`|Activity intent component|
 |`package?`|`string`|Activity intent package name|
 |`display?`|`integer` or `string`|Display identifier to launch the activity intent on|
 |`extras?`|`ActivityExtras`|Extra activity intent arguments. See below for expected structure|
-|`flags?`|`string`|Flags in hexadecimal format to apply on activity intent start-up. Refer to the [Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for supported values. Multiple flags should be combined into one value using bitwise OR.|
+|`flags?`|`string`|Flags in hexadecimal format to apply on activity intent start-up. Refer to the [Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for possible values (prefixed with `FLAG_`). Multiple flags should be combined into one value using bitwise OR.|
 
 The `extras` parameter (`ActivityExtras`) is an array of arrays, where each subarray contains 3
 items: value category, key, and the value itself. Supported value categories and their value types

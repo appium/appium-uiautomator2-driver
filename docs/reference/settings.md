@@ -20,8 +20,8 @@ under the hood.
 | -- | -- |
 | `boolean` | `false` |
 
-Whether to include elements that are not visible to the user (whose `displayed` attribute is
-`false`) in the XML source tree.
+Whether to include elements that are not visible to the user (whose [`displayed`](./element-attributes.md#displayed)
+attribute is `false`) in the XML source tree.
 
 ## `alwaysTraversableViewClasses`
 
@@ -80,8 +80,8 @@ Available since driver version 8.1.0.
 | -- | -- |
 | `boolean` | `false` |
 
-Whether to disable automatic prefixing of `resource-id`-based element selectors with the
-application package name.
+Whether to disable automatic prefixing of [`resource-id`](./element-attributes.md#resource-id)-based
+element selectors with the application package name.
 
 Internal Android standards expect each element resource identifier to be prefixed with the `<packageName>:id/`
 string. This is done to ensure uniqueness of each identifier. However, this rule is not strictly
@@ -178,9 +178,9 @@ viewing and searching the hierarchy inefficient are removed.
 | -- | -- |
 | `boolean` | `false` |
 
-Whether to include the `actions` element attribute in the application source. This attribute value
-could be huge if elements in the page source have a lot of actions, which could affect the
-performance of page source generation.
+Whether to include the [`actions`](./element-attributes.md#actions) element attribute in the
+application source. This attribute value could be huge if elements in the page source have a lot of
+actions, which could affect the performance of page source generation.
 
 Available since driver version 4.0.0.
 
@@ -190,8 +190,9 @@ Available since driver version 4.0.0.
 | -- | -- |
 | `boolean` | `false` |
 
-Whether to include the `text-size` and `text-unit` element attributes in the application source.
-Retrieval of these attributes has a slight effect on the performance of page source generation. 
+Whether to include the [`text-size`](./element-attributes.md#text-size) and [`text-unit`](./element-attributes.md#text-unit)
+element attributes in the application source. Retrieval of these attributes has a slight effect on
+the performance of page source generation. 
 
 Available since driver version 6.7.10.
 
@@ -201,9 +202,9 @@ Available since driver version 6.7.10.
 | -- | -- |
 | `boolean` | `false` |
 
-Whether to include the `extras` element attribute in the application source. This attribute value
-could be huge if elements in the page source have a lot of extras, which could affect the
-performance of page source generation.
+Whether to include the [`extras`](./element-attributes.md#extras) element attribute in the
+application source. This attribute value could be huge if elements in the page source have a lot of
+extras, which could affect the performance of page source generation.
 
 Available since driver version 2.1.0.
 
@@ -242,7 +243,8 @@ recommended to use the dot (`.`) notation: `findElement(By.xpath, "//root").find
 | `boolean` | `false` |
 
 Whether to map the [`testTag`](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/package-summary#(androidx.compose.ui.Modifier).testTag(kotlin.String))
-semantic property of Jetpack Compose elements onto their `resource-id` attribute.
+semantic property of Jetpack Compose elements onto their [`resource-id`](./element-attributes.md#resource-id)
+attribute.
 
 Enabling this setting mirrors the behavior of Compose's own [`testTagsAsResourceId`](https://developer.android.com/reference/kotlin/androidx/compose/ui/semantics/package-summary#(androidx.compose.ui.semantics.SemanticsPropertyReceiver).testTagsAsResourceId()),
 which can otherwise only be toggled from within the app's own composable tree. The mapping is
@@ -353,7 +355,8 @@ On the host machine, the forwarded UiAutomator2 server port can be configured us
 | `boolean` | `true` |
 
 Whether to enable compact responses for element search requests. If disabled, responses will
-include the attributes specified by the `elementResponseAttributes` setting.
+include the attributes specified by the [`elementResponseAttributes`](#elementresponseattributes)
+setting.
 
 ## `shutdownOnPowerDisconnect`
 
@@ -395,7 +398,8 @@ Available since driver version 2.27.0.
 | `boolean` | `true` |
 
 Whether to track all scroll events for the purpose of calculating the value of elements'
-`contentSize` attribute. Disabling this setting may speed up all scrolling actions.
+[`contentSize`](./element-attributes.md#contentsize) attribute. Disabling this setting may speed up
+all scrolling actions.
 
 ## `useResourcesForOrientationDetection`
 
@@ -427,7 +431,7 @@ help in mitigating long delays when interacting with elements.
 | `long` | `10000` |
 
 Maximum timeout in milliseconds to wait for an element match, when searching using the
-`-android uiautomator` locator strategy.
+[`-android uiautomator`](./locator-strategies.md#uiautomator) locator strategy.
 
 Since content in the user interface is dynamic, sometimes an element may not be immediately
 visible, and will not be detected by a selector. This timeout adds an extra wait during search,

@@ -5,8 +5,8 @@ title: Element Attributes
 The UiAutomator2 driver supports various native and custom element attributes.
 
 As a general rule, attributes that have a `null` value, or are not applicable to a given element
-type or Android version, are omitted from the page source, provided they are not already omitted
-by default. One exception to this rule is [`text`](#text).
+type or Android version, are omitted from the page source. One exception to this rule is [`text`](#text).
+Certain attributes also have further conditions for being omitted.
 
 ## `a11y-focused`
 
@@ -31,6 +31,8 @@ Retrieved from [`AccessibilityNodeInfo.getActionList()`](https://developer.andro
 This attribute is not included in the default page source due to performance reasons, but it can be
 added by changing the [`includeA11yActionsInPageSource`](./settings.md#includea11yactionsinpagesource)
 setting to true, or retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
+
+Available since driver version 4.0.0.
 
 ## `bounds`
 
@@ -59,7 +61,7 @@ Always set to `false` if [`checkable`](#checkable) is `false`.
 > Example: `android.view.View`
 
 Full name of the element's class. Retrieved from [`AccessibilityNodeInfo.getClassName()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getClassName()).
-Could be `null`.
+Could be `null` and therefore omitted.
 
 This attribute can also be retrieved using the `className` alias.
 
@@ -101,7 +103,7 @@ Available since driver version 8.3.0.
 > Example: `foo`
 
 Content description of the element. Retrieved from [`AccessibilityNodeInfo.getContentDescription()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getContentDescription()).
-Could be `null`.
+Could be `null` and therefore omitted.
 
 This attribute can also be retrieved using the `contentDescription` alias.
 
@@ -167,37 +169,145 @@ Error text of the element. Retrieved from [`AccessibilityNodeInfo.getError()`](h
 
 ## `extras`
 
+> Example: `AccessibilityNodeInfo.roleDescription=;ACTION_ARGUMENT_HTML_ELEMENT_STRING_VALUES=ARTICLE,BLOCKQUOTE`
+
+Extra data of the element. Retrieved from [`AccessibilityNodeInfo.getExtras()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getExtras()).
+
+The value of this attribute is formatted as a semicolon-separated (`;`) string of key-value pairs,
+which in turn are separated using the equality sign (`=`). Keys with non-`null` but otherwise empty
+values are preserved.
+
+This attribute is not included in the default page source due to performance reasons, but it can be
+added by changing the [`includeExtrasInPageSource`](./settings.md#includeextrasinpagesource)
+setting to true, or retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
+
+Available since driver version 2.1.0.
+
 ## `focusable`
+
+> Example: `true`
+
+Whether the element is focusable. Retrieved from [`AccessibilityNodeInfo.isFocusable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isFocusable()).
 
 ## `focused`
 
+> Example: `true`
+
+Whether the element is focused. Retrieved from [`AccessibilityNodeInfo.isFocused()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isFocused()).
+Always set to `false` if [`focusable`](#focusable) is `false`.
+
 ## `heading`
+
+> Example: `true`
+
+Whether element represents a heading. Retrieved from [`AccessibilityNodeInfo.isHeading()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isHeading()).
+Requires Android 9 (Pie / API level 28) or later.
 
 ## `hint`
 
+> Example: `enter text here`
+
+Hint text of the element. Retrieved from [`AccessibilityNodeInfo.getHintText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getHintText()).
+Requires Android 8 (Oreo / API level 26) or later.
+
 ## `index`
+
+> Example: `1`
+
+Index of the element under its parent, relative to its siblings.
 
 ## `input-type`
 
+> Example: `16`
+
+Integer bitmask of the element's input type. Only available for editable input text elements.
+Retrieved from [`AccessibilityNodeInfo.getInputType()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getInputType()).
+
+This attribute is omitted from the page source if its value is `0` (`TYPE_NUMBER_VARIATION_NORMAL`).
+
 ## `is-collection`
+
+> Example: `true`
+
+Whether the element represents a collection container (e.g. a list or grid). Calculated by retrieving [`AccessibilityNodeInfo.getCollectionInfo()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getCollectionInfo())
+and checking whether it is not `null`.
+
+This attribute is only included in the page source if its value is `true`.
+
+Available since driver version 8.3.0.
 
 ## `is-collection-item`
 
+> Example: `true`
+
+Whether the element represents an item within a collection container (e.g. a list or grid). Calculated by retrieving [`AccessibilityNodeInfo.getCollectionItemInfo()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getCollectionItemInfo())
+and checking whether it is not `null`.
+
+This attribute is only included in the page source if its value is `true`.
+
+Available since driver version 8.3.0.
+
 ## `live-region`
+
+> Example: `1`
+
+Integer value of the element's live region mode. Retrieved from [`AccessibilityNodeInfo.getLiveRegion()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getLiveRegion()).
 
 ## `long-clickable`
 
+> Example: `true`
+
+Whether the element responds to long clicks. Retrieved from [`AccessibilityNodeInfo.isLongClickable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isLongClickable()).
+
 ## `max-text-length`
+
+> Example: `30`
+
+Maximum text length for the element. Only available for input text elements. Retrieved from [`AccessibilityNodeInfo.getMaxTextLength()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getMaxTextLength()).
+
+This attribute is omitted from the page source if its value is `-1` (maximum text length is not
+set).
 
 ## `multiline`
 
+> Example: `true`
+
+Whether the element is a multi line editable text element. Only available for input text elements.
+Retrieved from [`AccessibilityNodeInfo.isMultiLine()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isMultiLine()).
+
+This attribute is omitted from the page source if the value of [`max-text-length`](#max-text-length)
+is `-1`.
+
 ## `package`
+
+> Example: `com.mycompany`
+
+Identifier of the package the element belongs to. Retrieved from [`AccessibilityNodeInfo.getPackageName()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getPackageName()).
+Could be `null` and therefore omitted.
 
 ## `pane-title`
 
+> Example: `title`
+
+Title of the pane represented by this element. Retrieved from [`AccessibilityNodeInfo.getPaneTitle()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getPaneTitle()).
+Requires Android 9 (Pie / API level 28) or later.
+
 ## `password`
 
+> Example: `true`
+
+Whether the element is a password input field. Retrieved from [`AccessibilityNodeInfo.isPassword()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isPassword()).
+
 ## `resource-id`
+
+> Example: `com.mycompany:id/resId`
+
+Fully qualified resource identifier of the element. Retrieved from [`AccessibilityNodeInfo.getViewIdResourceName()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getViewIdResourceName()).
+Could be `null` and therefore omitted.
+
+If the [`mapTestTagToResourceId`](./settings.md#maptesttagtoresourceid) setting is enabled, the
+value of this attribute is instead retrieved from the element's Jetpack Compose `testTag` property
+(`androidx.compose.ui.semantics.testTag`), if one is present.
 
 ## `screen-reader-focusable`
 

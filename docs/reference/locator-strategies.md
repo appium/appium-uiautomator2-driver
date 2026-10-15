@@ -31,9 +31,6 @@ setting is not enabled, the prefix identifier of the current app under test is a
 This strategy is mapped to the native UI Automator [`BySelector.desc`](https://developer.android.com/reference/androidx/test/uiautomator/BySelector#desc(java.lang.String))
 matcher, which returns elements whose content description matches the specified value exactly.
 
-In applications written using [React Native](https://reactnative.dev/), this attribute reflects the
-value of the `accessibilityLabel` property.
-
 !!! info "When to Use"
 
     Use this strategy for elements that can be identified using their [`View.contentDescription`](https://developer.android.com/reference/android/view/View#attr_android:contentDescription)

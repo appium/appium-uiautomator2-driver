@@ -1,3 +1,4 @@
+// oxlint-disable import/no-duplicates -- see the bare imports below
 import type {DefaultCreateSessionResult, ExternalDriver, InitialOpts, RouteMatcher, StringRecord} from '@appium/types';
 import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
@@ -110,6 +111,23 @@ import {
   startSession,
 } from './uiautomator2-server/index.js';
 import {assignDefaults, MJpegStream} from './utils/index.js';
+// Bare imports keep the `declare module` augmentations in the emitted `.d.ts` import graph
+import './commands/actions.js';
+import './commands/alert.js';
+import './commands/app-management.js';
+import './commands/aut.js';
+import './commands/battery.js';
+import './commands/clipboard.js';
+import './commands/element.js';
+import './commands/gestures.js';
+import './commands/keyboard.js';
+import './commands/misc.js';
+import './commands/navigation.js';
+import './commands/screenshot.js';
+import './commands/viewport.js';
+import './commands/windows.js';
+import './uiautomator2-server/session.js';
+// oxlint-enable import/no-duplicates
 
 // NO_PROXY contains the paths that we never want to proxy to UiAutomator2 server.
 // TODO:  Add the list of paths that we never want to proxy to UiAutomator2 server.
@@ -229,108 +247,6 @@ class AndroidUiautomator2Driver
 
   override desiredCapConstraints: Uiautomator2Constraints;
 
-  mobileGetActionHistory = mobileGetActionHistory;
-  mobileScheduleAction = mobileScheduleAction;
-  mobileUnscheduleAction = mobileUnscheduleAction;
-  performActions = performActions as AndroidDriver['performActions'];
-  releaseActions = releaseActions;
-
-  getAlertText = getAlertText;
-  mobileAcceptAlert = mobileAcceptAlert;
-  mobileDismissAlert = mobileDismissAlert;
-  postAcceptAlert = postAcceptAlert;
-  postDismissAlert = postDismissAlert;
-
-  mobileInstallMultipleApks = mobileInstallMultipleApks;
-
-  mobileGetBatteryInfo = mobileGetBatteryInfo;
-
-  active = active;
-  getAttribute = getAttribute as AndroidDriver['getAttribute'];
-  elementEnabled = elementEnabled as AndroidDriver['elementEnabled'];
-  elementDisplayed = elementDisplayed as AndroidDriver['elementDisplayed'];
-  elementSelected = elementSelected as AndroidDriver['elementSelected'];
-  getName = getName as AndroidDriver['getName'];
-  getLocation = getLocation as AndroidDriver['getLocation'];
-  getSize = getSize as AndroidDriver['getSize'];
-  getElementRect = getElementRect;
-  getElementScreenshot = getElementScreenshot;
-  getText = getText as AndroidDriver['getText'];
-  setValueImmediate = setValueImmediate as AndroidDriver['setValueImmediate'];
-  doSetElementValue = doSetElementValue as AndroidDriver['doSetElementValue'];
-  click = click as AndroidDriver['click'];
-  clear = clear;
-  mobileReplaceElementValue = mobileReplaceElementValue;
-
-  doFindElementOrEls = doFindElementOrEls as AndroidDriver['doFindElementOrEls'];
-
-  mobileClickGesture = mobileClickGesture;
-  mobileDoubleClickGesture = mobileDoubleClickGesture;
-  mobileDragGesture = mobileDragGesture;
-  mobileFlingGesture = mobileFlingGesture;
-  mobileLongClickGesture = mobileLongClickGesture;
-  mobilePinchCloseGesture = mobilePinchCloseGesture;
-  mobilePinchOpenGesture = mobilePinchOpenGesture;
-  mobileScroll = mobileScroll;
-  mobileScrollBackTo = mobileScrollBackTo;
-  mobileScrollGesture = mobileScrollGesture;
-  mobileSwipeGesture = mobileSwipeGesture;
-
-  pressKeyCode = pressKeyCode as AndroidDriver['pressKeyCode'];
-  longPressKeyCode = longPressKeyCode as AndroidDriver['longPressKeyCode'];
-  mobilePressKey = mobilePressKey;
-  mobileType = mobileType;
-  doSendKeys = doSendKeys as AndroidDriver['doSendKeys'];
-  keyevent = keyevent;
-
-  getPageSource = getPageSource;
-  getOrientation = getOrientation;
-  setOrientation = setOrientation;
-  openNotifications = openNotifications as AndroidDriver['openNotifications'];
-  suspendChromedriverProxy = suspendChromedriverProxy as AndroidDriver['suspendChromedriverProxy'];
-  mobileGetDeviceInfo = mobileGetDeviceInfo;
-  mobileGetDeclaredOrientation = mobileGetDeclaredOrientation;
-  mobileResetAccessibilityCache = mobileResetAccessibilityCache;
-  mobileListWindows = mobileListWindows;
-  mobileListDisplays = mobileListDisplays;
-
-  getClipboard = getClipboard;
-  setClipboard = setClipboard;
-
-  setUrl = setUrl as AndroidDriver['setUrl'];
-  mobileDeepLink = mobileDeepLink;
-  back = back;
-
-  mobileScreenshots = mobileScreenshots;
-  mobileViewportScreenshot = mobileViewportScreenshot;
-  getScreenshot = getScreenshot;
-  getViewportScreenshot = getViewportScreenshot;
-
-  getStatusBarHeight = getStatusBarHeight;
-  getDevicePixelRatio = getDevicePixelRatio;
-  getDisplayDensity = getDisplayDensity as AndroidDriver['getDisplayDensity'];
-  getViewPortRect = getViewPortRect;
-  getWindowRect = getWindowRect as AndroidDriver['getWindowRect'];
-  getWindowSize = getWindowSize as AndroidDriver['getWindowSize'];
-  mobileViewPortRect = mobileViewPortRect;
-  mobileViewportElementRect = mobileViewportElementRect;
-
-  prepareSessionApp = prepareSessionApp;
-  checkAppPresent = checkAppPresent;
-  initAUT = initAUT;
-  ensureAppStarts = ensureAppStarts;
-
-  allocateSystemPort = allocateSystemPort;
-  releaseSystemPort = releaseSystemPort;
-  allocateMjpegServerPort = allocateMjpegServerPort;
-  releaseMjpegServerPort = releaseMjpegServerPort;
-  performSessionPreExecSetup = performPreExecSetup;
-  performSessionExecution = performExecution;
-  performSessionPostExecSetup = performPostExecSetup;
-  startUiAutomator2Session = startSession;
-  initUiAutomator2Server = initServer;
-  requireUiautomator2 = requireServer;
-
   constructor(opts: InitialOpts = {} as InitialOpts, shouldValidateCaps = true) {
     // `shell` overwrites adb.shell, so remove
     // @ts-expect-error FIXME: what is this?
@@ -356,12 +272,11 @@ class AndroidUiautomator2Driver
     // memoize functions here, so that they are done on a per-instance basis
     this.getStatusBarHeight = util.memoize(this.getStatusBarHeight);
     this.getDevicePixelRatio = util.memoize(this.getDevicePixelRatio);
+  }
 
-    // wrap (rather than replace) the inherited implementation, so `mobile: getContexts`
-    // transparently also returns each webview's on-screen rect
-    const baseMobileGetContexts = this.mobileGetContexts.bind(this);
-    this.mobileGetContexts = async (waitForWebviewMs?: number) =>
-      enrichWebviewsMappingWithRects(this, await baseMobileGetContexts(waitForWebviewMs));
+  // also return each webview's on-screen rect
+  override async mobileGetContexts(waitForWebviewMs?: number) {
+    return await enrichWebviewsMappingWithRects(this, await super.mobileGetContexts(waitForWebviewMs));
   }
 
   override validateDesiredCaps(caps: any): caps is Uiautomator2DriverCaps {
@@ -639,5 +554,126 @@ class AndroidUiautomator2Driver
     return adb;
   }
 }
+
+Object.assign(AndroidUiautomator2Driver.prototype, {
+  // actions
+  mobileGetActionHistory,
+  mobileScheduleAction,
+  mobileUnscheduleAction,
+  performActions,
+  releaseActions,
+
+  // alert
+  getAlertText,
+  mobileAcceptAlert,
+  mobileDismissAlert,
+  postAcceptAlert,
+  postDismissAlert,
+
+  // app-management
+  mobileInstallMultipleApks,
+
+  // battery
+  mobileGetBatteryInfo,
+
+  // element
+  active,
+  getAttribute,
+  elementEnabled,
+  elementDisplayed,
+  elementSelected,
+  getName,
+  getLocation,
+  getSize,
+  getElementRect,
+  getElementScreenshot,
+  getText,
+  setValueImmediate,
+  doSetElementValue,
+  click,
+  clear,
+  mobileReplaceElementValue,
+
+  // find
+  doFindElementOrEls,
+
+  // gestures
+  mobileClickGesture,
+  mobileDoubleClickGesture,
+  mobileDragGesture,
+  mobileFlingGesture,
+  mobileLongClickGesture,
+  mobilePinchCloseGesture,
+  mobilePinchOpenGesture,
+  mobileScroll,
+  mobileScrollBackTo,
+  mobileScrollGesture,
+  mobileSwipeGesture,
+
+  // keyboard
+  pressKeyCode,
+  longPressKeyCode,
+  mobilePressKey,
+  mobileType,
+  doSendKeys,
+  keyevent,
+
+  // misc
+  getPageSource,
+  getOrientation,
+  setOrientation,
+  openNotifications,
+  suspendChromedriverProxy,
+  mobileGetDeviceInfo,
+  mobileGetDeclaredOrientation,
+  mobileResetAccessibilityCache,
+
+  // windows
+  mobileListWindows,
+  mobileListDisplays,
+
+  // clipboard
+  getClipboard,
+  setClipboard,
+
+  // navigation
+  setUrl,
+  mobileDeepLink,
+  back,
+
+  // screenshot
+  mobileScreenshots,
+  mobileViewportScreenshot,
+  getScreenshot,
+  getViewportScreenshot,
+
+  // viewport
+  getStatusBarHeight,
+  getDevicePixelRatio,
+  getDisplayDensity,
+  getViewPortRect,
+  getWindowRect,
+  getWindowSize,
+  mobileViewPortRect,
+  mobileViewportElementRect,
+
+  // aut
+  prepareSessionApp,
+  checkAppPresent,
+  initAUT,
+  ensureAppStarts,
+
+  // uiautomator2-server/session
+  allocateSystemPort,
+  releaseSystemPort,
+  allocateMjpegServerPort,
+  releaseMjpegServerPort,
+  performSessionPreExecSetup: performPreExecSetup,
+  performSessionExecution: performExecution,
+  performSessionPostExecSetup: performPostExecSetup,
+  startUiAutomator2Session: startSession,
+  initUiAutomator2Server: initServer,
+  requireUiautomator2: requireServer,
+});
 
 export {AndroidUiautomator2Driver};

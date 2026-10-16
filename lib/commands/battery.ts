@@ -1,6 +1,12 @@
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {BatteryInfo} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileGetBatteryInfo(...args: Parameters<typeof mobileGetBatteryInfo>): ReturnType<typeof mobileGetBatteryInfo>;
+  }
+}
+
 /**
  * Reads the battery information from the device under test.
  * @returns Battery information including level (0.0-1.0) and state (charging, discharging, etc.).

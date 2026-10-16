@@ -5,6 +5,18 @@ import {PROTOCOLS} from 'appium/driver.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    active(...args: Parameters<typeof active>): ReturnType<typeof active>;
+    getElementRect(...args: Parameters<typeof getElementRect>): ReturnType<typeof getElementRect>;
+    getElementScreenshot(...args: Parameters<typeof getElementScreenshot>): ReturnType<typeof getElementScreenshot>;
+    clear(...args: Parameters<typeof clear>): ReturnType<typeof clear>;
+    mobileReplaceElementValue(
+      ...args: Parameters<typeof mobileReplaceElementValue>
+    ): ReturnType<typeof mobileReplaceElementValue>;
+  }
+}
+
 /**
  * Gets the currently active element.
  * @returns The currently active element.

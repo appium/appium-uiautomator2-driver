@@ -1,5 +1,12 @@
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    getClipboard(...args: Parameters<typeof getClipboard>): ReturnType<typeof getClipboard>;
+    setClipboard(...args: Parameters<typeof setClipboard>): ReturnType<typeof setClipboard>;
+  }
+}
+
 /**
  * Gets the clipboard content as a base64-encoded string.
  * @returns Base64-encoded clipboard content, or an empty string if the clipboard is empty.

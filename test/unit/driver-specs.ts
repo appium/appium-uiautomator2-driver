@@ -312,4 +312,22 @@ describe('driver.js', function () {
       assert.strictEqual(setDefaultHiddenApiPolicyStub.calledOnce, false);
     });
   });
+
+  describe('command overrides', function () {
+    it('should expose commands as prototype methods', function () {
+      for (const name of ['getAlertText', 'mobileGetBatteryInfo', 'requireUiautomator2', 'mobileGetContexts']) {
+        assert.strictEqual(Object.hasOwn(new AndroidUiautomator2Driver(), name), false, name);
+      }
+    });
+    it('should allow descendants to override a command and call super', async function () {
+      class CustomDriver extends AndroidUiautomator2Driver {
+        override async getPageSource(): Promise<string> {
+          return `custom:${await super.getPageSource()}`;
+        }
+      }
+      const driver = new CustomDriver();
+      driver.uiautomator2 = {jwproxy: {command: sandbox.stub().resolves('<xml/>')}} as any;
+      assert.strictEqual(await driver.getPageSource(), 'custom:<xml/>');
+    });
+  });
 });

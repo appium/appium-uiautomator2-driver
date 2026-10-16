@@ -20,6 +20,27 @@ import type {
 import {UiAutomator2Server, type UiAutomator2ServerOptions} from './core.js';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    allocateSystemPort(...args: Parameters<typeof allocateSystemPort>): ReturnType<typeof allocateSystemPort>;
+    releaseSystemPort(...args: Parameters<typeof releaseSystemPort>): ReturnType<typeof releaseSystemPort>;
+    allocateMjpegServerPort(
+      ...args: Parameters<typeof allocateMjpegServerPort>
+    ): ReturnType<typeof allocateMjpegServerPort>;
+    releaseMjpegServerPort(
+      ...args: Parameters<typeof releaseMjpegServerPort>
+    ): ReturnType<typeof releaseMjpegServerPort>;
+    performSessionPreExecSetup(...args: Parameters<typeof performPreExecSetup>): ReturnType<typeof performPreExecSetup>;
+    performSessionExecution(...args: Parameters<typeof performExecution>): ReturnType<typeof performExecution>;
+    performSessionPostExecSetup(
+      ...args: Parameters<typeof performPostExecSetup>
+    ): ReturnType<typeof performPostExecSetup>;
+    startUiAutomator2Session(...args: Parameters<typeof startSession>): ReturnType<typeof startSession>;
+    initUiAutomator2Server(...args: Parameters<typeof initServer>): ReturnType<typeof initServer>;
+    requireUiautomator2(...args: Parameters<typeof requireServer>): ReturnType<typeof requireServer>;
+  }
+}
+
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device
 const DEVICE_PORT_RANGE = [8200, 8299];

@@ -4,6 +4,14 @@ import type {AndroidUiautomator2Driver} from '../driver.js';
 import {APK_EXTENSION} from '../extensions.js';
 import type {InstallOptions} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileInstallMultipleApks(
+      ...args: Parameters<typeof mobileInstallMultipleApks>
+    ): ReturnType<typeof mobileInstallMultipleApks>;
+  }
+}
+
 /**
  * Installs multiple APKs with `install-multiple` option.
  * @param apks - Array of APK file paths or URLs to install.

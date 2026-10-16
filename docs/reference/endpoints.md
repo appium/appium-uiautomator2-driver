@@ -102,7 +102,7 @@ always uses the currently active window.
 
 !!! warning "Deprecated"
 
-    Please use the [getWindowRect](https://appium.io/docs/en/latest/reference/api/webdriver/#getwindowrect)
+    Please use the standard [Get Window Rect](https://appium.io/docs/en/latest/reference/api/webdriver/#getwindowrect)
     endpoint instead
 
 #### Response
@@ -146,7 +146,7 @@ Returns the element's location on the page.
 
 !!! warning "Deprecated"
 
-    Please use the [getElementRect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
+    Please use the standard [Get Element Rect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
     endpoint instead
 
 #### Response
@@ -166,7 +166,7 @@ Returns the element's location on the page screen once it has been scrolled into
 
 !!! warning "Deprecated"
 
-    Please use the [getElementRect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
+    Please use the standard [Get Element Rect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
     endpoint instead
 
 #### Response
@@ -186,7 +186,7 @@ Returns the element's size in pixels.
 
 !!! warning "Deprecated"
 
-    Please use the [getElementRect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
+    Please use the standard [Get Element Rect](https://appium.io/docs/en/latest/reference/api/webdriver/#getelementrect)
     endpoint instead
 
 #### Response
@@ -831,7 +831,7 @@ Sets the value of an element using `adb`.
 
 !!! warning "Deprecated"
 
-    Please use the [setValue](https://appium.io/docs/en/latest/reference/api/webdriver/#setvalue)
+    Please use the standard [Element Send Keys](https://appium.io/docs/en/latest/reference/api/webdriver/#setvalue)
     endpoint instead
 
 #### Parameters
@@ -854,7 +854,7 @@ Replaces the value of an element using `adb`.
 
 !!! warning "Deprecated"
 
-    Please use the [setValue](https://appium.io/docs/en/latest/reference/api/webdriver/#setvalue)
+    Please use the standard [Element Send Keys](https://appium.io/docs/en/latest/reference/api/webdriver/#setvalue)
     endpoint instead
 
 #### Parameters

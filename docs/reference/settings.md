@@ -254,10 +254,10 @@ attribute.
 
 Enabling this setting mirrors the behavior of Compose's own [`testTagsAsResourceId`](https://developer.android.com/reference/kotlin/androidx/compose/ui/semantics/package-summary#(androidx.compose.ui.semantics.SemanticsPropertyReceiver).testTagsAsResourceId()),
 which can otherwise only be toggled from within the app's own composable tree. The mapping is
-consistently applied to `getAttribute`, page source/XPath generation, and `id`-based element
-lookups. Unlike the [`disableIdLocatorAutocompletion`](#disableidlocatorautocompletion) setting,
-bare `testTag` values are matched as-is, without automatically prepending the application package
-name.
+consistently applied to element attribute retrieval, page source/XPath generation, and `id`-based
+element lookups. Unlike the [`disableIdLocatorAutocompletion`](#disableidlocatorautocompletion)
+setting, bare `testTag` values are matched as-is, without automatically prepending the application
+package name.
 
 Available since driver version 8.4.0.
 

@@ -7,6 +7,15 @@ import {APKS_EXTENSION, APK_EXTENSION} from '../extensions.js';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from '../uiautomator2-server/index.js';
 import {signApp} from '../utils/index.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    prepareSessionApp(...args: Parameters<typeof prepareSessionApp>): ReturnType<typeof prepareSessionApp>;
+    checkAppPresent(...args: Parameters<typeof checkAppPresent>): ReturnType<typeof checkAppPresent>;
+    initAUT(...args: Parameters<typeof initAUT>): ReturnType<typeof initAUT>;
+    ensureAppStarts(...args: Parameters<typeof ensureAppStarts>): ReturnType<typeof ensureAppStarts>;
+  }
+}
+
 /** Configures the app capability and validates the APK path before session start. */
 export async function prepareSessionApp(this: AndroidUiautomator2Driver): Promise<void> {
   if (this.opts.app) {

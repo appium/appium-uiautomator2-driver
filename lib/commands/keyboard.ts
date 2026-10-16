@@ -2,6 +2,14 @@ import type {SendKeysOpts} from 'appium-android-driver';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobilePressKey(...args: Parameters<typeof mobilePressKey>): ReturnType<typeof mobilePressKey>;
+    mobileType(...args: Parameters<typeof mobileType>): ReturnType<typeof mobileType>;
+    keyevent(...args: Parameters<typeof keyevent>): ReturnType<typeof keyevent>;
+  }
+}
+
 /**
  * Presses a key code with optional metastate and flags.
  * @param keycode - Android key code to press.

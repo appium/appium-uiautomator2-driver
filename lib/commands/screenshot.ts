@@ -5,6 +5,17 @@ import type {AndroidUiautomator2Driver} from '../driver.js';
 import {cropBase64Image} from '../utils/index.js';
 import type {Screenshot} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileScreenshots(...args: Parameters<typeof mobileScreenshots>): ReturnType<typeof mobileScreenshots>;
+    mobileViewportScreenshot(
+      ...args: Parameters<typeof mobileViewportScreenshot>
+    ): ReturnType<typeof mobileViewportScreenshot>;
+    getScreenshot(...args: Parameters<typeof getScreenshot>): ReturnType<typeof getScreenshot>;
+    getViewportScreenshot(...args: Parameters<typeof getViewportScreenshot>): ReturnType<typeof getViewportScreenshot>;
+  }
+}
+
 // Matches SurfaceFlinger output format:
 // Physical: Display 4619827259835644672 (HWC display 0): port=0 pnpId=GGL displayName="EMU_display_0"
 // Virtual: Display 11529215049243506835 (Virtual display): displayName="Emulator 2D Display" uniqueId="..."

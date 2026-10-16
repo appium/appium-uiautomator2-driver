@@ -1,5 +1,15 @@
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    getAlertText(...args: Parameters<typeof getAlertText>): ReturnType<typeof getAlertText>;
+    mobileAcceptAlert(...args: Parameters<typeof mobileAcceptAlert>): ReturnType<typeof mobileAcceptAlert>;
+    mobileDismissAlert(...args: Parameters<typeof mobileDismissAlert>): ReturnType<typeof mobileDismissAlert>;
+    postAcceptAlert(...args: Parameters<typeof postAcceptAlert>): ReturnType<typeof postAcceptAlert>;
+    postDismissAlert(...args: Parameters<typeof postDismissAlert>): ReturnType<typeof postDismissAlert>;
+  }
+}
+
 /**
  * Gets the text of the currently displayed alert.
  * @returns The alert text as a string.

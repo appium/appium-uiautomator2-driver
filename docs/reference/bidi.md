@@ -14,7 +14,9 @@ and additionally defines the events and commands listed below.
 
 Indicates that a new log entry is available for consumption.
 
-This event is emitted when the driver retrieves a new entry for any of the log types listed below. 
+This event is emitted when the driver retrieves a new entry for any of the log types listed below.
+
+Available since driver version 3.7.10.
 
 #### Event Type (CDDL)
 

@@ -60,7 +60,7 @@ from your client code:
 Adds a new action to the list of scheduled actions. Refer to [the Scheduled Actions guide](../guides/scheduled-actions.md)
 for more details.
 
-Available since driver version 2.26.0.
+Available since driver version 2.29.6.
 
 #### Parameters
 
@@ -119,7 +119,7 @@ The contents of `payload` (`ActionStepPayload`) must be an object, and its prope
 Returns the execution history for an action. Refer to [the Scheduled Actions guide](../guides/scheduled-actions.md)
 for more details.
 
-Available since driver version 2.26.0.
+Available since driver version 2.29.6.
 
 #### Parameters
 
@@ -152,7 +152,7 @@ Each item in `stepResults` array (`ActionInvocation`) is itself an array of obje
 Removes an action from the list of scheduled actions and returns its execution history. Refer to
 [the Scheduled Actions guide](../guides/scheduled-actions.md) for more details.
 
-Available since driver version 2.26.0.
+Available since driver version 2.29.6.
 
 #### Parameters
 
@@ -249,6 +249,8 @@ for physical displays, and `adb shell dumpsys SurfaceFlinger --displays` for vir
 
 Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
 
+Available since driver version 6.6.0.
+
 #### Response
 
 `Array<Record<string, any>>` - list of display information objects, where each object contains the
@@ -284,6 +286,8 @@ all available displays (using [`UiAutomation.getWindowsOnAllDisplays()`](https:/
 For older devices, only windows from the default display are retrieved (using [`UiAutomation.getWindows()`](https://developer.android.com/reference/android/app/UiAutomation#getWindows())).
 
 Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
+
+Available since driver version 6.5.0.
 
 #### Parameters
 
@@ -464,7 +468,7 @@ issues.
 Note that this method also waits until the app under test becomes idle, so it may affect test
 performance if called too often under dynamic circumstances.
 
-Available since driver version 6.4.0.
+Available since driver version 6.4.1.
 
 #### Response
 
@@ -514,7 +518,7 @@ used by the [`currentDisplayId`](./settings.md#currentdisplayid) setting. Physic
 IDs can be obtained using the [`mobile: listDisplays`](#mobile-listdisplays) or [`mobile: listWindows`](#mobile-listwindows)
 execute methods, or the `adb shell dumpsys SurfaceFlinger --display-id` command.
 
-Available since driver version 2.29.0.
+Available since driver version 2.29.0. Virtual display IDs are supported since driver version 6.6.2.
 
 #### Parameters
 
@@ -688,6 +692,8 @@ for more details.
 
 Determines whether the device is locked.
 
+Available since driver version 2.18.0.
+
 #### Response
 
 `boolean` - `true` if the device is locked, otherwise `false`
@@ -718,8 +724,10 @@ Available since driver version 2.23.0.
 
 ### `mobile: getNotifications`
 
-Retrieves up to 100 most recent Android notifications, including dismissed ones. The Appium Settings
-helper app must first be *manually* granted notification access.
+Retrieves up to 100 most recent Android notifications, including dismissed ones.
+
+For devices running Android 8 (Oreo / API level 27) or earlier, the Appium Settings helper app must
+first be manually granted notification access.
 
 #### Response
 
@@ -1078,7 +1086,7 @@ Example output:
 
 Hides the on-screen keyboard. An error is thrown if the keyboard cannot be hidden.
 
-Available since driver version 2.16.0.
+Available since driver version 2.25.1.
 
 #### Response
 
@@ -1160,7 +1168,7 @@ Available since driver version 2.17.0.
 |`metastate`|`integer`|One or more meta keys that should be simultaneously pressed. Must match the combined numerical value for one or more supported KeyEvent `META_` constants.|
 |`flags`|`integer`|Flags to apply during the press. Must match the combined numerical value for one or more supported KeyEvent `FLAG_` constants.|
 |`isLongPress?`|`boolean`|Whether to emulate a long press. Set to `false` by default.|
-|`source?`|`integer`|Input device source. Must be set to the value of an [`InputDevice`](https://developer.android.com/reference/android/view/InputDevice) `SOURCE_` constant, or an bitwise OR combination of multiple such values. Set to `257` (`SOURCE_KEYBOARD`) by default.|
+|`source?`|`integer`|Input device source. Must be set to the value of an [`InputDevice`](https://developer.android.com/reference/android/view/InputDevice) `SOURCE_` constant, or an bitwise OR combination of multiple such values. Set to `257` (`SOURCE_KEYBOARD`) by default. Available since driver version 6.8.0.|
 
 #### Response
 
@@ -1455,6 +1463,8 @@ Available since driver version 2.5.0.
 Activates the application with the specified package identifier or launches it if necessary, by
 simulating a tap on the app icon on the Android UI.
 
+For devices running Android 6 (Marshmallow / API level 23) or older, this method calls the `monkey` tool under the hood, which [turns on auto-rotation](https://stackoverflow.com/questions/56684778/adb-shell-monkey-command-changing-device-orientation-lock).
+
 Available since driver version 2.5.0.
 
 #### Parameters
@@ -1634,7 +1644,7 @@ parameter. Use of the `appops` mode requires driver version 2.11.0 or later, and
 
 |<div style="width:7em">Name</div>|<div style="width:7em">Type</div>|Description|
 |---|---|---|
-|`permissions`|`string` or `Array<string>`|One or more permissions to be changed. For `pm` mode, supported values can be found in the [Android Manifest documentation](https://developer.android.com/reference/android/Manifest.permission), and the `all` magic string is additionally supported. For `appops` mode, supported values can be found in the [Android AppOpsManager documentation](https://developer.android.com/reference/android/app/AppOpsManager). Full constant values must be used for both modes.|
+|`permissions`|`string` or `Array<string>`|One or more permissions to be changed. For `pm` mode, supported values can be found in the [Android Manifest documentation](https://developer.android.com/reference/android/Manifest.permission), and the `all` magic string is additionally supported since driver version 2.8.0. For `appops` mode, supported values can be found in the [Android AppOpsManager documentation](https://developer.android.com/reference/android/app/AppOpsManager). Full constant values must be used for both modes.|
 |`appPackage?`|`string`|Name of the application package to change. Set to the package of the app under test by default.|
 |`action`|`string`|Permission action to apply. Supported values are either `grant` or `revoke` (in `pm` mode), or `allow`, `ignore`, `deny` and `default` (in `appops` mode).|
 |`target?`|`string`|The mode to use. Supported values are `pm` and `appops`. Set to `pm` by default.|

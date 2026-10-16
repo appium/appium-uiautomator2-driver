@@ -568,6 +568,8 @@ under test. The app file must have either the `.apk` or `.apks` extension.
 
 Do not set this capability in combination with [`browserName`](#browsername).
 
+This capability is always required for driver versions 2.31.2 or earlier.
+
 ### appPackage
 
 | Name | Type | Default |

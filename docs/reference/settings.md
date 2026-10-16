@@ -58,6 +58,8 @@ If set to `-1`, the display is reset to the default one.
 
 Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
 
+Available since driver version 4.2.0.
+
 ## `deferAccessibilityCacheReset`
 
 | Type | Default |
@@ -141,6 +143,8 @@ the driver selects the focused window, which generally also has the highest Z-or
 not be the case for multi-window apps, or devices with multiple displays.
 
 Refer to the [Multi-Window Testing guide](../guides/multiwindow.md) for detailed usage information.
+
+Available since driver version 2.25.2.
 
 ## `enforceXPath1`
 
@@ -235,6 +239,8 @@ Disabling this setting nonetheless requires caution with other context-based que
 a request like `findElement(By.xpath, "//root").findElement(By.xpath, "//element")` would ignore
 the current context and search for `element` through the whole page source. In such cases it is
 recommended to use the dot (`.`) notation: `findElement(By.xpath, "//root").findElement(By.xpath, ".//element")`.
+
+Available since driver version 2.0.2.
 
 ## `mapTestTagToResourceId`
 

@@ -16,6 +16,8 @@ Whether the element is accessibility focused. Retrieved from [`AccessibilityNode
 
 This attribute can also be retrieved using the `accessibilityFocused` alias.
 
+Available since driver version 4.0.0.
+
 ## `a11y-important`
 
 > Example: `true`
@@ -24,6 +26,8 @@ Whether the element is considered important for accessibility. Retrieved from [`
 Supported since Android 7 (Nougat / API level 24).
 
 This attribute can also be retrieved using the `importantForAccessibility` alias.
+
+Available since driver version 4.0.0.
 
 ## `actions`
 
@@ -127,6 +131,8 @@ Whether the content of this element is invalid, e.g. a date that is not well-for
 
 This attribute can also be retrieved using the `contentInvalid` alias.
 
+Available since driver version 4.0.0.
+
 ## `contentSize`
 
 > Example: `{"left": 0, "top":0, "width": 100, "height": 100, "scrollableOffset": 10, "touchPadding": 0}`
@@ -147,11 +153,15 @@ Supported since Android 6 (Marshmallow / API level 23).
 
 This attribute can also be retrieved using the `contextClickable` alias.
 
+Available since driver version 4.0.0.
+
 ## `dismissable`
 
 > Example: `true`
 
 Whether the element can be dismissed. Retrieved from [`AccessibilityNodeInfo.isDismissable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isDismissable()).
+
+Available since driver version 4.0.0.
 
 ## `displayed`
 
@@ -169,6 +179,8 @@ Supported since Android 7 (Nougat / API level 24).
 
 This attribute can also be retrieved using the `drawingOrder` alias.
 
+Available since driver version 4.0.0.
+
 ## `enabled`
 
 > Example: `true`
@@ -182,6 +194,8 @@ Whether the element is enabled. Retrieved from [`AccessibilityNodeInfo.isEnabled
 Error text of the element. Retrieved from [`AccessibilityNodeInfo.getError()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getError()).
 
 This attribute can also be retrieved using the `errorText` alias.
+
+Available since driver version 4.0.0.
 
 ## `extras`
 
@@ -219,6 +233,8 @@ Always set to `false` if [`focusable`](#focusable) is `false`.
 Whether element represents a heading. Retrieved from [`AccessibilityNodeInfo.isHeading()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isHeading()).
 Supported since Android 9 (Pie / API level 28).
 
+Available since driver version 4.0.0.
+
 ## `hint`
 
 > Example: `enter text here`
@@ -226,11 +242,15 @@ Supported since Android 9 (Pie / API level 28).
 Hint text of the element. Retrieved from [`AccessibilityNodeInfo.getHintText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getHintText()).
 Supported since Android 8 (Oreo / API level 26).
 
+Available since driver version 2.0.4.
+
 ## `index`
 
 > Example: `1`
 
 Index of the element under its parent, relative to its siblings.
+
+This attribute cannot be retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
 
 ## `input-type`
 
@@ -242,6 +262,8 @@ Retrieved from [`AccessibilityNodeInfo.getInputType()`](https://developer.androi
 This attribute is omitted from the page source if its value is `0` (`TYPE_NUMBER_VARIATION_NORMAL`).
 
 This attribute can also be retrieved using the `inputType` alias.
+
+Available since driver version 4.0.0.
 
 ## `is-collection`
 
@@ -277,6 +299,8 @@ Integer value of the element's live region mode. Retrieved from [`AccessibilityN
 
 This attribute can also be retrieved using the `liveRegion` alias.
 
+Available since driver version 4.0.0.
+
 ## `long-clickable`
 
 > Example: `true`
@@ -296,6 +320,8 @@ set).
 
 This attribute can also be retrieved using the `maxTextLength` alias.
 
+Available since driver version 4.0.0.
+
 ## `multiline`
 
 > Example: `true`
@@ -307,6 +333,8 @@ This attribute is omitted from the page source if the value of [`max-text-length
 is `-1`.
 
 This attribute can also be retrieved using the `multiLine` alias.
+
+Available since driver version 4.0.0.
 
 ## `package`
 
@@ -323,6 +351,8 @@ Title of the pane represented by this element. Retrieved from [`AccessibilityNod
 Supported since Android 9 (Pie / API level 28).
 
 This attribute can also be retrieved using the `paneTitle` alias.
+
+Available since driver version 4.0.0.
 
 ## `password`
 
@@ -395,6 +425,8 @@ Supported since Android 8 (Oreo / API level 26).
 
 This attribute can also be retrieved using the `showingHintText` alias.
 
+Available since driver version 4.0.0.
+
 ## `text`
 
 > Example: `some text`
@@ -417,6 +449,8 @@ Whether the element represents a text entry key that is part of a keyboard or ke
 
 This attribute can also be retrieved using the `textEntryKey` alias.
 
+Available since driver version 4.0.0.
+
 ## `text-has-clickable-span`
 
 > Example: `true`
@@ -427,6 +461,8 @@ Retrieved from [`Spanned.getSpans()`](https://developer.android.com/reference/an
 Only available for text elements.
 
 This attribute can also be retrieved using the `textHasClickableSpan` alias.
+
+Available since driver version 4.2.7.
 
 ## `text-size`
 
@@ -478,6 +514,8 @@ Supported since Android 9 (Pie / API level 28).
 
 This attribute can also be retrieved using the `tooltipText` alias.
 
+Available since driver version 4.2.7.
+
 ## `window-id`
 
 > Example: `123`
@@ -485,3 +523,5 @@ This attribute can also be retrieved using the `tooltipText` alias.
 Identifier of the window this element belongs to. Retrieved from [`AccessibilityNodeInfo.getWindowId()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getWindowId()).
 
 This attribute can also be retrieved using the `windowId` alias.
+
+Available since driver version 6.4.1.

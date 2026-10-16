@@ -15,7 +15,9 @@ For more information about the `appium driver run` command, refer to [the Appium
 
 Uninstalls all driver-related packages (UiAutomator2 Server and Appium Settings) from all connected
 devices. This can be useful after a driver update, if the packages installed on the test device(s)
-remain cached with their older versions. Available since driver version 2.7.0.
+remain cached with their older versions.
+
+Available since driver version 2.12.5.
 
 ### Usage
 

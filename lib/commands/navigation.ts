@@ -1,5 +1,12 @@
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileDeepLink(...args: Parameters<typeof mobileDeepLink>): ReturnType<typeof mobileDeepLink>;
+    back(...args: Parameters<typeof back>): ReturnType<typeof back>;
+  }
+}
+
 /**
  * Sets the URL for the current app.
  * @param url - The URL to navigate to.

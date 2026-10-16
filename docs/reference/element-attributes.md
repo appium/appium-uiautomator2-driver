@@ -19,7 +19,7 @@ Whether the element is accessibility focused. Retrieved from [`AccessibilityNode
 > Example: `true`
 
 Whether the element is considered important for accessibility. Retrieved from [`AccessibilityNodeInfo.isImportantForAccessibility()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isImportantForAccessibility()).
-Requires Android 7 (Nougat / API level 24) or later.
+Supported since Android 7 (Nougat / API level 24).
 
 ## `actions`
 
@@ -79,7 +79,7 @@ JSON representation of the element's [`CollectionInfo`](https://developer.androi
 containing the `rowCount`, `columnCount`, `isHierarchical`, and `selectionMode` properties.
 
 This attribute is not included in the default page source, but it can be retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
-Set to `null` if the element is not a collection.
+Could be `null` if the element is not a collection.
 
 Available since driver version 8.3.0.
 
@@ -89,12 +89,12 @@ Available since driver version 8.3.0.
 
 JSON representation of the element's [`CollectionItemInfo`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.CollectionItemInfo),
 containing the `rowIndex`, `columnIndex`, `rowSpan`, `columnSpan`, `isHeading`, `isSelected`,
-`rowTitle`, and `columnTitle` properties. The `isSelected` property requires Android 11 (R / API
-level 30) or later, while `rowTitle` and `columnTitle` require Android 13 (Tiramisu / API level 33)
-or later.
+`rowTitle`, and `columnTitle` properties. The `isSelected` property is supported since Android 11
+(R / API level 30), while `rowTitle` and `columnTitle` are supported since Android 13 (Tiramisu /
+API level 33).
 
 This attribute is not included in the default page source, but it can be retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
-Set to `null` if the element is not a collection item.
+Could be `null` if the element is not a collection item.
 
 Available since driver version 8.3.0.
 
@@ -133,7 +133,7 @@ retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org
 > Example: `true`
 
 Whether the element is context clickable. Retrieved from [`AccessibilityNodeInfo.isContextClickable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContextClickable()).
-Requires Android 6 (Marshmallow / API level 23) or later.
+Supported since Android 6 (Marshmallow / API level 23).
 
 ## `dismissable`
 
@@ -153,7 +153,7 @@ Whether the element is visible to the user. Retrieved from [`AccessibilityNodeIn
 
 Drawing order of the view corresponding to this element, relative to its siblings. Retrieved from
 [`AccessibilityNodeInfo.getDrawingOrder()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getDrawingOrder()).
-Requires Android 7 (Nougat / API level 24) or later.
+Supported since Android 7 (Nougat / API level 24).
 
 ## `enabled`
 
@@ -201,14 +201,14 @@ Always set to `false` if [`focusable`](#focusable) is `false`.
 > Example: `true`
 
 Whether element represents a heading. Retrieved from [`AccessibilityNodeInfo.isHeading()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isHeading()).
-Requires Android 9 (Pie / API level 28) or later.
+Supported since Android 9 (Pie / API level 28).
 
 ## `hint`
 
 > Example: `enter text here`
 
 Hint text of the element. Retrieved from [`AccessibilityNodeInfo.getHintText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getHintText()).
-Requires Android 8 (Oreo / API level 26) or later.
+Supported since Android 8 (Oreo / API level 26).
 
 ## `index`
 
@@ -290,7 +290,7 @@ Could be `null` and therefore omitted.
 > Example: `title`
 
 Title of the pane represented by this element. Retrieved from [`AccessibilityNodeInfo.getPaneTitle()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getPaneTitle()).
-Requires Android 9 (Pie / API level 28) or later.
+Supported since Android 9 (Pie / API level 28).
 
 ## `password`
 
@@ -311,26 +311,125 @@ value of this attribute is instead retrieved from the element's Jetpack Compose 
 
 ## `screen-reader-focusable`
 
+> Example: `true`
+
+Whether the element is explicitly marked as a focusable unit by a screen reader. Retrieved from
+[`AccessibilityNodeInfo.isScreenReaderFocusable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isScreenReaderFocusable()).
+Supported since Android 9 (Pie / API level 28).
+
 ## `scrollable`
+
+> Example: `true`
+
+Whether the element is scrollable. Retrieved from [`AccessibilityNodeInfo.isScrollable()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isScrollable()).
 
 ## `selected`
 
+> Example: `true`
+
+Whether the element is selected. Retrieved from [`AccessibilityNodeInfo.isSelected()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isSelected()).
+
 ## `selection-end`
+
+> Example: `7`
+
+Index of the character where text selection ends. Only available for input text elements.
+Retrieved from [`AccessibilityNodeInfo.getTextSelectionEnd()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTextSelectionEnd()).
+
+This attribute is omitted from the page source if no text is selected, or the element provides no
+range info.
 
 ## `selection-start`
 
+> Example: `3`
+
+Index of the character where text selection starts. Only available for input text elements.
+Retrieved from [`AccessibilityNodeInfo.getTextSelectionStart()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTextSelectionStart()).
+
+This attribute is omitted from the page source if no text is selected, or the element provides no
+range info.
+
 ## `showing-hint`
+
+> Example: `true`
+
+Whether the element's text represents a hint for the user to enter text. Only available for
+editable input text elements. Retrieved from [`AccessibilityNodeInfo.isShowingHintText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isShowingHintText()).
+Supported since Android 8 (Oreo / API level 26).
 
 ## `text`
 
+> Example: `some text`
+
+Text or value of the element, depending on the element type:
+
+* Range: retrieved from [`AccessibilityNodeInfo.RangeInfo.getCurrent()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.RangeInfo#getCurrent())
+* All other elements: retrieved from [`AccessibilityNodeInfo.getText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getText())
+
+The value of this attribute is never `null` - empty values are instead set to an empty string.
+
 ## `text-entry-key`
+
+> Example: `true`
+
+Whether the element represents a text entry key that is part of a keyboard or keypad. Retrieved from
+[`AccessibilityNodeInfo.isTextEntryKey()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isTextEntryKey()). Supported since Android 10 (Q / API level 29).
 
 ## `text-has-clickable-span`
 
+> Example: `true`
+
+Whether the element contains [`ClickableSpan`](https://developer.android.com/reference/android/text/style/ClickableSpan)
+or [`URLSpan`](https://developer.android.com/reference/android/text/style/URLSpan) markup elements.
+Retrieved from [`Spanned.getSpans()`](https://developer.android.com/reference/android/text/Spanned#getSpans(int,%20int,%20java.lang.Class%3CT%3E)).
+Only available for text elements.
+
 ## `text-size`
+
+> Example: `12.6`
+
+Text size of the element, in units specified by [`text-unit`](#text-unit). Only available for text
+elements. Calculated by retrieving [`AccessibilityNodeInfo.ExtraRenderingInfo.getTextSizeInPx()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.ExtraRenderingInfo#getTextSizeInPx())
+and scaling it according to `text-unit`. Supported since Android 11 (R / API level 30).
+
+This attribute is not included in the default page source due to performance reasons, but it can be
+added by changing the [`includeExtraRenderingInfo`](./settings.md#includeextrarenderinginfo)
+setting to true, or retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
+
+Available since driver version 6.7.10.
 
 ## `text-unit`
 
+> Example: `mm`
+
+Text size unit of the element. Only available for text elements. Calculated by retrieving
+[`AccessibilityNodeInfo.ExtraRenderingInfo.getTextSizeUnit()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.ExtraRenderingInfo#getTextSizeUnit())
+and converting it to a 2-character string.  Supported since Android 11 (R / API level 30).
+
+Supported values are:
+
+* `dp` - device independent pixels ([`COMPLEX_UNIT_DIP`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_DIP))
+* `in` - inches ([`COMPLEX_UNIT_IN`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_IN))
+* `mm` - millimeters ([`COMPLEX_UNIT_MM`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_MM))
+* `pt` - points ([`COMPLEX_UNIT_PT`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_PT))
+* `px` - pixels ([`COMPLEX_UNIT_PX`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_PT))
+* `sp` - scaled pixels ([`COMPLEX_UNIT_SP`](https://developer.android.com/reference/android/util/TypedValue#COMPLEX_UNIT_SP))
+
+This attribute is not included in the default page source due to performance reasons, but it can be
+added by changing the [`includeExtraRenderingInfo`](./settings.md#includeextrarenderinginfo)
+setting to true, or retrieved using [the standard Get Element Attribute endpoint](https://www.w3.org/TR/webdriver2/#get-element-attribute).
+
+Available since driver version 6.7.10.
+
 ## `tooltip-text`
 
+> Example: `Paste`
+
+Tooltip text of the element. Retrieved from [`AccessibilityNodeInfo.getTooltipText()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getTooltipText()).
+Supported since Android 9 (Pie / API level 28).
+
 ## `window-id`
+
+> Example: `123`
+
+Identifier of the window this element belongs to. Retrieved from [`AccessibilityNodeInfo.getWindowId()`](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#getWindowId()).

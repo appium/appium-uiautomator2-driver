@@ -58,7 +58,7 @@ matcher, which returns elements whose class name matches the specified value exa
 This strategy is mapped to the native UI Automator [`UiSelector`](https://developer.android.com/reference/androidx/test/uiautomator/UiSelector) locator.
 
 The strategy also allows to implicitly perform some advanced operations, like scrolling. Refer to
-the [UiAutomator Selector](../guides/uiautomator-selector.md) guide for more details.
+the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) guide for more details.
 
 !!! warning
 

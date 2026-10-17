@@ -57,7 +57,7 @@ nav:
           - guides/appbundle.md
           - guides/activity-startup.md
       - Driver Actions:
-          - guides/uiautomator-selector.md
+          - guides/uiautomator-locator-strategy.md
           - guides/multiwindow.md
           - guides/unlock.md
           - guides/scheduled-actions.md

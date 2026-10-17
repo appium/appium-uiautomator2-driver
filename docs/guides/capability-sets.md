@@ -2,11 +2,11 @@
 title: Capability Set Examples
 ---
 
-This article describes necessary capabilities that must be provided in order to implement some
-common automation testing scenarios. It only describes very minimum sets of capabilities required
-to be included. For refined setups more of them might need to be provided. Check the
-[Capabilities](../reference/capabilities.md) reference for more details on each option available for
-the fine-tuning of UiAutomator2 driver sessions.
+This guide describes necessary capabilities that must be provided in order to implement some common
+automation testing scenarios. It only describes very minimum sets of capabilities required to be
+included. For refined setups more of them might need to be provided. Check the
+[Capabilities](../reference/capabilities.md) reference for more details on each option available
+for the fine-tuning of UiAutomator2 driver sessions.
 
 ## Application File (Real Device)
 

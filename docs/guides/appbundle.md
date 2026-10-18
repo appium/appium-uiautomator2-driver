@@ -1,5 +1,5 @@
 ---
-title: Testing App Bundles
+title: Android App Bundle (.aab)
 ---
 
 The UiAutomator2 driver supports the [Android App Bundle](https://developer.android.com/platform/technology/app-bundle/)

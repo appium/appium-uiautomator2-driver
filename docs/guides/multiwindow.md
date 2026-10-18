@@ -306,9 +306,9 @@ for display in displays:
 
 ## Managing Displays
 
-The [`mobile: listDisplays`](../README.md#mobile-listdisplays) command provides information about
-all displays available on the device, including both logical and physical display identifiers along
-with detailed metrics.
+The [`mobile: listDisplays`](../reference/execute-methods.md#mobile-listdisplays) command provides
+information about all displays available on the device, including both logical and physical display
+identifiers along with detailed metrics.
 
 All the following examples are written in Python.
 
@@ -581,9 +581,9 @@ included for page source (XML hierarchy) generation and UiObject2-based element 
 5. Reset the accessibility cache using [`mobile: resetAccessibilityCache`](../reference/execute-methods.md#mobile-resetaccessibilitycache)
    if encountering stale element references after window changes
 
-6. List windows using [`mobile: listWindows`](../README.md#mobile-listwindows) to understand the
-   window structure before writing locators. Use filtering to find specific windows and verify
-   which windows are accessible for element location.
+6. List windows using [`mobile: listWindows`](../reference/execute-methods.md#mobile-listwindows)
+   to understand the window structure before writing locators. Use filtering to find specific
+   windows and verify which windows are accessible for element location.
 
 ## Examples
 

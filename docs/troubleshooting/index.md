@@ -212,6 +212,27 @@ forcefully switches the driver's XPath processor to the standard Android's Apach
 XPath1, which does not have this issue (but also does not support XPath2 syntax). Refer to issue
 [#16142](https://github.com/appium/appium/issues/16142#issuecomment-1003954166) for more details.
 
+## Slow Element Interaction
+
+If tests need at least 10 seconds or more to locate/interact with a single element, consider
+changing the default value of the [`waitForIdleTimeout`](../reference/settings.md#waitforidletimeout)
+setting.
+
+By default, the UI Automator framework (and all other Accessibility-based frameworks) always waits
+for the accessibility event stream to become idle before interacting with an element. This is
+needed to make sure all animations/transitions are finished before, for example, interacting with
+an element by clicking it. In case the application under test constantly runs some background
+animations or hogs the accessibility event stream in some other way, these waits may significantly
+slow down the automation flow.
+
+Setting the value of `waitForIdleTimeout` to `0` should completely disable any waits, and enforce
+interactions to happen immediately ignoring the accessibility event stream state. The downside of
+that would be that all interactions are never going to be delayed, so clicks and other actions
+might happen at wrong places of the application UI. That is why is it important to check the app
+under test first and fix its source to get rid of activities hogging the event loop. Sometimes it
+makes sense to disable animations completely for the app build under test, which could speed up
+test flows significantly in some situations.
+
 ## Scroll/Swipe Gestures Have No Effect
 
 The UiAutomator2 driver provides multiple options for automating touch gestures:

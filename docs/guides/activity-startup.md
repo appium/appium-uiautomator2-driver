@@ -45,9 +45,10 @@ package.
    output (`mFocusedApp` or `mCurrentFocus` entries)
 
 For more details, check the implementation of the `getFocusedPackageAndActivity` method in the
-[`appium-adb`](https://github.com/appium/appium-android/blob/main/packages/adb/lib/tools/apk-utils.ts) package.
+[`appium-adb`](https://github.com/appium/appium-android/blob/main/packages/adb/lib/tools/apk-utils.ts)
+package.
 
 ## Troubleshooting
 
-Refer to the [Session Startup Issues](../troubleshooting/startup.md) guide for handling potential
-issues.
+Refer to the [Session Startup Issues](../troubleshooting/index.md#session-startup-issues) guide for
+handling potential problems.

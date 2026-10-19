@@ -1,0 +1,28 @@
+name: Publish Docs
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0 # ensure the docs branch is also fetched
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+    - name: Use Node.js LTS
+      uses: actions/setup-node@v7
+      with:
+        node-version: lts/*
+    - run: npm install
+    - name: Install dependencies (Python)
+      run: npm run install-docs-deps
+    - name: Build and deploy docs
+      run: npm run publish:docs

@@ -1,0 +1,35 @@
+name: Build Docs
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'package*.json'
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/build-docs.yml' # this file
+  push:
+    branches: [ master ]
+    paths:
+      - 'package*.json'
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/build-docs.yml' # this file
+
+jobs:
+  docs:
+    name: Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          check-latest: true
+      - run: npm install
+        name: Install dependencies
+      - name: Install dependencies (Python)
+        run: npm run install-docs-deps
+      - name: Build Docs
+        run: npm run build:docs

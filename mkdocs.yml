@@ -1,10 +1,66 @@
 INHERIT: ./node_modules/@appium/docutils/base-mkdocs.yml
+site_name: Appium UiAutomator2 Driver
+repo_url: https://github.com/appium/appium-uiautomator2-driver
+repo_name: appium/appium-uiautomator2-driver
+copyright: |
+  <p>Copyright <a href="https://openjsf.org">OpenJS Foundation</a> and Appium contributors. All rights reserved. The <a href="https://openjsf.org">OpenJS Foundation</a> has registered trademarks and uses trademarks.  For a list of trademarks of the <a href="https://openjsf.org">OpenJS Foundation</a>, please see our <a href="https://trademark-policy.openjsf.org">Trademark Policy</a> and <a href="https://trademark-list.openjsf.org">Trademark List</a>. Trademarks and logos not indicated on the <a href="https://trademark-list.openjsf.org">list of OpenJS Foundation trademarks</a> are trademarks&trade; or registered&reg; trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.</p>
+  <p><a href="https://openjsf.org">The OpenJS Foundation</a> | <a href="https://terms-of-use.openjsf.org">Terms of Use</a> | <a href="https://privacy-policy.openjsf.org">Privacy Policy</a> | <a href="https://bylaws.openjsf.org">Bylaws</a> | <a href="https://code-of-conduct.openjsf.org">Code of Conduct</a> | <a href="https://trademark-policy.openjsf.org">Trademark Policy</a> | <a href="https://trademark-list.openjsf.org">Trademark List</a> | <a href="https://www.linuxfoundation.org/cookies">Cookie Policy</a></p>
+  <a href="#__consent">Change cookie settings</a>
+site_url: https://appium.github.io/appium-uiautomator2-driver
+edit_uri: edit/master/docs
+site_description: Appium UiAutomator2 Driver Documentation
 docs_dir: docs
 site_dir: site
-site_name: appium-uiautomator2-driver
-repo_url: git+https://github.com/appium/appium-uiautomator2-driver.git
-repo_name: appium/appium-uiautomator2-driver
-site_description: UiAutomator2 integration for Appium
+
+theme:
+  logo: assets/images/appium-logo-white.png
+  favicon: assets/images/appium-logo.png
+  custom_dir: docs/overrides
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra:
+  homepage: /appium-uiautomator2-driver
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/AppiumDevs
+
+plugins:
+  mike:
+    canonical_version: 'latest'
+
 nav:
+  - index.md
+  - overview.md
+  - Getting Started: getting-started/index.md
   - Reference:
-      - reference/commands/appium-uiautomator2-driver.md
+      - Command Line:
+          - reference/scripts.md
+          - reference/insecure-features.md
+      - Session Configuration:
+          - reference/capabilities.md
+          - reference/settings.md
+          - reference/endpoints.md
+          - reference/bidi.md
+          - reference/execute-methods.md
+      - Element Management:
+          - reference/locator-strategies.md
+          - reference/element-attributes.md
+  - Guides:
+      - Session Configuration:
+          - guides/capability-sets.md
+          - guides/parallel-tests.md
+          - guides/hybrid.md
+          - guides/mjpeg.md
+          - guides/appbundle.md
+          - guides/activity-startup.md
+      - Driver Actions:
+          - guides/uiautomator-locator-strategy.md
+          - guides/multiwindow.md
+          - guides/unlock.md
+          - guides/scheduled-actions.md
+          - guides/input-events.md
+  - Troubleshooting: troubleshooting/index.md
+  - contributing.md

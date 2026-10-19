@@ -321,11 +321,11 @@ Sets the state of network types (data, Wi-Fi, airplane mode).
 
 |<div style="width:6em">Name</div>|<div style="width:18em">Type</div>|Description|
 |--|--|--|
-|`parameters`|`{"type": `[`NetworkConnectionState`](#response_12)`}`|Object containing the `type` key, whose value is the desired network state|
+|`parameters`|`{"type": `[`NetworkConnectionState`](#response_13)`}`|Object containing the `type` key, whose value is the desired network state|
 
 #### Response
 
-[`NetworkConnectionState`](#response_12) - the new network state
+[`NetworkConnectionState`](#response_13) - the new network state
 
 ## Appium Protocol
 

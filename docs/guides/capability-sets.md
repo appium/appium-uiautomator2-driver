@@ -31,7 +31,7 @@ and [`appium:appActivity`](../reference/capabilities.md#appactivity) capabilitie
 driver is unable to autodetect them from the provided app package manifest. Refer to the
 [Activity Startup](./activity-startup.md) guide for more details.
 
-Similarly, some scenarios may require [`appium:platformVersion`](../reference/capabilities.md#platformname)
+Similarly, some scenarios may require [`appium:platformVersion`](../reference/capabilities.md#platformversion)
 to be explicitly specified.
 
 ## Application File (Emulator)

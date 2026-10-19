@@ -2,7 +2,7 @@
 title: Android Input Events
 ---
 
-### What Are Input Events
+## What Are Input Events
 
 Android OS uses the events concept to handle signals received from different input devices.
 It supports a wide range of different devices, such as touch screen, light pen, mouse, keyboard,
@@ -14,7 +14,7 @@ class. These APIs are quite flexible and support a wide range of different setti
 We are particularly interested in the APIs responsible for the generation and emulation of touch
 and keyboard events.
 
-### How Input Events Work
+## How Input Events Work
 
 An event is an object which is generated in response to a signal from an input device. These
 objects are then delivered to the corresponding kernel subsystem, which processes them and notifies
@@ -27,7 +27,7 @@ Each input device has a set of actions whose property ranges and sequences are a
 in the operating system. These are actions such as "tap", "swipe", "double tap", etc. The properties
 of each action could be found either in the Android documentation or in the OS source code.
 
-### Simulating a Single Tap
+## Simulating a Single Tap
 
 In order to perform a sequence of events recognized as single tap, it is necessary to generate the
 following motion events:
@@ -49,7 +49,7 @@ method of the `IUiAutomationConnection` interface. This is a very low-level meth
 be accessed via reflection in automated tests. Typical UiAutomator2 driver APIs use wrappers over
 it (e.g. `touchDown`, `touchMove`), that already simulate the stuff described above.
 
-### More Complicated Actions
+## More Complicated Actions
 
 In theory it is possible to emulate any input action using a generated events sequence. Still, some
 actions like multi-finger swipe are complicated, and require a lot of events to be generated with
@@ -68,7 +68,7 @@ So, in order to generate two-finger symmetric swipe, the following event chain i
 Google uses `5ms` as the interval between move events in UI Automator code, but testing has
 confirmed that this value is too small, which causes noticeable delays in actions execution.
 
-### Further Reading
+## Further Reading
 
 Unfortunately, there is not much detailed information on this topic. The only reliable source of
 information is Android OS sources. Consider visiting the following resources:

@@ -1,4 +1,7 @@
 ---
+hide:
+  - toc
+
 title: Testing in Parallel
 ---
 

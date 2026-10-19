@@ -11,7 +11,7 @@ their performance is very close to native.
 The driver enables the use of locator types via the [`-android uiautomator`](../reference/locator-strategies.md#uiautomator)
 locator strategy.
 
-### Examples
+## Examples
 
 Note that the index selector is unreliable so prefer instance instead. The following examples are
 written against the [ApiDemos](https://github.com/appium/appium-android/tree/main/packages/android-apidemos)
@@ -49,7 +49,7 @@ application using Ruby.
     element.text # "WebView"
     ```
 
-### More Resources
+## More Resources
 
 - [How to Use UISelector in Appium](http://code2test.com/appium-tutorial/how-to-use-uiselector-in-appium/)
 - [How to use UiSelector to inspect elements on Android](https://www.automationtestinghub.com/uiselector-android/)

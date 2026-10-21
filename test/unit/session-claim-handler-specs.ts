@@ -4,9 +4,7 @@ import {describe, it, beforeEach, afterEach} from 'node:test';
 
 import type {IAppiumIpc, IpcData, IpcMessage} from '@appium/types';
 import {node} from 'appium/support.js';
-import {createSandbox} from 'sinon';
-import type sinon from 'sinon';
-import type {SinonSandbox} from 'sinon';
+import sinon from 'sinon';
 
 import type {AndroidUiautomator2Driver} from '../../lib/driver.js';
 import {
@@ -70,11 +68,11 @@ class MockIpc {
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 describe('SessionClaimHandler', function () {
-  let sandbox: SinonSandbox;
+  let sandbox: sinon.SinonSandbox;
   let mockIpc: MockIpc;
 
   beforeEach(function () {
-    sandbox = createSandbox();
+    sandbox = sinon.createSandbox();
     mockIpc = new MockIpc();
     setSharedIpcForTesting(mockIpc as unknown as IAppiumIpc);
   });

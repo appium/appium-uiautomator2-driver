@@ -1,3 +1,18 @@
+## [9.0.0-beta.2](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.0-beta.1...v9.0.0-beta.2) (2026-10-21)
+
+### Bug Fixes
+
+* Bring back autoLaunch cap ([#1053](https://github.com/appium/appium-uiautomator2-driver/issues/1053)) ([2d4a024](https://github.com/appium/appium-uiautomator2-driver/commit/2d4a024145147c57e357e6f7e7f8d416d82ec25b))
+* Drop obsolete sessions from the server list on IPC session claim ([#1052](https://github.com/appium/appium-uiautomator2-driver/issues/1052)) ([652d5ba](https://github.com/appium/appium-uiautomator2-driver/commit/652d5ba87b6a3565d85e37e86d6f5b66b45089cd))
+
+### Miscellaneous Chores
+
+* Bump Appium monorepo packages to latest betas and fix lint warnings ([#1050](https://github.com/appium/appium-uiautomator2-driver/issues/1050)) ([218f597](https://github.com/appium/appium-uiautomator2-driver/commit/218f597c419043e700b6b609d31c5f2592f6498f))
+
+### Code Refactoring
+
+* attach commands via prototype to allow overrides in descendants ([#1055](https://github.com/appium/appium-uiautomator2-driver/issues/1055)) ([9d69fa7](https://github.com/appium/appium-uiautomator2-driver/commit/9d69fa7ed6097ddc368d6e8a22de76269b557530))
+
 ## [9.0.0-beta.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.0...v9.0.0-beta.1) (2026-10-01)
 
 ### ⚠ BREAKING CHANGES

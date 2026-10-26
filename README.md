@@ -1072,7 +1072,7 @@ This method extends the functionality of the [Start Activity](#applications-mana
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-intent | string | yes | The full name of the activity intent to start | `com.some.package.name/.YourActivityClassName`
+intent | string | no | The full name of the activity intent to start | `com.some.package.name/.YourActivityClassName`
 user | number or string | no | The user ID for which the service is started. The `current` user is used by default | 1006
 wait | boolean | no | Set it to `true` if you want to block the method call until the Activity Manager's process returns the control to the system. | false
 stop | boolean | no | Set it to `true` to force stop the target app before starting the activity. | false
@@ -1097,7 +1097,7 @@ The actual stdout of the downstream `am` command.
 Use the code snippet below to represent the following shell command: `shell am start-activity -W -n io.appium.android.apis/io.appium.android.apis.ApiDemos -S -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000'`, which is usually similar to what is called in a new session request.
 If you replace `'io.appium.android.apis/io.appium.android.apis.ApiDemos'` with your expected launchable activity, it would be the alternative method to start the activity in session.
 
-Please check [how appium adds flags](https://github.com/appium/appium-android-driver/blob/master/lib/commands/intent.js) for more details to understand how Appium builds flags.
+Please check [how appium adds flags](https://github.com/appium/appium-android-driver/blob/master/lib/commands/intent.ts) for more details to understand how Appium builds flags.
 
 ```ruby
 # Ruby
@@ -1126,8 +1126,8 @@ action | string | no | See the documentation for [startActivity extension](#mobi
 uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
 mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
 identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
-categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
-component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
 package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
 extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
@@ -1150,8 +1150,8 @@ action | string | no | See the documentation for [startActivity extension](#mobi
 uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
 mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
 identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
-categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
-component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
 package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
 extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`
@@ -1172,8 +1172,8 @@ action | string | no | See the documentation for [startActivity extension](#mobi
 uri | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | https://appium.io
 mimeType | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | application/json
 identifier | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | my_identifier
-categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
-component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+categories | string or Array&lt;string&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | android.intent.category.LAUNCHER
+component | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp/com.myapp.SplashActivity
 package | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | com.myapp
 extras | Array&lt;Array&lt;string&gt;&gt; | no | See the documentation for [startActivity extension](#mobile-startactivity) | [['s', 'varName1', 'My String1'], ['s', 'varName2', 'My String2'], ['ia', 'arrName', '1,2,3,4']]
 flags | string | no | See the documentation for [startActivity extension](#mobile-startactivity) | 0x10200000 is the combination of two flags: 0x10000000 `FLAG_ACTIVITY_NEW_TASK` `|` 0x00200000 `FLAG_ACTIVITY_RESET_TASK_IF_NEEDED`

@@ -1681,7 +1681,7 @@ Starts the specified app activity using `adb shell am start-activity`.
 
 |<div style="width:8em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
-|`intent?`|`string`|Full name of the activity intent to start|
+|`intent?`|`string`|Full name of the activity intent to start (e.g. `com.some.package.name/.YourActivitySubClassName`)|
 |`user?`|`integer` or `string`|ID of the user to start the activity for. By default, the `default` user is used.|
 |`wait?`|`boolean`|Whether to block the call until the Activity Manager's process returns control to the system. Unset by default.|
 |`stop?`|`boolean`|Whether to stop the target app before starting the activity. Unset by default.|
@@ -1692,10 +1692,10 @@ Starts the specified app activity using `adb shell am start-activity`.
 |`mimeType?`|`string`|Activity intent MIME type|
 |`identifier?`|`string`|Activity intent identifier|
 |`categories?`|`string` or `Array<string>`|One or more activity intent categories. Refer to [the Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for a list of possible values (prefixed with `CATEGORY_`).|
-|`component?`|`string`|Activity intent component|
+|`component?`|`string`|Activity intent component name (`-n` argument, e.g. `com.some.package.name/.YourActivitySubClassName`)|
 |`package?`|`string`|Activity intent package name|
 |`display?`|`integer` or `string`|Display identifier to launch the activity intent on|
-|`extras?`|`ActivityExtras`|Extra activity intent arguments. See below for expected structure|
+|`extras?`|`ActivityExtras`|Extra activity intent arguments (e.g. `[['s', 'varName1', 'My String1'], ['ia', 'arrName', '1,2,3,4']]`). See below for expected structure|
 |`flags?`|`string`|Flags in hexadecimal format to apply on activity intent start-up. Refer to the [Android Intent documentation](https://developer.android.com/reference/android/content/Intent) for possible values (prefixed with `FLAG_`). Multiple flags should be combined into one value using bitwise OR.|
 
 The `extras` parameter (`ActivityExtras`) is an array of arrays, where each subarray contains 3

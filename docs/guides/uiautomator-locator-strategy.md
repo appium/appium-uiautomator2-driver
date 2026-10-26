@@ -49,6 +49,12 @@ application using Ruby.
     element.text # "WebView"
     ```
 
+## Migrating from XPath
+
+To migrate existing XPath locators to `-android uiautomator`, you can use the third-party
+[xpath-to-uiselector](https://github.com/domovou69/xpath-to-uiselector) converter, which flags
+locators it could only convert approximately and skips those it cannot convert.
+
 ## More Resources
 
 - [How to Use UISelector in Appium](http://code2test.com/appium-tutorial/how-to-use-uiselector-in-appium/)

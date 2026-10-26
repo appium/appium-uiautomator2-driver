@@ -157,12 +157,14 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
     );
   }
   let appInfo;
-  preflightPromises.push(
-    (async () => {
-      // get appPackage et al from manifest if necessary
-      appInfo = await this.getLaunchInfo();
-    })(),
-  );
+  if (this.opts.app || this.opts.autoLaunch !== false) {
+    preflightPromises.push(
+      (async () => {
+        // get appPackage et al from manifest if necessary
+        appInfo = await this.getLaunchInfo();
+      })(),
+    );
+  }
   // start settings app, set the language/locale, start logcat etc...
   preflightPromises.push(this.initDevice());
 

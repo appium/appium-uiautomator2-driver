@@ -88,7 +88,9 @@ to be explicitly specified.
 
 The [`appium:noReset`](../reference/capabilities.md#noreset) capability is set to `true` in order
 to tell the driver that the app identified by `appium:appPackage` is already preinstalled and must
-not be reset.
+not be reset. [`appium:appActivity`](../reference/capabilities.md#appactivity) can be omitted if
+the package defines a default launchable activity, in which case the driver resolves it
+automatically from `appium:appPackage`.
 
 ## Pre-Installed App (Emulator)
 

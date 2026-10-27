@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it, before, after} from 'node:test';
 
-import {fs, tempDir, zip} from '@appium/support';
+import {fs, tempDir, zip} from 'appium/support.js';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../desired.js';

@@ -77,7 +77,6 @@
     "@appium/docutils": "^4.0.0-beta.5",
     "@appium/oxc-config": "^2.0.0-beta.2",
     "@appium/semantic-release-config": "^2.0.0-beta.1",
-    "@appium/support": "^8.0.0-beta.5",
     "@appium/tsconfig": "^2.0.0-beta.1",
     "@appium/types": "^2.0.0-beta.5",
     "@types/node": "^26.0.0",

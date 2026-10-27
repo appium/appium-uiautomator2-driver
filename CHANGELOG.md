@@ -1,3 +1,9 @@
+## [8.7.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.1...v8.7.2) (2026-10-27)
+
+### Miscellaneous Chores
+
+* dummy new line to kick a release again ([#1068](https://github.com/appium/appium-uiautomator2-driver/issues/1068)) ([3ea9527](https://github.com/appium/appium-uiautomator2-driver/commit/3ea9527a462fef830e9487a44057cd72c117489e))
+
 ## [8.7.1](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.0...v8.7.1) (2026-10-26)
 
 ### Miscellaneous Chores

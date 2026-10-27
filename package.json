@@ -1,6 +1,6 @@
 {
   "name": "appium-uiautomator2-driver",
-  "version": "8.7.1",
+  "version": "8.7.2",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "android",

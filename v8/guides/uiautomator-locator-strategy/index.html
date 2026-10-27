@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/appium-logo.png">
-      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
   
@@ -2089,29 +2089,29 @@ application using Ruby.</p>
 <li>
 <p>Find the first textview:</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ruby</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">first_textview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new UiSelector().className(&quot;android.widget.TextView&quot;).instance(0)&#39;</span><span class="p">);</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">first_textview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">'new UiSelector().className("android.widget.TextView").instance(0)'</span><span class="p">);</span>
 </span></code></pre></div>
 </li>
 <li>
 <p>Find the first element by text:</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ruby</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">first_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new UiSelector().text(&quot;Animation&quot;)&#39;</span><span class="p">)</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">first_text</span><span class="o">.</span><span class="n">text</span><span class="w"> </span><span class="c1"># &quot;Animation&quot;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">first_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">'new UiSelector().text("Animation")'</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">first_text</span><span class="o">.</span><span class="n">text</span><span class="w"> </span><span class="c1"># "Animation"</span>
 </span></code></pre></div>
 </li>
 <li>
 <p>Find the first scrollable element, then find a <code>TextView</code> with the text <code>Tabs</code>.
   The <code>Tabs</code> element will be scrolled into view.</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># ruby</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new UiScrollable(new UiSelector().scrollable(true).instance(0)).getChildByText(new UiSelector().className(&quot;android.widget.TextView&quot;), &quot;Tabs&quot;)&#39;</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">'new UiScrollable(new UiSelector().scrollable(true).instance(0)).getChildByText(new UiSelector().className("android.widget.TextView"), "Tabs")'</span><span class="p">)</span>
 </span></code></pre></div>
 </li>
 <li>
 <p>As a special case, <code>scrollIntoView</code> returns the element that is scrolled into view. It allows
   scrolling to any <code>UiSelector</code>.</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># ruby</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(&quot;WebView&quot;).instance(0));&#39;</span><span class="p">)</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="w"> </span><span class="c1"># &quot;WebView&quot;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_element</span><span class="p">(</span><span class="ss">:uiautomator</span><span class="p">,</span><span class="w"> </span><span class="s1">'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("WebView").instance(0));'</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="w"> </span><span class="c1"># "WebView"</span>
 </span></code></pre></div>
 </li>
 </ul>
@@ -2292,10 +2292,10 @@ locators it could only convert approximately and skips those it cannot convert.<
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.indexes", "navigation.path", "navigation.sections", "navigation.tabs", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.indexes", "navigation.path", "navigation.sections", "navigation.tabs", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="../../js/timeago.min.js"></script>
       

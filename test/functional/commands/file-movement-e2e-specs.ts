@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
-import stream from 'node:stream';
 import {describe, it, before, after} from 'node:test';
 
-import unzipper from 'unzipper';
+import {fs, tempDir, zip} from 'appium/support.js';
 import type {Browser} from 'webdriverio';
 
 import {APIDEMOS_CAPS} from '../desired.js';
@@ -49,25 +48,19 @@ describe('file movement', function () {
 
     // go through the folder we pulled and make sure the
     // two files we pushed are in it
-    const zipPromise = new Promise<number>((resolve) => {
-      let entryCount = 0;
-      const zipStream = new stream.Readable();
-      zipStream._read = () => {};
-      zipStream
-        .pipe(unzipper.Parse())
-        .on('entry', function (entry) {
-          if (entry.type === 'File') {
-            entryCount++;
-          }
-          entry.autodrain();
-        })
-        .on('close', function () {
-          resolve(entryCount);
-        });
-      zipStream.push(data, 'base64');
-      zipStream.push(null);
-    });
+    const zipPath = await tempDir.path({prefix: 'pulled-folder', suffix: '.zip'});
+    let entryCount = 0;
+    try {
+      await fs.writeFile(zipPath, Buffer.from(data, 'base64'));
+      await zip.readEntries(zipPath, ({entry}) => {
+        if (!entry.fileName.endsWith('/')) {
+          entryCount++;
+        }
+      });
+    } finally {
+      await fs.rimraf(zipPath);
+    }
 
-    assert.strictEqual(await zipPromise, 2);
+    assert.strictEqual(entryCount, 2);
   });
 });

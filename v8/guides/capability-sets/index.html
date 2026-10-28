@@ -2486,7 +2486,9 @@ to be explicitly specified.</p>
 </span></code></pre></div>
 <p>The <a href="../../reference/capabilities/#noreset"><code>appium:noReset</code></a> capability is set to <code>true</code> in order
 to tell the driver that the app identified by <code>appium:appPackage</code> is already preinstalled and must
-not be reset.</p>
+not be reset. <a href="../../reference/capabilities/#appactivity"><code>appium:appActivity</code></a> can be omitted if
+the package defines a default launchable activity, in which case the driver resolves it
+automatically from <code>appium:appPackage</code>.</p>
 <h2 id="pre-installed-app-emulator">Pre-Installed App (Emulator)<a class="headerlink" href="#pre-installed-app-emulator" title="Permanent link">&para;</a></h2>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"platformName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Android"</span><span class="p">,</span>
@@ -2535,7 +2537,7 @@ lifecycle.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 19, 2026 18:00:14 UTC"><span class="timeago" datetime="2026-10-19T18:00:14+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 18:00:14 UTC">2026-10-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 28, 2026 06:03:31 UTC"><span class="timeago" datetime="2026-10-28T06:03:31+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 28, 2026 06:03:31 UTC">2026-10-28</span>
   </span>
 
     

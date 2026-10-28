@@ -1,3 +1,9 @@
+## [8.7.3](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.2...v8.7.3) (2026-10-28)
+
+### Bug Fixes
+
+* bump server to 10.7.6 to fix [#988](https://github.com/appium/appium-uiautomator2-driver/issues/988) ([#1071](https://github.com/appium/appium-uiautomator2-driver/issues/1071)) ([bf13583](https://github.com/appium/appium-uiautomator2-driver/commit/bf13583bbb4cc50722e83a8ca98427129b48fdfd))
+
 ## [8.7.2](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.1...v8.7.2) (2026-10-27)
 
 ### Miscellaneous Chores

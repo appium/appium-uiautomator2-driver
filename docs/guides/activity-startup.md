@@ -28,11 +28,12 @@ auto-detect them by reading their values from the manifest of the APK file speci
 [`appium:app`](../reference/capabilities.md#app) capability.
 
 If the application under test is supposed to be already installed on the device, then at least the
-`appium:appActivity` and `appium:appPackage` capabilities must be set, since no package manifest is
-available in such case.
+`appium:appPackage` capability must be set. If `appium:appActivity` is not set, the driver tries to
+auto-detect the default launchable activity of the installed package on the device.
 
-For more details, check the implementation of the `packageAndLaunchActivityFromManifest` method in
-the [`appium-adb`](https://github.com/appium/appium-android/blob/main/packages/adb/lib/tools/android-manifest.ts)
+For more details, check the implementation of the `packageAndLaunchActivityFromManifest` and
+`resolveLaunchableActivity` methods in the
+[`appium-adb`](https://github.com/appium/appium-android/blob/main/packages/adb/lib/tools/android-manifest.ts)
 package.
 
 ## How UiAutomator2 Starts Activities

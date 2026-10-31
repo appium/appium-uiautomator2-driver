@@ -5,6 +5,30 @@ import {util} from 'appium/support.js';
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {RelativeRect} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileClickGesture(...args: Parameters<typeof mobileClickGesture>): ReturnType<typeof mobileClickGesture>;
+    mobileDoubleClickGesture(
+      ...args: Parameters<typeof mobileDoubleClickGesture>
+    ): ReturnType<typeof mobileDoubleClickGesture>;
+    mobileDragGesture(...args: Parameters<typeof mobileDragGesture>): ReturnType<typeof mobileDragGesture>;
+    mobileFlingGesture(...args: Parameters<typeof mobileFlingGesture>): ReturnType<typeof mobileFlingGesture>;
+    mobileLongClickGesture(
+      ...args: Parameters<typeof mobileLongClickGesture>
+    ): ReturnType<typeof mobileLongClickGesture>;
+    mobilePinchCloseGesture(
+      ...args: Parameters<typeof mobilePinchCloseGesture>
+    ): ReturnType<typeof mobilePinchCloseGesture>;
+    mobilePinchOpenGesture(
+      ...args: Parameters<typeof mobilePinchOpenGesture>
+    ): ReturnType<typeof mobilePinchOpenGesture>;
+    mobileScroll(...args: Parameters<typeof mobileScroll>): ReturnType<typeof mobileScroll>;
+    mobileScrollBackTo(...args: Parameters<typeof mobileScrollBackTo>): ReturnType<typeof mobileScrollBackTo>;
+    mobileScrollGesture(...args: Parameters<typeof mobileScrollGesture>): ReturnType<typeof mobileScrollGesture>;
+    mobileSwipeGesture(...args: Parameters<typeof mobileSwipeGesture>): ReturnType<typeof mobileSwipeGesture>;
+  }
+}
+
 /**
  * Performs a simple click/tap gesture.
  * @param elementId - Optional element to use as the origin for the click. If not provided, uses screen coordinates.

@@ -3,6 +3,19 @@ import type {StringRecord} from '@appium/types';
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {ActionResult} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileGetActionHistory(
+      ...args: Parameters<typeof mobileGetActionHistory>
+    ): ReturnType<typeof mobileGetActionHistory>;
+    mobileScheduleAction(...args: Parameters<typeof mobileScheduleAction>): ReturnType<typeof mobileScheduleAction>;
+    mobileUnscheduleAction(
+      ...args: Parameters<typeof mobileUnscheduleAction>
+    ): ReturnType<typeof mobileUnscheduleAction>;
+    releaseActions(...args: Parameters<typeof releaseActions>): ReturnType<typeof releaseActions>;
+  }
+}
+
 /**
  * Schedules a recurring action to be performed at specified intervals.
  * @param name - Unique name for the scheduled action.

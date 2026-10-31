@@ -2,6 +2,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import type {Orientation, StringRecord} from '@appium/types';
+import type {ADBLaunchInfo} from 'appium-android-driver';
 import {util} from 'appium/support.js';
 import {retryInterval} from 'asyncbox';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
@@ -18,6 +19,27 @@ import type {
 } from '../types.js';
 import {UiAutomator2Server, type UiAutomator2ServerOptions} from './core.js';
 import {SERVER_PACKAGE_ID, SERVER_TEST_PACKAGE_ID} from './packages.js';
+
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    allocateSystemPort(...args: Parameters<typeof allocateSystemPort>): ReturnType<typeof allocateSystemPort>;
+    releaseSystemPort(...args: Parameters<typeof releaseSystemPort>): ReturnType<typeof releaseSystemPort>;
+    allocateMjpegServerPort(
+      ...args: Parameters<typeof allocateMjpegServerPort>
+    ): ReturnType<typeof allocateMjpegServerPort>;
+    releaseMjpegServerPort(
+      ...args: Parameters<typeof releaseMjpegServerPort>
+    ): ReturnType<typeof releaseMjpegServerPort>;
+    performSessionPreExecSetup(...args: Parameters<typeof performPreExecSetup>): ReturnType<typeof performPreExecSetup>;
+    performSessionExecution(...args: Parameters<typeof performExecution>): ReturnType<typeof performExecution>;
+    performSessionPostExecSetup(
+      ...args: Parameters<typeof performPostExecSetup>
+    ): ReturnType<typeof performPostExecSetup>;
+    startUiAutomator2Session(...args: Parameters<typeof startSession>): ReturnType<typeof startSession>;
+    initUiAutomator2Server(...args: Parameters<typeof initServer>): ReturnType<typeof initServer>;
+    requireUiautomator2(...args: Parameters<typeof requireServer>): ReturnType<typeof requireServer>;
+  }
+}
 
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device
@@ -156,7 +178,7 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
       })(),
     );
   }
-  let appInfo;
+  let appInfo: ADBLaunchInfo | undefined;
   preflightPromises.push(
     (async () => {
       // get appPackage et al from manifest if necessary
@@ -168,7 +190,9 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
 
   await Promise.all(preflightPromises);
 
-  this.opts = {...this.opts, ...(appInfo ?? {})};
+  if (appInfo) {
+    this.opts = {...this.opts, ...appInfo};
+  }
   return appInfo;
 }
 
@@ -236,8 +260,9 @@ export async function performPostExecSetup(this: AndroidUiautomator2Driver): Pro
 
   // if the initial orientation is requested, set it
   if (util.hasValue(this.opts.orientation)) {
-    this.log.debug(`Setting initial orientation to '${this.opts.orientation}'`);
-    await this.setOrientation(this.opts.orientation as Orientation);
+    const orientation = this.opts.orientation as Orientation;
+    this.log.debug(`Setting initial orientation to '${orientation}'`);
+    await this.setOrientation(orientation);
   }
 
   // if we want to immediately get into a webview, set our context

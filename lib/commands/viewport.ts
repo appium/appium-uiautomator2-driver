@@ -7,6 +7,18 @@ import {util} from 'appium/support.js';
 import type {AndroidUiautomator2Driver} from '../driver.js';
 import type {RelativeRect} from './types.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    getStatusBarHeight(...args: Parameters<typeof getStatusBarHeight>): ReturnType<typeof getStatusBarHeight>;
+    getDevicePixelRatio(...args: Parameters<typeof getDevicePixelRatio>): ReturnType<typeof getDevicePixelRatio>;
+    getViewPortRect(...args: Parameters<typeof getViewPortRect>): ReturnType<typeof getViewPortRect>;
+    mobileViewPortRect(...args: Parameters<typeof mobileViewPortRect>): ReturnType<typeof mobileViewPortRect>;
+    mobileViewportElementRect(
+      ...args: Parameters<typeof mobileViewportElementRect>
+    ): ReturnType<typeof mobileViewportElementRect>;
+  }
+}
+
 /**
  * Gets the status bar height in pixels.
  * @returns The status bar height in pixels.

@@ -1,6 +1,9 @@
 import os from 'node:os';
 import path from 'node:path';
 
+import type {StringRecord} from '@appium/types';
+import type {Capabilities} from '@wdio/types';
+
 const uiautomator2ServerLaunchTimeout = process.env.CI ? 60000 : 20000;
 const uiautomator2ServerInstallTimeout = process.env.CI ? 120000 : 20000;
 
@@ -16,7 +19,10 @@ export const APIDEMOS_SCROLL_ACTIVITY = '.view.ScrollView2';
 export const APIDEMOS_TEXTFIELDS_ACTIVITY = '.view.TextFields';
 export const APIDEMOS_KEYEVENT_ACTIVITY = '.text.KeyEventText';
 
-export function amendCapabilities(baseCaps: any, ...newCaps: any[]): any {
+export function amendCapabilities(
+  baseCaps: Capabilities.W3CCapabilities,
+  ...newCaps: StringRecord[]
+): Capabilities.W3CCapabilities {
   return deepFreeze({
     alwaysMatch: structuredClone(Object.assign({}, baseCaps.alwaysMatch, ...newCaps)),
     firstMatch: [{}],

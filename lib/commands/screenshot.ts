@@ -1,8 +1,20 @@
 import type {StringRecord} from '@appium/types';
+import {util} from 'appium/support.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
-import {cropBase64Image, isEmpty} from '../utils/index.js';
+import {cropBase64Image} from '../utils/index.js';
 import type {Screenshot} from './types.js';
+
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    mobileScreenshots(...args: Parameters<typeof mobileScreenshots>): ReturnType<typeof mobileScreenshots>;
+    mobileViewportScreenshot(
+      ...args: Parameters<typeof mobileViewportScreenshot>
+    ): ReturnType<typeof mobileViewportScreenshot>;
+    getScreenshot(...args: Parameters<typeof getScreenshot>): ReturnType<typeof getScreenshot>;
+    getViewportScreenshot(...args: Parameters<typeof getViewportScreenshot>): ReturnType<typeof getViewportScreenshot>;
+  }
+}
 
 // Matches SurfaceFlinger output format:
 // Physical: Display 4619827259835644672 (HWC display 0): port=0 pnpId=GGL displayName="EMU_display_0"
@@ -89,7 +101,7 @@ export async function mobileScreenshots(
 ): Promise<StringRecord<Screenshot>> {
   const displaysInfo = await this.adb.shell(['dumpsys', 'SurfaceFlinger', '--display-id']);
   const infos = parseSurfaceFlingerDisplays(displaysInfo);
-  if (isEmpty(infos)) {
+  if (util.isEmpty(infos)) {
     this.log.debug(displaysInfo);
     throw new Error('Cannot determine the information about connected Android displays');
   }

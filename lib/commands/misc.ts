@@ -2,6 +2,21 @@ import type {Orientation, StringRecord} from '@appium/types';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface AndroidUiautomator2Driver {
+    getPageSource(...args: Parameters<typeof getPageSource>): ReturnType<typeof getPageSource>;
+    getOrientation(...args: Parameters<typeof getOrientation>): ReturnType<typeof getOrientation>;
+    setOrientation(...args: Parameters<typeof setOrientation>): ReturnType<typeof setOrientation>;
+    mobileGetDeviceInfo(...args: Parameters<typeof mobileGetDeviceInfo>): ReturnType<typeof mobileGetDeviceInfo>;
+    mobileGetDeclaredOrientation(
+      ...args: Parameters<typeof mobileGetDeclaredOrientation>
+    ): ReturnType<typeof mobileGetDeclaredOrientation>;
+    mobileResetAccessibilityCache(
+      ...args: Parameters<typeof mobileResetAccessibilityCache>
+    ): ReturnType<typeof mobileResetAccessibilityCache>;
+  }
+}
+
 /**
  * Retrieves the current page source.
  * @returns The XML page source of the current screen.

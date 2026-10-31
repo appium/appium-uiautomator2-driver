@@ -427,7 +427,7 @@ export class UiAutomator2Server {
       ).data as SessionsResponse;
       const activeSessionIds = value.map(({id}) => id).filter(Boolean);
       if (activeSessionIds.length) {
-        this.log.debug(`The following obsolete sessions are still running: ${activeSessionIds}`);
+        this.log.debug(`The following obsolete sessions are still running: ${activeSessionIds.join(', ')}`);
         this.log.debug(`Cleaning up ${util.pluralize('obsolete session', activeSessionIds.length, true)}`);
         await Promise.all(
           activeSessionIds.map((id: string) =>

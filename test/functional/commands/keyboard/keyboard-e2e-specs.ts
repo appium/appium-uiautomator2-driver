@@ -82,7 +82,7 @@ async function runTextEditTest(
 
   if (keys) {
     // wdio accepts one code point per key
-    await driver.keys([...testText]);
+    await driver.keys(Array.from(testText));
   } else {
     // await el.sendKeys(testText);
     const elementId = await el.elementId;

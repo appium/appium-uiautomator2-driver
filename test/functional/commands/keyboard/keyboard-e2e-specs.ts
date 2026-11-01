@@ -81,12 +81,8 @@ async function runTextEditTest(
   await el.click();
 
   if (keys) {
-    // W3C key actions can't synthesize non-ASCII characters on Android
-    if (/^\p{ASCII}*$/u.test(testText)) {
-      await driver.keys([testText]);
-    } else {
-      await driver.execute('mobile: type', {text: testText});
-    }
+    // wdio accepts one code point per key
+    await driver.keys([...testText]);
   } else {
     // await el.sendKeys(testText);
     const elementId = await el.elementId;

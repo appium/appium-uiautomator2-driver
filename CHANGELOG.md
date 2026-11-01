@@ -1,3 +1,30 @@
+## [9.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.3...v9.0.0) (2026-11-01)
+
+### ⚠ BREAKING CHANGES
+
+* requires Appium >=4.0.0-beta.0 and drops Node 20 support
+(minimum is now ^22.22.2 || ^24.15.0 || >=26.0.0), matching Appium 4's own
+minimum supported Node engine. Also requires appium-android-driver
+
+### Features
+
+* target Appium 4 beta ([#1048](https://github.com/appium/appium-uiautomator2-driver/issues/1048)) ([add442c](https://github.com/appium/appium-uiautomator2-driver/commit/add442c5b5e626a4f742bb4800f1fc61f95cbcf7))
+
+### Bug Fixes
+
+* Bring back autoLaunch cap ([#1053](https://github.com/appium/appium-uiautomator2-driver/issues/1053)) ([a89c10e](https://github.com/appium/appium-uiautomator2-driver/commit/a89c10e65df0e26d50be12a56eba79e6b5f4930b))
+* Drop obsolete sessions from the server list on IPC session claim ([#1052](https://github.com/appium/appium-uiautomator2-driver/issues/1052)) ([390f9b0](https://github.com/appium/appium-uiautomator2-driver/commit/390f9b0a290008ea44bd31384e5c87ccd84c7c52))
+
+### Miscellaneous Chores
+
+* Bump Appium monorepo packages to latest betas and fix lint warnings ([#1050](https://github.com/appium/appium-uiautomator2-driver/issues/1050)) ([b6aa938](https://github.com/appium/appium-uiautomator2-driver/commit/b6aa93808f61d05b7cebedb19e776bb63ab5d562))
+* bump appium-android-driver to v15 ([0e7102c](https://github.com/appium/appium-uiautomator2-driver/commit/0e7102c8a0d48a196275ee6ddccd6c4944782e06))
+* replace unzipper with @appium/support zip helpers ([#1069](https://github.com/appium/appium-uiautomator2-driver/issues/1069)) ([60c8601](https://github.com/appium/appium-uiautomator2-driver/commit/60c86015f602d21b3d8eaafced8b441a20c6f3a5))
+
+### Code Refactoring
+
+* attach commands via prototype to allow overrides in descendants ([#1055](https://github.com/appium/appium-uiautomator2-driver/issues/1055)) ([51720b2](https://github.com/appium/appium-uiautomator2-driver/commit/51720b2e1b0ff6713c57e1b1e2f1ff4a99dee92a))
+
 ## [8.7.3](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.2...v8.7.3) (2026-10-28)
 
 ### Bug Fixes

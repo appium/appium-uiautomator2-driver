@@ -28,7 +28,7 @@ This is a black-box Appium driver for automating native and hybrid applications 
 Android's UI Automator framework.
 
 > [!IMPORTANT]
-> Since major version *5.0.0*, this driver is only compatible with Appium 3.
+> Since major version *9.0.0*, this driver is only compatible with Appium 4.
 
 
 ## Documentation

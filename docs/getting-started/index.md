@@ -66,7 +66,8 @@ and prerequisites of Appium itself can be found in [the Appium documentation](ht
 
 | UiAutomator2 driver version | Supported Appium server version |
 | --- | --- |
-| >= 5.0.0 | Appium 3 |
+| >= 9.0.0 | Appium 4 |
+| 5.0.0 - 8.7.3 | Appium 3 |
 | 2.0.0 - 4.2.9 | Appium 2 |
 
 ## Installation

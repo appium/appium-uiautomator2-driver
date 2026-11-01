@@ -62,7 +62,7 @@ describe('Find - CSS', function () {
     assert.ok(await driver.$('*[description*="Animation"]').elementId);
   });
   it('should allow UiScrollable with unicode string', async function () {
-    await driver.startActivity('io.appium.android.apis', '.text.Unicode');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.text.Unicode'});
     const selector = '*[text="عربي"]:instance(0)';
     const el = await driver.$(selector);
     assert.strictEqual(await el.getText(), 'عربي');

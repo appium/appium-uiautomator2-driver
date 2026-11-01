@@ -81,7 +81,7 @@ async function runTextEditTest(
   await el.click();
 
   if (keys) {
-    await driver.sendKeys([testText]);
+    await driver.execute('mobile: type', {text: testText});
   } else {
     // await el.sendKeys(testText);
     const elementId = await el.elementId;
@@ -119,16 +119,16 @@ async function activateLatinIme(driver: Browser): Promise<void> {
 }
 
 async function startTextFieldsActivity(driver: Browser): Promise<void> {
-  await driver.startActivity(
-    defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-    defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-  );
+  await driver.startActivity({
+    appPackage: defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+    appActivity: defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+  });
   if (await dismissSystemAlertIfPresent(driver)) {
     await ensureUnlocked(driver);
-    await driver.startActivity(
-      defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-      defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-    );
+    await driver.startActivity({
+      appPackage: defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+      appActivity: defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+    });
   }
 }
 
@@ -289,7 +289,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: APIDEMOS_PACKAGE, appActivity: APIDEMOS_KEYEVENT_ACTIVITY});
         await sleep(500);
       });
 
@@ -353,7 +353,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: APIDEMOS_PACKAGE, appActivity: APIDEMOS_KEYEVENT_ACTIVITY});
       });
 
       it('should be able to send combination keyevents', async function () {

@@ -105,12 +105,10 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
           throw new Error('Alert was found, retry');
         });
         if (alertFound && driver) {
-          await driver.startActivity(
-            caps.alwaysMatch?.['appium:appPackage'] as string,
-            caps.alwaysMatch?.['appium:appActivity'] as string,
-            caps.alwaysMatch?.['appium:appWaitPackage'] as string | undefined,
-            caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined,
-          );
+          await driver.startActivity({
+            appPackage: caps.alwaysMatch?.['appium:appPackage'] as string,
+            appActivity: caps.alwaysMatch?.['appium:appActivity'] as string,
+          });
         }
       }
     } finally {

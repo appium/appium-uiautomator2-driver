@@ -59,7 +59,7 @@ describe('general', function () {
       const startAppPackage = 'io.appium.android.apis';
       const startAppActivity = '.view.SplitTouchView';
 
-      await driver.startActivity(startAppPackage, startAppActivity);
+      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
@@ -68,21 +68,25 @@ describe('general', function () {
       const startAppActivity = 'io.appium.android.apis.app.HelloWorld';
       const startIntentCategory = 'appium.android.intent.category.SAMPLE_CODE';
 
-      await driver.startActivity(startAppPackage, startAppActivity, undefined, undefined, startIntentCategory);
+      await driver.startActivity({
+        appPackage: startAppPackage,
+        appActivity: startAppActivity,
+        intentCategory: startIntentCategory,
+      });
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
     it('should be able to launch activity with dontStopAppOnReset = true', async function () {
       const startAppPackage = 'io.appium.android.apis';
       const startAppActivity = '.os.MorseCode';
-      await driver.startActivity(startAppPackage, startAppActivity);
+      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });
     it('should be able to launch activity with dontStopAppOnReset = false', async function () {
       const startAppPackage = 'io.appium.android.apis';
       const startAppActivity = '.os.MorseCode';
-      await driver.startActivity(startAppPackage, startAppActivity);
+      await driver.startActivity({appPackage: startAppPackage, appActivity: startAppActivity});
 
       await expectPackageAndActivity(driver, startAppPackage, startAppActivity);
     });

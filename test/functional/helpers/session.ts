@@ -32,6 +32,8 @@ export async function createRemoteSession(
     capabilities: caps,
     connectionRetryTimeout: E2E_TEST_TIMEOUT,
     connectionRetryCount: 1,
+    // wdio 10 defaults to strict selectors; the tests rely on first-match $()
+    strictSelectors: false,
     ...remoteOpts,
   });
 }
@@ -51,7 +53,7 @@ export async function initSession(caps: StringRecord, remoteOpts: StringRecord =
   // Create the driver
   const host = DEFAULT_HOST;
   const port = DEFAULT_PORT;
-  const opts = Object.assign({}, remoteOpts, {
+  const opts = Object.assign({strictSelectors: false}, remoteOpts, {
     hostname: host,
     port,
     capabilities: caps,

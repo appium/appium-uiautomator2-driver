@@ -81,7 +81,12 @@ async function runTextEditTest(
   await el.click();
 
   if (keys) {
-    await driver.execute('mobile: type', {text: testText});
+    // W3C key actions can't synthesize non-ASCII characters on Android
+    if (/^\p{ASCII}*$/u.test(testText)) {
+      await driver.keys([testText]);
+    } else {
+      await driver.execute('mobile: type', {text: testText});
+    }
   } else {
     // await el.sendKeys(testText);
     const elementId = await el.elementId;
@@ -195,7 +200,7 @@ const languageTests = [
   {label: 'should be able to send Tamil', text: 'சோதனை'},
   {label: 'should be able to send Gujarati', text: 'પરીક્ષણ'},
   {label: 'should be able to send Chinese', text: '测试'},
-  {label: 'should be able to send Russian', text: 'тестирование'},
+  {label: 'should be able to send Ukrainian', text: 'тестування'},
   {label: 'should be able to send Arabic', text: 'تجريب'},
   {label: 'should be able to send Hebrew', text: 'בדיקות'},
 ];

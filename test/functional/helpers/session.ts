@@ -32,6 +32,8 @@ export async function createRemoteSession(
     capabilities: caps,
     connectionRetryTimeout: E2E_TEST_TIMEOUT,
     connectionRetryCount: 1,
+    // wdio 10 defaults to strict selectors; the tests rely on first-match $()
+    strictSelectors: false,
     ...remoteOpts,
   });
 }
@@ -51,7 +53,7 @@ export async function initSession(caps: StringRecord, remoteOpts: StringRecord =
   // Create the driver
   const host = DEFAULT_HOST;
   const port = DEFAULT_PORT;
-  const opts = Object.assign({}, remoteOpts, {
+  const opts = Object.assign({strictSelectors: false}, remoteOpts, {
     hostname: host,
     port,
     capabilities: caps,
@@ -105,12 +107,10 @@ export async function attemptToDismissAlert(caps: StringRecord): Promise<void> {
           throw new Error('Alert was found, retry');
         });
         if (alertFound && driver) {
-          await driver.startActivity(
-            caps.alwaysMatch?.['appium:appPackage'] as string,
-            caps.alwaysMatch?.['appium:appActivity'] as string,
-            caps.alwaysMatch?.['appium:appWaitPackage'] as string | undefined,
-            caps.alwaysMatch?.['appium:appWaitActivity'] as string | undefined,
-          );
+          await driver.startActivity({
+            appPackage: caps.alwaysMatch?.['appium:appPackage'] as string,
+            appActivity: caps.alwaysMatch?.['appium:appActivity'] as string,
+          });
         }
       }
     } finally {

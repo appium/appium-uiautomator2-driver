@@ -81,7 +81,8 @@ async function runTextEditTest(
   await el.click();
 
   if (keys) {
-    await driver.sendKeys([testText]);
+    // wdio accepts one code point per key
+    await driver.keys(Array.from(testText));
   } else {
     // await el.sendKeys(testText);
     const elementId = await el.elementId;
@@ -119,16 +120,16 @@ async function activateLatinIme(driver: Browser): Promise<void> {
 }
 
 async function startTextFieldsActivity(driver: Browser): Promise<void> {
-  await driver.startActivity(
-    defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-    defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-  );
+  await driver.startActivity({
+    appPackage: defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+    appActivity: defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+  });
   if (await dismissSystemAlertIfPresent(driver)) {
     await ensureUnlocked(driver);
-    await driver.startActivity(
-      defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
-      defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
-    );
+    await driver.startActivity({
+      appPackage: defaultAsciiCaps.alwaysMatch?.['appium:appPackage'] as string,
+      appActivity: defaultAsciiCaps.alwaysMatch?.['appium:appActivity'] as string,
+    });
   }
 }
 
@@ -195,7 +196,7 @@ const languageTests = [
   {label: 'should be able to send Tamil', text: 'சோதனை'},
   {label: 'should be able to send Gujarati', text: 'પરીક્ષણ'},
   {label: 'should be able to send Chinese', text: '测试'},
-  {label: 'should be able to send Russian', text: 'тестирование'},
+  {label: 'should be able to send Ukrainian', text: 'тестування'},
   {label: 'should be able to send Arabic', text: 'تجريب'},
   {label: 'should be able to send Hebrew', text: 'בדיקות'},
 ];
@@ -289,7 +290,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: APIDEMOS_PACKAGE, appActivity: APIDEMOS_KEYEVENT_ACTIVITY});
         await sleep(500);
       });
 
@@ -353,7 +354,7 @@ describe('keyboard', function () {
 
     describe('sending a key event', function () {
       before(async function () {
-        await driver.startActivity(APIDEMOS_PACKAGE, APIDEMOS_KEYEVENT_ACTIVITY);
+        await driver.startActivity({appPackage: APIDEMOS_PACKAGE, appActivity: APIDEMOS_KEYEVENT_ACTIVITY});
       });
 
       it('should be able to send combination keyevents', async function () {

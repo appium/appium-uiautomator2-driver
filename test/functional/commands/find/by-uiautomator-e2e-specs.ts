@@ -115,28 +115,28 @@ describe('Find - uiautomator', function () {
     assert.ok(el.elementId);
   });
   it('should scroll to, and return elements using UiScrollable', async function () {
-    await driver.startActivity('io.appium.android.apis', '.view.List1');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     const selector =
       'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     const el = await driver.$(`android=${selector}`);
     assert.strictEqual(await el.getText(), 'Beer Cheese');
   });
   it('should allow chaining UiScrollable methods', async function () {
-    await driver.startActivity('io.appium.android.apis', '.view.List1');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     const selector =
       'new UiScrollable(new UiSelector().scrollable(true).instance(0)).setMaxSearchSwipes(11).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0))';
     const el = await driver.$(`android=${selector}`);
     assert.ok(el.elementId);
   });
   it('should allow UiScrollable scrollIntoView', async function () {
-    await driver.startActivity('io.appium.android.apis', '.view.List1');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.view.List1'});
     const selector =
       'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Beer Cheese").instance(0));';
     const el = await driver.$(`android=${selector}`);
     assert.strictEqual(await el.getText(), 'Beer Cheese');
   });
   it('should allow UiScrollable with unicode string', async function () {
-    await driver.startActivity('io.appium.android.apis', '.text.Unicode');
+    await driver.startActivity({appPackage: 'io.appium.android.apis', appActivity: '.text.Unicode'});
     const selector = 'new UiSelector().text("عربي").instance(0);';
     const el = await driver.$(`android=${selector}`);
     assert.strictEqual(await el.getText(), 'عربي');

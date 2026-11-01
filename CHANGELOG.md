@@ -1,3 +1,9 @@
+## [9.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.0...v9.0.1) (2026-11-01)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump webdriverio from 9.32.0 to 10.1.0 ([#1073](https://github.com/appium/appium-uiautomator2-driver/issues/1073)) ([8af7051](https://github.com/appium/appium-uiautomator2-driver/commit/8af705168fa7d94eb9974e60d99186ebead77e81))
+
 ## [9.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v8.7.3...v9.0.0) (2026-11-01)
 
 ### ⚠ BREAKING CHANGES

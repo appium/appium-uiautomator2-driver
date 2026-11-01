@@ -86,6 +86,7 @@ export async function mobileType(this: AndroidUiautomator2Driver, text: string |
 
 /**
  * Sends keys to the current element.
+ * @deprecated Use the `keyDown`/`keyUp` W3C Actions instead.
  * @param params - Options containing the text to send and optional replace flag.
  */
 export async function doSendKeys(this: AndroidUiautomator2Driver, params: SendKeysOpts): Promise<void> {

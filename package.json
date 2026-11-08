@@ -71,7 +71,7 @@
     "axios": "^1.18.0",
     "io.appium.settings": "^8.0.1",
     "portscanner": "^2.2.0",
-    "teen_process": "^4.2.0"
+    "teen_process": "4.2.2"
   },
   "devDependencies": {
     "@appium/docutils": "^4.0.0-beta.5",
@@ -95,6 +95,11 @@
   },
   "optionalDependencies": {
     "sharp": "^0.x"
+  },
+  "overrides": {
+    "glob": "14.0.4",
+    "minimatch": "11.0.5",
+    "teen_process": "4.2.2"
   },
   "engines": {
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0",

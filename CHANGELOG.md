@@ -1,3 +1,9 @@
+## [9.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.1...v9.0.2) (2026-11-11)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-adb, appium-android-driver, appium-uiautomator2-server and io.appium.settings ([#1079](https://github.com/appium/appium-uiautomator2-driver/issues/1079)) ([1f70b9e](https://github.com/appium/appium-uiautomator2-driver/commit/1f70b9e35e4312c42d90169e5b5270db07dc3216))
+
 ## [9.0.1](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.0...v9.0.1) (2026-11-01)
 
 ### Miscellaneous Chores

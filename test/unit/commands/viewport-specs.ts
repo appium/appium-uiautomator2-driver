@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import {describe, it, beforeEach, afterEach} from 'node:test';
 
 import {AndroidDriver} from 'appium-android-driver';
-import {PROTOCOLS} from 'appium/driver.js';
 import sinon from 'sinon';
 
 import {clampRectToBounds, enrichWebviewsMappingWithRects} from '../../../lib/commands/viewport.js';
@@ -75,7 +74,7 @@ describe('Viewport', function () {
       ...overrides,
     };
     const command = sinon.stub().withArgs('/execute/sync', 'POST', sinon.match.has('script')).resolves(geometry);
-    driver.chromedriver = {jwproxy: {downstreamProtocol: PROTOCOLS.W3C, command}} as any;
+    driver.chromedriver = {jwproxy: {command}} as any;
     return command;
   }
 

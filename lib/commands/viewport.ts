@@ -1,7 +1,7 @@
 import type {Element as AppiumElement, Rect, Size, StringRecord} from '@appium/types';
 import type {WebviewsMapping} from 'appium-android-driver';
 import type {Chromedriver} from 'appium-chromedriver';
-import {errors, PROTOCOLS} from 'appium/driver.js';
+import {errors} from 'appium/driver.js';
 import {util} from 'appium/support.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
@@ -400,8 +400,7 @@ return {
  */
 async function getWebviewGeometryContext(driver: AndroidUiautomator2Driver): Promise<WebviewGeometryContext> {
   const chromedriver = driver.chromedriver as Chromedriver;
-  const endpoint = chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP ? '/execute' : '/execute/sync';
-  return (await chromedriver.jwproxy.command(endpoint, 'POST', {
+  return (await chromedriver.jwproxy.command('/execute/sync', 'POST', {
     script: GET_WEBVIEW_GEOMETRY_CONTEXT_SCRIPT,
     args: [],
   })) as WebviewGeometryContext;

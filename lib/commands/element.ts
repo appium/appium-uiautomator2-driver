@@ -1,7 +1,6 @@
 import type {Element as AppiumElement, Position, Rect, Size} from '@appium/types';
 import type {DoSetElementValueOpts} from 'appium-android-driver';
 import type {Chromedriver} from 'appium-chromedriver';
-import {PROTOCOLS} from 'appium/driver.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
@@ -163,13 +162,6 @@ export async function getElementRect(this: AndroidUiautomator2Driver, elementId:
   }
 
   const chromedriver = this.chromedriver as Chromedriver;
-  if (chromedriver.jwproxy.downstreamProtocol === PROTOCOLS.MJSONWP) {
-    const [{x, y}, {width, height}] = (await Promise.all([
-      chromedriver.jwproxy.command(`/element/${elementId}/location`, 'GET'),
-      chromedriver.jwproxy.command(`/element/${elementId}/size`, 'GET'),
-    ])) as [Position, Size];
-    return {x, y, width, height};
-  }
   return (await chromedriver.jwproxy.command(`/element/${elementId}/rect`, 'GET')) as Rect;
 }
 

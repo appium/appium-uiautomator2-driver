@@ -64,12 +64,12 @@
   },
   "dependencies": {
     "@appium/css-locator-to-native": "^1.0.1",
-    "appium-adb": "^16.0.4",
-    "appium-android-driver": "^15.0.0",
-    "appium-uiautomator2-server": "^10.7.10",
+    "appium-adb": "^17.0.0",
+    "appium-android-driver": "^15.1.13",
+    "appium-uiautomator2-server": "^11.0.0",
     "asyncbox": "^6.4.3",
     "axios": "^1.18.0",
-    "io.appium.settings": "^8.0.1",
+    "io.appium.settings": "^9.0.0",
     "portscanner": "^2.2.0",
     "teen_process": "^4.2.0"
   },

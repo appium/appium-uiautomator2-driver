@@ -239,6 +239,8 @@ class AndroidUiautomator2Driver
 
   _originalIme: string | null;
 
+  _wasAccessibilityEventsServiceEnabled: boolean;
+
   mjpegStream?: MJpegStream;
 
   override caps: Uiautomator2DriverCaps;
@@ -259,6 +261,7 @@ class AndroidUiautomator2Driver
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
     this._originalIme = null;
+    this._wasAccessibilityEventsServiceEnabled = false;
 
     this.settings = new DeviceSettings(
       {ignoreUnimportantViews: false, allowInvisibleElements: false},
@@ -462,6 +465,14 @@ class AndroidUiautomator2Driver
       if (this._wasWindowAnimationDisabled) {
         this.log.info('Restoring window animation state');
         await this.settingsApp.setAnimationState(true);
+      }
+      if (this._wasAccessibilityEventsServiceEnabled) {
+        try {
+          await this.settingsApp.setAccessibilityEventsServiceState(false);
+        } catch (e) {
+          this.log.warn(`Cannot disable the accessibility events service: ${(e as Error).message}`);
+        }
+        this._wasAccessibilityEventsServiceEnabled = false;
       }
       if (this._originalIme) {
         try {

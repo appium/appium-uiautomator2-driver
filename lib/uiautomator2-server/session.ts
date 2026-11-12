@@ -189,6 +189,18 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
 
   await Promise.all(preflightPromises);
 
+  if (this.opts.enableAccessibilityEventsService) {
+    // Chrome only emits accessibility events if an accessibility service is enabled.
+    // Must be after initDevice(), which installs io.appium.settings
+    try {
+      this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
+    } catch (err) {
+      throw this.log.errorWithException(
+        `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
+      );
+    }
+  }
+
   if (appInfo) {
     this.opts = {...this.opts, ...appInfo};
   }
@@ -334,7 +346,9 @@ export async function initServer(this: AndroidUiautomator2Driver) {
     systemPort: this.systemPort as number,
     adb: this.adb,
     disableWindowAnimation: !!this.opts.disableWindowAnimation,
-    disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
+    // Enabled accessibility services must not be suppressed to be able to emit events
+    disableSuppressAccessibilityService:
+      this.opts.disableSuppressAccessibilityService ?? (this.opts.enableAccessibilityEventsService ? true : undefined),
     readTimeout: this.opts.uiautomator2ServerReadTimeout,
     basePath: this.basePath,
   };

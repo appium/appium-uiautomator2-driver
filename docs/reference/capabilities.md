@@ -158,6 +158,18 @@ devices where access to these policies has been locked by its vendor.
 Whether the instrumentation process should avoid suppressing accessibility services during the
 session. Useful if your automated test needs these services.
 
+### enableAccessibilityEventsService
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:enableAccessibilityEventsService` | `boolean` | `false` |
+
+Whether to enable the no-op accessibility service of Appium Settings for the duration of the
+session, and to not suppress accessibility services (unless `appium:disableSuppressAccessibilityService`
+is explicitly `false`). Chrome does not emit accessibility events for web content if UiAutomation is
+the only accessibility client, so accessibility caches (e.g. the server's `deferAccessibilityCacheReset`
+setting) may return stale web content. Requires Appium Settings 9.1.0 or newer.
+
 ### disableWindowAnimation
 
 | Name | Type | Default |

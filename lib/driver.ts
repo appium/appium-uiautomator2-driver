@@ -394,6 +394,62 @@ class AndroidUiautomator2Driver
     await sessionClaimHandler.trackTeardown(this, async () => await this.teardownSession());
   }
 
+  async onSettingsUpdate() {
+    // intentionally do nothing here, since commands.updateSettings proxies
+    // settings to the uiauto2 server already
+  }
+
+  override proxyActive(sessionId: string): boolean {
+    void sessionId;
+    // we always have an active proxy to the UiAutomator2 server
+    return true;
+  }
+
+  override canProxy(sessionId: string): boolean {
+    void sessionId;
+    // we can always proxy to the uiautomator2 server
+    return true;
+  }
+
+  override getProxyAvoidList(): RouteMatcher[] {
+    // we are maintaining two sets of NO_PROXY lists, one for chromedriver(CHROME_NO_PROXY)
+    // and one for uiautomator2(NO_PROXY), based on current context will return related NO_PROXY list
+    if (util.hasValue(this.chromedriver)) {
+      // if the current context is webview(chromedriver), then return CHROME_NO_PROXY list
+      this.jwpProxyAvoid = CHROME_NO_PROXY;
+    } else {
+      this.jwpProxyAvoid = NO_PROXY;
+    }
+    if (this.opts.nativeWebScreenshot) {
+      this.jwpProxyAvoid = [...this.jwpProxyAvoid, ['GET', new RegExp('^/session/[^/]+/screenshot')]];
+    }
+
+    return this.jwpProxyAvoid;
+  }
+
+  // @ts-expect-error narrower parameter type than the base class override allows
+  override async updateSettings(settings: Uiautomator2Settings) {
+    await this.settings.update(settings);
+    await this.requireUiautomator2().jwproxy.command('/appium/settings', 'POST', {settings});
+  }
+
+  override async getSettings(): Promise<StringRecord> {
+    const driverSettings = this.settings.getSettings();
+    const serverSettings = (await this.requireUiautomator2().jwproxy.command(
+      '/appium/settings',
+      'GET',
+    )) as Partial<Uiautomator2Settings>;
+    return {...driverSettings, ...serverSettings};
+  }
+
+  requireAdb(): ADB {
+    const adb = this.adb;
+    if (!adb) {
+      throw this.log.errorWithException('ADB must be initialized before this operation');
+    }
+    return adb;
+  }
+
   private async teardownSession(): Promise<void> {
     this.log.debug('Deleting UiAutomator2 session');
 
@@ -518,62 +574,6 @@ class AndroidUiautomator2Driver
     } catch (error) {
       this.log.warn(`Unable to remove MJPEG server port forward: ${(error as Error).message}`);
     }
-  }
-
-  async onSettingsUpdate() {
-    // intentionally do nothing here, since commands.updateSettings proxies
-    // settings to the uiauto2 server already
-  }
-
-  override proxyActive(sessionId: string): boolean {
-    void sessionId;
-    // we always have an active proxy to the UiAutomator2 server
-    return true;
-  }
-
-  override canProxy(sessionId: string): boolean {
-    void sessionId;
-    // we can always proxy to the uiautomator2 server
-    return true;
-  }
-
-  override getProxyAvoidList(): RouteMatcher[] {
-    // we are maintaining two sets of NO_PROXY lists, one for chromedriver(CHROME_NO_PROXY)
-    // and one for uiautomator2(NO_PROXY), based on current context will return related NO_PROXY list
-    if (util.hasValue(this.chromedriver)) {
-      // if the current context is webview(chromedriver), then return CHROME_NO_PROXY list
-      this.jwpProxyAvoid = CHROME_NO_PROXY;
-    } else {
-      this.jwpProxyAvoid = NO_PROXY;
-    }
-    if (this.opts.nativeWebScreenshot) {
-      this.jwpProxyAvoid = [...this.jwpProxyAvoid, ['GET', new RegExp('^/session/[^/]+/screenshot')]];
-    }
-
-    return this.jwpProxyAvoid;
-  }
-
-  // @ts-expect-error narrower parameter type than the base class override allows
-  override async updateSettings(settings: Uiautomator2Settings) {
-    await this.settings.update(settings);
-    await this.requireUiautomator2().jwproxy.command('/appium/settings', 'POST', {settings});
-  }
-
-  override async getSettings(): Promise<StringRecord> {
-    const driverSettings = this.settings.getSettings();
-    const serverSettings = (await this.requireUiautomator2().jwproxy.command(
-      '/appium/settings',
-      'GET',
-    )) as Partial<Uiautomator2Settings>;
-    return {...driverSettings, ...serverSettings};
-  }
-
-  requireAdb(): ADB {
-    const adb = this.adb;
-    if (!adb) {
-      throw this.log.errorWithException('ADB must be initialized before this operation');
-    }
-    return adb;
   }
 }
 

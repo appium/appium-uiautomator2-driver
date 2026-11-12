@@ -134,21 +134,6 @@ export async function releaseMjpegServerPort(this: AndroidUiautomator2Driver) {
   }
 }
 
-/** Enables the no-op accessibility service of io.appium.settings if requested. */
-async function enableAccessibilityEventsService(this: AndroidUiautomator2Driver): Promise<void> {
-  if (!this.opts.enableAccessibilityEventsService) {
-    return;
-  }
-  // Chrome only emits accessibility events if an accessibility service is enabled
-  try {
-    this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
-  } catch (err) {
-    throw this.log.errorWithException(
-      `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
-    );
-  }
-}
-
 /** Runs device preparation steps before the UiAutomator2 server session starts. */
 export async function performPreExecSetup(this: AndroidUiautomator2Driver): Promise<StringRecord | undefined> {
   const apiLevel = await this.adb.getApiLevel();
@@ -389,4 +374,19 @@ export function requireServer(this: AndroidUiautomator2Driver): UiAutomator2Serv
     throw this.log.errorWithException('UiAutomator2 server is not initialized');
   }
   return server;
+}
+
+/** Enables the no-op accessibility service of io.appium.settings if requested. */
+async function enableAccessibilityEventsService(this: AndroidUiautomator2Driver): Promise<void> {
+  if (!this.opts.enableAccessibilityEventsService) {
+    return;
+  }
+  // Chrome only emits accessibility events if an accessibility service is enabled
+  try {
+    this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
+  } catch (err) {
+    throw this.log.errorWithException(
+      `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
+    );
+  }
 }

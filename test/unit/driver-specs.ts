@@ -313,6 +313,109 @@ describe('driver.js', function () {
     });
   });
 
+  describe('accessibility events service', function () {
+    let driver: AndroidUiautomator2Driver;
+    let setServiceState: sinon.SinonStub;
+    let initDevice: sinon.SinonStub;
+
+    beforeEach(function () {
+      driver = new AndroidUiautomator2Driver({} as any, false);
+      driver.adb = new ADB();
+      driver.caps = {} as any;
+      sandbox.stub(driver.adb, 'getApiLevel').resolves(27);
+      sandbox.stub(driver.adb, 'stopLogcat');
+      sandbox.stub(driver, 'getLaunchInfo').resolves(undefined);
+      initDevice = sandbox.stub(driver, 'initDevice').resolves();
+      setServiceState = sandbox.stub(driver.settingsApp, 'setAccessibilityEventsServiceState');
+    });
+
+    describe('startup', function () {
+      it('should not enable the service by default', async function () {
+        await driver.performSessionPreExecSetup();
+        assert.strictEqual(setServiceState.called, false);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+      it('should enable the service after initDevice', async function () {
+        driver.opts.enableAccessibilityEventsService = true;
+        setServiceState.resolves(true);
+        await driver.performSessionPreExecSetup();
+        sinon.assert.calledOnceWithExactly(setServiceState, true);
+        sinon.assert.callOrder(initDevice, setServiceState);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, true);
+      });
+      it('should not remember the service if it was already enabled', async function () {
+        driver.opts.enableAccessibilityEventsService = true;
+        setServiceState.resolves(false);
+        await driver.performSessionPreExecSetup();
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+      it('should let the cleanup disable the service if another preflight step fails', async function () {
+        driver.opts.enableAccessibilityEventsService = true;
+        setServiceState.resolves(true);
+        // initDevice() is slower than the failing step
+        initDevice.callsFake(async () => await new Promise((resolve) => setTimeout(resolve, 20)));
+        (driver.getLaunchInfo as sinon.SinonStub).rejects(new Error('boom'));
+        await assert.rejects(driver.performSessionPreExecSetup(), /boom/);
+        // The service flag must be final by the time the failure reaches the cleanup
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, true);
+      });
+      it('should throw if the service cannot be enabled', async function () {
+        driver.opts.enableAccessibilityEventsService = true;
+        setServiceState.rejects(new Error('denied'));
+        await assert.rejects(driver.performSessionPreExecSetup(), /Cannot enable the accessibility service.+denied/);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+    });
+
+    describe('cleanup', function () {
+      it('should disable the service if it was enabled by the session', async function () {
+        driver._wasAccessibilityEventsServiceEnabled = true;
+        await driver.deleteSession();
+        sinon.assert.calledOnceWithExactly(setServiceState, false);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+      it('should not touch the service if it was not enabled by the session', async function () {
+        await driver.deleteSession();
+        assert.strictEqual(setServiceState.called, false);
+      });
+      it('should not fail the teardown if the service cannot be disabled', async function () {
+        driver._wasAccessibilityEventsServiceEnabled = true;
+        setServiceState.rejects(new Error('denied'));
+        await driver.deleteSession();
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+    });
+
+    describe('suppression of accessibility services', function () {
+      async function getServerOption(opts: Record<string, any>): Promise<boolean | undefined> {
+        driver.systemPort = 4724;
+        Object.assign(driver.opts, {skipServerInstallation: true}, opts);
+        const server = await driver.initUiAutomator2Server();
+        // @ts-expect-error - private field
+        return server.disableSuppressAccessibilityService;
+      }
+
+      it('should keep the default if the service is not requested', async function () {
+        assert.strictEqual(await getServerOption({}), undefined);
+      });
+      it('should disable the suppression if the service is requested', async function () {
+        assert.strictEqual(await getServerOption({enableAccessibilityEventsService: true}), true);
+      });
+      it('should respect an explicit true value', async function () {
+        assert.strictEqual(
+          await getServerOption({enableAccessibilityEventsService: true, disableSuppressAccessibilityService: true}),
+          true,
+        );
+      });
+      it('should respect an explicit false value', async function () {
+        assert.strictEqual(
+          await getServerOption({enableAccessibilityEventsService: true, disableSuppressAccessibilityService: false}),
+          false,
+        );
+      });
+    });
+  });
+
   describe('command overrides', function () {
     it('should expose commands as prototype methods', function () {
       for (const name of ['getAlertText', 'mobileGetBatteryInfo', 'requireUiautomator2', 'mobileGetContexts']) {

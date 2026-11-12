@@ -193,7 +193,11 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
     })(),
   );
 
-  await Promise.all(preflightPromises);
+  // Wait for all the steps to finish, so the session cleanup never races with a pending one
+  const failure = (await Promise.allSettled(preflightPromises)).find((r) => r.status === 'rejected');
+  if (failure) {
+    throw failure.reason;
+  }
 
   if (appInfo) {
     this.opts = {...this.opts, ...appInfo};

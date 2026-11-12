@@ -397,24 +397,6 @@ class AndroidUiautomator2Driver
   private async teardownSession(): Promise<void> {
     this.log.debug('Deleting UiAutomator2 session');
 
-    const screenRecordingStopTasks = [
-      async () => {
-        if (this._screenRecordingProperties) {
-          await this.stopRecordingScreen();
-        }
-      },
-      async () => {
-        if (await this.mobileIsMediaProjectionRecordingRunning()) {
-          await this.mobileStopMediaProjectionRecording();
-        }
-      },
-      async () => {
-        if (this._screenStreamingProps) {
-          await this.mobileStopScreenStreaming();
-        }
-      },
-    ];
-
     try {
       await this.stopChromedriverProxies();
     } catch (err) {
@@ -431,71 +413,10 @@ class AndroidUiautomator2Driver
     }
 
     if (this.adb) {
-      await Promise.all(
-        screenRecordingStopTasks.map((task) =>
-          (async () => {
-            try {
-              await task();
-            } catch {}
-          })(),
-        ),
-      );
-
-      if (this.opts.appPackage) {
-        if (
-          !this.isChromeSession &&
-          ((!this.opts.dontStopAppOnReset && !this.opts.noReset) || (this.opts.noReset && this.opts.shouldTerminateApp))
-        ) {
-          try {
-            await this.adb.forceStop(this.opts.appPackage);
-          } catch (err) {
-            this.log.warn(`Unable to force stop app: ${(err as Error).message}`);
-          }
-        }
-        if (this.opts.fullReset && !this.opts.skipUninstall) {
-          this.log.debug(`Capability 'fullReset' set to 'true', Uninstalling '${this.opts.appPackage}'`);
-          try {
-            await this.adb.uninstallApk(this.opts.appPackage);
-          } catch (err) {
-            this.log.warn(`Unable to uninstall app: ${(err as Error).message}`);
-          }
-        }
-      }
-      // This value can be true if test target device is <= 26
-      if (this._wasWindowAnimationDisabled) {
-        this.log.info('Restoring window animation state');
-        await this.settingsApp.setAnimationState(true);
-      }
-      if (this._wasAccessibilityEventsServiceEnabled) {
-        try {
-          await this.settingsApp.setAccessibilityEventsServiceState(false);
-        } catch (e) {
-          this.log.warn(`Cannot disable the accessibility events service: ${(e as Error).message}`);
-        }
-        this._wasAccessibilityEventsServiceEnabled = false;
-      }
-      if (this._originalIme) {
-        try {
-          await this.adb.setIME(this._originalIme);
-        } catch (e) {
-          this.log.warn(`Cannot restore the original IME: ${(e as Error).message}`);
-        }
-      }
-      try {
-        await this.releaseSystemPort();
-      } catch (error) {
-        this.log.warn(`Unable to remove system port forward: ${(error as Error).message}`);
-        // Ignore, this block will also be called when we fall in catch block
-        // and before even port forward.
-      }
-      try {
-        await this.releaseMjpegServerPort();
-      } catch (error) {
-        this.log.warn(`Unable to remove MJPEG server port forward: ${(error as Error).message}`);
-        // Ignore, this block will also be called when we fall in catch block
-        // and before even port forward.
-      }
-
+      await this.stopRecordingsAndStreams();
+      await this.restoreAppState();
+      await this.restoreDeviceState();
+      await this.releasePortForwards();
       if ((await this.adb.getApiLevel()) >= 28) {
         // Android P
         this.log.info('Restoring hidden api policy to the device default configuration');
@@ -507,6 +428,96 @@ class AndroidUiautomator2Driver
       this.mjpegStream.stop();
     }
     await super.deleteSession();
+  }
+
+  private async stopRecordingsAndStreams(): Promise<void> {
+    const stopTasks = [
+      async () => {
+        if (this._screenRecordingProperties) {
+          await this.stopRecordingScreen();
+        }
+      },
+      async () => {
+        if (await this.mobileIsMediaProjectionRecordingRunning()) {
+          await this.mobileStopMediaProjectionRecording();
+        }
+      },
+      async () => {
+        if (this._screenStreamingProps) {
+          await this.mobileStopScreenStreaming();
+        }
+      },
+    ];
+    await Promise.all(
+      stopTasks.map((task) =>
+        (async () => {
+          try {
+            await task();
+          } catch {}
+        })(),
+      ),
+    );
+  }
+
+  private async restoreAppState(): Promise<void> {
+    if (!this.opts.appPackage) {
+      return;
+    }
+    if (
+      !this.isChromeSession &&
+      ((!this.opts.dontStopAppOnReset && !this.opts.noReset) || (this.opts.noReset && this.opts.shouldTerminateApp))
+    ) {
+      try {
+        await this.adb.forceStop(this.opts.appPackage);
+      } catch (err) {
+        this.log.warn(`Unable to force stop app: ${(err as Error).message}`);
+      }
+    }
+    if (this.opts.fullReset && !this.opts.skipUninstall) {
+      this.log.debug(`Capability 'fullReset' set to 'true', Uninstalling '${this.opts.appPackage}'`);
+      try {
+        await this.adb.uninstallApk(this.opts.appPackage);
+      } catch (err) {
+        this.log.warn(`Unable to uninstall app: ${(err as Error).message}`);
+      }
+    }
+  }
+
+  private async restoreDeviceState(): Promise<void> {
+    // This value can be true if test target device is <= 26
+    if (this._wasWindowAnimationDisabled) {
+      this.log.info('Restoring window animation state');
+      await this.settingsApp.setAnimationState(true);
+    }
+    if (this._wasAccessibilityEventsServiceEnabled) {
+      try {
+        await this.settingsApp.setAccessibilityEventsServiceState(false);
+      } catch (e) {
+        this.log.warn(`Cannot disable the accessibility events service: ${(e as Error).message}`);
+      }
+      this._wasAccessibilityEventsServiceEnabled = false;
+    }
+    if (this._originalIme) {
+      try {
+        await this.adb.setIME(this._originalIme);
+      } catch (e) {
+        this.log.warn(`Cannot restore the original IME: ${(e as Error).message}`);
+      }
+    }
+  }
+
+  // Also called when session startup fails, possibly before the port forwards are set up
+  private async releasePortForwards(): Promise<void> {
+    try {
+      await this.releaseSystemPort();
+    } catch (error) {
+      this.log.warn(`Unable to remove system port forward: ${(error as Error).message}`);
+    }
+    try {
+      await this.releaseMjpegServerPort();
+    } catch (error) {
+      this.log.warn(`Unable to remove MJPEG server port forward: ${(error as Error).message}`);
+    }
   }
 
   async onSettingsUpdate() {

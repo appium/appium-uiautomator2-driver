@@ -134,6 +134,21 @@ export async function releaseMjpegServerPort(this: AndroidUiautomator2Driver) {
   }
 }
 
+/** Enables the no-op accessibility service of io.appium.settings if requested. */
+async function enableAccessibilityEventsService(this: AndroidUiautomator2Driver): Promise<void> {
+  if (!this.opts.enableAccessibilityEventsService) {
+    return;
+  }
+  // Chrome only emits accessibility events if an accessibility service is enabled
+  try {
+    this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
+  } catch (err) {
+    throw this.log.errorWithException(
+      `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
+    );
+  }
+}
+
 /** Runs device preparation steps before the UiAutomator2 server session starts. */
 export async function performPreExecSetup(this: AndroidUiautomator2Driver): Promise<StringRecord | undefined> {
   const apiLevel = await this.adb.getApiLevel();
@@ -185,21 +200,15 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
     })(),
   );
   // start settings app, set the language/locale, start logcat etc...
-  preflightPromises.push(this.initDevice());
+  preflightPromises.push(
+    (async () => {
+      await this.initDevice();
+      // Requires io.appium.settings, which is installed by initDevice()
+      await enableAccessibilityEventsService.call(this);
+    })(),
+  );
 
   await Promise.all(preflightPromises);
-
-  if (this.opts.enableAccessibilityEventsService) {
-    // Chrome only emits accessibility events if an accessibility service is enabled.
-    // Must be after initDevice(), which installs io.appium.settings
-    try {
-      this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
-    } catch (err) {
-      throw this.log.errorWithException(
-        `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
-      );
-    }
-  }
 
   if (appInfo) {
     this.opts = {...this.opts, ...appInfo};

@@ -1,3 +1,13 @@
+## [9.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.3...v9.1.0) (2026-11-13)
+
+### Features
+
+* add enableAccessibilityEventsService capability ([#1080](https://github.com/appium/appium-uiautomator2-driver/issues/1080)) ([e80b86c](https://github.com/appium/appium-uiautomator2-driver/commit/e80b86cde7a48f794b64f6ccb31020c34fb8741c))
+
+### Code Refactoring
+
+* use port helpers from appium/support instead of portscanner ([#1082](https://github.com/appium/appium-uiautomator2-driver/issues/1082)) ([911af30](https://github.com/appium/appium-uiautomator2-driver/commit/911af30ae7b490ac93da36ccb576993791522cc1))
+
 ## [9.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.2...v9.0.3) (2026-11-13)
 
 ### Miscellaneous Chores

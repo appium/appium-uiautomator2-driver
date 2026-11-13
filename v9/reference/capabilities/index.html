@@ -1547,6 +1547,39 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#enableaccessibilityeventsservice" class="md-nav__link">
+    <span class="md-ellipsis"> enableAccessibilityEventsService </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>  <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#disablewindowanimation" class="md-nav__link">
     <span class="md-ellipsis"> disableWindowAnimation </span>
   </a>
@@ -6272,6 +6305,39 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#enableaccessibilityeventsservice" class="md-nav__link">
+    <span class="md-ellipsis"> enableAccessibilityEventsService </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>  <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#disablewindowanimation" class="md-nav__link">
     <span class="md-ellipsis"> disableWindowAnimation </span>
   </a>
@@ -9894,12 +9960,39 @@ devices where access to these policies has been locked by its vendor.</p>
 <tr>
 <td><code>appium:disableSuppressAccessibilityService</code></td>
 <td><code>boolean</code></td>
-<td><code>false</code></td>
+<td>Not specified</td>
 </tr>
 </tbody>
 </table>
 <p>Whether the instrumentation process should avoid suppressing accessibility services during the
-session. Useful if your automated test needs these services.</p>
+session. Useful if your automated test needs these services. If not specified, accessibility services
+are suppressed unless <code>appium:enableAccessibilityEventsService</code> is enabled.</p>
+<h3 id="enableaccessibilityeventsservice">enableAccessibilityEventsService<a class="headerlink" href="#enableaccessibilityeventsservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appium:enableAccessibilityEventsService</code></td>
+<td><code>boolean</code></td>
+<td>Not specified</td>
+</tr>
+</tbody>
+</table>
+<p>Whether to enable the no-op accessibility service of Appium Settings for the duration of the
+session, and to not suppress accessibility services (unless <code>appium:disableSuppressAccessibilityService</code>
+is explicitly <code>false</code>). Chrome does not emit accessibility events for web content if UiAutomation is
+the only accessibility client, so accessibility caches (e.g. the server's <code>deferAccessibilityCacheReset</code>
+setting) may return stale web content.</p>
+<p>The service is disabled again when the session ends, unless it had already been enabled before the
+session started. Such a pre-existing state is left as is. If the capability is not specified, the
+service is not enabled.</p>
+<p>Available since driver version 9.1.0.</p>
 <h3 id="disablewindowanimation">disableWindowAnimation<a class="headerlink" href="#disablewindowanimation" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -11781,7 +11874,7 @@ rather than the package of the application under test.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 19, 2026 18:00:14 UTC"><span class="timeago" datetime="2026-10-19T18:00:14+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 18:00:14 UTC">2026-10-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 13, 2026 22:30:57 UTC"><span class="timeago" datetime="2026-11-13T22:30:57+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 13, 2026 22:30:57 UTC">2026-11-13</span>
   </span>
 
     

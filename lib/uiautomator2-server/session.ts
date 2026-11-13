@@ -3,10 +3,9 @@ import path from 'node:path';
 
 import type {Orientation, StringRecord} from '@appium/types';
 import type {ADBLaunchInfo} from 'appium-android-driver';
-import {util} from 'appium/support.js';
+import {util, net} from 'appium/support.js';
 import {retryInterval} from 'asyncbox';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
-import {checkPortStatus, findAPortNotInUse} from 'portscanner';
 import type {ExecError} from 'teen_process';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
@@ -67,7 +66,7 @@ export async function allocateSystemPort(this: AndroidUiautomator2Driver) {
   const adb = this.requireAdb();
   const forwardPort = async (localPort: number) => {
     this.log.debug(`Forwarding UiAutomator2 Server port ${DEVICE_PORT} to local port ${localPort}`);
-    if ((await checkPortStatus(localPort, LOCALHOST_IP4)) === 'open') {
+    if ((await net.checkPortStatus(localPort, {host: LOCALHOST_IP4})) === 'open') {
       throw this.log.errorWithException(
         `UiAutomator2 Server cannot start because the local port #${localPort} is busy. ` +
           `Make sure the port you provide via 'systemPort' capability is not occupied. ` +
@@ -86,7 +85,7 @@ export async function allocateSystemPort(this: AndroidUiautomator2Driver) {
   await DEVICE_PORT_ALLOCATION_GUARD(async () => {
     const [startPort, endPort] = DEVICE_PORT_RANGE;
     try {
-      this.systemPort = await findAPortNotInUse(startPort, endPort);
+      this.systemPort = await net.getFreePort({port: [startPort, endPort]});
     } catch {
       throw this.log.errorWithException(
         `Cannot find any free port in range ${startPort}..${endPort}}. ` +

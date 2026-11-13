@@ -70,7 +70,6 @@
     "asyncbox": "^6.4.3",
     "axios": "^1.18.0",
     "io.appium.settings": "^9.0.0",
-    "portscanner": "^2.2.0",
     "teen_process": "^4.2.0"
   },
   "devDependencies": {
@@ -80,7 +79,6 @@
     "@appium/tsconfig": "^2.0.0-beta.2",
     "@appium/types": "^2.0.0-beta.6",
     "@types/node": "^26.0.0",
-    "@types/portscanner": "^2.1.1",
     "@types/semver": "^7.5.0",
     "@types/sinon": "^22.0.0",
     "@types/ws": "^8.5.4",

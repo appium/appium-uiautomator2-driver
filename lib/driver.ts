@@ -4,6 +4,7 @@ import {DEFAULT_ADB_PORT, type ADB} from 'appium-adb';
 import {AndroidDriver, utils} from 'appium-android-driver';
 import {BaseDriver, DeviceSettings} from 'appium/driver.js';
 import {util} from 'appium/support.js';
+import {retry} from 'asyncbox';
 
 import {
   mobileGetActionHistory,
@@ -551,11 +552,12 @@ class AndroidUiautomator2Driver
     }
     if (this._wasAccessibilityEventsServiceEnabled) {
       try {
-        await this.settingsApp.setAccessibilityEventsServiceState(false);
+        // The helper keeps a pending toggle restoration after a failure, so a retry may complete it
+        await retry(2, async () => await this.settingsApp.setAccessibilityEventsServiceState(false));
+        this._wasAccessibilityEventsServiceEnabled = false;
       } catch (e) {
         this.log.warn(`Cannot disable the accessibility events service: ${(e as Error).message}`);
       }
-      this._wasAccessibilityEventsServiceEnabled = false;
     }
     if (this._originalIme) {
       try {

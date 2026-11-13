@@ -386,11 +386,19 @@ describe('driver.js', function () {
         sinon.assert.calledOnceWithExactly(setServiceState, false);
         assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
       });
-      it('should not fail the teardown if the service cannot be disabled', async function () {
+      it('should retry disabling the service once and then forget it', async function () {
+        driver._wasAccessibilityEventsServiceEnabled = true;
+        setServiceState.onFirstCall().rejects(new Error('denied')).onSecondCall().resolves(true);
+        await driver.deleteSession();
+        sinon.assert.calledTwice(setServiceState);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
+      it('should not fail the teardown and keep the service marker if it cannot be disabled', async function () {
         driver._wasAccessibilityEventsServiceEnabled = true;
         setServiceState.rejects(new Error('denied'));
         await driver.deleteSession();
-        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+        sinon.assert.calledTwice(setServiceState);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, true);
       });
     });
 

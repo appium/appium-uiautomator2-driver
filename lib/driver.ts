@@ -543,7 +543,11 @@ class AndroidUiautomator2Driver
     // This value can be true if test target device is <= 26
     if (this._wasWindowAnimationDisabled) {
       this.log.info('Restoring window animation state');
-      await this.settingsApp.setAnimationState(true);
+      try {
+        await this.settingsApp.setAnimationState(true);
+      } catch (e) {
+        this.log.warn(`Cannot restore the window animation state: ${(e as Error).message}`);
+      }
     }
     if (this._wasAccessibilityEventsServiceEnabled) {
       try {

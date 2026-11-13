@@ -378,6 +378,14 @@ describe('driver.js', function () {
         await driver.deleteSession();
         assert.strictEqual(setServiceState.called, false);
       });
+      it('should disable the service even if the window animation cannot be restored', async function () {
+        driver._wasAccessibilityEventsServiceEnabled = true;
+        driver._wasWindowAnimationDisabled = true;
+        sandbox.stub(driver.settingsApp, 'setAnimationState').rejects(new Error('denied'));
+        await driver.deleteSession();
+        sinon.assert.calledOnceWithExactly(setServiceState, false);
+        assert.strictEqual(driver._wasAccessibilityEventsServiceEnabled, false);
+      });
       it('should not fail the teardown if the service cannot be disabled', async function () {
         driver._wasAccessibilityEventsServiceEnabled = true;
         setServiceState.rejects(new Error('denied'));

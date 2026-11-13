@@ -1,3 +1,9 @@
+## [9.0.3](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.2...v9.0.3) (2026-11-13)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium to 4.0.0-beta.8 ([#1081](https://github.com/appium/appium-uiautomator2-driver/issues/1081)) ([325440f](https://github.com/appium/appium-uiautomator2-driver/commit/325440f35052f0c8dc9b9c27cbfce05e8dc0fd46))
+
 ## [9.0.2](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.1...v9.0.2) (2026-11-11)
 
 ### Miscellaneous Chores

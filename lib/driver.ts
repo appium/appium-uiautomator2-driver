@@ -230,8 +230,8 @@ class AndroidUiautomator2Driver
   extends AndroidDriver<Uiautomator2Constraints>
   implements ExternalDriver<Uiautomator2Constraints, string, StringRecord>
 {
-  static newMethodMap = newMethodMap;
-  static executeMethodMap = executeMethodMap;
+  static override newMethodMap = newMethodMap;
+  static override executeMethodMap = executeMethodMap;
 
   uiautomator2!: UiAutomator2Server;
 
@@ -283,7 +283,7 @@ class AndroidUiautomator2Driver
     return super.validateDesiredCaps(caps);
   }
 
-  async createSession(w3cCapabilities: W3CUiautomator2DriverCaps): Promise<any> {
+  override async createSession(w3cCapabilities: W3CUiautomator2DriverCaps): Promise<any> {
     try {
       const [sessionId, caps] = (await BaseDriver.prototype.createSession.call(
         this,
@@ -381,7 +381,7 @@ class AndroidUiautomator2Driver
     };
   }
 
-  async onIpcInit(): Promise<void> {
+  override async onIpcInit(): Promise<void> {
     await sessionClaimHandler.registerActiveSession(this);
   }
 

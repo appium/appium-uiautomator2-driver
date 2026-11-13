@@ -153,10 +153,29 @@ devices where access to these policies has been locked by its vendor.
 
 | Name | Type | Default |
 | -- | -- | -- |
-| `appium:disableSuppressAccessibilityService` | `boolean` | `false` |
+| `appium:disableSuppressAccessibilityService` | `boolean` | Not specified |
 
 Whether the instrumentation process should avoid suppressing accessibility services during the
-session. Useful if your automated test needs these services.
+session. Useful if your automated test needs these services. If not specified, accessibility services
+are suppressed unless `appium:enableAccessibilityEventsService` is enabled.
+
+### enableAccessibilityEventsService
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:enableAccessibilityEventsService` | `boolean` | Not specified |
+
+Whether to enable the no-op accessibility service of Appium Settings for the duration of the
+session, and to not suppress accessibility services (unless `appium:disableSuppressAccessibilityService`
+is explicitly `false`). Chrome does not emit accessibility events for web content if UiAutomation is
+the only accessibility client, so accessibility caches (e.g. the server's `deferAccessibilityCacheReset`
+setting) may return stale web content.
+
+The service is disabled again when the session ends, unless it had already been enabled before the
+session started. Such a pre-existing state is left as is. If the capability is not specified, the
+service is not enabled.
+
+Available since driver version 9.1.0.
 
 ### disableWindowAnimation
 

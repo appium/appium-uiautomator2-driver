@@ -30,6 +30,9 @@ const UIAUTOMATOR2_CONSTRAINTS = {
   disableSuppressAccessibilityService: {
     isBoolean: true,
   },
+  enableAccessibilityEventsService: {
+    isBoolean: true,
+  },
   forceAppLaunch: {
     isBoolean: true,
   },

@@ -185,9 +185,19 @@ export async function performPreExecSetup(this: AndroidUiautomator2Driver): Prom
     })(),
   );
   // start settings app, set the language/locale, start logcat etc...
-  preflightPromises.push(this.initDevice());
+  preflightPromises.push(
+    (async () => {
+      await this.initDevice();
+      // Requires io.appium.settings, which is installed by initDevice()
+      await enableAccessibilityEventsService.call(this);
+    })(),
+  );
 
-  await Promise.all(preflightPromises);
+  // Wait for all the steps to finish, so the session cleanup never races with a pending one
+  const failure = (await Promise.allSettled(preflightPromises)).find((r) => r.status === 'rejected');
+  if (failure) {
+    throw failure.reason;
+  }
 
   if (appInfo) {
     this.opts = {...this.opts, ...appInfo};
@@ -334,7 +344,9 @@ export async function initServer(this: AndroidUiautomator2Driver) {
     systemPort: this.systemPort as number,
     adb: this.adb,
     disableWindowAnimation: !!this.opts.disableWindowAnimation,
-    disableSuppressAccessibilityService: this.opts.disableSuppressAccessibilityService,
+    // Enabled accessibility services must not be suppressed to be able to emit events
+    disableSuppressAccessibilityService:
+      this.opts.disableSuppressAccessibilityService ?? (this.opts.enableAccessibilityEventsService ? true : undefined),
     readTimeout: this.opts.uiautomator2ServerReadTimeout,
     basePath: this.basePath,
   };
@@ -366,4 +378,19 @@ export function requireServer(this: AndroidUiautomator2Driver): UiAutomator2Serv
     throw this.log.errorWithException('UiAutomator2 server is not initialized');
   }
   return server;
+}
+
+/** Enables the no-op accessibility service of io.appium.settings if requested. */
+async function enableAccessibilityEventsService(this: AndroidUiautomator2Driver): Promise<void> {
+  if (!this.opts.enableAccessibilityEventsService) {
+    return;
+  }
+  // Chrome only emits accessibility events if an accessibility service is enabled
+  try {
+    this._wasAccessibilityEventsServiceEnabled = await this.settingsApp.setAccessibilityEventsServiceState(true);
+  } catch (err) {
+    throw this.log.errorWithException(
+      `Cannot enable the accessibility service of io.appium.settings: ${(err as Error).message}`,
+    );
+  }
 }

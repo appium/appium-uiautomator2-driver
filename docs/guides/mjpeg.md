@@ -168,6 +168,12 @@ interface Options {
   audio: boolean;
 }
 
+/** Lets an output pause the incoming units while it cannot keep up */
+interface Flow {
+  pause(): void;
+  resume(): void;
+}
+
 /** Where the decoded units of the stream go */
 interface Output {
   onUnit(track: Track, data: Buffer): void;
@@ -252,7 +258,7 @@ function createMjpegServer(port: number): Output {
 }
 
 /** Remuxes the video (and audio) units into an .mp4 file with ffmpeg, without re-encoding */
-function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean): Output {
+function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean, flow: Flow): Output {
   const ffmpegArgs = [
     '-y',
     // The raw stream has no timestamps, so use the arrival time of the units
@@ -281,10 +287,27 @@ function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean)
   }
   console.log(`Recording to ${file}`);
 
+  // When ffmpeg cannot keep up, stop reading from Appium until its input drains,
+  // instead of buffering the recording in memory
+  const blocked = new Set<Writable>();
+  const write = (input: Writable | null, data: Buffer) => {
+    if (!input || input.write(data) || blocked.has(input)) {
+      return;
+    }
+    blocked.add(input);
+    flow.pause();
+    input.once('drain', () => {
+      blocked.delete(input);
+      if (!blocked.size) {
+        flow.resume();
+      }
+    });
+  };
+
   return {
     onUnit(track, data) {
       if (track === 'video' || track === 'audio') {
-        inputs[track]?.write(data);
+        write(inputs[track], data);
       }
     },
     async close() {
@@ -319,8 +342,12 @@ function subscribe(ws: WebSocket, events: string[]): Promise<void> {
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
   const codec = 'h264';
+  let ws: WebSocket | undefined;
+  const flow: Flow = {pause: () => ws?.pause(), resume: () => ws?.resume()};
   const output =
-    options.mode === 'mjpeg' ? createMjpegServer(options.port) : createMp4Recorder(options.file, codec, options.audio);
+    options.mode === 'mjpeg'
+      ? createMjpegServer(options.port)
+      : createMp4Recorder(options.file, codec, options.audio, flow);
 
   const {sessionId, capabilities} = await wd('POST', '/session', {
     capabilities: {
@@ -331,8 +358,9 @@ async function main(): Promise<void> {
       },
     },
   });
-  const ws = new WebSocket(capabilities.webSocketUrl);
-  await new Promise((resolve, reject) => ws.once('open', resolve).once('error', reject));
+  const socket = new WebSocket(capabilities.webSocketUrl);
+  ws = socket;
+  await new Promise((resolve, reject) => socket.once('open', resolve).once('error', reject));
 
   let streamId: string | undefined;
   let closing: Promise<void> | undefined;
@@ -344,19 +372,22 @@ async function main(): Promise<void> {
           args: [{streamId}],
         }).catch(() => {});
       }
-      ws.close();
+      socket.resume();
+      socket.close();
       await output.close();
       await wd('DELETE', `/session/${sessionId}`).catch(() => {});
     })());
-  const shutdownAndExit = () => void shutdown().finally(() => process.exit(0));
+  const shutdownAndExit = (code: number) => void shutdown().finally(() => process.exit(code));
 
-  process.once('SIGINT', shutdownAndExit);
-  // Appium closes the connection with 1013 if this client cannot keep up with the stream
-  ws.on('close', (code) => {
-    console.log(`BiDi connection closed (${code})`);
-    shutdownAndExit();
+  process.once('SIGINT', () => shutdownAndExit(0));
+  socket.on('close', (code) => {
+    // Appium closes the connection with 1013 if this client cannot keep up with the stream
+    if (!closing) {
+      console.log(`BiDi connection closed (${code})`);
+      shutdownAndExit(1);
+    }
   });
-  ws.on('message', (raw) => {
+  socket.on('message', (raw) => {
     const {type, method, params} = JSON.parse(raw.toString());
     if (type !== 'event' || closing) {
       return;
@@ -373,7 +404,7 @@ async function main(): Promise<void> {
 
   try {
     // Events are only emitted while a client is subscribed, so subscribe first
-    await subscribe(ws, [MEDIA_STREAM_MODULE]);
+    await subscribe(socket, [MEDIA_STREAM_MODULE]);
     const stream = await wd('POST', `/session/${sessionId}/execute/sync`, {
       script: 'mobile: startMediaStream',
       args: [options.mode === 'mjpeg' ? {kind: 'jpeg', quality: 70} : {kind: 'video', codec, audio: options.audio}],
@@ -397,6 +428,8 @@ Notes:
 - The client subscribes first and only then starts the stream, since events are only emitted while a client is subscribed.
 - Appium closes the connection with code `1013` if the client cannot keep up with the stream. This script then stops;
   a real client could reconnect, subscribe again and restart the stream.
+- If `ffmpeg` cannot keep up, the script stops reading from Appium until its input has drained, instead of buffering the
+  recording in memory. Appium then skips video units for this client.
 - A raw H.264/HEVC stream has no timestamps, so `ffmpeg` timestamps the units by the time they arrive. The result
   is accurate to about the batching window (`batchMs`), and the audio is not aligned to the video. If you need
   exact timing, use the `ts` of the units (microseconds, one clock for all the tracks).

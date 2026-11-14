@@ -1819,17 +1819,17 @@ Starts a specified service intent using `adb shell am start-service`/`adb shell 
 |<div style="width:8em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
 |`foreground?`|`boolean`|Whether to start the service in the foreground. Unset by default. Ignored for devices running Android 8 (Oreo / API level 26) or earlier.|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 
 #### Response
 
@@ -1843,17 +1843,17 @@ Stops the specified service intent using `adb shell am stop-service`.
 
 |Name|Type|Description|
 |--|--|--|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 
 #### Response
 
@@ -1867,17 +1867,17 @@ Sends a broadcast Intent to the Android system using `adb shell am broadcast`.
 
 |<div style="width:16em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 |`receiverPermission?`|`string`|Permission that the receiver must hold|
 |`allowBackgroundActivityStarts?`|`boolean`|Whether the receiver may start activities even if in the background. Unset by default.|
 

@@ -137,18 +137,19 @@ The script below is a complete Node.js client that unwraps the events of a strea
   first unit.
 
 ```bash
-npm install ws                          # a WebSocket client
-node media-stream-client.ts mjpeg 8093  # MJPEG at http://127.0.0.1:8093
-node media-stream-client.ts mp4 screen.mp4 --audio
+npm install ws tsx                         # a WebSocket client and a TypeScript runner
+npx tsx media-stream-client.mts mjpeg 8093  # MJPEG at http://127.0.0.1:8093
+npx tsx media-stream-client.mts mp4 screen.mp4 --audio
 ```
 
-It needs Node.js 22.18 or newer (which runs TypeScript files as they are), a running Appium server with a
-device, and `ffmpeg` on the `PATH` for the `mp4` mode. Press `Ctrl+C` to stop the stream and finish the file.
+It needs a running Appium server with a device, and `ffmpeg` on the `PATH` for the `mp4` mode. Press `Ctrl+C`
+to stop the stream and finish the file. The file uses the `.mts` extension so that it is an ES module, which
+the top-level `await` needs. Node.js 22.18 or newer can also run it without `tsx`: `node media-stream-client.mts ...`.
 
-`media-stream-client.ts`:
+`media-stream-client.mts`:
 
 ```ts
-// Usage: node media-stream-client.ts mjpeg [port]  |  node media-stream-client.ts mp4 [file] [--audio]
+// Usage: npx tsx media-stream-client.mts mjpeg [port]  |  npx tsx media-stream-client.mts mp4 [file] [--audio]
 import {spawn, type ChildProcess} from 'node:child_process';
 import {createServer, type ServerResponse} from 'node:http';
 

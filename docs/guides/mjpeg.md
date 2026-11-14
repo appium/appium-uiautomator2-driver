@@ -125,6 +125,230 @@ Since every frame is base64-encoded into a JSON message, this costs more CPU and
 MJPEG server above. Prefer `video` for long or high resolution streams. A client that needs an HTTP MJPEG URL
 (for example a browser or `ffmpeg`) can run a small local bridge that unwraps the `jpeg` units and serves them.
 
+### Example client
+
+The script below is a complete Node.js client that unwraps the events of a stream and sends the data to either of:
+
+- `mjpeg`: a local HTTP server that serves the `jpeg` units as `multipart/x-mixed-replace` (MJPEG). Open
+  `http://127.0.0.1:8093` in a browser, or use it as a source for `ffmpeg` and other tools. A new viewer gets the
+  last frame right away, and a slow viewer skips frames instead of making the script buffer them.
+- `mp4`: an `.mp4` file written by `ffmpeg`, which only remuxes the `video` (and optionally `audio`) units without
+  re-encoding them. The codec configuration is part of every keyframe, so `ffmpeg` can parse the stream from the
+  first unit.
+
+```bash
+npm install ws                          # a WebSocket client
+node media-stream-client.ts mjpeg 8093  # MJPEG at http://127.0.0.1:8093
+node media-stream-client.ts mp4 screen.mp4 --audio
+```
+
+It needs Node.js 22.18 or newer (which runs TypeScript files as they are), a running Appium server with a
+device, and `ffmpeg` on the `PATH` for the `mp4` mode. Press `Ctrl+C` to stop the stream and finish the file.
+
+`media-stream-client.ts`:
+
+```ts
+// Usage: node media-stream-client.ts mjpeg [port]  |  node media-stream-client.ts mp4 [file] [--audio]
+import {spawn, type ChildProcess} from 'node:child_process';
+import {createServer, type ServerResponse} from 'node:http';
+
+import WebSocket from 'ws';
+
+const APPIUM = process.env.APPIUM_URL ?? 'http://127.0.0.1:4723';
+const [mode, arg] = process.argv.slice(2);
+const withAudio = process.argv.includes('--audio');
+
+async function wd<T = any>(method: string, path: string, body?: object): Promise<T> {
+  const res = await fetch(APPIUM + path, {
+    method,
+    headers: {'content-type': 'application/json'},
+    body: body && JSON.stringify(body),
+  });
+  const {value} = (await res.json()) as {value: any};
+  if (value?.error) {
+    throw new Error(`${value.error}: ${value.message}`);
+  }
+  return value;
+}
+
+/** Receives the units of the stream, decoded from base64 */
+type UnitHandler = (track: 'video' | 'audio' | 'jpeg', data: Buffer, key: boolean) => void;
+
+// --- Output 1: a local MJPEG server (multipart/x-mixed-replace over HTTP) ---
+function mjpegServer(port: number): {onUnit: UnitHandler; close: () => void} {
+  const viewers = new Set<ServerResponse>();
+  let last: Buffer | undefined;
+  const part = (jpeg: Buffer) =>
+    Buffer.concat([
+      Buffer.from(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${jpeg.length}\r\n\r\n`),
+      jpeg,
+      Buffer.from('\r\n'),
+    ]);
+  const server = createServer((req, res) => {
+    res.writeHead(200, {
+      'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
+      'Cache-Control': 'no-cache',
+      Connection: 'close',
+    });
+    viewers.add(res);
+    req.on('close', () => viewers.delete(res));
+    if (last) {
+      res.write(part(last)); // a new viewer gets a picture right away
+    }
+  }).listen(port, '127.0.0.1');
+  console.log(`MJPEG: http://127.0.0.1:${port}`);
+  return {
+    onUnit(track, data) {
+      if (track !== 'jpeg') {
+        return;
+      }
+      last = data;
+      const chunk = part(data);
+      for (const res of viewers) {
+        // Drop frames for a slow viewer instead of buffering them
+        if (!res.writableNeedDrain) {
+          res.write(chunk);
+        }
+      }
+    },
+    close: () => {
+      viewers.forEach((res) => res.end());
+      server.close();
+    },
+  };
+}
+
+// --- Output 2: an .mp4 file written by ffmpeg, which only remuxes (no re-encoding) ---
+function mp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean) {
+  const args = [
+    '-y',
+    // The raw stream has no timestamps, so use the arrival time of the units
+    ...['-use_wallclock_as_timestamps', '1', '-f', codec, '-i', 'pipe:0'],
+    ...(audio ? ['-f', 'aac', '-i', 'pipe:3'] : []),
+    '-c',
+    'copy',
+    // The audio arrives as ADTS, mp4 needs the plain AAC frames
+    ...(audio ? ['-bsf:a', 'aac_adtstoasc'] : []),
+    // Keeps the file playable even if ffmpeg is killed before it can finish the file
+    '-movflags',
+    '+frag_keyframe+empty_moov',
+    file,
+  ];
+  const ffmpeg: ChildProcess = spawn('ffmpeg', args, {
+    // Own process group: Ctrl+C must not stop ffmpeg before it has finished the file
+    detached: true,
+    stdio: ['pipe', 'inherit', 'inherit', ...(audio ? ['pipe' as const] : [])],
+  });
+  const exited = new Promise<number | null>((resolve) => ffmpeg.on('close', resolve));
+  const audioPipe = (audio ? ffmpeg.stdio[3] : undefined) as NodeJS.WritableStream | undefined;
+  for (const [name, pipe] of [
+    ['video', ffmpeg.stdin],
+    ['audio', audioPipe],
+  ] as const) {
+    pipe?.on('error', (e) => console.error(`ffmpeg ${name} input: ${e.message} (${Date.now()})`));
+  }
+  console.log(`Recording to ${file}`);
+  return {
+    onUnit: ((track, data) => {
+      if (track === 'video') {
+        ffmpeg.stdin?.write(data);
+      } else if (track === 'audio') {
+        audioPipe?.write(data);
+      }
+    }) as UnitHandler,
+    async close() {
+      ffmpeg.stdin?.end();
+      audioPipe?.end();
+      await exited;
+    },
+  };
+}
+
+// --- BiDi plumbing ---
+let closing: Promise<void> | undefined;
+const {sessionId, capabilities} = await wd('POST', '/session', {
+  capabilities: {
+    alwaysMatch: {
+      platformName: 'Android',
+      'appium:automationName': 'UiAutomator2',
+      webSocketUrl: true,
+    },
+  },
+});
+const ws = new WebSocket(capabilities.webSocketUrl);
+await new Promise((resolve, reject) => ws.once('open', resolve).once('error', reject));
+
+const isJpeg = mode === 'mjpeg';
+const codec = 'h264' as const;
+const output = isJpeg
+  ? mjpegServer(Number(arg ?? 8093))
+  : mp4Recorder(arg && !arg.startsWith('--') ? arg : 'screen.mp4', codec, withAudio);
+
+ws.on('message', (raw) => {
+  const msg = JSON.parse(raw.toString());
+  if (msg.type !== 'event') {
+    return;
+  }
+  const {method, params} = msg;
+  if (closing) {
+    return;
+  }
+  if (method === 'appium:mediaStream.units') {
+    for (const u of params.units) {
+      output.onUnit(u.track, Buffer.from(u.data, 'base64'), u.key);
+    }
+  } else {
+    // started / formatChanged (frame size) / ended
+    console.log(method, JSON.stringify(params));
+  }
+});
+// Appium closes the connection with 1013 if this client cannot keep up
+ws.on('close', (code) => {
+  console.log(`BiDi connection closed (${code})`);
+  void shutdown();
+});
+
+// Subscribe first, then start: events are only emitted while someone is subscribed
+ws.send(JSON.stringify({id: 1, method: 'session.subscribe', params: {events: ['appium:mediaStream']}}));
+await new Promise<void>((resolve) =>
+  ws.on('message', function onReply(raw) {
+    if (JSON.parse(raw.toString()).id === 1) {
+      ws.off('message', onReply);
+      resolve();
+    }
+  }),
+);
+const stream = await wd('POST', `/session/${sessionId}/execute/sync`, {
+  script: 'mobile: startMediaStream',
+  args: [isJpeg ? {kind: 'jpeg', quality: 70} : {kind: 'video', codec, audio: withAudio}],
+});
+console.log('Stream started', JSON.stringify(stream));
+
+function shutdown() {
+  return (closing ??= (async () => {
+    await wd('POST', `/session/${sessionId}/execute/sync`, {
+      script: 'mobile: stopMediaStream',
+      args: [{streamId: stream.streamId}],
+    }).catch(() => {});
+    ws.close();
+    await output.close();
+    await wd('DELETE', `/session/${sessionId}`).catch(() => {});
+    process.exit(0);
+  })());
+}
+process.on('SIGINT', shutdown);
+```
+
+Notes:
+
+- The client subscribes first and only then starts the stream, since events are only emitted while a client is subscribed.
+- Appium closes the connection with code `1013` if the client cannot keep up with the stream. This script then stops;
+  a real client could reconnect, subscribe again and restart the stream.
+- A raw H.264/HEVC stream has no timestamps, so `ffmpeg` timestamps the units by the time they arrive. The result
+  is accurate to about the batching window (`batchMs`), and the audio is not aligned to the video. If you need
+  exact timing, use the `ts` of the units (microseconds, one clock for all the tracks).
+- To record HEVC, pass `codec: 'hevc'` to `mobile: startMediaStream` and use `hevc` instead of `h264` as the input format of `ffmpeg`.
+
 ## Requirements
 
 - For **device-side MJPEG streaming** itself, no extra tools are required beyond a compatible Android device and the UiAutomator2 server; the broadcaster runs entirely on the device.

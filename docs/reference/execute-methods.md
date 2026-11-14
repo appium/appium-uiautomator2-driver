@@ -560,6 +560,7 @@ execute method. Repeated calls to this method have no effect unless the previous
 is stopped.
 
 For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../guides/mjpeg.md).
+To stream the screen without any host dependencies, see [`mobile: startMediaStream`](#mobile-startmediastream).
 
 #### Parameters
 
@@ -590,6 +591,90 @@ For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../gu
 #### Response
 
 `null`
+
+### `mobile: startMediaStream`
+
+Streams the device screen as [`appium:mediaStream.*` BiDi events](./bidi.md#appiummediastreamstarted):
+either H.264/HEVC video (optionally with AAC audio) or JPEG frames. Only supported since Android 10
+(Q / API level 29). Subscribe to the `appium:mediaStream` BiDi module before calling this method, since
+events are only emitted while a client is subscribed. See the [MJPEG guide](../guides/mjpeg.md#streaming-over-bidi)
+for an overview.
+
+Only one stream of each `kind` can run in a session, and the device only runs one stream of each kind at
+a time. The stream can be stopped using [`mobile: stopMediaStream`](#mobile-stopmediastream), and is
+stopped automatically when the session ends. Use [`mobile: getMediaStreamCapabilities`](#mobile-getmediastreamcapabilities)
+to check what the device supports.
+
+Available since driver version 9.2.0.
+
+#### Parameters
+
+|<div style="width:11em">Name</div>|Type|Description|
+|---|---|---|
+|`kind`|`string`|Either `video` (H.264/HEVC, optionally with audio) or `jpeg`.|
+|`codec?`|`string`|Video only. Either `h264` or `hevc`. Set to `h264` by default. The method fails if the device has no encoder for the codec.|
+|`fps?`|`integer`|Requested frames per second.|
+|`bitrate?`|`integer`|Video only. Bitrate in bits per second.|
+|`resolution?`|`string`|Video only. Frame size, formatted as `<width>x<height>`. It is scaled down if the device encoder does not support it.|
+|`audio?`|`boolean`|Video only. Whether to add an AAC audio track. Whether audio is actually captured depends on the apps (e.g. apps that disallow audio capture produce silence).|
+|`quality?`|`integer`|JPEG only. Quality of the frames, in the range `[1, 100]`.|
+|`scale?`|`integer`|JPEG only. Scale of the frames in percent, in the range `[1, 100]`.|
+|`batchMs?`|`integer`|Video and audio only. Units that arrive within this time window are sent in a single event. Set to `40` by default.|
+|`idleHeartbeatMs?`|`integer`|JPEG only. The last frame is sent again after this idle time, so that a client that subscribes while the screen does not change still gets a picture. Set to `1000` by default, `0` disables it.|
+
+#### Response
+
+An object with the following properties:
+
+|Name|Type|Description|
+|---|---|---|
+|`streamId`|`string`|Identifier of the stream, to be used in the stream events and in [`mobile: stopMediaStream`](#mobile-stopmediastream).|
+|`kind`|`string`|The stream kind.|
+|`tracks`|`string[]`|The tracks of the stream: `video`, `audio` or `jpeg`.|
+|`codec`|`string`|`h264`, `hevc` or `jpeg`.|
+|`event`|`string`|The BiDi module the events are sent in, `appium:mediaStream`.|
+|`width?`, `height?`|`integer`|Frame size. Always set for video, after any scaling to the encoder limits.|
+|`audio?`|`object`|`{sampleRate, channels}` if the stream has an audio track.|
+
+A video stream is only considered started once the encoder has produced its first output. The method fails
+if that does not happen in five seconds, for instance because the encoder does not support the requested
+configuration.
+
+### `mobile: stopMediaStream`
+
+Stops a stream started by [`mobile: startMediaStream`](#mobile-startmediastream). Stopping a stream that
+has already ended is a no-op.
+
+Available since driver version 9.2.0.
+
+#### Parameters
+
+|<div style="width:7em">Name</div>|Type|Description|
+|---|---|---|
+|`streamId`|`string`|The stream identifier returned by [`mobile: startMediaStream`](#mobile-startmediastream).|
+
+#### Response
+
+`null`
+
+### `mobile: getMediaStreamCapabilities`
+
+Reports whether media streaming works on the device and which video codecs it can encode.
+
+Available since driver version 9.2.0.
+
+#### Response
+
+An object with the following properties:
+
+|Name|Type|Description|
+|---|---|---|
+|`supported`|`boolean`|Whether media streaming is available.|
+|`reason?`|`object`|`{code, message}` explaining why it is not. The code is either `api_level_too_low` or `settings_app_missing`.|
+|`apiLevel`|`integer`|The Android API level of the device.|
+|`kinds`|`string[]`|The supported stream kinds, `video` and/or `jpeg`.|
+|`audio?`|`boolean`|Whether video streams can have an audio track.|
+|`codecs?`|`object`|`{h264, hevc}`, each a list of the device video encoders `{name, codec, softwareOnly, maxWidth?, maxHeight?}`. `null` if the device does not list its codecs (before Android 13), in which case the codecs are assumed rather than verified. A software encoder may only support small frame sizes, streams are scaled down to fit.|
 
 ### `mobile: startMediaProjectionRecording`
 

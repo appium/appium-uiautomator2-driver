@@ -613,12 +613,12 @@ Available since driver version 9.2.0.
 |---|---|---|
 |`kind`|`string`|Either `video` (H.264/HEVC, optionally with audio) or `jpeg`.|
 |`codec?`|`string`|Video only. Either `h264` or `hevc`. Set to `h264` by default. The method fails if the device has no encoder for the codec.|
-|`fps?`|`integer`|Requested frames per second.|
-|`bitrate?`|`integer`|Video only. Bitrate in bits per second.|
-|`resolution?`|`string`|Video only. Frame size, formatted as `<width>x<height>`. It is scaled down if the device encoder does not support it.|
-|`audio?`|`boolean`|Video only. Whether to add an AAC audio track. Whether audio is actually captured depends on the apps (e.g. apps that disallow audio capture produce silence).|
-|`quality?`|`integer`|JPEG only. Quality of the frames, in the range `[1, 100]`.|
-|`scale?`|`integer`|JPEG only. Scale of the frames in percent, in the range `[1, 100]`.|
+|`fps?`|`integer`|Maximum frames per second, in the range `[1, 60]`. Set to `30` for video and to `60` for JPEG by default. For video, it is also limited by what the device encoder supports. Must be a positive integer; larger values are lowered to the maximum.|
+|`bitrate?`|`integer`|Video only. Bitrate in bits per second, in the range `[100000, 50000000]`. Set to `4000000` (4 Mbps) by default. It is also limited by what the device encoder supports. Must be a positive integer; values out of range are adjusted to the nearest valid one.|
+|`resolution?`|`string`|Video only. Resolution of the video, formatted as `<width>x<height>`. Supported values are `1920x1080`, `1280x720`, `720x480`, `320x240` and `176x144`; any other value is replaced by the default. Set to the greatest supported device resolution by default (usually `1920x1080`). The width and height are swapped in portrait orientation, and the size is scaled down further if the device encoder does not support it (see [`mobile: getMediaStreamCapabilities`](#mobile-getmediastreamcapabilities)). The final size is reported in the response and in the `started` event.|
+|`audio?`|`boolean`|Video only. Whether to add an audio track (ADTS AAC-LC, 44.1 kHz, mono, 64 kbps). Set to `false` by default. Whether audio is actually captured depends on the apps (e.g. apps that disallow audio capture produce silence).|
+|`quality?`|`integer`|JPEG only. Quality of the frames, in the range `[1, 100]`, where `100` indicates the best quality. Set to `80` by default.|
+|`scale?`|`integer`|JPEG only. Scale of the frames in percent of the screen size, in the range `[1, 100]`. Set to `100` by default.|
 |`batchMs?`|`integer`|Video and audio only. Units that arrive within this time window are sent in a single event. Set to `40` by default.|
 |`idleHeartbeatMs?`|`integer`|JPEG only. The last frame is sent again after this idle time, so that a client that subscribes while the screen does not change still gets a picture. Set to `1000` by default, `0` disables it.|
 

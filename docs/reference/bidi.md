@@ -123,7 +123,7 @@ appium:mediaStream.units = (
 
 Video units are Annex-B H.264/HEVC. The codec configuration (SPS/PPS/VPS) is prepended to every keyframe
 and is never sent separately, so a client can start decoding at any keyframe. A keyframe always starts a
-new event. Audio units are ADTS AAC frames, and a JPEG unit is a complete frame.
+new event. Audio units are ADTS AAC-LC frames (44.1 kHz, mono), and a JPEG unit is a complete frame.
 
 Video units are held back until a keyframe arrives after the subscription started, and the driver asks the
 device for one when a client subscribes late (if the Settings app supports it). If a client cannot keep up with the stream, Appium skips video

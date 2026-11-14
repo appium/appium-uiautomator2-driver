@@ -150,17 +150,47 @@ the top-level `await` needs. Node.js 22.18 or newer can also run it without `tsx
 
 ```ts
 // Usage: npx tsx media-stream-client.mts mjpeg [port]  |  npx tsx media-stream-client.mts mp4 [file] [--audio]
-import {spawn, type ChildProcess} from 'node:child_process';
+import {spawn} from 'node:child_process';
 import {createServer, type ServerResponse} from 'node:http';
+import type {Writable} from 'node:stream';
 
 import WebSocket from 'ws';
 
-const APPIUM = process.env.APPIUM_URL ?? 'http://127.0.0.1:4723';
-const [mode, arg] = process.argv.slice(2);
-const withAudio = process.argv.includes('--audio');
+const APPIUM_URL = process.env.APPIUM_URL ?? 'http://127.0.0.1:4723';
+const MEDIA_STREAM_MODULE = 'appium:mediaStream';
 
-async function wd<T = any>(method: string, path: string, body?: object): Promise<T> {
-  const res = await fetch(APPIUM + path, {
+type Track = 'video' | 'audio' | 'jpeg';
+
+interface Options {
+  mode: 'mjpeg' | 'mp4';
+  port: number;
+  file: string;
+  audio: boolean;
+}
+
+/** Where the decoded units of the stream go */
+interface Output {
+  onUnit(track: Track, data: Buffer): void;
+  close(): Promise<void>;
+}
+
+function parseArgs(argv: string[]): Options {
+  const audio = argv.includes('--audio');
+  const [mode, arg] = argv.filter((a) => !a.startsWith('--'));
+  if (mode !== 'mjpeg' && mode !== 'mp4') {
+    throw new Error('Usage: media-stream-client.mts mjpeg [port] | mp4 [file] [--audio]');
+  }
+  return {
+    mode,
+    port: mode === 'mjpeg' && arg ? Number(arg) : 8093,
+    file: mode === 'mp4' && arg ? arg : 'screen.mp4',
+    audio,
+  };
+}
+
+/** Sends a WebDriver command to Appium and returns its value */
+async function wd(method: string, path: string, body?: object): Promise<any> {
+  const res = await fetch(APPIUM_URL + path, {
     method,
     headers: {'content-type': 'application/json'},
     body: body && JSON.stringify(body),
@@ -172,19 +202,18 @@ async function wd<T = any>(method: string, path: string, body?: object): Promise
   return value;
 }
 
-/** Receives the units of the stream, decoded from base64 */
-type UnitHandler = (track: 'video' | 'audio' | 'jpeg', data: Buffer, key: boolean) => void;
-
-// --- Output 1: a local MJPEG server (multipart/x-mixed-replace over HTTP) ---
-function mjpegServer(port: number): {onUnit: UnitHandler; close: () => void} {
+/** Serves the JPEG units as MJPEG (multipart/x-mixed-replace over HTTP) */
+function createMjpegServer(port: number): Output {
   const viewers = new Set<ServerResponse>();
-  let last: Buffer | undefined;
-  const part = (jpeg: Buffer) =>
+  let lastFrame: Buffer | undefined;
+
+  const toPart = (jpeg: Buffer) =>
     Buffer.concat([
       Buffer.from(`--frame\r\nContent-Type: image/jpeg\r\nContent-Length: ${jpeg.length}\r\n\r\n`),
       jpeg,
       Buffer.from('\r\n'),
     ]);
+
   const server = createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
@@ -193,151 +222,174 @@ function mjpegServer(port: number): {onUnit: UnitHandler; close: () => void} {
     });
     viewers.add(res);
     req.on('close', () => viewers.delete(res));
-    if (last) {
-      res.write(part(last)); // a new viewer gets a picture right away
+    if (lastFrame) {
+      // A new viewer gets a picture right away
+      res.write(toPart(lastFrame));
     }
-  }).listen(port, '127.0.0.1');
+  });
+  server.listen(port, '127.0.0.1');
   console.log(`MJPEG: http://127.0.0.1:${port}`);
+
   return {
     onUnit(track, data) {
       if (track !== 'jpeg') {
         return;
       }
-      last = data;
-      const chunk = part(data);
+      lastFrame = data;
+      const part = toPart(data);
       for (const res of viewers) {
-        // Drop frames for a slow viewer instead of buffering them
+        // Skip frames for a slow viewer instead of buffering them
         if (!res.writableNeedDrain) {
-          res.write(chunk);
+          res.write(part);
         }
       }
     },
-    close: () => {
+    async close() {
       viewers.forEach((res) => res.end());
       server.close();
     },
   };
 }
 
-// --- Output 2: an .mp4 file written by ffmpeg, which only remuxes (no re-encoding) ---
-function mp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean) {
-  const args = [
+/** Remuxes the video (and audio) units into an .mp4 file with ffmpeg, without re-encoding */
+function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean): Output {
+  const ffmpegArgs = [
     '-y',
     // The raw stream has no timestamps, so use the arrival time of the units
     ...['-use_wallclock_as_timestamps', '1', '-f', codec, '-i', 'pipe:0'],
     ...(audio ? ['-f', 'aac', '-i', 'pipe:3'] : []),
-    '-c',
-    'copy',
+    ...['-c', 'copy'],
     // The audio arrives as ADTS, mp4 needs the plain AAC frames
     ...(audio ? ['-bsf:a', 'aac_adtstoasc'] : []),
-    // Keeps the file playable even if ffmpeg is killed before it can finish the file
-    '-movflags',
-    '+frag_keyframe+empty_moov',
+    // Keeps the file playable even if ffmpeg is killed before it finishes the file
+    ...['-movflags', '+frag_keyframe+empty_moov'],
     file,
   ];
-  const ffmpeg: ChildProcess = spawn('ffmpeg', args, {
+  const ffmpeg = spawn('ffmpeg', ffmpegArgs, {
     // Own process group: Ctrl+C must not stop ffmpeg before it has finished the file
     detached: true,
+    windowsHide: true,
     stdio: ['pipe', 'inherit', 'inherit', ...(audio ? ['pipe' as const] : [])],
   });
-  const exited = new Promise<number | null>((resolve) => ffmpeg.on('close', resolve));
-  const audioPipe = (audio ? ffmpeg.stdio[3] : undefined) as NodeJS.WritableStream | undefined;
-  for (const [name, pipe] of [
-    ['video', ffmpeg.stdin],
-    ['audio', audioPipe],
-  ] as const) {
-    pipe?.on('error', (e) => console.error(`ffmpeg ${name} input: ${e.message} (${Date.now()})`));
+  const exited = new Promise((resolve) => ffmpeg.once('close', resolve));
+  const inputs: Record<'video' | 'audio', Writable | null> = {
+    video: ffmpeg.stdin,
+    audio: audio ? (ffmpeg.stdio[3] as Writable) : null,
+  };
+  for (const [name, input] of Object.entries(inputs)) {
+    input?.on('error', (e: Error) => console.error(`ffmpeg ${name} input: ${e.message}`));
   }
   console.log(`Recording to ${file}`);
+
   return {
-    onUnit: ((track, data) => {
-      if (track === 'video') {
-        ffmpeg.stdin?.write(data);
-      } else if (track === 'audio') {
-        audioPipe?.write(data);
+    onUnit(track, data) {
+      if (track === 'video' || track === 'audio') {
+        inputs[track]?.write(data);
       }
-    }) as UnitHandler,
+    },
     async close() {
-      ffmpeg.stdin?.end();
-      audioPipe?.end();
+      inputs.video?.end();
+      inputs.audio?.end();
       await exited;
     },
   };
 }
 
-// --- BiDi plumbing ---
-let closing: Promise<void> | undefined;
-const {sessionId, capabilities} = await wd('POST', '/session', {
-  capabilities: {
-    alwaysMatch: {
-      platformName: 'Android',
-      'appium:automationName': 'UiAutomator2',
-      webSocketUrl: true,
-    },
-  },
-});
-const ws = new WebSocket(capabilities.webSocketUrl);
-await new Promise((resolve, reject) => ws.once('open', resolve).once('error', reject));
-
-const isJpeg = mode === 'mjpeg';
-const codec = 'h264' as const;
-const output = isJpeg
-  ? mjpegServer(Number(arg ?? 8093))
-  : mp4Recorder(arg && !arg.startsWith('--') ? arg : 'screen.mp4', codec, withAudio);
-
-ws.on('message', (raw) => {
-  const msg = JSON.parse(raw.toString());
-  if (msg.type !== 'event') {
-    return;
-  }
-  const {method, params} = msg;
-  if (closing) {
-    return;
-  }
-  if (method === 'appium:mediaStream.units') {
-    for (const u of params.units) {
-      output.onUnit(u.track, Buffer.from(u.data, 'base64'), u.key);
-    }
-  } else {
-    // started / formatChanged (frame size) / ended
-    console.log(method, JSON.stringify(params));
-  }
-});
-// Appium closes the connection with 1013 if this client cannot keep up
-ws.on('close', (code) => {
-  console.log(`BiDi connection closed (${code})`);
-  void shutdown();
-});
-
-// Subscribe first, then start: events are only emitted while someone is subscribed
-ws.send(JSON.stringify({id: 1, method: 'session.subscribe', params: {events: ['appium:mediaStream']}}));
-await new Promise<void>((resolve) =>
-  ws.on('message', function onReply(raw) {
-    if (JSON.parse(raw.toString()).id === 1) {
-      ws.off('message', onReply);
-      resolve();
-    }
-  }),
-);
-const stream = await wd('POST', `/session/${sessionId}/execute/sync`, {
-  script: 'mobile: startMediaStream',
-  args: [isJpeg ? {kind: 'jpeg', quality: 70} : {kind: 'video', codec, audio: withAudio}],
-});
-console.log('Stream started', JSON.stringify(stream));
-
-function shutdown() {
-  return (closing ??= (async () => {
-    await wd('POST', `/session/${sessionId}/execute/sync`, {
-      script: 'mobile: stopMediaStream',
-      args: [{streamId: stream.streamId}],
-    }).catch(() => {});
-    ws.close();
-    await output.close();
-    await wd('DELETE', `/session/${sessionId}`).catch(() => {});
-    process.exit(0);
-  })());
+/** Subscribes to the events and resolves once Appium has confirmed it */
+function subscribe(ws: WebSocket, events: string[]): Promise<void> {
+  const id = 1;
+  return new Promise((resolve, reject) => {
+    const onMessage = (raw: WebSocket.RawData) => {
+      const msg = JSON.parse(raw.toString());
+      if (msg.id !== id) {
+        return;
+      }
+      ws.off('message', onMessage);
+      if (msg.type === 'error') {
+        reject(new Error(`${msg.error}: ${msg.message}`));
+      } else {
+        resolve();
+      }
+    };
+    ws.on('message', onMessage);
+    ws.send(JSON.stringify({id, method: 'session.subscribe', params: {events}}));
+  });
 }
-process.on('SIGINT', shutdown);
+
+async function main(): Promise<void> {
+  const options = parseArgs(process.argv.slice(2));
+  const codec = 'h264';
+  const output =
+    options.mode === 'mjpeg' ? createMjpegServer(options.port) : createMp4Recorder(options.file, codec, options.audio);
+
+  const {sessionId, capabilities} = await wd('POST', '/session', {
+    capabilities: {
+      alwaysMatch: {
+        platformName: 'Android',
+        'appium:automationName': 'UiAutomator2',
+        webSocketUrl: true,
+      },
+    },
+  });
+  const ws = new WebSocket(capabilities.webSocketUrl);
+  await new Promise((resolve, reject) => ws.once('open', resolve).once('error', reject));
+
+  let streamId: string | undefined;
+  let closing: Promise<void> | undefined;
+  const shutdown = () =>
+    (closing ??= (async () => {
+      if (streamId) {
+        await wd('POST', `/session/${sessionId}/execute/sync`, {
+          script: 'mobile: stopMediaStream',
+          args: [{streamId}],
+        }).catch(() => {});
+      }
+      ws.close();
+      await output.close();
+      await wd('DELETE', `/session/${sessionId}`).catch(() => {});
+    })());
+  const shutdownAndExit = () => void shutdown().finally(() => process.exit(0));
+
+  process.once('SIGINT', shutdownAndExit);
+  // Appium closes the connection with 1013 if this client cannot keep up with the stream
+  ws.on('close', (code) => {
+    console.log(`BiDi connection closed (${code})`);
+    shutdownAndExit();
+  });
+  ws.on('message', (raw) => {
+    const {type, method, params} = JSON.parse(raw.toString());
+    if (type !== 'event' || closing) {
+      return;
+    }
+    if (method === 'appium:mediaStream.units') {
+      for (const unit of params.units) {
+        output.onUnit(unit.track, Buffer.from(unit.data, 'base64'));
+      }
+    } else {
+      // started, formatChanged (the frame size) and ended
+      console.log(method, JSON.stringify(params));
+    }
+  });
+
+  try {
+    // Events are only emitted while a client is subscribed, so subscribe first
+    await subscribe(ws, [MEDIA_STREAM_MODULE]);
+    const stream = await wd('POST', `/session/${sessionId}/execute/sync`, {
+      script: 'mobile: startMediaStream',
+      args: [options.mode === 'mjpeg' ? {kind: 'jpeg', quality: 70} : {kind: 'video', codec, audio: options.audio}],
+    });
+    streamId = stream.streamId;
+    console.log('Stream started', JSON.stringify(stream));
+  } catch (e) {
+    await shutdown();
+    throw e;
+  }
+}
+
+main().catch((e) => {
+  console.error(e instanceof Error ? e.message : e);
+  process.exit(1);
+});
 ```
 
 Notes:
@@ -348,6 +400,8 @@ Notes:
 - A raw H.264/HEVC stream has no timestamps, so `ffmpeg` timestamps the units by the time they arrive. The result
   is accurate to about the batching window (`batchMs`), and the audio is not aligned to the video. If you need
   exact timing, use the `ts` of the units (microseconds, one clock for all the tracks).
+- The script was tested on macOS. It uses no platform-specific code, but the audio goes to `ffmpeg` through an extra
+  pipe (`pipe:3`), which may not work on Windows. If it does not, record without `--audio`.
 - To record HEVC, pass `codec: 'hevc'` to `mobile: startMediaStream` and use `hevc` instead of `h264` as the input format of `ffmpeg`.
 
 ## Requirements

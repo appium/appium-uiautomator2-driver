@@ -168,15 +168,12 @@ interface Options {
   audio: boolean;
 }
 
-/** Lets an output pause the incoming units while it cannot keep up */
-interface Flow {
-  pause(): void;
-  resume(): void;
-}
-
 /** Where the decoded units of the stream go */
 interface Output {
-  onUnit(track: Track, data: Buffer): void;
+  onUnit(track: Track, data: Buffer, key: boolean): void;
+  /** Resolves if the output stops working on its own */
+  readonly failure?: Promise<void>;
+  /** Finishes the output, and rejects if it has failed */
   close(): Promise<void>;
 }
 
@@ -258,7 +255,7 @@ function createMjpegServer(port: number): Output {
 }
 
 /** Remuxes the video (and audio) units into an .mp4 file with ffmpeg, without re-encoding */
-function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean, flow: Flow): Output {
+function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean): Output {
   const ffmpegArgs = [
     '-y',
     // The raw stream has no timestamps, so use the arrival time of the units
@@ -277,43 +274,50 @@ function createMp4Recorder(file: string, codec: 'h264' | 'hevc', audio: boolean,
     windowsHide: true,
     stdio: ['pipe', 'inherit', 'inherit', ...(audio ? ['pipe' as const] : [])],
   });
-  const exited = new Promise((resolve) => ffmpeg.once('close', resolve));
-  const inputs: Record<'video' | 'audio', Writable | null> = {
-    video: ffmpeg.stdin,
+  let spawnError: Error | undefined;
+  ffmpeg.once('error', (e) => (spawnError = e));
+  const exited = new Promise<number | null>((resolve) => ffmpeg.once('close', resolve));
+  let closing = false;
+  // Resolves if ffmpeg exits before close() was called
+  const failure = new Promise<void>((resolve) => void exited.then(() => closing || resolve()));
+  const inputs = {
+    video: ffmpeg.stdin as Writable,
     audio: audio ? (ffmpeg.stdio[3] as Writable) : null,
   };
-  for (const [name, input] of Object.entries(inputs)) {
-    input?.on('error', (e: Error) => console.error(`ffmpeg ${name} input: ${e.message}`));
-  }
+  // A broken pipe means that ffmpeg has exited, which is reported through its exit code
+  Object.values(inputs).forEach((input) => input?.on('error', () => {}));
   console.log(`Recording to ${file}`);
 
-  // When ffmpeg cannot keep up, stop reading from Appium until its input drains,
-  // instead of buffering the recording in memory
-  const blocked = new Set<Writable>();
-  const write = (input: Writable | null, data: Buffer) => {
-    if (!input || input.write(data) || blocked.has(input)) {
-      return;
-    }
-    blocked.add(input);
-    flow.pause();
-    input.once('drain', () => {
-      blocked.delete(input);
-      if (!blocked.size) {
-        flow.resume();
-      }
-    });
-  };
-
+  // An ffmpeg input that is full skips units instead of buffering them in memory, and pausing
+  // the connection could starve the other input. Video resumes at the next keyframe.
+  let videoSynced = false;
   return {
-    onUnit(track, data) {
-      if (track === 'video' || track === 'audio') {
-        write(inputs[track], data);
+    failure,
+    onUnit(track, data, key) {
+      if (track === 'video') {
+        if (inputs.video.writableNeedDrain) {
+          videoSynced = false;
+          return;
+        }
+        videoSynced ||= key;
+        if (videoSynced) {
+          inputs.video.write(data);
+        }
+      } else if (track === 'audio' && inputs.audio && !inputs.audio.writableNeedDrain) {
+        inputs.audio.write(data);
       }
     },
     async close() {
-      inputs.video?.end();
+      closing = true;
+      inputs.video.end();
       inputs.audio?.end();
-      await exited;
+      const code = await exited;
+      if (spawnError) {
+        throw new Error(`Cannot run ffmpeg: ${spawnError.message}`);
+      }
+      if (code !== 0) {
+        throw new Error(`ffmpeg failed with exit code ${code}`);
+      }
     },
   };
 }
@@ -342,12 +346,8 @@ function subscribe(ws: WebSocket, events: string[]): Promise<void> {
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
   const codec = 'h264';
-  let ws: WebSocket | undefined;
-  const flow: Flow = {pause: () => ws?.pause(), resume: () => ws?.resume()};
   const output =
-    options.mode === 'mjpeg'
-      ? createMjpegServer(options.port)
-      : createMp4Recorder(options.file, codec, options.audio, flow);
+    options.mode === 'mjpeg' ? createMjpegServer(options.port) : createMp4Recorder(options.file, codec, options.audio);
 
   const {sessionId, capabilities} = await wd('POST', '/session', {
     capabilities: {
@@ -359,7 +359,6 @@ async function main(): Promise<void> {
     },
   });
   const socket = new WebSocket(capabilities.webSocketUrl);
-  ws = socket;
   await new Promise((resolve, reject) => socket.once('open', resolve).once('error', reject));
 
   let streamId: string | undefined;
@@ -372,14 +371,23 @@ async function main(): Promise<void> {
           args: [{streamId}],
         }).catch(() => {});
       }
-      socket.resume();
       socket.close();
-      await output.close();
-      await wd('DELETE', `/session/${sessionId}`).catch(() => {});
+      try {
+        await output.close();
+      } finally {
+        await wd('DELETE', `/session/${sessionId}`).catch(() => {});
+      }
     })());
-  const shutdownAndExit = (code: number) => void shutdown().finally(() => process.exit(code));
+  const shutdownAndExit = (code: number) =>
+    void shutdown()
+      .then(
+        () => code,
+        (e: Error) => (console.error(e.message), 1),
+      )
+      .then((exitCode) => process.exit(exitCode));
 
   process.once('SIGINT', () => shutdownAndExit(0));
+  void output.failure?.then(() => shutdownAndExit(1));
   socket.on('close', (code) => {
     // Appium closes the connection with 1013 if this client cannot keep up with the stream
     if (!closing) {
@@ -394,7 +402,7 @@ async function main(): Promise<void> {
     }
     if (method === 'appium:mediaStream.units') {
       for (const unit of params.units) {
-        output.onUnit(unit.track, Buffer.from(unit.data, 'base64'));
+        output.onUnit(unit.track, Buffer.from(unit.data, 'base64'), unit.key);
       }
     } else {
       // started, formatChanged (the frame size) and ended
@@ -412,7 +420,7 @@ async function main(): Promise<void> {
     streamId = stream.streamId;
     console.log('Stream started', JSON.stringify(stream));
   } catch (e) {
-    await shutdown();
+    await shutdown().catch(() => {});
     throw e;
   }
 }
@@ -428,8 +436,8 @@ Notes:
 - The client subscribes first and only then starts the stream, since events are only emitted while a client is subscribed.
 - Appium closes the connection with code `1013` if the client cannot keep up with the stream. This script then stops;
   a real client could reconnect, subscribe again and restart the stream.
-- If `ffmpeg` cannot keep up, the script stops reading from Appium until its input has drained, instead of buffering the
-  recording in memory. Appium then skips video units for this client.
+- If an `ffmpeg` input cannot keep up, the script skips units for it instead of buffering the recording in memory;
+  video resumes at the next keyframe. If `ffmpeg` fails or exits, the script stops the stream, ends the session and exits with a nonzero code.
 - A raw H.264/HEVC stream has no timestamps, so `ffmpeg` timestamps the units by the time they arrive. The result
   is accurate to about the batching window (`batchMs`), and the audio is not aligned to the video. If you need
   exact timing, use the `ts` of the units (microseconds, one clock for all the tracks).

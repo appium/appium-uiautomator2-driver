@@ -1,3 +1,9 @@
+## [9.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.1.0...v9.2.0) (2026-11-15)
+
+### Features
+
+* stream the screen media over BiDi ([#1083](https://github.com/appium/appium-uiautomator2-driver/issues/1083)) ([5d835d3](https://github.com/appium/appium-uiautomator2-driver/commit/5d835d32516ef54641bc0310c852169d89e92876))
+
 ## [9.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.0.3...v9.1.0) (2026-11-13)
 
 ### Features

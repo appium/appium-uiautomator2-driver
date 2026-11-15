@@ -54,6 +54,7 @@ nav:
           - guides/parallel-tests.md
           - guides/hybrid.md
           - guides/mjpeg.md
+          - guides/media-stream.md
           - guides/appbundle.md
           - guides/activity-startup.md
       - Driver Actions:

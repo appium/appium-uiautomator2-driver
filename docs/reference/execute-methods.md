@@ -597,7 +597,7 @@ For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../gu
 Streams the device screen as [`appium:mediaStream.*` BiDi events](./bidi.md#appiummediastreamstarted):
 either H.264/HEVC video (optionally with AAC audio) or JPEG frames. Only supported since Android 10
 (Q / API level 29). Subscribe to the `appium:mediaStream` BiDi module before calling this method, since
-events are only emitted while a client is subscribed. See the [MJPEG guide](../guides/mjpeg.md#streaming-over-bidi)
+events are only emitted while a client is subscribed. See the [Media Streaming guide](../guides/media-stream.md)
 for an overview.
 
 Only one stream of each `kind` can run in a session, and the device only runs one stream of each kind at

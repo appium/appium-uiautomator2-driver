@@ -560,6 +560,7 @@ execute method. Repeated calls to this method have no effect unless the previous
 is stopped.
 
 For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../guides/mjpeg.md).
+To stream the screen without any host dependencies, see [`mobile: startMediaStream`](#mobile-startmediastream).
 
 #### Parameters
 
@@ -590,6 +591,90 @@ For the built-in device MJPEG stream (no GStreamer), see the [MJPEG guide](../gu
 #### Response
 
 `null`
+
+### `mobile: startMediaStream`
+
+Streams the device screen as [`appium:mediaStream.*` BiDi events](./bidi.md#appiummediastreamstarted):
+either H.264/HEVC video (optionally with AAC audio) or JPEG frames. Only supported since Android 10
+(Q / API level 29). Subscribe to the `appium:mediaStream` BiDi module before calling this method, since
+events are only emitted while a client is subscribed. See the [Media Streaming guide](../guides/media-stream.md)
+for an overview.
+
+Only one stream of each `kind` can run in a session, and the device only runs one stream of each kind at
+a time. The stream can be stopped using [`mobile: stopMediaStream`](#mobile-stopmediastream), and is
+stopped automatically when the session ends. Use [`mobile: getMediaStreamCapabilities`](#mobile-getmediastreamcapabilities)
+to check what the device supports.
+
+Available since driver version 9.2.0.
+
+#### Parameters
+
+|<div style="width:11em">Name</div>|Type|Description|
+|---|---|---|
+|`kind`|`string`|Either `video` (H.264/HEVC, optionally with audio) or `jpeg`.|
+|`codec?`|`string`|Video only. Either `h264` or `hevc`. Set to `h264` by default. The method fails if the device has no encoder for the codec.|
+|`fps?`|`integer`|Maximum frames per second, in the range `[1, 60]`. Set to `30` for video and to `60` for JPEG by default. For video, it is also limited by what the device encoder supports. Must be a positive integer; larger values are lowered to the maximum.|
+|`bitrate?`|`integer`|Video only. Bitrate in bits per second, in the range `[100000, 50000000]`. Set to `4000000` (4 Mbps) by default. It is also limited by what the device encoder supports. Must be a positive integer; values out of range are adjusted to the nearest valid one.|
+|`resolution?`|`string`|Video only. Resolution of the video, formatted as `<width>x<height>`. Supported values are `1920x1080`, `1280x720`, `720x480`, `320x240` and `176x144`; any other value is replaced by the default. Set to the greatest supported device resolution by default (usually `1920x1080`). The width and height are swapped in portrait orientation, and the size is scaled down further if the device encoder does not support it (see [`mobile: getMediaStreamCapabilities`](#mobile-getmediastreamcapabilities)). The final size is reported in the response and in the `started` event.|
+|`audio?`|`boolean`|Video only. Whether to add an audio track (ADTS AAC-LC, 44.1 kHz, mono, 64 kbps). Set to `false` by default. Whether audio is actually captured depends on the apps (e.g. apps that disallow audio capture produce silence).|
+|`quality?`|`integer`|JPEG only. Quality of the frames, in the range `[1, 100]`, where `100` indicates the best quality. Set to `80` by default.|
+|`scale?`|`integer`|JPEG only. Scale of the frames in percent of the screen size, in the range `[1, 100]`. Set to `100` by default.|
+|`batchMs?`|`integer`|Video and audio only. Units that arrive within this time window are sent in a single event. Set to `40` by default.|
+|`idleHeartbeatMs?`|`integer`|JPEG only. The last frame is sent again after this idle time, so that a client that subscribes while the screen does not change still gets a picture. Set to `1000` by default, `0` disables it.|
+
+#### Response
+
+An object with the following properties:
+
+|Name|Type|Description|
+|---|---|---|
+|`streamId`|`string`|Identifier of the stream, to be used in the stream events and in [`mobile: stopMediaStream`](#mobile-stopmediastream).|
+|`kind`|`string`|The stream kind.|
+|`tracks`|`string[]`|The tracks of the stream: `video`, `audio` or `jpeg`.|
+|`codec`|`string`|`h264`, `hevc` or `jpeg`.|
+|`event`|`string`|The BiDi module the events are sent in, `appium:mediaStream`.|
+|`width?`, `height?`|`integer`|Frame size. Always set for video, after any scaling to the encoder limits.|
+|`audio?`|`object`|`{sampleRate, channels}` if the stream has an audio track.|
+
+A video stream is only considered started once the encoder has produced its first output. The method fails
+if that does not happen in five seconds, for instance because the encoder does not support the requested
+configuration.
+
+### `mobile: stopMediaStream`
+
+Stops a stream started by [`mobile: startMediaStream`](#mobile-startmediastream). Stopping a stream that
+has already ended is a no-op.
+
+Available since driver version 9.2.0.
+
+#### Parameters
+
+|<div style="width:7em">Name</div>|Type|Description|
+|---|---|---|
+|`streamId`|`string`|The stream identifier returned by [`mobile: startMediaStream`](#mobile-startmediastream).|
+
+#### Response
+
+`null`
+
+### `mobile: getMediaStreamCapabilities`
+
+Reports whether media streaming works on the device and which video codecs it can encode.
+
+Available since driver version 9.2.0.
+
+#### Response
+
+An object with the following properties:
+
+|Name|Type|Description|
+|---|---|---|
+|`supported`|`boolean`|Whether media streaming is available.|
+|`reason?`|`object`|`{code, message}` explaining why it is not. The code is either `api_level_too_low` or `settings_app_missing`.|
+|`apiLevel`|`integer`|The Android API level of the device.|
+|`kinds`|`string[]`|The supported stream kinds, `video` and/or `jpeg`.|
+|`audio?`|`boolean`|Whether video streams can have an audio track.|
+|`codecs?`|`object`|`{h264, hevc}`, each a list of the device video encoders `{name, codec, softwareOnly, maxWidth?, maxHeight?}`. `null` if the device does not list its codecs (before Android 13), in which case the codecs are assumed rather than verified. A software encoder may only support small frame sizes, streams are scaled down to fit.|
 
 ### `mobile: startMediaProjectionRecording`
 
@@ -1734,17 +1819,17 @@ Starts a specified service intent using `adb shell am start-service`/`adb shell 
 |<div style="width:8em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
 |`foreground?`|`boolean`|Whether to start the service in the foreground. Unset by default. Ignored for devices running Android 8 (Oreo / API level 26) or earlier.|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 
 #### Response
 
@@ -1758,17 +1843,17 @@ Stops the specified service intent using `adb shell am stop-service`.
 
 |Name|Type|Description|
 |--|--|--|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 
 #### Response
 
@@ -1782,17 +1867,17 @@ Sends a broadcast Intent to the Android system using `adb shell am broadcast`.
 
 |<div style="width:16em">Name</div>|<div style="width:11em">Type</div>|Description|
 |--|--|--|
-|`intent?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_54)|
-|`action?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`uri?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_54)|
-|`component?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`package?`|`string`|See [`mobile: startActivity`](#parameters_54)|
-|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_54)|
-|`flags?`|`string`|See [`mobile: startActivity`](#parameters_54)|
+|`intent?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`user?`|`integer` or `string`|See [`mobile: startActivity`](#parameters_56)|
+|`action?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`uri?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`mimeType?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`identifier?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`categories?`|`string` or `Array<string>`|See [`mobile: startActivity`](#parameters_56)|
+|`component?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`package?`|`string`|See [`mobile: startActivity`](#parameters_56)|
+|`extras?`|`Array<Array<string>>`|See [`mobile: startActivity`](#parameters_56)|
+|`flags?`|`string`|See [`mobile: startActivity`](#parameters_56)|
 |`receiverPermission?`|`string`|Permission that the receiver must hold|
 |`allowBackgroundActivityStarts?`|`boolean`|Whether the receiver may start activities even if in the background. Unset by default.|
 

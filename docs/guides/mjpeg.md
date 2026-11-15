@@ -108,6 +108,12 @@ These are **different** from the built-in device MJPEG server:
 
 Use the device MJPEG server (with `appium:mjpegServerPort` and optionally `appium:mjpegScreenshotUrl`) when you only need a simple TCP MJPEG stream from the device. Use `mobile: startScreenStreaming` when you need the host-based GStreamer pipeline (e.g. for specific encoding or network options).
 
+## Streaming over BiDi
+
+To receive the screen on the client as JPEG frames or H.264/HEVC video (with optional audio) over WebDriver BiDi,
+instead of serving it from a host port, use [`mobile: startMediaStream`](../reference/execute-methods.md#mobile-startmediastream).
+See the [Media Streaming over BiDi guide](media-stream.md) for details and an example client.
+
 ## Requirements
 
 - For **device-side MJPEG streaming** itself, no extra tools are required beyond a compatible Android device and the UiAutomator2 server; the broadcaster runs entirely on the device.
@@ -121,4 +127,5 @@ Use the device MJPEG server (with `appium:mjpegServerPort` and optionally `appiu
 | Expose device screen as MJPEG on the host | Set `appium:mjpegServerPort` to a host port; connect to `http://localhost:<port>`. |
 | Screenshot from the MJPEG stream | Also set `appium:mjpegScreenshotUrl` to that URL (e.g. `http://localhost:<port>`). |
 | Tune framerate, size, or quality on the device | Use Settings API: `mjpegServerFramerate`, `mjpegScalingFactor`, `mjpegServerScreenshotQuality`, `mjpegBilinearFiltering`. |
+| Stream the screen to the client over BiDi, as JPEG or H.264/HEVC video with audio | Use [`mobile: startMediaStream`](../reference/execute-methods.md#mobile-startmediastream), see the [Media Streaming guide](media-stream.md). |
 | Host-side GStreamer-based streaming | Use `mobile: startScreenStreaming` / `mobile: stopScreenStreaming`. |

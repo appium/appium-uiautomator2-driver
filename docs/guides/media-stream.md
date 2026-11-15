@@ -1,4 +1,7 @@
 ---
+hide:
+    - toc
+
 title: Media Streaming over BiDi
 ---
 

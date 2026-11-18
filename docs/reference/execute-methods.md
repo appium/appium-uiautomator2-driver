@@ -426,7 +426,7 @@ Available since driver version 2.24.0.
 ### `mobile: startLogsBroadcast`
 
 !!! warning "Deprecated"
-    This extension is deprecated and will be removed in a future version. Subscribe to the
+    This method is deprecated and will be removed in a future version. Subscribe to the
     [`log.entryAdded`](./bidi.md#logentryadded) BiDi event instead, which does not need direct
     access to the Appium server host and port.
 
@@ -447,7 +447,7 @@ for more details.
 ### `mobile: stopLogsBroadcast`
 
 !!! warning "Deprecated"
-    This extension is deprecated and will be removed in a future version. Unsubscribe from the
+    This method is deprecated and will be removed in a future version. Unsubscribe from the
     [`log.entryAdded`](./bidi.md#logentryadded) BiDi event instead.
 
 Stops the logcat websocket server previously started using [`mobile: startLogsBroadcast`](#mobile-startlogsbroadcast).

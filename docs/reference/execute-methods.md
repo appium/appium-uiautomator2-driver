@@ -624,8 +624,8 @@ Available since driver version 9.2.0.
 |`audio?`|`boolean`|Video only. Whether to add an audio track (ADTS AAC-LC, 44.1 kHz, mono, 64 kbps). Set to `false` by default. Whether audio is actually captured depends on the apps (e.g. apps that disallow audio capture produce silence).|
 |`quality?`|`integer`|JPEG only. Quality of the frames, in the range `[1, 100]`, where `100` indicates the best quality. Set to `80` by default.|
 |`scale?`|`integer`|JPEG only. Scale of the frames in percent of the screen size, in the range `[1, 100]`. Set to `100` by default.|
-|`batchMs?`|`integer`|Video and audio only. Units that arrive within this time window are sent in a single event. Set to `40` by default.|
-|`idleHeartbeatMs?`|`integer`|JPEG only. The last frame is sent again after this idle time, so that a client that subscribes while the screen does not change still gets a picture. Set to `1000` by default, `0` disables it.|
+|`batchMs?`|`integer`|Video and audio only. Units that arrive within this time window are sent in a single event, in milliseconds. Set to `40` by default, `0` disables batching, `1000` at most.|
+|`idleHeartbeatMs?`|`integer`|JPEG only. The last frame is sent again after this idle time, so that a client that subscribes while the screen does not change still gets a picture. Set to `1000` by default, `0` disables it, otherwise the value must be in the range `[100, 60000]`.|
 
 #### Response
 

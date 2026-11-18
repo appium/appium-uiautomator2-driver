@@ -523,15 +523,15 @@ waitForLaunch | boolean | no | If `false` then ADB won't wait for the started ac
 
 ### mobile: startLogsBroadcast
 
-Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/device/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected websocket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
+**Deprecated.** This extension will be removed in a future version. Use [logs broadcast via BiDi](./docs/reference/bidi.md#logentryadded) instead.
 
-Consider using [logs broadcast via BiDi](./docs/bidi.md#logentryadded) over this extension.
+Starts Android logcat broadcast websocket on the same host and port where Appium server is running at `/ws/session/:sessionId:/appium/device/logcat` endpoint. The method will return immediately if the web socket is already listening. Each connected websocket listener will receive logcat log lines as soon as they are visible to Appium. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
 
 ### mobile: stopLogsBroadcast
 
-Stops the previously started logcat broadcasting websocket server. This method will return immediately if no server is running. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
+**Deprecated.** This extension will be removed in a future version. Use [logs broadcast via BiDi](./docs/reference/bidi.md#logentryadded) instead.
 
-Consider using [logs broadcast via BiDi](./docs/bidi.md#logentryadded) over this extension.
+Stops the previously started logcat broadcasting websocket server. This method will return immediately if no server is running. Read [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://appiumpro.com/editions/55-using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium) for more details.
 
 ### mobile: deviceidle
 

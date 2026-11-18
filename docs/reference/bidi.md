@@ -50,6 +50,10 @@ Event emission of all of these log types is supported for both real devices and 
 
 * `syslog`
     * Each event contains a single device `adb logcat` line
+    * `level` is derived from the logcat priority of the line: `V` and `D` are reported as `debug`, `I` as `info`,
+      `W` as `warn`, `E` and `F` as `error`. This works for the `brief`, `process`, `tag`, `thread`, `time`
+      and `threadtime` values of the [`appium:logcatFormat`](./capabilities.md#logcatformat) capability. Lines of
+      the `raw` and `long` formats, and lines without a recognizable priority, are reported as `info`
     * `context` is always set to `NATIVE_APP`
     * Event emission can be disabled by setting the [`appium:skipLogcatCapture`](./capabilities.md#skiplogcatcapture)
       capability
@@ -58,6 +62,30 @@ Event emission of all of these log types is supported for both real devices and 
     * `context` is always set to `NATIVE_APP`
     * Events are only emitted if the [`get_server_logs`](./insecure-features.md#get_server_logs)
       insecure feature is enabled
+
+#### Usage
+
+Start the session with the `webSocketUrl` capability set to `true` and subscribe to the `log.entryAdded` event
+(or to the whole `log` module). The driver only emits the event while a client is subscribed to it. The events
+arrive over the BiDi connection of the session, so there is no need for direct access to the host and port of
+the Appium server. This replaces the deprecated
+[`mobile: startLogsBroadcast`](./execute-methods.md#mobile-startlogsbroadcast) and
+[`mobile: stopLogsBroadcast`](./execute-methods.md#mobile-stoplogsbroadcast) execute methods.
+
+=== "Java"
+
+    ```java
+    // Requires the java-client-selenium-bridge artifact, see
+    // https://github.com/appium/java-client/blob/master/docs/selenium-bridge.md
+    var driver = new AndroidDriver(serverUrl, options.enableBiDi());
+    var selenium = SeleniumBridge.asRemoteWebDriver(driver);
+    try (var logInspector = new LogInspector(selenium)) {
+        logInspector.onLog(entry -> System.out.println(entry.getText()));
+        // ... run the test
+    } finally {
+        selenium.closeBiDi();
+    }
+    ```
 
 ### `appium:mediaStream.started`
 

@@ -1,3 +1,9 @@
+## [9.2.2](https://github.com/appium/appium-uiautomator2-driver/compare/v9.2.1...v9.2.2) (2026-11-18)
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/css-locator-to-native from 1.0.7 to 2.0.1 ([#1086](https://github.com/appium/appium-uiautomator2-driver/issues/1086)) ([f87defb](https://github.com/appium/appium-uiautomator2-driver/commit/f87defbe537a901f828adbdf2b9c2278c559a307))
+
 ## [9.2.1](https://github.com/appium/appium-uiautomator2-driver/compare/v9.2.0...v9.2.1) (2026-11-16)
 
 ### Miscellaneous Chores

@@ -63,7 +63,7 @@
     "test": "node --test --test-timeout=60000 \"build/test/unit/**/*-specs.js\""
   },
   "dependencies": {
-    "@appium/css-locator-to-native": "^1.0.1",
+    "@appium/css-locator-to-native": "^2.0.1",
     "appium-adb": "^17.0.3",
     "appium-android-driver": "^15.4.0",
     "appium-uiautomator2-server": "^11.0.0",

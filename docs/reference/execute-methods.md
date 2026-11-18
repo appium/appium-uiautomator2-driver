@@ -425,8 +425,13 @@ Available since driver version 2.24.0.
 
 ### `mobile: startLogsBroadcast`
 
+!!! warning "Deprecated"
+    This method is deprecated and will be removed in a future version. Subscribe to the
+    [`log.entryAdded`](./bidi.md#logentryadded) BiDi event instead, which does not need direct
+    access to the Appium server host and port.
+
 Starts a websocket server for broadcasting Android logcat logs, using the host and port of the
-Appium server. The resulting endpoint is `/ws/session/:sessionId:/appium/logcat`. Broadcasting can
+Appium server. The resulting endpoint is `/ws/session/:sessionId:/appium/device/logcat`. Broadcasting can
 be stopped using the [`mobile: stopLogsBroadcast`](#mobile-stoplogsbroadcast) execute method.
 
 The method will return immediately if the web socket is already listening. Each listener will
@@ -435,21 +440,21 @@ receive logcat log lines as soon as they are visible to Appium.
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
 
-Consider using [log broadcast via BiDi](../reference/bidi.md#logentryadded) over this extension.
-
 #### Response
 
 `null`
 
 ### `mobile: stopLogsBroadcast`
 
+!!! warning "Deprecated"
+    This method is deprecated and will be removed in a future version. Unsubscribe from the
+    [`log.entryAdded`](./bidi.md#logentryadded) BiDi event instead.
+
 Stops the logcat websocket server previously started using [`mobile: startLogsBroadcast`](#mobile-startlogsbroadcast).
 The method will return immediately if no websocket server is running.
 
 Refer to [Using Mobile Execution Commands to Continuously Stream Device Logs with Appium](https://www.headspin.io/blog/using-mobile-execution-commands-to-continuously-stream-device-logs-with-appium)
 for more details.
-
-Consider using [log broadcast via BiDi](../reference/bidi.md#logentryadded) over this extension.
 
 #### Response
 

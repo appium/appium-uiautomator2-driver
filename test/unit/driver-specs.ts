@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import {once} from 'node:events';
+import {createServer, type AddressInfo} from 'node:net';
 import * as path from 'node:path';
 import {describe, it, before, beforeEach, afterEach} from 'node:test';
 
@@ -287,7 +289,7 @@ describe('driver.js', function () {
     });
   });
 
-  describe('system port forwarding', function () {
+  describe('ADB port forwarding', function () {
     let driver: AndroidUiautomator2Driver;
     let adb: ADB;
 
@@ -295,14 +297,16 @@ describe('driver.js', function () {
       driver = new AndroidUiautomator2Driver();
       adb = new ADB();
       driver.adb = adb;
+      driver.opts.remoteAdbHost = 'adb.example.test';
     });
 
     it('skips ports already forwarded or in use and releases only the reserved port', async function () {
-      driver.opts.remoteAdbHost = 'localhost';
       const forward = sandbox.stub(adb, 'adbExec');
       forward.onFirstCall().rejects(new Error('adb: error: cannot rebind existing socket'));
       forward.onSecondCall().rejects(new Error('adb: error: cannot bind listener: Address already in use'));
-      forward.onThirdCall().resolves('');
+      forward.onThirdCall().rejects(new Error("adb: error: cannot bind 'tcp:8202'"));
+      forward.onCall(3).rejects(new Error('adb: error: cannot bind listener: Adresse bereits verwendet'));
+      forward.onCall(4).resolves('');
       const remove = sandbox.stub(adb, 'removePortForward').resolves();
 
       await driver.allocateSystemPort();
@@ -312,13 +316,37 @@ describe('driver.js', function () {
           ['forward', '--no-rebind', 'tcp:8200', 'tcp:6790'],
           ['forward', '--no-rebind', 'tcp:8201', 'tcp:6790'],
           ['forward', '--no-rebind', 'tcp:8202', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8203', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8204', 'tcp:6790'],
         ],
       );
-      assert.equal(driver.systemPort, 8202);
+      assert.equal(driver.systemPort, 8204);
       await driver.releaseSystemPort();
       await driver.releaseSystemPort();
-      sinon.assert.calledOnceWithExactly(remove, 8202);
+      sinon.assert.calledOnceWithExactly(remove, 8204);
     });
+
+    for (const host of ['127.0.0.1', '::1']) {
+      it(`checks an occupied ${host} listener only for a local ADB connection`, async function () {
+        const listener = createServer((socket) => socket.end());
+        listener.listen(0, host);
+        await once(listener, 'listening');
+        try {
+          const {port} = listener.address() as AddressInfo;
+          driver.opts.systemPort = port;
+          driver.opts.remoteAdbHost = host;
+          const forward = sandbox.stub(adb, 'adbExec').resolves('');
+          await assert.rejects(driver.allocateSystemPort(), /unavailable.*already in use/);
+          sinon.assert.notCalled(forward);
+
+          driver.opts.remoteAdbHost = 'adb.example.test';
+          await driver.allocateSystemPort();
+          sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', `tcp:${port}`, 'tcp:6790']);
+        } finally {
+          await listener[Symbol.asyncDispose]();
+        }
+      });
+    }
 
     it('skips a port in the Windows excluded port range', async function () {
       const forward = sandbox.stub(adb, 'adbExec');
@@ -340,7 +368,7 @@ describe('driver.js', function () {
       driver.opts.systemPort = 8317;
       const forward = sandbox.stub(adb, 'adbExec').rejects(new Error('adb: error: cannot rebind existing socket'));
       const remove = sandbox.stub(adb, 'removePortForward').resolves();
-      await assert.rejects(driver.allocateSystemPort(), /8317.*unavailable/);
+      await assert.rejects(driver.allocateSystemPort(), /8317.*choose a free port.*cannot rebind existing socket/i);
       await driver.releaseSystemPort();
       sinon.assert.calledOnce(forward);
       sinon.assert.notCalled(remove);
@@ -352,6 +380,47 @@ describe('driver.js', function () {
       await assert.rejects(driver.allocateSystemPort(), error);
       sinon.assert.calledOnce(forward);
       assert.equal(driver.systemPort, undefined);
+    });
+
+    it('leaves a configured MJPEG forward alone when the system port reservation fails', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      sandbox.stub(adb, 'adbExec').rejects(new Error('cannot rebind existing socket'));
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), /8317.*unavailable/);
+      await driver.deleteSession();
+      sinon.assert.notCalled(remove);
+    });
+
+    it('releases only the system port when the MJPEG port is already forwarded', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().resolves('');
+      forward.onSecondCall().rejects(new Error('cannot rebind existing socket'));
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), /mjpegServerPort #9100.*cannot rebind/);
+      assert.deepEqual(forward.secondCall.args[0], ['forward', '--no-rebind', 'tcp:9100', 'tcp:7810']);
+      await driver.deleteSession();
+      sinon.assert.calledOnceWithExactly(remove, 8317);
+    });
+
+    it('removes a successfully reserved MJPEG forward only once', async function () {
+      driver.opts.mjpegServerPort = 9100;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await driver.allocateMjpegServerPort();
+      sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', 'tcp:9100', 'tcp:7810']);
+      await driver.releaseMjpegServerPort();
+      await driver.releaseMjpegServerPort();
+      sinon.assert.calledOnceWithExactly(remove, 9100);
     });
 
     it('reports exhaustion without allocating outside the documented range', async function () {

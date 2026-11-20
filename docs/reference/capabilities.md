@@ -554,9 +554,8 @@ app is not compatible with the driver or the app under test.
 | -- | -- | -- |
 | `appium:mjpegServerPort` | `integer` | Not specified |
 
-The port on the host machine where the MJPEG screenshot streaming server should be listening. If
-not specified, the MJPEG stream from the device under test is not forwarded. Can be used to connect
-to the device MJPEG stream outside of the session.
+The port on the ADB server host used to connect to the MJPEG stream outside of the session. Choose a
+free port unique to this session. If omitted, the MJPEG stream is not forwarded from the device.
 
 On the device under test, the MJPEG server port can be configured using the
 [`mjpegServerPort`](./settings.md#mjpegserverport) setting.

@@ -3,7 +3,7 @@ import type {AndroidUiautomator2Driver} from '../driver.js';
 const UI_SCROLLABLE_PATTERN = /\bUiScrollable\b/;
 const UIAUTOMATOR_STRATEGY = '-android uiautomator';
 const MIGRATION_DOC_URL =
-  'https://appium.github.io/appium-uiautomator2-driver/latest/reference/locator-strategies/#uiautomator';
+  'https://appium.github.io/appium-uiautomator2-driver/latest/guides/migrating-from-uiscrollable/';
 
 /**
  * Logs the `UiScrollable` deprecation warning, but only once per session.

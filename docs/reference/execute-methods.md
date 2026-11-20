@@ -2273,7 +2273,9 @@ The `id` and `xpath` strategies, scrolling a view located with any strategy, and
 ### `mobile: scrollBackTo`
 
 Scrolls a scrollable view until the target element is reported as displayed. The target element
-must still exist in the view hierarchy for this to work.
+must still exist in the view hierarchy for this to work. The method has no direction parameter:
+the direction is detected automatically (`down`, or `right` if the view is a `HorizontalScrollView`).
+Use [mobile: scroll](#mobile-scroll) to scroll in an explicit direction.
 
 !!! warning "Deprecated"
 

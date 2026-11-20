@@ -106,13 +106,10 @@ static void scrollTo(AndroidDriver driver, WebElement view, String xpath) {
 - The strategies `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` are supported.
   Locate the element by `id` or `xpath` where possible.
 
-!!! warning "Legacy behavior is unchanged"
+!!! warning
 
-    A call that uses the `accessibility id`, `class name` or `-android uiautomator` strategy,
-    no view or a view located with `-android uiautomator`, and neither `direction` nor `fromStart`,
-    still goes through `UiScrollable`, which scrolls to the beginning first. A call that uses
-    `id` or `xpath`, a view located with another strategy, `direction` or `fromStart` is handled by
-    the gesture-based implementation described here.
+    Eventually, all locators based on the `-android uiautomator` strategy will fail, not only the
+    ones used for scrolling.
 
 ### Scroll horizontal lists
 

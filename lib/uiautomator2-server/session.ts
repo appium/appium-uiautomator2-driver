@@ -1,9 +1,6 @@
-import os from 'node:os';
-import path from 'node:path';
-
 import type {Orientation, StringRecord} from '@appium/types';
 import type {ADBLaunchInfo} from 'appium-android-driver';
-import {util, net} from 'appium/support.js';
+import {util} from 'appium/support.js';
 import {retryInterval} from 'asyncbox';
 import {SETTINGS_HELPER_ID} from 'io.appium.settings';
 import type {ExecError} from 'teen_process';
@@ -43,13 +40,9 @@ declare module '../driver.js' {
 // The range of ports we can use on the system for communicating to the
 // UiAutomator2 HTTP server on the device
 const DEVICE_PORT_RANGE = [8200, 8299];
-
-// The guard is needed to avoid dynamic system port allocation conflicts for
-// parallel driver sessions
-const DEVICE_PORT_ALLOCATION_GUARD = util.getLockFileGuard(path.resolve(os.tmpdir(), 'uia2_device_port_guard'), {
-  timeout: 25,
-  tryRecovery: true,
-});
+// ADB reports existing forwards separately from occupied or reserved listener ports.
+const PORT_UNAVAILABLE =
+  /cannot rebind|cannot bind listener:[^\r\n]*(?:address already in use|permission denied|only one usage of each socket address|\b10013\b|\b10048\b)/i;
 
 // This is the port that UiAutomator2 listens to on the device. We will forward
 // one of the ports above on the system to this port on the device.
@@ -61,57 +54,41 @@ const MJPEG_SERVER_DEVICE_PORT = 7810;
 const MIN_SUPPORTED_API_LEVEL = 26;
 const LOCALHOST_IP4 = '127.0.0.1';
 
-/** Forwards a local port to the UiAutomator2 server port on the device. */
+/** Reserves a port on the ADB server host and forwards it to the UiAutomator2 server. */
 export async function allocateSystemPort(this: AndroidUiautomator2Driver) {
   const adb = this.requireAdb();
-  const forwardPort = async (localPort: number) => {
-    this.log.debug(`Forwarding UiAutomator2 Server port ${DEVICE_PORT} to local port ${localPort}`);
-    if ((await net.checkPortStatus(localPort, {host: LOCALHOST_IP4})) === 'open') {
-      throw this.log.errorWithException(
-        `UiAutomator2 Server cannot start because the local port #${localPort} is busy. ` +
-          `Make sure the port you provide via 'systemPort' capability is not occupied. ` +
-          `This situation might often be a result of an inaccurate sessions management, e.g. ` +
-          `old automation sessions on the same device must always be closed before starting new ones.`,
-      );
-    }
-    await adb.forwardPort(localPort, DEVICE_PORT);
-  };
-
-  if (this.opts.systemPort) {
-    this.systemPort = this.opts.systemPort;
-    return await forwardPort(this.systemPort);
-  }
-
-  await DEVICE_PORT_ALLOCATION_GUARD(async () => {
-    const [startPort, endPort] = DEVICE_PORT_RANGE;
+  const requestedPort = this.opts.systemPort;
+  const [startPort, endPort] = requestedPort ? [requestedPort, requestedPort] : DEVICE_PORT_RANGE;
+  let lastPortError: unknown;
+  for (let port = startPort; port <= endPort; port++) {
     try {
-      this.systemPort = await net.getFreePort({port: [startPort, endPort]});
-    } catch {
-      throw this.log.errorWithException(
-        `Cannot find any free port in range ${startPort}..${endPort}}. ` +
-          `Please set the available port number by providing the systemPort capability or ` +
-          `double check the processes that are locking ports within this range and terminate ` +
-          `these which are not needed anymore`,
-      );
+      // All clients of this ADB server compete for the same ports, even across Appium hosts.
+      await adb.adbExec(['forward', '--no-rebind', `tcp:${port}`, `tcp:${DEVICE_PORT}`]);
+    } catch (err) {
+      if (!PORT_UNAVAILABLE.test((err as Error).message)) {
+        throw err;
+      }
+      if (requestedPort) {
+        throw new Error(`Requested systemPort #${port} is unavailable on the ADB host.`, {cause: err});
+      }
+      lastPortError = err;
+      continue;
     }
-    await forwardPort(this.systemPort);
-  });
+    this.systemPort = port;
+    this.log.debug(`Forwarded system port ${port} to UiAutomator2 Server port ${DEVICE_PORT}`);
+    return;
+  }
+  throw new Error(
+    `Cannot find any free port in range ${startPort}..${endPort} on the ADB host. Set an available systemPort for this session.`,
+    {cause: lastPortError},
+  );
 }
 
 /** Removes the UiAutomator2 server port forward. */
 export async function releaseSystemPort(this: AndroidUiautomator2Driver) {
-  const adb = this.adb;
-  const systemPort = this.systemPort;
-  if (!systemPort || !adb) {
-    return;
-  }
-
-  if (this.opts.systemPort) {
-    // We assume if the systemPort is provided manually then it must be unique,
-    // so there is no need for the explicit synchronization
-    await adb.removePortForward(systemPort);
-  } else {
-    await DEVICE_PORT_ALLOCATION_GUARD(async () => await adb.removePortForward(systemPort));
+  if (this.systemPort && this.adb) {
+    await this.adb.removePortForward(this.systemPort);
+    this.systemPort = undefined;
   }
 }
 
@@ -210,14 +187,9 @@ export async function performExecution(
   this: AndroidUiautomator2Driver,
   capsWithSessionInfo: StringRecord,
 ): Promise<void> {
-  await Promise.all([
-    // Prepare the device by forwarding the UiAutomator2 port
-    // This call mutates this.systemPort if it is not set explicitly
-    this.allocateSystemPort(),
-    // Prepare the device by forwarding the UiAutomator2 MJPEG server port (if
-    // applicable)
-    this.allocateMjpegServerPort(),
-  ]);
+  // Finish each reservation before a startup failure can trigger port cleanup.
+  await this.allocateSystemPort();
+  await this.allocateMjpegServerPort();
 
   const [uiautomator2] = await Promise.all([
     // set up the modified UiAutomator2 server etc

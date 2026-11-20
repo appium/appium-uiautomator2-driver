@@ -503,7 +503,7 @@ Available since driver version 6.7.0.
 | -- | -- | -- |
 | `appium:systemPort` | `integer` | `8200` |
 
-The port on the host machine where the UiAutomator2 server should be listening. Must be unique for
+The port on the ADB server host that forwards to the UiAutomator2 server on the device. Must be unique for
 each session - see the [Testing in Parallel guide](../guides/parallel-tests.md) for details. If not
 provided, Appium will try the first available port in the range `[8200, 8299]`.
 

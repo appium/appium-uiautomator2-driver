@@ -287,6 +287,82 @@ describe('driver.js', function () {
     });
   });
 
+  describe('system port forwarding', function () {
+    let driver: AndroidUiautomator2Driver;
+    let adb: ADB;
+
+    beforeEach(function () {
+      driver = new AndroidUiautomator2Driver();
+      adb = new ADB();
+      driver.adb = adb;
+    });
+
+    it('skips ports already forwarded or in use and releases only the reserved port', async function () {
+      driver.opts.remoteAdbHost = 'localhost';
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().rejects(new Error('adb: error: cannot rebind existing socket'));
+      forward.onSecondCall().rejects(new Error('adb: error: cannot bind listener: Address already in use'));
+      forward.onThirdCall().resolves('');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await driver.allocateSystemPort();
+      assert.deepEqual(
+        forward.getCalls().map((call) => call.args[0]),
+        [
+          ['forward', '--no-rebind', 'tcp:8200', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8201', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8202', 'tcp:6790'],
+        ],
+      );
+      assert.equal(driver.systemPort, 8202);
+      await driver.releaseSystemPort();
+      await driver.releaseSystemPort();
+      sinon.assert.calledOnceWithExactly(remove, 8202);
+    });
+
+    it('skips a port in the Windows excluded port range', async function () {
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().rejects(new Error('cannot bind listener: cannot bind to 127.0.0.1:8200: (10013)'));
+      forward.onSecondCall().resolves('');
+      await driver.allocateSystemPort();
+      assert.equal(driver.systemPort, 8201);
+    });
+
+    it('forwards the explicitly requested port without substituting another one', async function () {
+      driver.opts.systemPort = 8317;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      await driver.allocateSystemPort();
+      sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', 'tcp:8317', 'tcp:6790']);
+      assert.equal(driver.systemPort, 8317);
+    });
+
+    it('leaves an occupied explicit port alone during cleanup', async function () {
+      driver.opts.systemPort = 8317;
+      const forward = sandbox.stub(adb, 'adbExec').rejects(new Error('adb: error: cannot rebind existing socket'));
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+      await assert.rejects(driver.allocateSystemPort(), /8317.*unavailable/);
+      await driver.releaseSystemPort();
+      sinon.assert.calledOnce(forward);
+      sinon.assert.notCalled(remove);
+    });
+
+    it('propagates a device or transport error immediately', async function () {
+      const error = new Error('device offline');
+      const forward = sandbox.stub(adb, 'adbExec').rejects(error);
+      await assert.rejects(driver.allocateSystemPort(), error);
+      sinon.assert.calledOnce(forward);
+      assert.equal(driver.systemPort, undefined);
+    });
+
+    it('reports exhaustion without allocating outside the documented range', async function () {
+      const forward = sandbox.stub(adb, 'adbExec').rejects(new Error('adb: error: cannot rebind existing socket'));
+      await assert.rejects(driver.allocateSystemPort(), /8200\.\.8299/);
+      assert.equal(forward.callCount, 100);
+      assert.deepEqual(forward.lastCall.args[0], ['forward', '--no-rebind', 'tcp:8299', 'tcp:6790']);
+      assert.equal(driver.systemPort, undefined);
+    });
+  });
+
   describe('deleteSession', function () {
     let driver: AndroidUiautomator2Driver;
     beforeEach(function () {

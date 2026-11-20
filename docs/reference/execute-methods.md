@@ -2257,8 +2257,8 @@ stops if the end of the content is reached or after `maxSwipes` swipes.
 |`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `accessibility id`, `class name`, `id`, `xpath` and `-android uiautomator`.|
 |`selector`|`string`|Element selector to use for the specified locator strategy|
 |`elementId?`|`string`|Identifier of the view to scroll. The view must be scrollable. By default, the first currently available scrollable view is used.|
-|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`) for `UiScrollable`, and `30` for gestures.|
-|`direction?`|`string`|Direction to scroll in. Supported values are `up`, `down`, `left`, and `right` (case insensitive). By default, `down` is used, or `right` if the view is a `HorizontalScrollView`. Setting this argument makes the view to be scrolled with gestures.|
+|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`) for `UiScrollable`, and `30` for gestures. With `fromStart`, it also limits how far the view is scrolled back to the beginning, so a small value may not reach the start of a long list.|
+|`direction?`|`string`|Direction to scroll in. Supported values are `up`, `down`, `left`, and `right` (case insensitive). By default, `down` is used, or `right` if the view is a `HorizontalScrollView`. Other horizontal containers, such as a horizontal `RecyclerView` or a `ViewPager`, must be scrolled with an explicit `direction`. Setting this argument makes the view to be scrolled with gestures.|
 |`fromStart?`|`boolean`|Whether to scroll to the start of the content (the opposite of `direction`) before searching in the given direction. `false` by default. Setting this argument makes the view to be scrolled with gestures.|
 
 #### Response

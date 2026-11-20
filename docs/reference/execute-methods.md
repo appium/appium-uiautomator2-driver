@@ -2239,30 +2239,37 @@ Performs a pinch close gesture on the specified element or area using the W3C Ac
 
 ### `mobile: scroll`
 
-Scrolls a scrollable view until the element identified by `strategy` and `selector` becomes visible.
+Scrolls a scrollable view with gestures until the element identified by `strategy` and `selector`
+becomes visible. The element is searched for inside of the view after each swipe. The search stops
+if the end of the content is reached or after `maxSwipes` swipes. If the element is not found, the
+command fails with "no such element".
 
 This function returns immediately if the destination element is already visible in the viewport.
 
 The `id` and `xpath` strategies, scrolling a view located with any strategy, and the `direction` and
 `fromStart` arguments are available since driver version 9.4.0.
 
-The `accessibility id`, `class name` and `-android uiautomator` strategies, when used with a view
-located using `-android uiautomator` (or the default view) and without the `direction` and `fromStart`
-arguments, are handled by the native `UiScrollable` class. It detects the scroll direction automatically
-and always starts the search from the beginning of the content. Everything else is handled by scrolling
-the view with gestures until the element, searched for inside of the view, becomes visible. The search
-stops if the end of the content is reached or after `maxSwipes` swipes.
+!!! warning "Deprecated"
+
+    The legacy implementation based on the native `UiScrollable` class still serves the
+    `accessibility id`, `class name` and `-android uiautomator` strategies if neither `direction` nor
+    `fromStart` is set, and the view is either not set or was located using `-android uiautomator`.
+    It detects the scroll direction automatically and always starts from the beginning of the content.
+    It is deprecated and is going to be removed together with the support of the
+    `-android uiautomator` locator strategy. Use the `id` or `xpath` strategies, or set `direction`
+    or `fromStart`, to switch to scrolling with gestures. See
+    [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
 
 #### Parameters
 
 |<div style="width:6em">Name</div>|Type|Description|
 |--|--|--|
-|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `accessibility id`, `class name`, `id`, `xpath` and `-android uiautomator`.|
+|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` (deprecated).|
 |`selector`|`string`|Element selector to use for the specified locator strategy|
 |`elementId?`|`string`|Identifier of the view to scroll. The view must be scrollable. By default, the first currently available scrollable view is used.|
-|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`) for `UiScrollable`, and `30` for gestures. With `fromStart`, it also limits how far the view is scrolled back to the beginning, so a small value may not reach the start of a long list.|
-|`direction?`|`string`|Direction to scroll in. Supported values are `up`, `down`, `left`, and `right` (case insensitive). By default, `down` is used, or `right` if the view is a `HorizontalScrollView`. Other horizontal containers, such as a horizontal `RecyclerView` or a `ViewPager`, must be scrolled with an explicit `direction`. Setting this argument makes the view to be scrolled with gestures.|
-|`fromStart?`|`boolean`|Whether to scroll to the start of the content (the opposite of `direction`) before searching in the given direction. `false` by default. Setting this argument makes the view to be scrolled with gestures.|
+|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. `30` by default. With `fromStart`, it also limits how far the view is scrolled back to the beginning, so a small value may not reach the start of a long list.|
+|`direction?`|`string`|Direction to scroll in. Supported values are `up`, `down`, `left`, and `right` (case insensitive). By default, `down` is used, or `right` if the view is a `HorizontalScrollView`. Other horizontal containers, such as a horizontal `RecyclerView` or a `ViewPager`, must be scrolled with an explicit `direction`.|
+|`fromStart?`|`boolean`|Whether to scroll to the start of the content (the opposite of `direction`) before searching in the given direction. `false` by default.|
 
 #### Response
 
@@ -2270,11 +2277,15 @@ stops if the end of the content is reached or after `maxSwipes` swipes.
 
 ### `mobile: scrollBackTo`
 
-Scrolls a scrollable view until the target element becomes visible. If both elements have been
-located using the `-android uiautomator` strategy, the native `UiScrollable` class is used and the
-scroll direction is detected automatically. Otherwise, the view is scrolled with gestures, starting
-from the beginning of the content, until the target element is reported as displayed. The target
-element must still exist in the view hierarchy for this to work.
+Scrolls a scrollable view with gestures, starting from the beginning of the content, until the target
+element is reported as displayed. The target element must still exist in the view hierarchy for this to work.
+
+!!! warning "Deprecated"
+
+    If both elements have been located using the `-android uiautomator` strategy, the legacy
+    implementation based on the native `UiScrollable` class is used instead, and the scroll direction is
+    detected automatically. It is deprecated and is going to be removed together with the support of the
+    `-android uiautomator` locator strategy. Locate the elements using other strategies.
 
 #### Parameters
 

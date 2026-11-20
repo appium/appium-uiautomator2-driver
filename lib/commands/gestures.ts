@@ -3,6 +3,7 @@ import {errors} from 'appium/driver.js';
 import {util} from 'appium/support.js';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
+import {warnIfUiAutomatorScrollStrategy} from '../utils/deprecation.js';
 import type {RelativeRect} from './types.js';
 
 declare module '../driver.js' {
@@ -299,6 +300,7 @@ export async function mobileScroll(
   if (!strategy || !selector) {
     throw new errors.InvalidArgumentError(`Both strategy and selector arguments must be provided`);
   }
+  warnIfUiAutomatorScrollStrategy(this, strategy);
   await this.uiautomator2.jwproxy.command('/gestures/scroll_to', 'POST', {
     origin: toOrigin(elementId),
     params: {strategy, selector, maxSwipes},

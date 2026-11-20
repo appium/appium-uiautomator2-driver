@@ -67,6 +67,9 @@ the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) gu
     UiAutomator framework. This will render all `-android uiautomator`-based locators invalid, so
     keep this in mind while using them or planning to use them in the future.
 
+    The driver logs a warning, once per session, when a `UiScrollable` expression is used as a
+    locator or when `mobile: scroll` is called with this strategy.
+
 !!! info "When to Use"
 
     Use this strategy for elements that cannot be directly identified by their class name, `id`,

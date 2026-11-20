@@ -1,4 +1,4 @@
-import type {Orientation, StringRecord} from '@appium/types';
+import type {Orientation, Rotation, StringRecord} from '@appium/types';
 
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
@@ -7,6 +7,8 @@ declare module '../driver.js' {
     getPageSource(...args: Parameters<typeof getPageSource>): ReturnType<typeof getPageSource>;
     getOrientation(...args: Parameters<typeof getOrientation>): ReturnType<typeof getOrientation>;
     setOrientation(...args: Parameters<typeof setOrientation>): ReturnType<typeof setOrientation>;
+    getRotation(...args: Parameters<typeof getRotation>): ReturnType<typeof getRotation>;
+    setRotation(...args: Parameters<typeof setRotation>): ReturnType<typeof setRotation>;
     mobileGetDeviceInfo(...args: Parameters<typeof mobileGetDeviceInfo>): ReturnType<typeof mobileGetDeviceInfo>;
     mobileGetDeclaredOrientation(
       ...args: Parameters<typeof mobileGetDeclaredOrientation>
@@ -42,6 +44,24 @@ export async function setOrientation(this: AndroidUiautomator2Driver, orientatio
   await this.uiautomator2.jwproxy.command(`/orientation`, 'POST', {
     orientation: normalizedOrientation,
   });
+}
+
+/**
+ * Gets the current device rotation.
+ * @returns Object containing the current device rotation in degrees on each axis
+ */
+export async function getRotation(this: AndroidUiautomator2Driver): Promise<Rotation> {
+  return (await this.uiautomator2.jwproxy.command(`/rotation`, 'GET', {})) as Rotation;
+}
+
+/**
+ * Sets the device rotation.
+ * @param x - The desired rotation in degrees on the X axis
+ * @param y - The desired rotation in degrees on the Y axis
+ * @param z - The desired rotation in degrees on the Z axis
+ */
+export async function setRotation(this: AndroidUiautomator2Driver, x: number, y: number, z: number): Promise<void> {
+  await this.uiautomator2.jwproxy.command(`/rotation`, 'POST', {x, y, z});
 }
 
 /**

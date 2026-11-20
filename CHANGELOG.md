@@ -1,3 +1,9 @@
+## [9.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.2.2...v9.3.0) (2026-11-20)
+
+### Features
+
+* add handling for new rotation/context routes ([#1090](https://github.com/appium/appium-uiautomator2-driver/issues/1090)) ([6d97402](https://github.com/appium/appium-uiautomator2-driver/commit/6d974026a16dce6cff5e035c066d85e8e509373e))
+
 ## [9.2.2](https://github.com/appium/appium-uiautomator2-driver/compare/v9.2.1...v9.2.2) (2026-11-18)
 
 ### Miscellaneous Chores

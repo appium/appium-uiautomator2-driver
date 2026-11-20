@@ -14,7 +14,8 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
     versions, `mobile: scroll` only supports the `accessibility id`, `class name` and
     `-android uiautomator` strategies, and `mobile: scrollGesture` requires an element or an area.
     The Java snippets use
-    [java-client](https://github.com/appium/java-client) 10 and Selenium 4. The code is
+    [java-client](https://github.com/appium/java-client) 11. With java-client 10, cast the elements to
+    `RemoteWebElement` instead of `AppiumWebElement` to get their identifiers. The approach is
     the same for any client, only the way of calling `mobile:` commands differs.
 
 ## Why migrate
@@ -92,7 +93,7 @@ static void scrollTo(AndroidDriver driver, String xpath) {
 /** Scrolls the given view from its beginning, using at most 10 swipes. */
 static void scrollTo(AndroidDriver driver, WebElement view, String xpath) {
     driver.executeScript("mobile: scroll", Map.of(
-            "elementId", ((RemoteWebElement) view).getId(),
+            "elementId", ((AppiumWebElement) view).getId(),
             "strategy", "xpath",
             "selector", xpath,
             "fromStart", true,
@@ -122,7 +123,7 @@ strips. Other horizontal containers, for example a horizontal `RecyclerView`, ne
 /** Scrolls a horizontal view that is not a HorizontalScrollView, for example a RecyclerView. */
 static void scrollRightTo(AndroidDriver driver, WebElement view, String xpath) {
     driver.executeScript("mobile: scroll", Map.of(
-            "elementId", ((RemoteWebElement) view).getId(),
+            "elementId", ((AppiumWebElement) view).getId(),
             "strategy", "xpath",
             "selector", xpath,
             "direction", "right"));
@@ -138,14 +139,14 @@ scrolls that many pages, stopping at the end:
 /** Values of "percent" above 1 scroll that many pages and stop at the end of the content. */
 static void scrollToEnd(AndroidDriver driver, WebElement view) {
     driver.executeScript("mobile: scrollGesture", Map.of(
-            "elementId", ((RemoteWebElement) view).getId(),
+            "elementId", ((AppiumWebElement) view).getId(),
             "direction", "down",
             "percent", 50));
 }
 
 static void scrollToBeginning(AndroidDriver driver, WebElement view) {
     driver.executeScript("mobile: scrollGesture", Map.of(
-            "elementId", ((RemoteWebElement) view).getId(),
+            "elementId", ((AppiumWebElement) view).getId(),
             "direction", "up",
             "percent", 50));
 }
@@ -170,7 +171,7 @@ static WebElement scrollIntoView(AndroidDriver driver, WebElement view, By targe
                 return found.get(0);
             }
             boolean canScrollMore = (Boolean) driver.executeScript("mobile: scrollGesture", Map.of(
-                    "elementId", ((RemoteWebElement) view).getId(),
+                    "elementId", ((AppiumWebElement) view).getId(),
                     "direction", "down",
                     "percent", 0.7));
             if (!canScrollMore) {
@@ -208,7 +209,7 @@ Swipe them instead:
 /** Pages a carousel or a ViewPager to the next page. */
 static void nextPage(AndroidDriver driver, WebElement pager) {
     driver.executeScript("mobile: swipeGesture", Map.of(
-            "elementId", ((RemoteWebElement) pager).getId(),
+            "elementId", ((AppiumWebElement) pager).getId(),
             "direction", "left",
             "percent", 0.75));
 }

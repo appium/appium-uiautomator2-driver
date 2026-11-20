@@ -11,6 +11,11 @@ their performance is very close to native.
 The driver enables the use of locator types via the [`-android uiautomator`](../reference/locator-strategies.md#uiautomator)
 locator strategy.
 
+!!! warning
+
+    Google is going to remove `UiScrollable` and `UiSelector` from the UiAutomator framework.
+    If you use these locators to scroll, see [Migrating from UiScrollable and UiSelector](migrating-from-uiscrollable.md).
+
 ## Examples
 
 Note that the index selector is unreliable so prefer instance instead. The following examples are

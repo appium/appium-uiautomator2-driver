@@ -59,6 +59,7 @@ This strategy is mapped to the native UI Automator [`UiSelector`](https://develo
 
 The strategy also allows to implicitly perform some advanced operations, like scrolling. Refer to
 the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) guide for more details.
+To scroll without `UiScrollable`, see [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
 
 !!! warning
 

@@ -21,7 +21,9 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 
 - `UiScrollable` is going away, and so are the locators built on `UiSelector`, including the ones the
   driver generates for the `css selector` strategy.
-- It is slow on horizontal lists: scrolling a 30-tab strip to the last tab took about 60 seconds.
+- It can be slow. On an emulator, scrolling a strip of 30 tabs from the first tab to the 28th took
+  about 41 seconds with `UiScrollable` and about 28 seconds with `mobile: scroll`, and to the 10th tab
+  about 19 and 7 seconds (medians of 2 or 3 runs).
 - It hides failures. If the chain of a `UiScrollable` locator has a setter (`setMaxSearchSwipes`,
   `setAsHorizontalList`, ...) and the target is not on the screen yet, the lookup returns the scrollable
   container instead of the target, even if the target does not exist, instead of failing with
@@ -152,29 +154,37 @@ static void scrollToBeginning(AndroidDriver driver, WebElement view) {
 ### Your own search loop
 
 If you need your own stop condition, for example a text that appears after a scroll, call `mobile: scrollGesture`
-in a loop. Use `findElements` in the loop: unlike `findElement` it does not wait for the implicit timeout.
+in a loop. Set the implicit wait to zero while the loop is running, because otherwise every lookup that
+finds nothing takes as long as the implicit wait, and restore it afterwards:
 
 ```java
 /** The same as scrollTo, but with your own stop condition and no dependency on the strategies above. */
 static WebElement scrollIntoView(AndroidDriver driver, WebElement view, By target, int maxSwipes) {
-    for (int i = 0; i <= maxSwipes; i++) {
-        List<WebElement> found = view.findElements(target);
-        if (!found.isEmpty()) {
-            return found.get(0);
-        }
-        boolean canScrollMore = (Boolean) driver.executeScript("mobile: scrollGesture", Map.of(
-                "elementId", ((RemoteWebElement) view).getId(),
-                "direction", "down",
-                "percent", 0.7));
-        if (!canScrollMore) {
-            List<WebElement> last = view.findElements(target); // the final swipe might have revealed it
-            if (!last.isEmpty()) {
-                return last.get(0);
+    // Every lookup that finds nothing would otherwise take as long as the implicit wait
+    Duration implicitWait = driver.manage().timeouts().getImplicitWaitTimeout();
+    driver.manage().timeouts().implicitlyWait(Duration.ZERO);
+    try {
+        for (int i = 0; i <= maxSwipes; i++) {
+            List<WebElement> found = view.findElements(target);
+            if (!found.isEmpty()) {
+                return found.get(0);
             }
-            break;
+            boolean canScrollMore = (Boolean) driver.executeScript("mobile: scrollGesture", Map.of(
+                    "elementId", ((RemoteWebElement) view).getId(),
+                    "direction", "down",
+                    "percent", 0.7));
+            if (!canScrollMore) {
+                List<WebElement> last = view.findElements(target); // the final swipe might have revealed it
+                if (!last.isEmpty()) {
+                    return last.get(0);
+                }
+                break;
+            }
         }
+        throw new NoSuchElementException("Cannot scroll to " + target);
+    } finally {
+        driver.manage().timeouts().implicitlyWait(implicitWait);
     }
-    throw new NoSuchElementException("Cannot scroll to " + target);
 }
 ```
 

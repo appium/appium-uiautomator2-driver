@@ -105,8 +105,8 @@ static void scrollTo(AndroidDriver driver, WebElement view, String xpath) {
   resource id to `(//*[@scrollable='true'])[1]`.
 - The search goes down by default. It does not return to the beginning of the content unless
   `fromStart` is `true`, so use `fromStart` if the element might be above the current position.
-- The strategies `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` are supported.
-  Locate the element by `id` or `xpath` where possible.
+- The strategies `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` are supported,
+  but `-android uiautomator` is deprecated.
 
 !!! warning
 

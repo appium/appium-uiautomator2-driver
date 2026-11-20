@@ -2251,14 +2251,9 @@ The `id` and `xpath` strategies, scrolling a view located with any strategy, and
 
 !!! warning "Deprecated"
 
-    The legacy implementation based on the native `UiScrollable` class still serves the
-    `accessibility id`, `class name` and `-android uiautomator` strategies if neither `direction` nor
-    `fromStart` is set, and the view is either not set or was located using `-android uiautomator`.
-    It detects the scroll direction automatically and always starts from the beginning of the content.
-    It is deprecated and is going to be removed together with the support of the
-    `-android uiautomator` locator strategy. Use the `id` or `xpath` strategies, or set `direction`
-    or `fromStart`, to switch to scrolling with gestures. See
-    [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
+    The `-android uiautomator` strategy is deprecated and is going to be removed, because Google is
+    removing `UiScrollable` and `UiSelector` from the UiAutomator framework. Use another strategy.
+    See [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
 
 #### Parameters
 
@@ -2277,15 +2272,14 @@ The `id` and `xpath` strategies, scrolling a view located with any strategy, and
 
 ### `mobile: scrollBackTo`
 
-Scrolls a scrollable view with gestures, starting from the beginning of the content, until the target
-element is reported as displayed. The target element must still exist in the view hierarchy for this to work.
+Scrolls a scrollable view until the target element is reported as displayed. The target element
+must still exist in the view hierarchy for this to work.
 
 !!! warning "Deprecated"
 
-    If both elements have been located using the `-android uiautomator` strategy, the legacy
-    implementation based on the native `UiScrollable` class is used instead, and the scroll direction is
-    detected automatically. It is deprecated and is going to be removed together with the support of the
-    `-android uiautomator` locator strategy. Locate the elements using other strategies.
+    Elements located using the `-android uiautomator` strategy are deprecated and are going to stop
+    working, because Google is removing `UiScrollable` and `UiSelector` from the UiAutomator
+    framework. Locate the elements using other strategies.
 
 #### Parameters
 

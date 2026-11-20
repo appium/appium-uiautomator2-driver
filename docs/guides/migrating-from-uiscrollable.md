@@ -165,24 +165,21 @@ static WebElement scrollIntoView(AndroidDriver driver, WebElement view, By targe
     Duration implicitWait = driver.manage().timeouts().getImplicitWaitTimeout();
     driver.manage().timeouts().implicitlyWait(Duration.ZERO);
     try {
-        for (int i = 0; i <= maxSwipes; i++) {
-            List<WebElement> found = view.findElements(target);
-            if (!found.isEmpty()) {
-                return found.get(0);
-            }
+        List<WebElement> found = view.findElements(target);
+        for (int i = 0; i < maxSwipes && found.isEmpty(); i++) {
             boolean canScrollMore = (Boolean) driver.executeScript("mobile: scrollGesture", Map.of(
                     "elementId", ((AppiumWebElement) view).getId(),
                     "direction", "down",
                     "percent", 0.7));
+            found = view.findElements(target);
             if (!canScrollMore) {
-                List<WebElement> last = view.findElements(target); // the final swipe might have revealed it
-                if (!last.isEmpty()) {
-                    return last.get(0);
-                }
                 break;
             }
         }
-        throw new NoSuchElementException("Cannot scroll to " + target);
+        if (found.isEmpty()) {
+            throw new NoSuchElementException("Cannot scroll to " + target);
+        }
+        return found.get(0);
     } finally {
         driver.manage().timeouts().implicitlyWait(implicitWait);
     }

@@ -2108,18 +2108,28 @@ Performs a double click action on the specified element or coordinates using the
 
 Performs a scroll action on the specified element or area using the W3C Actions API.
 
+If neither `elementId` nor the area (`left`/`top`/`width`/`height`) is provided, the first scrollable
+element on the current display is scrolled.
+
 #### Parameters
 
 |<div style="width:6em">Name</div>|Type|Description|
 |--|--|--|
 |`direction`|`string`|Direction to scroll. Supported values are `up`, `down`, `left`, and `right` (case insensitive).|
-|`percent`|`float`|Fraction of the element/area to scroll. Must be in range `(0..1]`.|
-|`elementId?`|`string`|The identifier of an element whose bounds should be used as the scroll area. Either this property or `left`/`top`/`width`/`height` must be provided.|
-|`left?`|`float`|Coordinate offset on the X-axis for the start of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
-|`top?`|`float`|Coordinate offset on the Y-axis for the start of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
-|`width?`|`float`|Width of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
-|`height?`|`float`|Height of the scroll area. Either this property or `elementId` must be provided. Ignored if both are provided.|
+|`percent`|`float`|Fraction of the element/area to scroll. Must be greater than zero. Values above `1` scroll that many pages and stop early if the end of the content is reached.|
+|`elementId?`|`string`|The identifier of an element whose bounds should be used as the scroll area. Gestures on elements keep a 10% margin from the element's edges.|
+|`left?`|`float`|Coordinate offset on the X-axis for the start of the scroll area. Must be provided together with `top`, `width` and `height`. Ignored if `elementId` is provided.|
+|`top?`|`float`|Coordinate offset on the Y-axis for the start of the scroll area. Must be provided together with `left`, `width` and `height`. Ignored if `elementId` is provided.|
+|`width?`|`float`|Width of the scroll area. Must be provided together with `left`, `top` and `height`. Ignored if `elementId` is provided.|
+|`height?`|`float`|Height of the scroll area. Must be provided together with `left`, `top` and `width`. Ignored if `elementId` is provided.|
 |`speed?`|`integer`|Speed of the scroll gesture in pixels per second. Set to `1500 * displayDensity` by default.|
+
+!!! note
+
+    The gesture starts at the edge of the scroll area. An area that covers the whole display is
+    clamped to the last pixel of the display, so such an edge-to-edge gesture may be interpreted as a
+    system gesture (for example, going home) if gesture navigation is enabled on the device. Prefer
+    an element or an area that is inset from the screen edges.
 
 #### Response
 

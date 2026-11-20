@@ -316,7 +316,14 @@ function toPoint(x?: number, y?: number): Partial<Position> | undefined {
 }
 
 function toRect(left?: number, top?: number, width?: number, height?: number): RelativeRect | undefined {
-  return [left, top, width, height].some((v) => !Number.isFinite(v))
-    ? undefined
-    : ({left, top, width, height} as RelativeRect);
+  const values = [left, top, width, height];
+  if (values.every((v) => v === undefined || v === null)) {
+    return undefined;
+  }
+  if (values.some((v) => !Number.isFinite(v))) {
+    throw new errors.InvalidArgumentError(
+      `The 'left', 'top', 'width' and 'height' arguments must be provided together as finite numbers`,
+    );
+  }
+  return {left, top, width, height} as RelativeRect;
 }

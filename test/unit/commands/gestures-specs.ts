@@ -42,6 +42,14 @@ describe('Gestures', function () {
       });
       assert.deepEqual(commandStub.firstCall.args[2].area, {left: 1, top: 2, width: 3, height: 4});
     });
+
+    it('should reject a partial area', async function () {
+      await assert.rejects(
+        driver.execute('mobile: scrollGesture', {direction: 'down', percent: 1, left: 1, top: 2}),
+        /must be provided together/,
+      );
+      assert.equal(commandStub.callCount, 0);
+    });
   });
 
   describe('mobile: scroll', function () {

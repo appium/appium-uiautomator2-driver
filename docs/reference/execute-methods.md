@@ -2109,7 +2109,7 @@ Performs a double click action on the specified element or coordinates using the
 Performs a scroll action on the specified element or area using the W3C Actions API.
 
 If neither `elementId` nor the area (`left`/`top`/`width`/`height`) is provided, the first scrollable
-element on the current display is scrolled.
+element on the current display is scrolled. This is available since driver version 9.4.0.
 
 #### Parameters
 
@@ -2242,6 +2242,9 @@ Performs a pinch close gesture on the specified element or area using the W3C Ac
 Scrolls a scrollable view until the element identified by `strategy` and `selector` becomes visible.
 
 This function returns immediately if the destination element is already visible in the viewport.
+
+The `id` and `xpath` strategies, scrolling a view located with any strategy, and the `direction` and
+`fromStart` arguments are available since driver version 9.4.0.
 
 The `accessibility id`, `class name` and `-android uiautomator` strategies, when used with a view
 located using `-android uiautomator` (or the default view) and without the `direction` and `fromStart`

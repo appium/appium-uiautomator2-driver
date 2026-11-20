@@ -10,8 +10,8 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 
 !!! note "Requirements"
 
-    The `mobile: scroll` features described here need a driver that bundles
-    `appium-uiautomator2-server` 11.2.0 or newer. The Java snippets use
+    The features described here need `appium-uiautomator2-server` 11.2.1 or newer, which the
+    driver installs by default. The Java snippets use
     [java-client](https://github.com/appium/java-client) 10 and Selenium 4. The code is
     the same for any client, only the way of calling `mobile:` commands differs.
 

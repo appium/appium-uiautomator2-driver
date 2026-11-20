@@ -288,6 +288,8 @@ export async function mobileScrollBackTo(
  * @param selector - Selector string for the element to find.
  * @param elementId - Optional element to use as the origin for scrolling.
  * @param maxSwipes - Optional maximum number of swipes to perform.
+ * @param direction - Optional direction to scroll in ('up', 'down', 'left', 'right').
+ * @param fromStart - Whether to scroll to the start of the content before searching.
  * @throws {errors.InvalidArgumentError} If either strategy or selector is not provided.
  */
 export async function mobileScroll(
@@ -296,6 +298,8 @@ export async function mobileScroll(
   selector: string,
   elementId?: AppiumElement | string,
   maxSwipes?: number,
+  direction?: string,
+  fromStart?: boolean,
 ): Promise<void> {
   if (!strategy || !selector) {
     throw new errors.InvalidArgumentError(`Both strategy and selector arguments must be provided`);
@@ -303,7 +307,7 @@ export async function mobileScroll(
   warnIfUiAutomatorScrollStrategy(this, strategy);
   await this.uiautomator2.jwproxy.command('/gestures/scroll_to', 'POST', {
     origin: toOrigin(elementId),
-    params: {strategy, selector, maxSwipes},
+    params: {strategy, selector, maxSwipes, direction, fromStart},
   });
 }
 

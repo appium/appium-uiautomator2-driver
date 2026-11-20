@@ -2240,18 +2240,26 @@ Performs a pinch close gesture on the specified element or area using the W3C Ac
 ### `mobile: scroll`
 
 Scrolls a scrollable view until the element identified by `strategy` and `selector` becomes visible.
-The scroll direction is detected automatically.
 
 This function returns immediately if the destination element is already visible in the viewport.
+
+The `accessibility id`, `class name` and `-android uiautomator` strategies, when used with a view
+located using `-android uiautomator` (or the default view) and without the `direction` and `fromStart`
+arguments, are handled by the native `UiScrollable` class. It detects the scroll direction automatically
+and always starts the search from the beginning of the content. Everything else is handled by scrolling
+the view with gestures until the element, searched for inside of the view, becomes visible. The search
+stops if the end of the content is reached or after `maxSwipes` swipes.
 
 #### Parameters
 
 |<div style="width:6em">Name</div>|Type|Description|
 |--|--|--|
-|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `accessibility id`, `class name`, and `-android uiautomator`.|
+|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `accessibility id`, `class name`, `id`, `xpath` and `-android uiautomator`.|
 |`selector`|`string`|Element selector to use for the specified locator strategy|
-|`elementId?`|`string`|Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the `-android uiautomator` strategy. By default, the first currently available scrollable view is used.|
-|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`).|
+|`elementId?`|`string`|Identifier of the view to scroll. The view must be scrollable. By default, the first currently available scrollable view is used.|
+|`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (`getMaxSearchSwipes()`) for `UiScrollable`, and `30` for gestures.|
+|`direction?`|`string`|Direction to scroll in. Supported values are `up`, `down`, `left`, and `right` (case insensitive). By default, `down` is used, or `right` if the view is a `HorizontalScrollView`. Setting this argument makes the view to be scrolled with gestures.|
+|`fromStart?`|`boolean`|Whether to scroll to the start of the content (the opposite of `direction`) before searching in the given direction. `false` by default. Setting this argument makes the view to be scrolled with gestures.|
 
 #### Response
 
@@ -2259,15 +2267,18 @@ This function returns immediately if the destination element is already visible 
 
 ### `mobile: scrollBackTo`
 
-Scrolls a scrollable view until the target element becomes visible. The scroll direction is
-detected automatically.
+Scrolls a scrollable view until the target element becomes visible. If both elements have been
+located using the `-android uiautomator` strategy, the native `UiScrollable` class is used and the
+scroll direction is detected automatically. Otherwise, the view is scrolled with gestures, starting
+from the beginning of the content, until the target element is reported as displayed. The target
+element must still exist in the view hierarchy for this to work.
 
 #### Parameters
 
 |<div style="width:7em">Name</div>|Type|Description|
 |--|--|--|
-|`elementId`|`string`|Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the `-android uiautomator` strategy.|
-|`elementToId`|`string`|Identifier of the element to scroll to. The element matching this identifier must be locatable using the `-android uiautomator` strategy.|
+|`elementId`|`string`|Identifier of the view to scroll.|
+|`elementToId`|`string`|Identifier of the element to scroll to.|
 
 #### Response
 

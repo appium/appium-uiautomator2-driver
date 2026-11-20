@@ -50,6 +50,12 @@ describe('Gestures', function () {
       );
       assert.equal(commandStub.callCount, 0);
     });
+
+    it('should ignore a partial area if an element is given', async function () {
+      await driver.execute('mobile: scrollGesture', {elementId: 'el1', direction: 'down', percent: 1, left: 1, top: 2});
+      assert.equal(commandStub.callCount, 1);
+      assert.equal(commandStub.firstCall.args[2].area, undefined);
+    });
   });
 
   describe('mobile: scroll', function () {

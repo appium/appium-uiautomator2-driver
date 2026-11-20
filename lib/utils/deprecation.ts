@@ -1,6 +1,6 @@
 import type {AndroidUiautomator2Driver} from '../driver.js';
 
-const UI_SCROLLABLE_PATTERN = /\bUiScrollable\b/;
+const UI_SCROLLABLE_PATTERN = /\bnew\s+UiScrollable\s*\(/;
 const UIAUTOMATOR_STRATEGY = '-android uiautomator';
 const MIGRATION_DOC_URL =
   'https://appium.github.io/appium-uiautomator2-driver/latest/guides/migrating-from-uiscrollable/';

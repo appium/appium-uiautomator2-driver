@@ -136,7 +136,7 @@ export async function mobileFlingGesture(
 ): Promise<boolean> {
   return (await this.uiautomator2.jwproxy.command('/appium/gestures/fling', 'POST', {
     origin: toOrigin(elementId),
-    area: toRect(left, top, width, height),
+    area: toRect(elementId, left, top, width, height),
     direction,
     speed,
   })) as boolean;
@@ -164,7 +164,7 @@ export async function mobilePinchCloseGesture(
 ): Promise<void> {
   await this.uiautomator2.jwproxy.command('/appium/gestures/pinch_close', 'POST', {
     origin: toOrigin(elementId),
-    area: toRect(left, top, width, height),
+    area: toRect(elementId, left, top, width, height),
     percent,
     speed,
   });
@@ -192,7 +192,7 @@ export async function mobilePinchOpenGesture(
 ): Promise<void> {
   await this.uiautomator2.jwproxy.command('/appium/gestures/pinch_open', 'POST', {
     origin: toOrigin(elementId),
-    area: toRect(left, top, width, height),
+    area: toRect(elementId, left, top, width, height),
     percent,
     speed,
   });
@@ -222,7 +222,7 @@ export async function mobileSwipeGesture(
 ): Promise<void> {
   await this.uiautomator2.jwproxy.command('/appium/gestures/swipe', 'POST', {
     origin: toOrigin(elementId),
-    area: toRect(left, top, width, height),
+    area: toRect(elementId, left, top, width, height),
     direction,
     percent,
     speed,
@@ -254,7 +254,7 @@ export async function mobileScrollGesture(
 ): Promise<boolean> {
   return (await this.uiautomator2.jwproxy.command('/appium/gestures/scroll', 'POST', {
     origin: toOrigin(elementId),
-    area: toRect(left, top, width, height),
+    area: toRect(elementId, left, top, width, height),
     direction,
     percent,
     speed,
@@ -319,12 +319,22 @@ function toPoint(x?: number, y?: number): Partial<Position> | undefined {
   return Number.isFinite(x) && Number.isFinite(y) ? {x, y} : undefined;
 }
 
-function toRect(left?: number, top?: number, width?: number, height?: number): RelativeRect | undefined {
+function toRect(
+  elementId?: AppiumElement | string,
+  left?: number,
+  top?: number,
+  width?: number,
+  height?: number,
+): RelativeRect | undefined {
   const values = [left, top, width, height];
   if (values.every((v) => v === undefined || v === null)) {
     return undefined;
   }
   if (values.some((v) => !Number.isFinite(v))) {
+    // The area is ignored by the server if an origin element is given
+    if (elementId) {
+      return undefined;
+    }
     throw new errors.InvalidArgumentError(
       `The 'left', 'top', 'width' and 'height' arguments must be provided together as finite numbers`,
     );

@@ -38,6 +38,11 @@ describe('Find', function () {
     assert.equal(warnStub.callCount, 0);
   });
 
+  it('should not warn about locators with text mentioning UiScrollable', async function () {
+    await find('-android uiautomator', 'new UiSelector().text("UiScrollable")');
+    assert.equal(warnStub.callCount, 0);
+  });
+
   it('should not warn about other strategies mentioning UiScrollable', async function () {
     await find('xpath', '//*[@text="UiScrollable"]');
     assert.equal(warnStub.callCount, 0);

@@ -304,7 +304,7 @@ Refer to the [MJPEG guide](../guides/mjpeg.md) for more details.
 The port on the device under test to start the MJPEG screenshot broadcaster on. Must be in range
 `1024..65535`.
 
-On the host machine, the forwarded MJPEG server port can be configured using the
+On the ADB server host, the forwarded MJPEG server port can be configured using the
 [`appium:mjpegServerPort`](./capabilities.md#mjpegserverport) capability.
 
 Refer to the [MJPEG guide](../guides/mjpeg.md) for more details.
@@ -351,7 +351,7 @@ under the hood.
 The port on the device under test to start the UiAutomator2 server on. Must be in range
 `1024..65535`.
 
-On the host machine, the forwarded UiAutomator2 server port can be configured using the
+On the ADB server host, the forwarded UiAutomator2 server port can be configured using the
 [`appium:systemPort`](./capabilities.md#systemport) capability.
 
 ## `shouldUseCompactResponses`

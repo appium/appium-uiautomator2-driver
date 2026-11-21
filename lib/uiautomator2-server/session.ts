@@ -67,10 +67,18 @@ async function tryReservePort(adb: ADB, host: string, port: number, devicePort: 
   try {
     await adb.adbExec(['forward', '--no-rebind', `tcp:${port}`, `tcp:${devicePort}`]);
   } catch (err) {
-    if (PORT_UNAVAILABLE.test((err as Error).message)) {
-      return err as Error;
+    const cause = err instanceof Error ? err : new Error(String(err));
+    if (PORT_UNAVAILABLE.test(cause.message)) {
+      return cause;
     }
-    throw err;
+    // A transport error can hide a successful forward. ADB cannot tell us which
+    // client owns the mapping, so removing an unconfirmed forward is unsafe.
+    throw new Error(
+      `Could not confirm the ADB forward for tcp:${port} on ${host}: ${cause.message}. ` +
+        'Check the same ADB server with adb forward --list. ' +
+        `If you confirm the mapping is stale, remove it with adb forward --remove tcp:${port} for its device.`,
+      {cause: err},
+    );
   }
 }
 

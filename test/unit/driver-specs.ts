@@ -349,10 +349,22 @@ describe('driver.js', function () {
     });
 
     for (const host of ['127.0.0.1', '::1', '0:0:0:0:0:0:0:1']) {
-      it(`checks an occupied ${host} listener only for a local ADB connection`, async function () {
+      it(`checks an occupied ${host} listener only for a local ADB connection`, async function (t) {
         const listener = createServer((socket) => socket.end());
+        const listening = once(listener, 'listening');
         listener.listen(0, host);
-        await once(listener, 'listening');
+        try {
+          await listening;
+        } catch (err) {
+          if (
+            host.includes(':') &&
+            ['EADDRNOTAVAIL', 'EAFNOSUPPORT'].includes((err as NodeJS.ErrnoException).code ?? '')
+          ) {
+            t.skip('IPv6 loopback is unavailable');
+            return;
+          }
+          throw err;
+        }
         try {
           const {port} = listener.address() as AddressInfo;
           driver.opts.systemPort = port;
@@ -396,11 +408,18 @@ describe('driver.js', function () {
       sinon.assert.notCalled(remove);
     });
 
-    it('propagates a device or transport error immediately', async function () {
+    it('reports an unconfirmed system forward without retrying or removing it', async function () {
       const error = new Error('device offline');
       const forward = sandbox.stub(adb, 'adbExec').rejects(error);
-      await assert.rejects(driver.allocateSystemPort(), error);
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.allocateSystemPort(), {
+        message: /tcp:8200 on adb\.example\.test: device offline.*adb forward --list.*adb forward --remove tcp:8200/,
+        cause: error,
+      });
+      await driver.releaseSystemPort();
       sinon.assert.calledOnce(forward);
+      sinon.assert.notCalled(remove);
       assert.equal(driver.systemPort, undefined);
     });
 
@@ -430,6 +449,27 @@ describe('driver.js', function () {
       await assert.rejects(driver.performSessionExecution({}), /mjpegServerPort #9100.*cannot rebind/);
       assert.deepEqual(forward.secondCall.args[0], ['forward', '--no-rebind', 'tcp:9100', 'tcp:7810']);
       await driver.deleteSession();
+      sinon.assert.calledOnceWithExactly(remove, 8317);
+    });
+
+    it('releases only the confirmed system forward after an ambiguous MJPEG timeout', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      const timeout = new Error('ADB command timed out');
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().resolves('');
+      forward.onSecondCall().rejects(timeout);
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), {
+        message: /tcp:9100 on adb\.example\.test: ADB command timed out.*adb forward --list/,
+        cause: timeout,
+      });
+      assert.equal(driver.mjpegServerPort, undefined);
+      await driver.deleteSession();
+      sinon.assert.calledTwice(forward);
       sinon.assert.calledOnceWithExactly(remove, 8317);
     });
 

@@ -557,6 +557,10 @@ app is not compatible with the driver or the app under test.
 The port on the ADB server host used to connect to the MJPEG stream outside of the session. Choose a
 free port unique to this session. If omitted, the MJPEG stream is not forwarded from the device.
 
+Session creation fails if the port is already forwarded. The driver previously replaced the
+existing MJPEG forward. See [Recovering a stale forward](../guides/mjpeg.md#recovering-a-stale-forward)
+if a session ended without releasing the port.
+
 On the device under test, the MJPEG server port can be configured using the
 [`mjpegServerPort`](./settings.md#mjpegserverport) setting.
 

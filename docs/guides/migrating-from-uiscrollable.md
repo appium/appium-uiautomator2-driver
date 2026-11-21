@@ -29,7 +29,7 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
   `setAsHorizontalList`, ...) and the target is not on the screen yet, the lookup returns the scrollable
   container instead of the target, even if the target does not exist, instead of failing with
   "no such element".
-- Its scroll direction, search start and swipe count are decided by the framework and cannot be tuned.
+- `scrollIntoView()` always starts searching from the beginning of the content and has no parameter to change that.
 
 ## What replaces what
 
@@ -50,9 +50,9 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 | `UiSelector` | XPath | Other strategies |
 |---|---|---|
 | `.text("A")` | `//*[@text='A']` | |
-| `.textContains("A")` | `//*[contains(@text, 'A')]` | |
-| `.textStartsWith("A")` | `//*[starts-with(@text, 'A')]` | |
-| `.textMatches("A.*")` | `//*[matches(@text, 'A.*')]` (XPath 2, server 4.25 and newer) | |
+| `.textContains("A")` | `//*[contains(lower-case(@text), 'a')]` (XPath 2) | |
+| `.textStartsWith("A")` | `//*[starts-with(lower-case(@text), 'a')]` (XPath 2) | |
+| `.textMatches("A.*")` | `//*[matches(@text, '^A.*$', 's')]` (XPath 2) | |
 | `.description("A")` | `//*[@content-desc='A']` | `accessibility id` |
 | `.resourceId("pkg:id/a")` | `//*[@resource-id='pkg:id/a']` | `id` |
 | `.className("android.widget.Button")` | `//android.widget.Button` | `class name` |
@@ -60,6 +60,12 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 | `.clickable(true)`, `.checked(true)`, ... | `//*[@clickable='true']`, `//*[@checked='true']` | |
 | `.instance(n)` | `(<expression>)[n + 1]` | |
 | `.childSelector(...)` | A nested path, for example `//*[@resource-id='list']//*[@text='A']` | |
+
+`UiSelector` is not case sensitive in the `...Contains` and `...StartsWith` methods, so the XPath above lower-cases the
+attribute and expects a lower-case literal. The `...Matches` methods must match the whole value, and `.` also matches
+line breaks, hence the anchors and the `s` flag. The `description...` methods behave the same way for `@content-desc`.
+The exact matches, `text()` and `description()`, are case sensitive. XPath 2 is the default, unless the
+[`enforceXPath1`](../reference/settings.md#enforcexpath1) setting is enabled.
 
 ## Choosing the tool
 
@@ -188,14 +194,20 @@ static WebElement scrollIntoView(AndroidDriver driver, WebElement view, By targe
 
 ### Find a child of the view
 
-`getChildByText()` found a child of the scrollable view and scrolled to it. Scroll first, then look for the child:
+`getChildByText(childPattern, text)` found a child of the scrollable view that matches `childPattern` and contains the text, and
+scrolled to it. It returns that child, for example the list row, not the nested text view. Scroll first, then look for
+the child with a nested XPath. `Quotes.escape()` makes the text safe for labels that contain quotes:
 
 ```java
-/** Replaces UiScrollable.getChildByText(). Scroll to the child first. */
-static WebElement childByText(WebElement view, String text) {
-    return view.findElement(AppiumBy.xpath(".//*[@text='" + text + "']"));
+/** Replaces UiScrollable.getChildByText(): returns the child of the given class that contains the text. */
+static WebElement childByText(WebElement view, String childClassName, String text) {
+    return view.findElement(AppiumBy.xpath(
+            ".//" + childClassName + "[.//*[@text=" + Quotes.escape(text) + "]]"));
 }
 ```
+
+For example, `childByText(list, "android.widget.LinearLayout", "Settings")` returns the row that has a `Settings` label.
+Use `.//*[@text=...]` instead if you need the label itself.
 
 ### Page through a carousel
 

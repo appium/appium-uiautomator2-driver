@@ -507,6 +507,10 @@ The port on the ADB server host that forwards to the UiAutomator2 server on the 
 each session - see the [Testing in Parallel guide](../guides/parallel-tests.md) for details. If not
 provided, Appium will try the first available port in the range `[8200, 8299]`.
 
+An explicit `systemPort` must differ from `appium:mjpegServerPort`. Session creation fails if the
+requested port is already forwarded on the ADB server. See
+[Recovering a stale forward](../guides/mjpeg.md#recovering-a-stale-forward) for migration steps.
+
 On the device under test, the UiAutomator2 server port can be configured using the
 [`serverPort`](./settings.md#serverport) setting.
 
@@ -556,6 +560,7 @@ app is not compatible with the driver or the app under test.
 
 The port on the ADB server host used to connect to the MJPEG stream outside of the session. Choose a
 free port unique to this session. If omitted, the MJPEG stream is not forwarded from the device.
+An explicit `mjpegServerPort` must differ from `appium:systemPort`.
 
 Session creation fails if the port is already forwarded. The driver previously replaced the
 existing MJPEG forward. See [Recovering a stale forward](../guides/mjpeg.md#recovering-a-stale-forward)

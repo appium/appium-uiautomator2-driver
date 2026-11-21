@@ -80,8 +80,9 @@ These settings control the MJPEG broadcaster that runs **on the device under tes
 
 ### Recovering a Stale Forward
 
-The driver refuses to replace an existing MJPEG forward. If a session ends without releasing its
-forward, the next session using the same MJPEG port will fail to start. Use a free port or run
+The driver refuses to replace an existing forward. If a session ends without releasing its
+forward, the next session explicitly requesting that `appium:systemPort` or `appium:mjpegServerPort`
+will fail to start. Use a free port or run
 `adb forward --list` against the same ADB server. After confirming the mapping is no longer in use,
 run `adb forward --remove tcp:<port>` for that device on the same ADB server. If the server is
 remote, use the same ADB host and port, and select the device by serial if necessary.

@@ -436,6 +436,24 @@ describe('driver.js', function () {
       sinon.assert.notCalled(remove);
     });
 
+    it('rejects equal explicit ports before reserving a forward', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 8317;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      const server = sandbox.createStubInstance(UiAutomator2Server);
+      const initServer = sandbox.stub(driver, 'initUiAutomator2Server').resolves(server);
+      sandbox.stub(driver, 'initAUT').resolves();
+
+      await assert.rejects(
+        driver.performSessionExecution({}),
+        /appium:systemPort and appium:mjpegServerPort must use different ports.*8317/,
+      );
+      sinon.assert.notCalled(forward);
+      sinon.assert.notCalled(initServer);
+      assert.equal(driver.systemPort, undefined);
+      assert.equal(driver.mjpegServerPort, undefined);
+    });
+
     it('releases only the system port when the MJPEG port is already forwarded', async function () {
       driver.opts.systemPort = 8317;
       driver.opts.mjpegServerPort = 9100;

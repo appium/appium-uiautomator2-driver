@@ -233,6 +233,13 @@ export async function performExecution(
   this: AndroidUiautomator2Driver,
   capsWithSessionInfo: StringRecord,
 ): Promise<void> {
+  const {systemPort, mjpegServerPort} = this.opts;
+  if (systemPort && systemPort === mjpegServerPort) {
+    throw new Error(
+      `appium:systemPort and appium:mjpegServerPort must use different ports. Both were set to ${systemPort}.`,
+    );
+  }
+
   // Finish each reservation before a startup failure can trigger port cleanup.
   await this.allocateSystemPort();
   await this.allocateMjpegServerPort();

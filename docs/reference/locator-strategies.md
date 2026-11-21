@@ -59,6 +59,7 @@ This strategy is mapped to the native UI Automator [`UiSelector`](https://develo
 
 The strategy also allows to implicitly perform some advanced operations, like scrolling. Refer to
 the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) guide for more details.
+To scroll without `UiScrollable`, see [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
 
 !!! warning
 
@@ -66,6 +67,9 @@ the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) gu
     and remove `UiCollection`, `UiObject`, `UiScrollable`, and `UiSelector` support from the
     UiAutomator framework. This will render all `-android uiautomator`-based locators invalid, so
     keep this in mind while using them or planning to use them in the future.
+
+    The driver logs a warning, once per session, when a `UiScrollable` expression is used as a
+    locator or when `mobile: scroll` is called with this strategy.
 
 !!! info "When to Use"
 

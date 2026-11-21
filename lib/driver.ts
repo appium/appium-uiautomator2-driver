@@ -247,6 +247,8 @@ class AndroidUiautomator2Driver
 
   _wasAccessibilityEventsServiceEnabled: boolean;
 
+  _uiScrollableWarningShown: boolean;
+
   mjpegStream?: MJpegStream;
 
   override caps: Uiautomator2DriverCaps;
@@ -268,6 +270,7 @@ class AndroidUiautomator2Driver
     this.jwpProxyAvoid = NO_PROXY;
     this._originalIme = null;
     this._wasAccessibilityEventsServiceEnabled = false;
+    this._uiScrollableWarningShown = false;
 
     this.settings = new DeviceSettings(
       {ignoreUnimportantViews: false, allowInvisibleElements: false},

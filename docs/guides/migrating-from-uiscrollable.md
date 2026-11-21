@@ -199,10 +199,10 @@ scrolled to it. It returns that child, for example the list row, not the nested 
 the child with a nested XPath. `Quotes.escape()` makes the text safe for labels that contain quotes:
 
 ```java
-/** Replaces UiScrollable.getChildByText(): returns the child of the given class that contains the text. */
+/** Replaces UiScrollable.getChildByText(): returns the child of the given class that has the text itself or contains it. */
 static WebElement childByText(WebElement view, String childClassName, String text) {
     return view.findElement(AppiumBy.xpath(
-            ".//" + childClassName + "[.//*[@text=" + Quotes.escape(text) + "]]"));
+            ".//" + childClassName + "[descendant-or-self::*[@text=" + Quotes.escape(text) + "]]"));
 }
 ```
 

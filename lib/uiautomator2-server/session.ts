@@ -1,3 +1,5 @@
+import {SocketAddress} from 'node:net';
+
 import type {Orientation, StringRecord} from '@appium/types';
 import type {ADB} from 'appium-adb';
 import type {ADBLaunchInfo} from 'appium-android-driver';
@@ -57,7 +59,9 @@ const LOCALHOST_IP4 = '127.0.0.1';
 /** Returns the collision error, or reserves the port. Other ADB errors propagate immediately. */
 async function tryReservePort(adb: ADB, host: string, port: number, devicePort: number): Promise<Error | undefined> {
   // ADB may bind one loopback address family while another service owns the address the driver uses.
-  if (['localhost', LOCALHOST_IP4, '::1'].includes(host) && (await net.checkPortStatus(port, {host})) === 'open') {
+  const isLoopback =
+    host === 'localhost' || host === LOCALHOST_IP4 || SocketAddress.parse(`[${host}]`)?.address === '::1';
+  if (isLoopback && (await net.checkPortStatus(port, {host})) === 'open') {
     return new Error(`Port ${port} is already in use on ${host}`);
   }
   try {
@@ -86,6 +90,10 @@ export async function allocateSystemPort(this: AndroidUiautomator2Driver) {
   const [startPort, endPort] = requestedPort ? [requestedPort, requestedPort] : DEVICE_PORT_RANGE;
   let lastPortError: unknown;
   for (let port = startPort; port <= endPort; port++) {
+    // Leave the explicitly requested MJPEG port available for the next reservation.
+    if (!requestedPort && port === this.opts.mjpegServerPort) {
+      continue;
+    }
     // All clients of this ADB server compete for the same ports, even across Appium hosts.
     const collision = await tryReservePort(adb, this.opts.remoteAdbHost || LOCALHOST_IP4, port, DEVICE_PORT);
     if (collision) {

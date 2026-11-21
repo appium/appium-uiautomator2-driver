@@ -8,6 +8,7 @@ import {ADB} from 'appium-adb';
 import sinon from 'sinon';
 
 import {AndroidUiautomator2Driver} from '../../lib/driver.js';
+import {UiAutomator2Server} from '../../lib/uiautomator2-server/core.js';
 
 const sandbox = sinon.createSandbox();
 
@@ -326,7 +327,28 @@ describe('driver.js', function () {
       sinon.assert.calledOnceWithExactly(remove, 8204);
     });
 
-    for (const host of ['127.0.0.1', '::1']) {
+    it('keeps the requested MJPEG port free during automatic system port selection', async function () {
+      driver.opts.mjpegServerPort = 8200;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      const server = sandbox.createStubInstance(UiAutomator2Server);
+      sandbox.stub(driver, 'initUiAutomator2Server').resolves(server);
+      sandbox.stub(driver, 'initAUT').resolves();
+
+      await driver.performSessionExecution({});
+
+      assert.deepEqual(
+        forward.getCalls().map((call) => call.args[0]),
+        [
+          ['forward', '--no-rebind', 'tcp:8201', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8200', 'tcp:7810'],
+        ],
+      );
+      assert.equal(driver.systemPort, 8201);
+      assert.equal(driver.mjpegServerPort, 8200);
+      sinon.assert.calledOnce(server.startSession);
+    });
+
+    for (const host of ['127.0.0.1', '::1', '0:0:0:0:0:0:0:1']) {
       it(`checks an occupied ${host} listener only for a local ADB connection`, async function () {
         const listener = createServer((socket) => socket.end());
         listener.listen(0, host);

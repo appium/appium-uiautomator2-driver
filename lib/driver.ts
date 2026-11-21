@@ -243,6 +243,8 @@ class AndroidUiautomator2Driver
 
   systemPort: number | undefined;
 
+  mjpegServerPort: number | undefined;
+
   _originalIme: string | null;
 
   _wasAccessibilityEventsServiceEnabled: boolean;

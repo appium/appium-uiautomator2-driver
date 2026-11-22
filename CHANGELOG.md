@@ -1,3 +1,15 @@
+## [10.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.3.0...v10.0.0) (2026-11-22)
+
+### ⚠ BREAKING CHANGES
+
+* ChromeDriver and Microsoft Edge WebDriver executables are verified against a
+SHA-256 allowlist before they are run. Custom or unlisted executables are rejected unless the
+chromedriver_allow_any_executable server feature is enabled.
+
+### Features
+
+* bump appium-android-driver to v16 with ChromeDriver executable verification ([#1092](https://github.com/appium/appium-uiautomator2-driver/issues/1092)) ([53699d3](https://github.com/appium/appium-uiautomator2-driver/commit/53699d34cb558dbc082a26c6a566dcaf5e1cccb3))
+
 ## [9.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.2.2...v9.3.0) (2026-11-20)
 
 ### Features

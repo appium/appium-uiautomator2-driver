@@ -1046,6 +1046,10 @@ mobile.
 Custom path to a ChromeDriver executable on the host file system. Takes priority over
 [`appium:chromedriverExecutableDir`](#chromedriverexecutabledir).
 
+The executable must pass the [checksum verification](../guides/hybrid.md#executable-verification),
+unless the [`chromedriver_allow_any_executable`](./insecure-features.md#chromedriver_allow_any_executable)
+server feature is enabled.
+
 Refer to the [Managing ChromeDriver guide](../guides/hybrid.md#managing-chromedriver) for more
 details.
 
@@ -1057,7 +1061,9 @@ details.
 
 Custom path to a directory on the host file system, containing ChromeDriver executables. If
 automatic ChromeDriver download is enabled, this folder is also used to store the downloaded
-executables.
+executables. Executables in this folder that fail the [checksum verification](../guides/hybrid.md#executable-verification)
+are ignored, unless the [`chromedriver_allow_any_executable`](./insecure-features.md#chromedriver_allow_any_executable)
+server feature is enabled.
 
 The default value is `node_modules/appium-chromedriver/chromedriver/<host os>` in the driver's
 installation directory.

@@ -32,6 +32,16 @@ execute method.
 Enables shell-related functionality for the underlying `adb` instance. Can be used in execute
 methods like [`mobile: shell`](./execute-methods.md#mobile-shell).
 
+## `chromedriver_allow_any_executable`
+
+Allows running any ChromeDriver (or Microsoft Edge WebDriver) executable, skipping the verification
+of its SHA-256 checksum. By default, only the builds distributed by Google or Microsoft (and the ones
+downloaded by the driver itself if [`chromedriver_autodownload`](#chromedriver_autodownload) is
+enabled) are allowed to run. Only relevant in a webview context.
+
+Available since driver version 10.0.0. Refer to the [Hybrid Mode guide](../guides/hybrid.md#executable-verification)
+for more details.
+
 ## `chromedriver_autodownload`
 
 Enables automatic download of a ChromeDriver binary compatible with the active webview. Only

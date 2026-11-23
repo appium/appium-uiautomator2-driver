@@ -243,6 +243,8 @@ class AndroidUiautomator2Driver
 
   systemPort: number | undefined;
 
+  mjpegServerPort: number | undefined;
+
   _originalIme: string | null;
 
   _wasAccessibilityEventsServiceEnabled: boolean;
@@ -306,6 +308,13 @@ class AndroidUiautomator2Driver
         this,
         w3cCapabilities,
       )) as DefaultCreateSessionResult<Uiautomator2Constraints>;
+
+      const {systemPort, mjpegServerPort} = this.opts;
+      if (systemPort && systemPort === mjpegServerPort) {
+        throw new Error(
+          `appium:systemPort and appium:mjpegServerPort must use different ports. Both were set to ${systemPort}.`,
+        );
+      }
 
       const startSessionOpts: Uiautomator2StartSessionOpts = {
         ...caps,

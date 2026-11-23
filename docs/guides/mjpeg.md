@@ -32,20 +32,20 @@ port on the device (default `7810`).
 
 ### Capabilities
 
-These capabilities control the MJPEG broadcaster that runs **on the host machine**.
+These capabilities configure ADB forwarding and how the driver receives the device's MJPEG stream.
 
 #### [`appium:mjpegServerPort`](../reference/capabilities.md#mjpegserverport)
 
-- **Type:** integer (port number on the **host**)
-- **Description:** The port on the host machine to which the device MJPEG server port is forwarded via ADB. If not set, no port forwarding is done, so the device MJPEG service is not reachable from the host.
-- **Use case:** Set this when you want to connect to the device MJPEG stream from the host (e.g. `http://localhost:<mjpegServerPort>`) or when using screen recording so the host can receive the stream.
+- **Type:** integer (port number on the **ADB server host**)
+- **Description:** The port on the ADB server host to which the device MJPEG server port is forwarded. If omitted, the driver does not create an MJPEG forward.
+- **Use case:** Set this to connect to the stream or to use screen recording. See [Port forwarding and connecting](#port-forwarding-and-connecting) for the stream URL.
 - **Parallel sessions:** Use a **unique** `mjpegServerPort` per session when running multiple devices or parallel tests to avoid port conflicts.
 
 #### [`appium:mjpegScreenshotUrl`](../reference/capabilities.md#mjpegscreenshoturl)
 
 - **Type:** string (URL)
 - **Description:** URL of a service that provides real-time device screenshots in MJPEG format. If set, the driver creates an MJPEG client that consumes this URL; the standard **screenshot** command then returns the latest frame from that stream instead of calling the UiAutomator2 server’s `/screenshot` endpoint.
-- **Typical value:** When you forward the device MJPEG port with `appium:mjpegServerPort`, you can set this to `http://localhost:<mjpegServerPort>` (or the same host/port your client uses to reach the stream) so that screenshot uses the MJPEG stream.
+- **Typical value:** When you forward the device MJPEG port with `appium:mjpegServerPort`, set this to the same URL used to connect to the stream.
 - **Note:** The driver starts the MJPEG stream client after the session is created and stops it on session end. If the stream has not yet produced a frame, the screenshot command may fall back to the regular server screenshot.
 
 ### Settings
@@ -54,7 +54,7 @@ These settings control the MJPEG broadcaster that runs **on the device under tes
 
 | <div style="width:15em">Setting</div> | Range / values | Default | Description |
 |--------|----------------|---------|-------------|
-| [`mjpegServerPort`](../reference/settings.md#mjpegserverport) | 1024..65535 | 7810 | Port on the device where the MJPEG server listens. The driver forwards this to the host when `appium:mjpegServerPort` capability is set. |
+| [`mjpegServerPort`](../reference/settings.md#mjpegserverport) | 1024..65535 | 7810 | Port on the device where the MJPEG server listens. The driver creates a forward on the ADB server host when `appium:mjpegServerPort` is set. |
 | [`mjpegServerFramerate`](../reference/settings.md#mjpegserverframerate) | 1..60 | 10 | Maximum frames per second. Higher values increase CPU load on the device. |
 | [`mjpegScalingFactor`](../reference/settings.md#mjpegscalingfactor) | 1..100 | 50 | Scale factor in percent (100 = no scaling). Lower values reduce size and CPU use. |
 | [`mjpegServerScreenshotQuality`](../reference/settings.md#mjpegserverscreenshotquality) | 1..100 | 50 | JPEG quality (100 = best). Higher values improve quality but use more CPU. |
@@ -71,10 +71,25 @@ These settings control the MJPEG broadcaster that runs **on the device under tes
 
 ### Port Forwarding and Connecting
 
-1. Set the capability `appium:mjpegServerPort` to a free port on the host (e.g. `7810` or any port you choose).
-2. The driver will run `adb forward <host port> 7810` (or the device port you set via the `mjpegServerPort` setting) so that the device MJPEG server is reachable at `http://localhost:<host port>` (or your host IP if you need remote access).
-3. Open that URL in a browser or use any MJPEG-capable client; you should see the live device screen.
-4. Optionally set `appium:mjpegScreenshotUrl` to the same URL (e.g. `http://localhost:7810`) so that the driver’s screenshot command uses the latest frame from this stream.
+1. Set `appium:mjpegServerPort` to a free port on the ADB server host.
+2. The driver reserves the port with `adb forward --no-rebind tcp:<port> tcp:7810`.
+3. For a local ADB server, connect to `http://localhost:<port>`. With `appium:remoteAdbHost` set,
+   connect to the forwarded port on that host, provided the port is reachable from the client.
+4. Optionally set `appium:mjpegScreenshotUrl` to the same URL so that the driver's screenshot
+   command uses the latest frame from the stream.
+
+### Recovering a Stale Forward
+
+The driver refuses to replace an existing forward. If a session ends without releasing its
+forward, the next session explicitly requesting that `appium:systemPort` or `appium:mjpegServerPort`
+will fail to start. Use a free port or run
+`adb forward --list` against the same ADB server. After confirming the mapping is no longer in use,
+run `adb forward --remove tcp:<port>` for that device on the same ADB server. If the server is
+remote, use the same ADB host and port, and select the device by serial if necessary.
+
+A timeout or dropped connection while creating either forward may leave a mapping on the ADB
+server. The driver leaves an unconfirmed mapping alone because ADB does not identify the client
+that owns it. Use the same checks before removing that mapping.
 
 ### Screenshot Behavior
 
@@ -124,8 +139,8 @@ See the [Media Streaming over BiDi guide](media-stream.md) for details and an ex
 
 | What you want | What to use |
 |---------------|-------------|
-| Expose device screen as MJPEG on the host | Set `appium:mjpegServerPort` to a host port; connect to `http://localhost:<port>`. |
-| Screenshot from the MJPEG stream | Also set `appium:mjpegScreenshotUrl` to that URL (e.g. `http://localhost:<port>`). |
+| Expose the device screen as MJPEG | Set `appium:mjpegServerPort` to a free port on the ADB server host and connect to the stream on that host. |
+| Screenshot from the MJPEG stream | Also set `appium:mjpegScreenshotUrl` to the stream URL. |
 | Tune framerate, size, or quality on the device | Use Settings API: `mjpegServerFramerate`, `mjpegScalingFactor`, `mjpegServerScreenshotQuality`, `mjpegBilinearFiltering`. |
 | Stream the screen to the client over BiDi, as JPEG or H.264/HEVC video with audio | Use [`mobile: startMediaStream`](../reference/execute-methods.md#mobile-startmediastream), see the [Media Streaming guide](media-stream.md). |
 | Host-side GStreamer-based streaming | Use `mobile: startScreenStreaming` / `mobile: stopScreenStreaming`. |

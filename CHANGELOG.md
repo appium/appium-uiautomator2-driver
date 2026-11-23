@@ -1,3 +1,13 @@
+## [10.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.0.0...v10.1.0) (2026-11-23)
+
+### Features
+
+* support the -android class chain locator strategy ([#1093](https://github.com/appium/appium-uiautomator2-driver/issues/1093)) ([0ce561f](https://github.com/appium/appium-uiautomator2-driver/commit/0ce561f9fe36128ffd182cf5af4c9c7c685f1de0))
+
+### Bug Fixes
+
+* **driver:** reserve system ports on the ADB server ([#1088](https://github.com/appium/appium-uiautomator2-driver/issues/1088)) ([1b4c1b4](https://github.com/appium/appium-uiautomator2-driver/commit/1b4c1b48b472cd6f19e6a5f1e28aea818740a02a))
+
 ## [10.0.0](https://github.com/appium/appium-uiautomator2-driver/compare/v9.3.0...v10.0.0) (2026-11-22)
 
 ### ⚠ BREAKING CHANGES

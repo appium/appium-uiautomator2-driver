@@ -56,12 +56,14 @@ const MJPEG_SERVER_DEVICE_PORT = 7810;
 const MIN_SUPPORTED_API_LEVEL = 26;
 const LOCALHOST_IP4 = '127.0.0.1';
 
-/** Returns the collision error, or reserves the port. Other ADB errors propagate immediately. */
+function isLoopbackHost(host: string): boolean {
+  return host === 'localhost' || host === LOCALHOST_IP4 || SocketAddress.parse(`[${host}]`)?.address === '::1';
+}
+
+/** Returns a collision error or undefined on success. Throws for other failures. */
 async function tryReservePort(adb: ADB, host: string, port: number, devicePort: number): Promise<Error | undefined> {
   // ADB may bind one loopback address family while another service owns the address the driver uses.
-  const isLoopback =
-    host === 'localhost' || host === LOCALHOST_IP4 || SocketAddress.parse(`[${host}]`)?.address === '::1';
-  if (isLoopback && (await net.checkPortStatus(port, {host})) === 'open') {
+  if (isLoopbackHost(host) && (await net.checkPortStatus(port, {host})) === 'open') {
     return new Error(`Port ${port} is already in use on ${host}`);
   }
   try {
@@ -233,13 +235,6 @@ export async function performExecution(
   this: AndroidUiautomator2Driver,
   capsWithSessionInfo: StringRecord,
 ): Promise<void> {
-  const {systemPort, mjpegServerPort} = this.opts;
-  if (systemPort && systemPort === mjpegServerPort) {
-    throw new Error(
-      `appium:systemPort and appium:mjpegServerPort must use different ports. Both were set to ${systemPort}.`,
-    );
-  }
-
   // Finish each reservation before a startup failure can trigger port cleanup.
   await this.allocateSystemPort();
   await this.allocateMjpegServerPort();

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/appium-logo.png">
-      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.8.2">
     
     
       
@@ -1284,6 +1284,41 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#class-chain" class="md-nav__link">
+    <span class="md-ellipsis"> Class Chain </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#xpath" class="md-nav__link">
     <span class="md-ellipsis"> XPath </span>
   </a>
@@ -1693,6 +1728,8 @@
       
         
       
+        
+      
     
     
     
@@ -1753,6 +1790,34 @@
     
   
     UiAutomator Locator Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/android-class-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class Chain Locator Strategy
   
 
     
@@ -2138,6 +2203,41 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#class-chain" class="md-nav__link">
+    <span class="md-ellipsis"> Class Chain </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#xpath" class="md-nav__link">
     <span class="md-ellipsis"> XPath </span>
   </a>
@@ -2354,6 +2454,38 @@ keep this in mind while using them or planning to use them in the future.</p>
 <p>Use this strategy for elements that cannot be directly identified by their class name, <code>id</code>,
 or <code>contentDescription</code>.</p>
 </div>
+<h2 id="class-chain">Class Chain<a class="headerlink" href="#class-chain" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Speed Ranking</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-android class chain</code></td>
+<td>⭐⭐⭐⭐</td>
+<td><code>**/android.widget.TextView[`text == 'Gallery'`]</code></td>
+</tr>
+</tbody>
+</table>
+<p>This strategy evaluates a chain of steps (children, descendants, parents, ancestors and siblings of
+the elements, each one optionally narrowed down by predicates on the element attributes and
+a position) directly on the accessibility tree. It is a layer over the same tree as the
+<a href="#xpath">XPath</a> strategy, but it does not need the page source of the whole application, so it is
+much faster, and about as fast as <a href="#uiautomator">UiAutomator</a> for finding single elements.
+Available since driver version 10.1.0.
+Read the <a href="../../guides/android-class-chain/">Class Chain Locator Strategy</a> article for more details on how
+to build such locators.</p>
+<div class="admonition info">
+<p class="admonition-title">When to Use</p>
+<p>Use this strategy for elements that <em>cannot</em> be identified only using their own attributes,
+but <em>can</em> be identified upon additionally using their parent element(s), sibling element(s)
+and/or their descendant element attribute(s). It is also the recommended replacement of
+<a href="#uiautomator">UiAutomator</a> locators, which Google is going to remove.</p>
+</div>
 <h2 id="xpath">XPath<a class="headerlink" href="#xpath" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2376,7 +2508,8 @@ or <code>contentDescription</code>.</p>
 <div class="admonition info">
 <p class="admonition-title">When to Use</p>
 <p>Use this strategy when no other strategy is applicable, typically for elements that can only be
-identified from their sibling or descendant elements.</p>
+identified by conditions that cannot be expressed by the other strategies, for example the complex
+ones that combine several elements of the hierarchy.</p>
 </div>
 
 
@@ -2398,7 +2531,7 @@ identified from their sibling or descendant elements.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 19, 2026 18:00:14 UTC"><span class="timeago" datetime="2026-10-19T18:00:14+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 18:00:14 UTC">2026-10-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 23, 2026 20:29:35 UTC"><span class="timeago" datetime="2026-11-23T20:29:35+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 23, 2026 20:29:35 UTC">2026-11-23</span>
   </span>
 
     
@@ -2546,7 +2679,7 @@ identified from their sibling or descendant elements.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.indexes", "navigation.path", "navigation.sections", "navigation.tabs", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
         <script src="../../js/timeago.min.js"></script>
       

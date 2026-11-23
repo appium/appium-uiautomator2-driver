@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/appium-logo.png">
-      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.8.2">
     
     
       
@@ -5418,6 +5418,8 @@
       
         
       
+        
+      
     
     
     
@@ -5478,6 +5480,34 @@
     
   
     UiAutomator Locator Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/android-class-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Class Chain Locator Strategy
   
 
     
@@ -10665,9 +10695,12 @@ be enabled.</p>
 </tr>
 </tbody>
 </table>
-<p>The port on the host machine where the UiAutomator2 server should be listening. Must be unique for
+<p>The port on the ADB server host that forwards to the UiAutomator2 server on the device. Must be unique for
 each session - see the <a href="../../guides/parallel-tests/">Testing in Parallel guide</a> for details. If not
 provided, Appium will try the first available port in the range <code>[8200, 8299]</code>.</p>
+<p>An explicit <code>systemPort</code> must differ from <code>appium:mjpegServerPort</code>. Session creation fails if the
+requested port is already forwarded on the ADB server. See
+<a href="../../guides/mjpeg/#recovering-a-stale-forward">Recovering a stale forward</a> for migration steps.</p>
 <p>On the device under test, the UiAutomator2 server port can be configured using the
 <a href="../settings/#serverport"><code>serverPort</code></a> setting.</p>
 <h3 id="uiautomator2serverinstalltimeout">uiautomator2ServerInstallTimeout<a class="headerlink" href="#uiautomator2serverinstalltimeout" title="Permanent link">&para;</a></h3>
@@ -10765,9 +10798,12 @@ app is not compatible with the driver or the app under test.</p>
 </tr>
 </tbody>
 </table>
-<p>The port on the host machine where the MJPEG screenshot streaming server should be listening. If
-not specified, the MJPEG stream from the device under test is not forwarded. Can be used to connect
-to the device MJPEG stream outside of the session.</p>
+<p>The port on the ADB server host used to connect to the MJPEG stream outside of the session. Choose a
+free port unique to this session. If omitted, the MJPEG stream is not forwarded from the device.
+An explicit <code>mjpegServerPort</code> must differ from <code>appium:systemPort</code>.</p>
+<p>Session creation fails if the port is already forwarded. The driver previously replaced the
+existing MJPEG forward. See <a href="../../guides/mjpeg/#recovering-a-stale-forward">Recovering a stale forward</a>
+if a session ended without releasing the port.</p>
 <p>On the device under test, the MJPEG server port can be configured using the
 <a href="../settings/#mjpegserverport"><code>mjpegServerPort</code></a> setting.</p>
 <p>Refer to <a href="../../guides/mjpeg/">the MJPEG guide</a> for more details.</p>
@@ -11909,7 +11945,7 @@ rather than the package of the application under test.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 22, 2026 20:23:40 UTC"><span class="timeago" datetime="2026-11-22T20:23:40+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 22, 2026 20:23:40 UTC">2026-11-22</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 23, 2026 20:30:04 UTC"><span class="timeago" datetime="2026-11-23T20:30:04+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 23, 2026 20:30:04 UTC">2026-11-23</span>
   </span>
 
     
@@ -12057,7 +12093,7 @@ rather than the package of the application under test.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.indexes", "navigation.path", "navigation.sections", "navigation.tabs", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
         <script src="../../js/timeago.min.js"></script>
       

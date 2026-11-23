@@ -84,7 +84,7 @@ a position) directly on the accessibility tree. It is a layer over the same tree
 [XPath](#xpath) strategy, but it does not need the page source of the whole application, so it is
 much faster, and about as fast as [UiAutomator](#uiautomator) for finding single elements.
 Available since driver version 10.1.0.
-Read the [Class Chain Locator Strategy](./android-class-chain.md) article for more details on how
+Read the [Class Chain Locator Strategy](../guides/android-class-chain.md) article for more details on how
 to build such locators.
 
 !!! info "When to Use"
@@ -108,6 +108,4 @@ XPath versions 1.0 and 2.0 are supported.
 
     Use this strategy when no other strategy is applicable, typically for elements that can only be
     identified by conditions that cannot be expressed by the other strategies, for example the complex
-    ones that combine several elements of the hierarchy. It is _strongly_ recommended to use more
-    performant strategies if possible, like [class chain](#class-chain) for the parents, siblings
-    and descendants of an element.
+    ones that combine several elements of the hierarchy.

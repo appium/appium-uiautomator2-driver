@@ -47,7 +47,6 @@ nav:
           - reference/execute-methods.md
       - Element Management:
           - reference/locator-strategies.md
-          - reference/android-class-chain.md
           - reference/element-attributes.md
   - Guides:
       - Session Configuration:
@@ -60,6 +59,7 @@ nav:
           - guides/activity-startup.md
       - Driver Actions:
           - guides/uiautomator-locator-strategy.md
+          - guides/android-class-chain.md
           - guides/multiwindow.md
           - guides/unlock.md
           - guides/scheduled-actions.md

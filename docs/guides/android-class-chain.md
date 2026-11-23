@@ -3,9 +3,9 @@ title: Class Chain Locator Strategy
 ---
 
 The UiAutomator2 driver supports searching elements using the _class chain_
-[locator search strategy](./locator-strategies.md#class-chain) (`-android class chain`). It is
+[locator search strategy](../reference/locator-strategies.md#class-chain) (`-android class chain`). It is
 inspired by the class chain locators of the XCUITest driver, and is a simplified and much faster
-alternative of [XPath](./locator-strategies.md#xpath): the chain is evaluated directly on the
+alternative of [XPath](../reference/locator-strategies.md#xpath): the chain is evaluated directly on the
 accessibility tree, in a single pass, and the lookup does not need the page source of the whole
 application. A class chain is a `/`-separated list of _steps_. Each step selects elements of a
 certain type, optionally narrowed down by predicates and a position, relative to the elements
@@ -49,7 +49,7 @@ Both examples select the second button among the direct children of all rows.
 ## Steps
 
 Every step starts with an element type, which is the _full name_ of the Android class of the element
-(the [`class`](./element-attributes.md#class) attribute), for example `android.widget.Button`, or `*`
+(the [`class`](../reference/element-attributes.md#class) attribute), for example `android.widget.Button`, or `*`
 for any type. The type is matched exactly, so `android.view.View` does not match the elements of its
 subclasses.
 
@@ -83,7 +83,7 @@ matches of the step.
 ### Predicates
 
 Predicates restrict the elements of a step. They are put into square brackets before the position,
-and every predicate is an expression using the [element attributes](./element-attributes.md):
+and every predicate is an expression using the [element attributes](../reference/element-attributes.md):
 
 - ``[`predicate`]`` - the predicate is applied to the matched elements themselves
 - `[$predicate$]` - the predicate is applied to all _descendants_ of the matched elements;
@@ -107,7 +107,7 @@ one after another, in the given order.
 A predicate is a subset of the [NSPredicate](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/AdditionalChapters/Introduction.html)
 syntax, the same one that the iOS strategies use. A comparison is `attribute OPERATOR value`.
 
-- **Attributes:** any [element attribute](./element-attributes.md) that has a plain value, for
+- **Attributes:** any [element attribute](../reference/element-attributes.md) that has a plain value, for
   example `text`, `content-desc`, `resource-id`, `class`, `package`, `index`, `checked`,
   `clickable`, `enabled`, `selected` or `scrollable`, either by its name or by one of its aliases
   (`contentDescription`, `resourceId`). The attributes that are not in the page source by default
@@ -252,16 +252,18 @@ and `<`, in document order for `>` and `~`, and from the other end if negative.
 The elements of the tree are the same as in the page source and XPath lookups:
 
 - The first step is relative to the roots of the windows, which depend on the
-  [`enableMultiWindows`](./settings.md#enablemultiwindows) and
-  [`enableTopmostWindowFromActivePackage`](./settings.md#enabletopmostwindowfromactivepackage)
+  [`enableMultiWindows`](../reference/settings.md#enablemultiwindows) and
+  [`enableTopmostWindowFromActivePackage`](../reference/settings.md#enabletopmostwindowfromactivepackage)
   settings. A lookup within an element only searches below that element.
-- Invisible elements are skipped, unless [`allowInvisibleElements`](./settings.md#allowinvisibleelements)
+- Invisible elements are skipped, unless [`allowInvisibleElements`](../reference/settings.md#allowinvisibleelements)
   is enabled or the class of the element is listed in
-  [`alwaysTraversableViewClasses`](./settings.md#alwaystraversableviewclasses),
-  and the depth of the tree is limited by [`snapshotMaxDepth`](./settings.md#snapshotmaxdepth).
+  [`alwaysTraversableViewClasses`](../reference/settings.md#alwaystraversableviewclasses),
+  and the depth of the tree is limited by [`snapshotMaxDepth`](../reference/settings.md#snapshotmaxdepth).
 - The `index` attribute is the position of the element among the children of its parent, as in the
   page source, and the `text` attribute is `""` for elements without a text, as in XPath.
-- Toast messages, which the page source adds to the end of the tree, are not searched.
+- Toast messages are not searched. The page source adds them to the end of the tree as synthetic
+  elements built from the toast notifications, they are not part of the accessibility tree that
+  a class chain walks, whereas XPath looks them up in the page source.
 
 Malformed chains and predicates fail before anything is searched, with an `invalid selector`
 error that points to the position of the problem.
@@ -284,11 +286,11 @@ the median times were about:
 |all 19 elements of a class|19 ms|36 ms|22 ms|
 |all 9 elements with a resource id|20 ms|27 ms|23 ms|
 
-So looking up a single element is about as fast as with [`-android uiautomator`](./locator-strategies.md#uiautomator),
+So looking up a single element is about as fast as with [`-android uiautomator`](../reference/locator-strategies.md#uiautomator),
 and the lookups of multiple elements are faster than with both alternatives.
 
 ## More Information
 
-- [Locator Strategies](./locator-strategies.md) — overview of all strategies and their performance
-- [Element Attributes](./element-attributes.md) — attributes available in predicates
-- [Settings](./settings.md) — settings that define which elements are searched
+- [Locator Strategies](../reference/locator-strategies.md) — overview of all strategies and their performance
+- [Element Attributes](../reference/element-attributes.md) — attributes available in predicates
+- [Settings](../reference/settings.md) — settings that define which elements are searched

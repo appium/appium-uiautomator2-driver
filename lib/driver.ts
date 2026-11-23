@@ -262,7 +262,7 @@ class AndroidUiautomator2Driver
 
     super(opts, shouldValidateCaps);
 
-    this.locatorStrategies = ['xpath', 'id', 'class name', 'accessibility id', 'css selector', '-android uiautomator'];
+    this.locatorStrategies = ['xpath', 'id', 'class name', 'accessibility id', 'css selector', '-android uiautomator', '-android class chain'];
     this.desiredCapConstraints = structuredClone(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;

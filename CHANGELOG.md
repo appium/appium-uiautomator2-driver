@@ -1,3 +1,9 @@
+## [10.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.2.0...v10.3.0) (2026-11-24)
+
+### Features
+
+* add a gesture-based mobile: scroll and a guide on migrating from UiScrollable ([#1091](https://github.com/appium/appium-uiautomator2-driver/issues/1091)) ([0a3992b](https://github.com/appium/appium-uiautomator2-driver/commit/0a3992b28e63f49aa53617624b1a904a4c0ec1a5))
+
 ## [10.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.1.0...v10.2.0) (2026-11-24)
 
 ### Features

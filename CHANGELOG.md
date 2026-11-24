@@ -1,3 +1,9 @@
+## [10.2.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.1.0...v10.2.0) (2026-11-24)
+
+### Features
+
+* support the -android predicate string locator strategy ([#1094](https://github.com/appium/appium-uiautomator2-driver/issues/1094)) ([1dde3ca](https://github.com/appium/appium-uiautomator2-driver/commit/1dde3ca9666fff5473fac8f5101fec6cac6be0f4))
+
 ## [10.1.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.0.0...v10.1.0) (2026-11-23)
 
 ### Features

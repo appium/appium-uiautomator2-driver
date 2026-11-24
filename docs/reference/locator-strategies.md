@@ -76,6 +76,48 @@ To scroll without `UiScrollable`, see [Migrating from UiScrollable and UiSelecto
     Use this strategy for elements that cannot be directly identified by their class name, `id`,
     or `contentDescription`.
 
+## Predicate String
+
+|Name|Speed Ranking|Example|
+|---|---|---|
+|`-android predicate string`|⭐⭐⭐⭐|``text == 'Gallery' AND clickable == true``|
+
+This strategy finds all elements below the search root (the whole screen or the context element)
+that satisfy a predicate on their attributes. It is a shorthand for the
+[class chain](#class-chain) ``**/*[`predicate`]``, uses the same
+[predicate syntax](../guides/android-class-chain.md#predicate-syntax) and has the same performance.
+Available since driver version 10.2.0.
+Read the [Class Chain Locator Strategy](../guides/android-class-chain.md#predicate-string-strategy)
+article for more details.
+
+!!! info "When to Use"
+
+    Use this strategy for elements that can be identified by a combination of their own attributes,
+    for example when the `id`, `accessibility id` and `class name` strategies are not enough, and
+    the parent, sibling or descendant elements are not needed.
+
+## Class Chain
+
+|Name|Speed Ranking|Example|
+|---|---|---|
+|`-android class chain`|⭐⭐⭐⭐|``**/android.widget.TextView[`text == 'Gallery'`]``|
+
+This strategy evaluates a chain of steps (children, descendants, parents, ancestors and siblings of
+the elements, each one optionally narrowed down by predicates on the element attributes and
+a position) directly on the accessibility tree. It is a layer over the same tree as the
+[XPath](#xpath) strategy, but it does not need the page source of the whole application, so it is
+much faster, and about as fast as [UiAutomator](#uiautomator) for finding single elements.
+Available since driver version 10.1.0.
+Read the [Class Chain Locator Strategy](../guides/android-class-chain.md) article for more details on how
+to build such locators.
+
+!!! info "When to Use"
+
+    Use this strategy for elements that _cannot_ be identified only using their own attributes,
+    but _can_ be identified upon additionally using their parent element(s), sibling element(s)
+    and/or their descendant element attribute(s). It is also the recommended replacement of
+    [UiAutomator](#uiautomator) locators, which Google is going to remove.
+
 ## XPath
 
 |Name|Speed Ranking|Example|
@@ -89,4 +131,5 @@ XPath versions 1.0 and 2.0 are supported.
 !!! info "When to Use"
 
     Use this strategy when no other strategy is applicable, typically for elements that can only be
-    identified from their sibling or descendant elements.
+    identified by conditions that cannot be expressed by the other strategies, for example the complex
+    ones that combine several elements of the hierarchy.

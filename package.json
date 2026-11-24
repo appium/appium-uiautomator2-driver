@@ -1,6 +1,6 @@
 {
   "name": "appium-uiautomator2-driver",
-  "version": "9.3.0",
+  "version": "10.2.0",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "android",
@@ -65,8 +65,8 @@
   "dependencies": {
     "@appium/css-locator-to-native": "^2.0.1",
     "appium-adb": "^17.0.3",
-    "appium-android-driver": "^15.4.0",
-    "appium-uiautomator2-server": "^11.2.1",
+    "appium-android-driver": "^16.0.0",
+    "appium-uiautomator2-server": "^11.6.0",
     "asyncbox": "^7.0.0",
     "axios": "^1.18.0",
     "io.appium.settings": "^9.2.0",

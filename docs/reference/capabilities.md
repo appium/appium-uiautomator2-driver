@@ -503,9 +503,13 @@ Available since driver version 6.7.0.
 | -- | -- | -- |
 | `appium:systemPort` | `integer` | `8200` |
 
-The port on the host machine where the UiAutomator2 server should be listening. Must be unique for
+The port on the ADB server host that forwards to the UiAutomator2 server on the device. Must be unique for
 each session - see the [Testing in Parallel guide](../guides/parallel-tests.md) for details. If not
 provided, Appium will try the first available port in the range `[8200, 8299]`.
+
+An explicit `systemPort` must differ from `appium:mjpegServerPort`. Session creation fails if the
+requested port is already forwarded on the ADB server. See
+[Recovering a stale forward](../guides/mjpeg.md#recovering-a-stale-forward) for migration steps.
 
 On the device under test, the UiAutomator2 server port can be configured using the
 [`serverPort`](./settings.md#serverport) setting.
@@ -554,9 +558,13 @@ app is not compatible with the driver or the app under test.
 | -- | -- | -- |
 | `appium:mjpegServerPort` | `integer` | Not specified |
 
-The port on the host machine where the MJPEG screenshot streaming server should be listening. If
-not specified, the MJPEG stream from the device under test is not forwarded. Can be used to connect
-to the device MJPEG stream outside of the session.
+The port on the ADB server host used to connect to the MJPEG stream outside of the session. Choose a
+free port unique to this session. If omitted, the MJPEG stream is not forwarded from the device.
+An explicit `mjpegServerPort` must differ from `appium:systemPort`.
+
+Session creation fails if the port is already forwarded. The driver previously replaced the
+existing MJPEG forward. See [Recovering a stale forward](../guides/mjpeg.md#recovering-a-stale-forward)
+if a session ended without releasing the port.
 
 On the device under test, the MJPEG server port can be configured using the
 [`mjpegServerPort`](./settings.md#mjpegserverport) setting.
@@ -1046,6 +1054,10 @@ mobile.
 Custom path to a ChromeDriver executable on the host file system. Takes priority over
 [`appium:chromedriverExecutableDir`](#chromedriverexecutabledir).
 
+The executable must pass the [checksum verification](../guides/hybrid.md#executable-verification),
+unless the [`chromedriver_allow_any_executable`](./insecure-features.md#chromedriver_allow_any_executable)
+server feature is enabled.
+
 Refer to the [Managing ChromeDriver guide](../guides/hybrid.md#managing-chromedriver) for more
 details.
 
@@ -1057,7 +1069,9 @@ details.
 
 Custom path to a directory on the host file system, containing ChromeDriver executables. If
 automatic ChromeDriver download is enabled, this folder is also used to store the downloaded
-executables.
+executables. Executables in this folder that fail the [checksum verification](../guides/hybrid.md#executable-verification)
+are ignored, unless the [`chromedriver_allow_any_executable`](./insecure-features.md#chromedriver_allow_any_executable)
+server feature is enabled.
 
 The default value is `node_modules/appium-chromedriver/chromedriver/<host os>` in the driver's
 installation directory.

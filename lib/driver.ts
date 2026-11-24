@@ -243,6 +243,8 @@ class AndroidUiautomator2Driver
 
   systemPort: number | undefined;
 
+  mjpegServerPort: number | undefined;
+
   _originalIme: string | null;
 
   _wasAccessibilityEventsServiceEnabled: boolean;
@@ -264,7 +266,16 @@ class AndroidUiautomator2Driver
 
     super(opts, shouldValidateCaps);
 
-    this.locatorStrategies = ['xpath', 'id', 'class name', 'accessibility id', 'css selector', '-android uiautomator'];
+    this.locatorStrategies = [
+      'xpath',
+      'id',
+      'class name',
+      'accessibility id',
+      'css selector',
+      '-android uiautomator',
+      '-android class chain',
+      '-android predicate string',
+    ];
     this.desiredCapConstraints = structuredClone(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;
     this.jwpProxyAvoid = NO_PROXY;
@@ -301,6 +312,13 @@ class AndroidUiautomator2Driver
         this,
         w3cCapabilities,
       )) as DefaultCreateSessionResult<Uiautomator2Constraints>;
+
+      const {systemPort, mjpegServerPort} = this.opts;
+      if (systemPort && systemPort === mjpegServerPort) {
+        throw new Error(
+          `appium:systemPort and appium:mjpegServerPort must use different ports. Both were set to ${systemPort}.`,
+        );
+      }
 
       const startSessionOpts: Uiautomator2StartSessionOpts = {
         ...caps,

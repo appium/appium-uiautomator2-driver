@@ -68,7 +68,7 @@ is considered an insecure feature, and requires explicit enablement on the serve
 name:
 
 ```sh
-appium server --allow-insecure chromedriver_autodownload
+appium server --allow-insecure uiautomator2:chromedriver_autodownload
 ```
 
 Once this feature is enabled, no additional configuration is required on the client side.
@@ -117,6 +117,32 @@ APPIUM_SKIP_CHROMEDRIVER_INSTALL=1 appium driver install uiautomator2
 If ChromeDriver has already been automatically installed this way, it is also possible to skip its
 usage using the [`appium:chromedriverUseSystemExecutable`](../reference/capabilities.md#chromedriverusesystemexecutable)
 capability.
+
+### Executable Verification
+
+Since version 10.0.0, the driver verifies the SHA-256 checksum of a ChromeDriver executable before
+running it. The executable must be a build distributed by Google (or by Microsoft, in the case of
+Microsoft Edge WebDriver), which is checked against the checksums shipped with the
+[`appium-chromedriver`](https://github.com/appium/appium-android/tree/main/packages/chromedriver#executable-verification)
+package, or it must have been downloaded by the driver itself using the
+[`chromedriver_autodownload`](../reference/insecure-features.md#chromedriver_autodownload) feature.
+This applies to the executables set via the [`appium:chromedriverExecutable`](../reference/capabilities.md#chromedriverexecutable)
+capability and to the ones found in the folder set via [`appium:chromedriverExecutableDir`](../reference/capabilities.md#chromedriverexecutabledir).
+Executables that fail the verification are not run.
+
+Custom or self-built ChromeDriver binaries, as well as older builds that are not covered by the
+checksums, can only be used if the server explicitly allows it using the
+[`chromedriver_allow_any_executable`](../reference/insecure-features.md#chromedriver_allow_any_executable)
+feature:
+
+```sh
+appium server --allow-insecure uiautomator2:chromedriver_allow_any_executable
+```
+
+!!! warning
+
+    With this feature enabled, any client that is able to create a session can make the server run an
+    arbitrary executable from the host file system. Only enable it if you trust all your clients.
 
 ## Troubleshooting
 

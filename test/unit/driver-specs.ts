@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import {once} from 'node:events';
+import {createServer, type AddressInfo} from 'node:net';
 import * as path from 'node:path';
 import {describe, it, before, beforeEach, afterEach} from 'node:test';
 
@@ -6,6 +8,7 @@ import {ADB} from 'appium-adb';
 import sinon from 'sinon';
 
 import {AndroidUiautomator2Driver} from '../../lib/driver.js';
+import {UiAutomator2Server} from '../../lib/uiautomator2-server/core.js';
 
 const sandbox = sinon.createSandbox();
 
@@ -37,9 +40,34 @@ describe('driver.js', function () {
       assert.ok(driver);
       assert.ok(driver.opts);
     });
+
+    it('accepts the strategies that are evaluated by the server', function () {
+      const driver = new AndroidUiautomator2Driver({} as any, false);
+      for (const strategy of ['-android uiautomator', '-android class chain', '-android predicate string']) {
+        assert.ok(driver.locatorStrategies.includes(strategy), strategy);
+      }
+    });
   });
 
   describe('createSession', function () {
+    it('rejects equal explicit ports before preparing the device', async function () {
+      const driver = new AndroidUiautomator2Driver({} as any, false);
+      const getDeviceInfo = sandbox.stub(driver, 'getDeviceInfoFromCaps').rejects(new Error('Unexpected device setup'));
+
+      await assert.rejects(
+        driver.createSession({
+          firstMatch: [{}],
+          alwaysMatch: {
+            'appium:systemPort': 8317,
+            'appium:mjpegServerPort': 8317,
+          },
+        } as any),
+        /appium:systemPort and appium:mjpegServerPort must use different ports.*8317/,
+      );
+
+      sinon.assert.notCalled(getDeviceInfo);
+    });
+
     it('should throw an error if app can not be found', async function () {
       const driver = new AndroidUiautomator2Driver({} as any, false);
       const adb = defaultStub(driver);
@@ -284,6 +312,210 @@ describe('driver.js', function () {
           selector: 'new UiSelector().scrollable(true)',
         },
       ]);
+    });
+  });
+
+  describe('ADB port forwarding', function () {
+    let driver: AndroidUiautomator2Driver;
+    let adb: ADB;
+
+    beforeEach(function () {
+      driver = new AndroidUiautomator2Driver();
+      adb = new ADB();
+      driver.adb = adb;
+      driver.opts.remoteAdbHost = 'adb.example.test';
+    });
+
+    it('skips ports already forwarded or in use and releases only the reserved port', async function () {
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().rejects(new Error('adb: error: cannot rebind existing socket'));
+      forward.onSecondCall().rejects(new Error('adb: error: cannot bind listener: Address already in use'));
+      forward.onThirdCall().rejects(new Error("adb: error: cannot bind 'tcp:8202'"));
+      forward.onCall(3).rejects(new Error('adb: error: cannot bind listener: Adresse bereits verwendet'));
+      forward.onCall(4).resolves('');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await driver.allocateSystemPort();
+      assert.deepEqual(
+        forward.getCalls().map((call) => call.args[0]),
+        [
+          ['forward', '--no-rebind', 'tcp:8200', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8201', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8202', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8203', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8204', 'tcp:6790'],
+        ],
+      );
+      assert.equal(driver.systemPort, 8204);
+      await driver.releaseSystemPort();
+      await driver.releaseSystemPort();
+      sinon.assert.calledOnceWithExactly(remove, 8204);
+    });
+
+    it('keeps the requested MJPEG port free during automatic system port selection', async function () {
+      driver.opts.mjpegServerPort = 8200;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      const server = sandbox.createStubInstance(UiAutomator2Server);
+      sandbox.stub(driver, 'initUiAutomator2Server').resolves(server);
+      sandbox.stub(driver, 'initAUT').resolves();
+
+      await driver.performSessionExecution({});
+
+      assert.deepEqual(
+        forward.getCalls().map((call) => call.args[0]),
+        [
+          ['forward', '--no-rebind', 'tcp:8201', 'tcp:6790'],
+          ['forward', '--no-rebind', 'tcp:8200', 'tcp:7810'],
+        ],
+      );
+      assert.equal(driver.systemPort, 8201);
+      assert.equal(driver.mjpegServerPort, 8200);
+      sinon.assert.calledOnce(server.startSession);
+    });
+
+    for (const host of ['127.0.0.1', '::1', '0:0:0:0:0:0:0:1']) {
+      it(`checks an occupied ${host} listener only for a local ADB connection`, async function (t) {
+        const listener = createServer((socket) => socket.end());
+        const listening = once(listener, 'listening');
+        listener.listen(0, host);
+        try {
+          await listening;
+        } catch (err) {
+          if (
+            host.includes(':') &&
+            ['EADDRNOTAVAIL', 'EAFNOSUPPORT'].includes((err as NodeJS.ErrnoException).code ?? '')
+          ) {
+            t.skip('IPv6 loopback is unavailable');
+            return;
+          }
+          throw err;
+        }
+        try {
+          const {port} = listener.address() as AddressInfo;
+          driver.opts.systemPort = port;
+          driver.opts.remoteAdbHost = host;
+          const forward = sandbox.stub(adb, 'adbExec').resolves('');
+          await assert.rejects(driver.allocateSystemPort(), /unavailable.*already in use/);
+          sinon.assert.notCalled(forward);
+
+          driver.opts.remoteAdbHost = 'adb.example.test';
+          await driver.allocateSystemPort();
+          sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', `tcp:${port}`, 'tcp:6790']);
+        } finally {
+          await listener[Symbol.asyncDispose]();
+        }
+      });
+    }
+
+    it('skips a port in the Windows excluded port range', async function () {
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().rejects(new Error('cannot bind listener: cannot bind to 127.0.0.1:8200: (10013)'));
+      forward.onSecondCall().resolves('');
+      await driver.allocateSystemPort();
+      assert.equal(driver.systemPort, 8201);
+    });
+
+    it('forwards the explicitly requested port without substituting another one', async function () {
+      driver.opts.systemPort = 8317;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      await driver.allocateSystemPort();
+      sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', 'tcp:8317', 'tcp:6790']);
+      assert.equal(driver.systemPort, 8317);
+    });
+
+    it('leaves an occupied explicit port alone during cleanup', async function () {
+      driver.opts.systemPort = 8317;
+      const forward = sandbox.stub(adb, 'adbExec').rejects(new Error('adb: error: cannot rebind existing socket'));
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+      await assert.rejects(driver.allocateSystemPort(), /8317.*choose a free port.*cannot rebind existing socket/i);
+      await driver.releaseSystemPort();
+      sinon.assert.calledOnce(forward);
+      sinon.assert.notCalled(remove);
+    });
+
+    it('reports an unconfirmed system forward without retrying or removing it', async function () {
+      const error = new Error('device offline');
+      const forward = sandbox.stub(adb, 'adbExec').rejects(error);
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.allocateSystemPort(), {
+        message: /tcp:8200 on adb\.example\.test: device offline.*adb forward --list.*adb forward --remove tcp:8200/,
+        cause: error,
+      });
+      await driver.releaseSystemPort();
+      sinon.assert.calledOnce(forward);
+      sinon.assert.notCalled(remove);
+      assert.equal(driver.systemPort, undefined);
+    });
+
+    it('leaves a configured MJPEG forward alone when the system port reservation fails', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      sandbox.stub(adb, 'adbExec').rejects(new Error('cannot rebind existing socket'));
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), /8317.*unavailable/);
+      await driver.deleteSession();
+      sinon.assert.notCalled(remove);
+    });
+
+    it('releases only the system port when the MJPEG port is already forwarded', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().resolves('');
+      forward.onSecondCall().rejects(new Error('cannot rebind existing socket'));
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), /mjpegServerPort #9100.*cannot rebind/);
+      assert.deepEqual(forward.secondCall.args[0], ['forward', '--no-rebind', 'tcp:9100', 'tcp:7810']);
+      await driver.deleteSession();
+      sinon.assert.calledOnceWithExactly(remove, 8317);
+    });
+
+    it('releases only the confirmed system forward after an ambiguous MJPEG timeout', async function () {
+      driver.opts.systemPort = 8317;
+      driver.opts.mjpegServerPort = 9100;
+      const timeout = new Error('ADB command timed out');
+      const forward = sandbox.stub(adb, 'adbExec');
+      forward.onFirstCall().resolves('');
+      forward.onSecondCall().rejects(timeout);
+      sandbox.stub(adb, 'getApiLevel').resolves(27);
+      sandbox.stub(adb, 'stopLogcat');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await assert.rejects(driver.performSessionExecution({}), {
+        message: /tcp:9100 on adb\.example\.test: ADB command timed out.*adb forward --list/,
+        cause: timeout,
+      });
+      assert.equal(driver.mjpegServerPort, undefined);
+      await driver.deleteSession();
+      sinon.assert.calledTwice(forward);
+      sinon.assert.calledOnceWithExactly(remove, 8317);
+    });
+
+    it('removes a successfully reserved MJPEG forward only once', async function () {
+      driver.opts.mjpegServerPort = 9100;
+      const forward = sandbox.stub(adb, 'adbExec').resolves('');
+      const remove = sandbox.stub(adb, 'removePortForward').resolves();
+
+      await driver.allocateMjpegServerPort();
+      sinon.assert.calledOnceWithExactly(forward, ['forward', '--no-rebind', 'tcp:9100', 'tcp:7810']);
+      await driver.releaseMjpegServerPort();
+      await driver.releaseMjpegServerPort();
+      sinon.assert.calledOnceWithExactly(remove, 9100);
+    });
+
+    it('reports exhaustion without allocating outside the documented range', async function () {
+      const forward = sandbox.stub(adb, 'adbExec').rejects(new Error('adb: error: cannot rebind existing socket'));
+      await assert.rejects(driver.allocateSystemPort(), /8200\.\.8299/);
+      assert.equal(forward.callCount, 100);
+      assert.deepEqual(forward.lastCall.args[0], ['forward', '--no-rebind', 'tcp:8299', 'tcp:6790']);
+      assert.equal(driver.systemPort, undefined);
     });
   });
 

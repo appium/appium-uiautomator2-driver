@@ -72,6 +72,26 @@ the [UiAutomator Locator Strategy](../guides/uiautomator-locator-strategy.md) gu
     Use this strategy for elements that cannot be directly identified by their class name, `id`,
     or `contentDescription`.
 
+## Predicate String
+
+|Name|Speed Ranking|Example|
+|---|---|---|
+|`-android predicate string`|⭐⭐⭐⭐|``text == 'Gallery' AND clickable == true``|
+
+This strategy finds all elements below the search root (the whole screen or the context element)
+that satisfy a predicate on their attributes. It is a shorthand for the
+[class chain](#class-chain) ``**/*[`predicate`]``, uses the same
+[predicate syntax](../guides/android-class-chain.md#predicate-syntax) and has the same performance.
+Available since driver version 10.2.0.
+Read the [Class Chain Locator Strategy](../guides/android-class-chain.md#predicate-string-strategy)
+article for more details.
+
+!!! info "When to Use"
+
+    Use this strategy for elements that can be identified by a combination of their own attributes,
+    for example when the `id`, `accessibility id` and `class name` strategies are not enough, and
+    the parent, sibling or descendant elements are not needed.
+
 ## Class Chain
 
 |Name|Speed Ranking|Example|
@@ -93,27 +113,6 @@ to build such locators.
     but _can_ be identified upon additionally using their parent element(s), sibling element(s)
     and/or their descendant element attribute(s). It is also the recommended replacement of
     [UiAutomator](#uiautomator) locators, which Google is going to remove.
-
-## Predicate String
-
-|Name|Speed Ranking|Example|
-|---|---|---|
-|`-android predicate string`|⭐⭐⭐⭐|``text == 'Gallery' AND clickable == true``|
-
-This strategy finds all elements below the search root (the whole screen or the context element)
-that satisfy a predicate on their attributes. It is a shorthand for the
-[class chain](#class-chain) ``**/*[`predicate`]``, uses the same
-[predicate syntax](../guides/android-class-chain.md#predicate-syntax) and has the same performance.
-Available since driver version 10.2.0.
-Read the [Class Chain Locator Strategy](../guides/android-class-chain.md#predicate-string-strategy)
-article for more details.
-
-!!! info "When to Use"
-
-    Use this strategy for elements that can be identified by a combination of their own attributes,
-    for example when the `id`, `accessibility id` and `class name` strategies are not enough, and
-    the parent, sibling or descendant elements are not needed. Use [class chain](#class-chain)
-    otherwise.
 
 ## XPath
 

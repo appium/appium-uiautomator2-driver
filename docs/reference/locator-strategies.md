@@ -135,3 +135,27 @@ XPath versions 1.0 and 2.0 are supported.
     Use this strategy when no other strategy is applicable, typically for elements that can only be
     identified by conditions that cannot be expressed by the other strategies, for example the complex
     ones that combine several elements of the hierarchy.
+
+## CSS Selector
+
+|Name|Speed Ranking|Example|
+|---|---|---|
+|`css selector`|⭐⭐⭐⭐|`android.widget.TextView[text^="Gal"]:instance(0)`|
+
+This strategy converts a CSS selector to a [class chain](#class-chain) on the driver side, so it has
+the same performance and search scope. Only the first comma-separated selector is used. The following is supported:
+
+- a fully qualified class name as the tag (`android.widget.TextView`), or a trailing part of it (`TextView`, `.widget.TextView`)
+- `#id` and `[id=...]`, which are qualified with the application package unless they already have the `package:id/` form
+- the attributes `text`, `description` (aliases `content-desc`, `content-description`, `desc`, `accessibility-id`),
+  `resource-id`, `class-name` and `package-name` with the `=`, `^=`, `$=`, `*=` and `~=` operators.
+  `text` and `description` ignore the case in `^=` and `*=`
+- the boolean attributes `checkable`, `checked`, `clickable`, `enabled`, `focusable`, `focused`, `long-clickable`,
+  `scrollable` and `selected`, either as `[clickable=true]` or `:clickable`
+- `:nth-child(n)` or `:index(n)`, the `index` attribute of the element, and the zero-based `:instance(n)`, the position among the matches
+- the descendant (a space) and the child (`>`) combinators
+
+!!! info "When to Use"
+
+    Use this strategy if the locators are shared with web tests or the client library offers CSS selectors only.
+    Prefer [Predicate String](#predicate-string) and [Class Chain](#class-chain) otherwise.

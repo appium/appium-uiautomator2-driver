@@ -10,7 +10,7 @@ import {warnIfUiScrollableLocator} from '../utils/deprecation.js';
 const MAGIC_FIRST_VIS_CHILD_SEL = /\/\*\[@firstVisible ?= ?('|")true\1\]/;
 
 const MAGIC_SCROLLABLE_SEL = /\/\/\*\[@scrollable ?= ?('|")true\1\]/;
-const MAGIC_SCROLLABLE_BY = 'new UiSelector().scrollable(true)';
+const MAGIC_SCROLLABLE_BY = 'scrollable == true';
 
 /**
  * Overrides helpers.doFindElementOrEls functionality of appium-android-driver.
@@ -40,7 +40,7 @@ export async function doFindElementOrEls(
     )) as AppiumElement;
   }
   if (params.strategy === 'xpath' && MAGIC_SCROLLABLE_SEL.test(params.selector)) {
-    params.strategy = '-android uiautomator';
+    params.strategy = '-android predicate string';
     params.selector = MAGIC_SCROLLABLE_BY;
   }
   if (params.strategy === 'css selector') {

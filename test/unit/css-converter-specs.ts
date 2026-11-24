@@ -1,58 +1,62 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
-import {cssToNativeLocator, UI_AUTOMATOR_STRATEGY} from '../../lib/css/index.js';
+import {cssToNativeLocator, CLASS_CHAIN_STRATEGY} from '../../lib/css/index.js';
 
 describe('css-converter.js', function () {
   describe('simple cases', function () {
     const simpleCases: Array<[string, string]> = [
-      ['android.widget.TextView', 'new UiSelector().className("android.widget.TextView")'],
-      ['TextView', 'new UiSelector().classNameMatches("TextView")'],
-      ['.TextView', 'new UiSelector().classNameMatches("TextView")'],
-      ['.widget.TextView', 'new UiSelector().classNameMatches("widget\\.TextView")'],
-      ['*[checkable=true]', 'new UiSelector().checkable(true)'],
-      ['*[checkable]', 'new UiSelector().checkable(true)'],
-      ['*:checked', 'new UiSelector().checked(true)'],
-      ['*[checked]', 'new UiSelector().checked(true)'],
+      ['android.widget.TextView', '**/android.widget.TextView'],
+      ['TextView', "**/*[`class ENDSWITH '.TextView'`]"],
+      ['.TextView', "**/*[`class ENDSWITH '.TextView'`]"],
+      ['.widget.TextView', "**/*[`class ENDSWITH '.widget.TextView'`]"],
+      ['*', '**/*'],
+      ['*[checkable=true]', '**/*[`checkable == true`]'],
+      ['*[checkable=false]', '**/*[`checkable == false`]'],
+      ['*[checkable]', '**/*[`checkable == true`]'],
+      ['*:checked', '**/*[`checked == true`]'],
+      ['*[checked]', '**/*[`checked == true`]'],
       [
         'TextView[description="Some description"]',
-        'new UiSelector().classNameMatches("TextView").description("Some description")',
+        "**/*[`class ENDSWITH '.TextView' AND content-desc == 'Some description'`]",
       ],
-      ['*[description]', 'new UiSelector().descriptionMatches("")'],
-      ['*[description^=blah]', 'new UiSelector().descriptionStartsWith("blah")'],
-      ['*[description$=bar]', 'new UiSelector().descriptionMatches("bar$")'],
-      ['*[description*=bar]', 'new UiSelector().descriptionContains("bar")'],
-      ['#identifier[description=foo]', 'new UiSelector().resourceId("android:id/identifier").description("foo")'],
-      ['*[id=foo]', 'new UiSelector().resourceId("android:id/foo")'],
+      ['*[description]', "**/*[`content-desc != ''`]"],
+      ['*[description=""]', "**/*[`content-desc == ''`]"],
+      ['*[description^=blah]', "**/*[`content-desc BEGINSWITH[c] 'blah'`]"],
+      ['*[description$=bar]', "**/*[`content-desc ENDSWITH 'bar'`]"],
+      ['*[description*=bar]', "**/*[`content-desc CONTAINS[c] 'bar'`]"],
+      ['*[text*=bar]', "**/*[`text CONTAINS[c] 'bar'`]"],
+      ['*[package-name="com.example"]', "**/*[`package == 'com.example'`]"],
+      ['#identifier[description=foo]', "**/*[`resource-id == 'android:id/identifier' AND content-desc == 'foo'`]"],
+      ['*[id=foo]', "**/*[`resource-id == 'android:id/foo'`]"],
+      ['*[id="com.example:id/foo"]', "**/*[`resource-id == 'com.example:id/foo'`]"],
       [
         '*[description$="hello [ ^ $ . | ? * + ( ) world"]',
-        'new UiSelector().descriptionMatches("hello \\[ \\^ \\$ \\. \\| \\? \\* \\+ \\( \\) world$")',
+        "**/*[`content-desc ENDSWITH 'hello [ ^ $ . | ? * + ( ) world'`]",
       ],
-      ['TextView:iNdEx(4)', 'new UiSelector().classNameMatches("TextView").index(4)'],
-      ['*:long-clickable', 'new UiSelector().longClickable(true)'],
-      ['*[lOnG-cLiCkAbLe]', 'new UiSelector().longClickable(true)'],
-      ['*:nth-child(3)', 'new UiSelector().index(3)'],
-      ['*:instance(3)', 'new UiSelector().instance(3)'],
+      ['*[text="a\\\\b"]', "**/*[`text == 'a\\\\b'`]"],
+      ['*[text="a`b"]', "**/*[`text == 'a``b'`]"],
+      ['TextView:iNdEx(4)', "**/*[`class ENDSWITH '.TextView' AND index == 4`]"],
+      ['*:long-clickable', '**/*[`long-clickable == true`]'],
+      ['*[lOnG-cLiCkAbLe]', '**/*[`long-clickable == true`]'],
+      ['*:nth-child(3)', '**/*[`index == 3`]'],
+      ['*:instance(3)', '**/*[4]'],
+      ['*[clickable=true]:instance(0)', '**/*[`clickable == true`][1]'],
       [
         'android.widget.TextView[checkable] android.widget.WidgetView[focusable]:nth-child(1)',
-        'new UiSelector().className("android.widget.TextView").checkable(true).childSelector(new UiSelector().className("android.widget.WidgetView").focusable(true).index(1))',
+        '**/android.widget.TextView[`checkable == true`]/**/android.widget.WidgetView[`focusable == true AND index == 1`]',
       ],
-      [
-        '* *[clickable=true][focused]',
-        'new UiSelector().childSelector(new UiSelector().clickable(true).focused(true))',
-      ],
-      ['*[clickable=true], *[clickable=false]', 'new UiSelector().clickable(true)'],
-      ['*[description~="word"]', 'new UiSelector().descriptionMatches("\\b(\\w*word\\w*)\\b")'],
-      [
-        'android.widget.ListView android.widget.TextView',
-        'new UiSelector().className("android.widget.ListView").childSelector(new UiSelector().className("android.widget.TextView"))',
-      ],
+      ['* *[clickable=true][focused]', '**/*/**/*[`clickable == true AND focused == true`]'],
+      ['*[clickable=true], *[clickable=false]', '**/*[`clickable == true`]'],
+      ['*[description~="word"]', "**/*[`content-desc MATCHES '(?s).*\\\\b(\\\\w*word\\\\w*)\\\\b.*'`]"],
+      ['android.widget.ListView android.widget.TextView', '**/android.widget.ListView/**/android.widget.TextView'],
+      ['android.widget.ListView > android.widget.TextView', '**/android.widget.ListView/android.widget.TextView'],
     ];
-    for (const [cssSelector, uiAutomatorSelector] of simpleCases) {
-      it(`should convert '${cssSelector}' to '${uiAutomatorSelector}'`, async function () {
+    for (const [cssSelector, classChain] of simpleCases) {
+      it(`should convert '${cssSelector}' to '${classChain}'`, async function () {
         assert.deepStrictEqual(await cssToNativeLocator(cssSelector), {
-          strategy: UI_AUTOMATOR_STRATEGY,
-          selector: uiAutomatorSelector,
+          strategy: CLASS_CHAIN_STRATEGY,
+          selector: classChain,
         });
       });
     }

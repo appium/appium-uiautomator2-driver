@@ -22,8 +22,8 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 
 ## Why migrate
 
-- `UiScrollable` is going away, and so are the locators built on `UiSelector`, including the ones the
-  driver generates for the `css selector` strategy.
+- `UiScrollable` is going away, and so are the locators built on `UiSelector`. The driver does not use
+  them itself: the `css selector` strategy is converted to a [class chain](../guides/android-class-chain.md).
 - It can be slow. On an emulator, scrolling a strip of 30 tabs from the first tab to the 28th took
   about 41 seconds with `UiScrollable` and about 28 seconds with `mobile: scroll`, and to the 10th tab
   about 19 and 7 seconds (medians of 2 or 3 runs).

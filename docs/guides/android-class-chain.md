@@ -247,6 +247,28 @@ and `<`, in document order for `>` and `~`, and from the other end if negative.
   duplicates removed. XPath applies the position for each element separately.
 - The matches of a chain containing axis steps are always returned in the document order, same as for XPath.
 
+## Predicate String Strategy
+
+If the elements can be identified only by their own attributes, the `-android predicate string`
+locator strategy is a shorter alternative. Its value is a predicate with the
+[syntax](#predicate-syntax) described above, and the strategy finds all elements below the search
+root that satisfy it. It is the same as the class chain ``**/*[`predicate`]``, so the search scope
+and the performance are the same, and a position or a step cannot be used. The predicate does not
+have to be enclosed in backticks.
+
+!!! info "Availability"
+
+    The strategy is available since driver version 10.2.0 (UiAutomator2 server 11.6.0).
+
+|Predicate string|Class chain|
+|---|---|
+|``text == 'OK'``|``**/*[`text == 'OK'`]``|
+|``class == 'android.widget.Button' AND enabled == true``|``**/*[`class == 'android.widget.Button' AND enabled == true`]``|
+|``text CONTAINS[cd] 'cafe' OR content-desc BEGINSWITH 'menu'``|``**/*[`text CONTAINS[cd] 'cafe' OR content-desc BEGINSWITH 'menu'`]``|
+
+A malformed predicate fails before anything is searched, with an `invalid selector` error that
+points to the position of the problem.
+
 ## Search Scope
 
 The elements of the tree are the same as in the page source and XPath lookups:

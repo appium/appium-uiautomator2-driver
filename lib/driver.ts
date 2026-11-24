@@ -272,6 +272,7 @@ class AndroidUiautomator2Driver
       'css selector',
       '-android uiautomator',
       '-android class chain',
+      '-android predicate string',
     ];
     this.desiredCapConstraints = structuredClone(UIAUTOMATOR2_CONSTRAINTS);
     this.jwpProxyActive = false;

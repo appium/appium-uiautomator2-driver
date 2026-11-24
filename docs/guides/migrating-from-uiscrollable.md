@@ -31,7 +31,9 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
   `setAsHorizontalList`, ...) and the target is not on the screen yet, the lookup returns the scrollable
   container instead of the target, even if the target does not exist, instead of failing with
   "no such element".
-- `scrollIntoView()` always starts searching from the beginning of the content and has no parameter to change that.
+- `scrollIntoView()` checks the current viewport first. If the target is not there, it scrolls towards the beginning
+  by up to the swipe limit before searching forward, so a long list may only be rewound partway, and there is no
+  parameter to change that.
 
 ## What replaces what
 

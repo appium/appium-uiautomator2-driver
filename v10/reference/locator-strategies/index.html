@@ -1284,6 +1284,41 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#predicate-string" class="md-nav__link">
+    <span class="md-ellipsis"> Predicate String </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#class-chain" class="md-nav__link">
     <span class="md-ellipsis"> Class Chain </span>
   </a>
@@ -2203,6 +2238,41 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#predicate-string" class="md-nav__link">
+    <span class="md-ellipsis"> Predicate String </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#class-chain" class="md-nav__link">
     <span class="md-ellipsis"> Class Chain </span>
   </a>
@@ -2454,6 +2524,36 @@ keep this in mind while using them or planning to use them in the future.</p>
 <p>Use this strategy for elements that cannot be directly identified by their class name, <code>id</code>,
 or <code>contentDescription</code>.</p>
 </div>
+<h2 id="predicate-string">Predicate String<a class="headerlink" href="#predicate-string" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Speed Ranking</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-android predicate string</code></td>
+<td>⭐⭐⭐⭐</td>
+<td><code>text == 'Gallery' AND clickable == true</code></td>
+</tr>
+</tbody>
+</table>
+<p>This strategy finds all elements below the search root (the whole screen or the context element)
+that satisfy a predicate on their attributes. It is a shorthand for the
+<a href="#class-chain">class chain</a> <code>**/*[`predicate`]</code>, uses the same
+<a href="../../guides/android-class-chain/#predicate-syntax">predicate syntax</a> and has the same performance.
+Available since driver version 10.2.0.
+Read the <a href="../../guides/android-class-chain/#predicate-string-strategy">Class Chain Locator Strategy</a>
+article for more details.</p>
+<div class="admonition info">
+<p class="admonition-title">When to Use</p>
+<p>Use this strategy for elements that can be identified by a combination of their own attributes,
+for example when the <code>id</code>, <code>accessibility id</code> and <code>class name</code> strategies are not enough, and
+the parent, sibling or descendant elements are not needed.</p>
+</div>
 <h2 id="class-chain">Class Chain<a class="headerlink" href="#class-chain" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2531,7 +2631,7 @@ ones that combine several elements of the hierarchy.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 23, 2026 20:29:35 UTC"><span class="timeago" datetime="2026-11-23T20:29:35+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 23, 2026 20:29:35 UTC">2026-11-23</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 24, 2026 17:27:25 UTC"><span class="timeago" datetime="2026-11-24T17:27:25+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 24, 2026 17:27:25 UTC">2026-11-24</span>
   </span>
 
     

@@ -44,7 +44,11 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
     return this.emitRule(parsed.rule, ctx);
   }
 
-  private emitRule(rule: ParsedRule, ctx?: ClassChainEmitterContext): string {
+  /** Splits a rule into the type of a step, the predicates that restrict it and an optional position. */
+  protected buildStep(
+    rule: ParsedRule,
+    ctx?: ClassChainEmitterContext,
+  ): {type: string; predicates: string[]; position?: number} {
     const {type, predicates: classPredicates} = this.formatClass(rule);
     const predicates = [...classPredicates];
     let position: number | undefined;
@@ -60,6 +64,11 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
       }
       predicates.push(this.formatPredicate(attr, ctx));
     }
+    return {type, predicates, position};
+  }
+
+  private emitRule(rule: ParsedRule, ctx?: ClassChainEmitterContext): string {
+    const {type, predicates, position} = this.buildStep(rule, ctx);
 
     let step = type;
     if (predicates.length) {
@@ -131,6 +140,24 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
   private formatIdLocator(locator: string, appPackage?: string | null): string {
     return ID_LOCATOR_PATTERN.test(locator) ? locator : `${appPackage || 'android'}:id/${locator}`;
   }
+}
+
+/**
+ * Converts a parsed CSS selector that is a single rule without a position into a predicate string.
+ * It is the same as a class chain of a single step with the predicate, but shorter.
+ */
+export class PredicateStringEmitter extends ClassChainEmitter {
+  override emit(parsed: ParsedSelector, ctx?: ClassChainEmitterContext): string {
+    const {type, predicates} = this.buildStep(parsed.rule, ctx);
+    const all = type === '*' ? predicates : [`class == ${quote(type)}`, ...predicates];
+    return all.length ? all.join(' AND ') : 'TRUEPREDICATE';
+  }
+}
+
+/** Whether the selector needs a class chain: it has more than one rule or selects a position. */
+export function needsClassChain(parsed: ParsedSelector): boolean {
+  const {rule} = parsed;
+  return Boolean(rule.nested) || [...rule.attributes, ...rule.pseudos].some((attr) => attr.name === 'instance');
 }
 
 /** Quotes a predicate string literal: the backslash and the quote are the only characters to escape. */

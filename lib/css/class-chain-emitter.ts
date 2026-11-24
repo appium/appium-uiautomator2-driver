@@ -1,4 +1,5 @@
 import type {ParsedAttribute, ParsedRule, ParsedSelector, StrategyEmitter} from '@appium/css-locator-to-native';
+import {errors} from 'appium/driver.js';
 import {util} from 'appium/support.js';
 
 const BOOLEAN_ATTRS = new Set([
@@ -100,17 +101,19 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
 
   private formatStringPredicate(attr: ParsedAttribute, ctx?: ClassChainEmitterContext): string {
     const name = STRING_ATTRS[attr.name];
-    let value = attr.value ?? '';
+    if (!name) {
+      throw new errors.InvalidSelectorError(`Unsupported attribute '${attr.name}'`);
+    }
+    if (attr.operator === undefined) {
+      // A missing value also satisfies `!= ''`, so it has to be excluded explicitly
+      return `${name} != nil AND ${name} != ''`;
+    }
 
+    let value = attr.value ?? '';
     if (attr.name === 'resource-id') {
       value = this.formatIdLocator(value, ctx?.appPackage);
     }
-
     const modifier = CASE_INSENSITIVE_ATTRS.has(attr.name) ? '[c]' : '';
-    if (attr.operator === undefined) {
-      // the attribute is present: has a non-empty value
-      return `${name} != ''`;
-    }
     switch (attr.operator) {
       case '*=':
         return `${name} CONTAINS${modifier} ${quote(value)}`;

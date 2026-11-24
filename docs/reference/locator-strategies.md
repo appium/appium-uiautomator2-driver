@@ -145,14 +145,18 @@ XPath versions 1.0 and 2.0 are supported.
 This strategy converts a CSS selector to a [class chain](#class-chain) on the driver side, so it has
 the same performance and search scope. Only the first comma-separated selector is used. The following is supported:
 
-- a fully qualified class name as the tag (`android.widget.TextView`), or a trailing part of it (`TextView`, `.widget.TextView`)
+- a fully qualified class name as the tag (`android.widget.TextView`), or a trailing part of it that starts with a dot
+  or has no dots (`TextView`, `.TextView`, `.widget.TextView`). `widget.TextView` is a full name, not a trailing part
 - `#id` and `[id=...]`, which are qualified with the application package unless they already have the `package:id/` form
 - the attributes `text`, `description` (aliases `content-desc`, `content-description`, `desc`, `accessibility-id`),
   `resource-id`, `class-name` and `package-name` with the `=`, `^=`, `$=`, `*=` and `~=` operators.
   `text` and `description` ignore the case in `^=` and `*=`
 - the boolean attributes `checkable`, `checked`, `clickable`, `enabled`, `focusable`, `focused`, `long-clickable`,
   `scrollable` and `selected`, either as `[clickable=true]` or `:clickable`
-- `:nth-child(n)` or `:index(n)`, the `index` attribute of the element, and the zero-based `:instance(n)`, the position among the matches
+- `:nth-child(n)` or `:index(n)`, the `index` attribute of the element, and the zero-based `:instance(n)`, the position
+  among the matches of everything before it in the selector, as in a [class chain](../guides/android-class-chain.md#positions).
+  For an element that is not the last one of the selector, prefer `:nth-child(n)`
+- an attribute without a value (`[description]`) selects the elements that have a non-empty value
 - the descendant (a space) and the child (`>`) combinators
 
 !!! info "When to Use"

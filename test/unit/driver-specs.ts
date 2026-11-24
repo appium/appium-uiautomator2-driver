@@ -40,6 +40,13 @@ describe('driver.js', function () {
       assert.ok(driver);
       assert.ok(driver.opts);
     });
+
+    it('accepts the strategies that are evaluated by the server', function () {
+      const driver = new AndroidUiautomator2Driver({} as any, false);
+      for (const strategy of ['-android uiautomator', '-android class chain', '-android predicate string']) {
+        assert.ok(driver.locatorStrategies.includes(strategy), strategy);
+      }
+    });
   });
 
   describe('createSession', function () {

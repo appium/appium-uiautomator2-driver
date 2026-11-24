@@ -5404,6 +5404,8 @@
       
         
       
+        
+      
     
     
     
@@ -5464,6 +5466,34 @@
     
   
     UiAutomator Locator Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/migrating-from-uiscrollable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrating from UiScrollable and UiSelector
   
 
     
@@ -13267,6 +13297,8 @@ endpoint does not work properly.</p>
 <p><code>null</code></p>
 <h3 id="mobile-scrollgesture"><code>mobile: scrollGesture</code><a class="headerlink" href="#mobile-scrollgesture" title="Permanent link">&para;</a></h3>
 <p>Performs a scroll action on the specified element or area using the W3C Actions API.</p>
+<p>If neither <code>elementId</code> nor the area (<code>left</code>/<code>top</code>/<code>width</code>/<code>height</code>) is provided, the first scrollable
+element on the current display is scrolled. This is available since driver version 10.3.0.</p>
 <h4 id="parameters_68">Parameters<a class="headerlink" href="#parameters_68" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -13285,32 +13317,32 @@ endpoint does not work properly.</p>
 <tr>
 <td><code>percent</code></td>
 <td><code>float</code></td>
-<td>Fraction of the element/area to scroll. Must be in range <code>(0..1]</code>.</td>
+<td>Fraction of the element/area to scroll. Must be greater than zero. Values above <code>1</code> scroll that many pages and stop early if the end of the content is reached.</td>
 </tr>
 <tr>
 <td><code>elementId?</code></td>
 <td><code>string</code></td>
-<td>The identifier of an element whose bounds should be used as the scroll area. Either this property or <code>left</code>/<code>top</code>/<code>width</code>/<code>height</code> must be provided.</td>
+<td>The identifier of an element whose bounds should be used as the scroll area. Gestures on elements keep a 10% margin from the element's edges.</td>
 </tr>
 <tr>
 <td><code>left?</code></td>
 <td><code>float</code></td>
-<td>Coordinate offset on the X-axis for the start of the scroll area. Either this property or <code>elementId</code> must be provided. Ignored if both are provided.</td>
+<td>Coordinate offset on the X-axis for the start of the scroll area. Must be provided together with <code>top</code>, <code>width</code> and <code>height</code>. Ignored if <code>elementId</code> is provided.</td>
 </tr>
 <tr>
 <td><code>top?</code></td>
 <td><code>float</code></td>
-<td>Coordinate offset on the Y-axis for the start of the scroll area. Either this property or <code>elementId</code> must be provided. Ignored if both are provided.</td>
+<td>Coordinate offset on the Y-axis for the start of the scroll area. Must be provided together with <code>left</code>, <code>width</code> and <code>height</code>. Ignored if <code>elementId</code> is provided.</td>
 </tr>
 <tr>
 <td><code>width?</code></td>
 <td><code>float</code></td>
-<td>Width of the scroll area. Either this property or <code>elementId</code> must be provided. Ignored if both are provided.</td>
+<td>Width of the scroll area. Must be provided together with <code>left</code>, <code>top</code> and <code>height</code>. Ignored if <code>elementId</code> is provided.</td>
 </tr>
 <tr>
 <td><code>height?</code></td>
 <td><code>float</code></td>
-<td>Height of the scroll area. Either this property or <code>elementId</code> must be provided. Ignored if both are provided.</td>
+<td>Height of the scroll area. Must be provided together with <code>left</code>, <code>top</code> and <code>width</code>. Ignored if <code>elementId</code> is provided.</td>
 </tr>
 <tr>
 <td><code>speed?</code></td>
@@ -13319,6 +13351,13 @@ endpoint does not work properly.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gesture starts at the edge of the scroll area. An area that covers the whole display is
+clamped to the last pixel of the display, so such an edge-to-edge gesture may be interpreted as a
+system gesture (for example, going home) if gesture navigation is enabled on the device. Prefer
+an element or an area that is inset from the screen edges.</p>
+</div>
 <h4 id="response_96">Response<a class="headerlink" href="#response_96" title="Permanent link">&para;</a></h4>
 <p><code>boolean</code> - <code>true</code> if further scrolling is possible, otherwise <code>false</code></p>
 <h3 id="mobile-draggesture"><code>mobile: dragGesture</code><a class="headerlink" href="#mobile-draggesture" title="Permanent link">&para;</a></h3>
@@ -13578,9 +13617,22 @@ endpoint does not work properly.</p>
 <p><code>null</code></p>
 <h2 id="elements">Elements<a class="headerlink" href="#elements" title="Permanent link">&para;</a></h2>
 <h3 id="mobile-scroll"><code>mobile: scroll</code><a class="headerlink" href="#mobile-scroll" title="Permanent link">&para;</a></h3>
-<p>Scrolls a scrollable view until the element identified by <code>strategy</code> and <code>selector</code> becomes visible.
-The scroll direction is detected automatically.</p>
+<p>Scrolls a scrollable view with gestures until the element identified by <code>strategy</code> and <code>selector</code>
+becomes visible. The element is searched for inside of the view after each swipe. The search stops
+if the end of the content is reached or after <code>maxSwipes</code> swipes. If the element is not found, the
+command fails with "no such element".</p>
 <p>This function returns immediately if the destination element is already visible in the viewport.</p>
+<p>The <code>id</code>, <code>xpath</code>, <code>-android class chain</code> and <code>-android predicate string</code> strategies, scrolling a view located
+with any strategy, and the <code>direction</code> and <code>fromStart</code> arguments are available since driver version 10.3.0.
+The <code>-android class chain</code> and <code>-android predicate string</code> strategies require driver versions 10.1.0
+and 10.2.0 at least, and are the recommended ones, because they are faster than <code>xpath</code> and are not going to be removed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Deprecated</p>
+<p>The <code>-android uiautomator</code> strategy is deprecated and is going to be removed, because Google is
+removing <code>UiScrollable</code> and <code>UiSelector</code> from the UiAutomator framework. Use another strategy, preferably
+<code>-android predicate string</code> or <code>-android class chain</code>.
+See <a href="../../guides/migrating-from-uiscrollable/">Migrating from UiScrollable and UiSelector</a>.</p>
+</div>
 <h4 id="parameters_74">Parameters<a class="headerlink" href="#parameters_74" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -13594,7 +13646,7 @@ The scroll direction is detected automatically.</p>
 <tr>
 <td><code>strategy</code></td>
 <td><code>string</code></td>
-<td>Locator strategy to use for finding the target element. The following values are supported: <code>accessibility id</code>, <code>class name</code>, and <code>-android uiautomator</code>.</td>
+<td>Locator strategy to use for finding the target element. The following values are supported: <code>-android predicate string</code>, <code>-android class chain</code>, <code>id</code>, <code>xpath</code>, <code>accessibility id</code>, <code>class name</code> and <code>-android uiautomator</code> (deprecated).</td>
 </tr>
 <tr>
 <td><code>selector</code></td>
@@ -13604,20 +13656,38 @@ The scroll direction is detected automatically.</p>
 <tr>
 <td><code>elementId?</code></td>
 <td><code>string</code></td>
-<td>Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the <code>-android uiautomator</code> strategy. By default, the first currently available scrollable view is used.</td>
+<td>Identifier of the view to scroll. The view must be scrollable. By default, the first currently available scrollable view is used.</td>
 </tr>
 <tr>
 <td><code>maxSwipes?</code></td>
 <td><code>integer</code></td>
-<td>Maximum number of swipes to perform on the scrollable view in order to reach the destination element. By default, the value is retrieved from the scrollable element itself (<code>getMaxSearchSwipes()</code>).</td>
+<td>Maximum number of swipes to perform on the scrollable view in order to reach the destination element. <code>30</code> by default. With <code>fromStart</code>, it also limits how far the view is scrolled back to the beginning, so a small value may not reach the start of a long list.</td>
+</tr>
+<tr>
+<td><code>direction?</code></td>
+<td><code>string</code></td>
+<td>Direction to scroll in. Supported values are <code>up</code>, <code>down</code>, <code>left</code>, and <code>right</code> (case insensitive). By default, <code>down</code> is used, or <code>right</code> if the view is a <code>HorizontalScrollView</code>. Other horizontal containers, such as a horizontal <code>RecyclerView</code> or a <code>ViewPager</code>, must be scrolled with an explicit <code>direction</code>.</td>
+</tr>
+<tr>
+<td><code>fromStart?</code></td>
+<td><code>boolean</code></td>
+<td>Whether to scroll to the start of the content (the opposite of <code>direction</code>) before searching in the given direction. <code>false</code> by default.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="response_102">Response<a class="headerlink" href="#response_102" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="mobile-scrollbackto"><code>mobile: scrollBackTo</code><a class="headerlink" href="#mobile-scrollbackto" title="Permanent link">&para;</a></h3>
-<p>Scrolls a scrollable view until the target element becomes visible. The scroll direction is
-detected automatically.</p>
+<p>Scrolls a scrollable view until the target element is reported as displayed. The target element
+must still exist in the view hierarchy for this to work. The method has no direction parameter:
+the direction is detected automatically (<code>down</code>, or <code>right</code> if the view is a <code>HorizontalScrollView</code>).
+Use <a href="#mobile-scroll">mobile: scroll</a> to scroll in an explicit direction.</p>
+<div class="admonition warning">
+<p class="admonition-title">Deprecated</p>
+<p>Elements located using the <code>-android uiautomator</code> strategy are deprecated and are going to stop
+working, because Google is removing <code>UiScrollable</code> and <code>UiSelector</code> from the UiAutomator
+framework. Locate the elements using other strategies.</p>
+</div>
 <h4 id="parameters_75">Parameters<a class="headerlink" href="#parameters_75" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -13631,12 +13701,12 @@ detected automatically.</p>
 <tr>
 <td><code>elementId</code></td>
 <td><code>string</code></td>
-<td>Identifier of the view to scroll. The view matching this identifier must be a valid scrollable container located using the <code>-android uiautomator</code> strategy.</td>
+<td>Identifier of the view to scroll.</td>
 </tr>
 <tr>
 <td><code>elementToId</code></td>
 <td><code>string</code></td>
-<td>Identifier of the element to scroll to. The element matching this identifier must be locatable using the <code>-android uiautomator</code> strategy.</td>
+<td>Identifier of the element to scroll to.</td>
 </tr>
 </tbody>
 </table>
@@ -13784,7 +13854,7 @@ should look like within the accessibility representation.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 18, 2026 14:56:13 UTC"><span class="timeago" datetime="2026-11-18T14:56:13+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 18, 2026 14:56:13 UTC">2026-11-18</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 24, 2026 18:45:46 UTC"><span class="timeago" datetime="2026-11-24T18:45:46+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 24, 2026 18:45:46 UTC">2026-11-24</span>
   </span>
 
     

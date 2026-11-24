@@ -2109,7 +2109,7 @@ Performs a double click action on the specified element or coordinates using the
 Performs a scroll action on the specified element or area using the W3C Actions API.
 
 If neither `elementId` nor the area (`left`/`top`/`width`/`height`) is provided, the first scrollable
-element on the current display is scrolled. This is available since driver version 9.4.0.
+element on the current display is scrolled. This is available since driver version 10.3.0.
 
 #### Parameters
 
@@ -2246,20 +2246,23 @@ command fails with "no such element".
 
 This function returns immediately if the destination element is already visible in the viewport.
 
-The `id` and `xpath` strategies, scrolling a view located with any strategy, and the `direction` and
-`fromStart` arguments are available since driver version 9.4.0.
+The `id`, `xpath`, `-android class chain` and `-android predicate string` strategies, scrolling a view located
+with any strategy, and the `direction` and `fromStart` arguments are available since driver version 10.3.0.
+The `-android class chain` and `-android predicate string` strategies require driver versions 10.1.0
+and 10.2.0 at least, and are the recommended ones, because they are faster than `xpath` and are not going to be removed.
 
 !!! warning "Deprecated"
 
     The `-android uiautomator` strategy is deprecated and is going to be removed, because Google is
-    removing `UiScrollable` and `UiSelector` from the UiAutomator framework. Use another strategy.
+    removing `UiScrollable` and `UiSelector` from the UiAutomator framework. Use another strategy, preferably
+    `-android predicate string` or `-android class chain`.
     See [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md).
 
 #### Parameters
 
 |<div style="width:6em">Name</div>|Type|Description|
 |--|--|--|
-|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` (deprecated).|
+|`strategy`|`string`|Locator strategy to use for finding the target element. The following values are supported: `-android predicate string`, `-android class chain`, `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` (deprecated).|
 |`selector`|`string`|Element selector to use for the specified locator strategy|
 |`elementId?`|`string`|Identifier of the view to scroll. The view must be scrollable. By default, the first currently available scrollable view is used.|
 |`maxSwipes?`|`integer`|Maximum number of swipes to perform on the scrollable view in order to reach the destination element. `30` by default. With `fromStart`, it also limits how far the view is scrolled back to the beginning, so a small value may not reach the start of a long list.|

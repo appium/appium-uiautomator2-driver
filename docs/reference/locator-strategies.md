@@ -67,14 +67,16 @@ To scroll without `UiScrollable`, see [Migrating from UiScrollable and UiSelecto
     and remove `UiCollection`, `UiObject`, `UiScrollable`, and `UiSelector` support from the
     UiAutomator framework. This will render all `-android uiautomator`-based locators invalid, so
     keep this in mind while using them or planning to use them in the future.
+    Replace them with [Predicate String](#predicate-string) or [Class Chain](#class-chain) locators, which
+    are about as fast as `UiSelector`, and faster than [XPath](#xpath).
 
     The driver logs a warning, once per session, when a `UiScrollable` expression is used as a
     locator or when `mobile: scroll` is called with this strategy.
 
 !!! info "When to Use"
 
-    Use this strategy for elements that cannot be directly identified by their class name, `id`,
-    or `contentDescription`.
+    Prefer [Predicate String](#predicate-string) and [Class Chain](#class-chain) for new tests. Use this
+    strategy only for elements that cannot be identified by the other strategies, as long as it is available.
 
 ## Predicate String
 

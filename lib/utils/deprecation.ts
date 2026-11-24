@@ -16,7 +16,8 @@ export function warnAboutUiScrollableOnce(driver: AndroidUiautomator2Driver): vo
   driver.log.warn(
     'Google is going to remove UiScrollable and UiSelector from the UiAutomator framework, ' +
       `so scrolling via the '${UIAUTOMATOR_STRATEGY}' locator strategy will stop working. ` +
-      `Consider 'mobile: scrollGesture' or W3C actions instead. See ${MIGRATION_DOC_URL}`,
+      `Consider 'mobile: scroll' with the '-android predicate string' or '-android class chain' strategy, ` +
+      `'mobile: scrollGesture' or W3C actions instead. See ${MIGRATION_DOC_URL}`,
   );
 }
 

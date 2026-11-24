@@ -15,6 +15,8 @@ locator strategy.
 
     Google is going to remove `UiScrollable` and `UiSelector` from the UiAutomator framework.
     If you use these locators to scroll, see [Migrating from UiScrollable and UiSelector](migrating-from-uiscrollable.md).
+    To find elements, use the [predicate string and class chain](android-class-chain.md) strategies instead:
+    they are as fast as `UiSelector` and faster than XPath.
 
 ## Examples
 
@@ -56,9 +58,10 @@ application using Ruby.
 
 ## Migrating from XPath
 
-To migrate existing XPath locators to `-android uiautomator`, you can use the third-party
-[xpath-to-uiselector](https://github.com/domovou69/xpath-to-uiselector) converter, which flags
-locators it could only convert approximately and skips those it cannot convert.
+Do not migrate XPath locators to `-android uiautomator`, because it is going away. The
+[predicate string and class chain](android-class-chain.md) strategies are the faster replacement of XPath
+that stays. See [Migrating from UiScrollable and UiSelector](migrating-from-uiscrollable.md#replacing-uiselector-lookups)
+for the equivalents of `UiSelector` methods.
 
 ## More Resources
 

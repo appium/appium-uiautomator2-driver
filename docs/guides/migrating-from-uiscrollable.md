@@ -10,9 +10,11 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 
 !!! note "Requirements"
 
-    The scrolling features described here are available since driver version 9.4.0. With older
+    The scrolling features described here are available since driver version 10.3.0. With older
     versions, `mobile: scroll` only supports the `accessibility id`, `class name` and
     `-android uiautomator` strategies, and `mobile: scrollGesture` requires an element or an area.
+    The `-android predicate string` and `-android class chain` strategies, which the guide recommends
+    for finding elements, are available since driver versions 10.2.0 and 10.1.0.
     The Java snippets use
     [java-client](https://github.com/appium/java-client) 11. With java-client 10, cast the elements to
     `RemoteWebElement` instead of `AppiumWebElement` to get their identifiers. The approach is
@@ -35,7 +37,7 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 
 | Legacy | Use instead |
 |---|---|
-| `UiScrollable(...).scrollIntoView(selector)`, `scrollTextIntoView(text)`, `scrollDescriptionIntoView(text)` | [`mobile: scroll`](#scroll-until-an-element-is-visible) with the `xpath`, `id` or `accessibility id` strategy |
+| `UiScrollable(...).scrollIntoView(selector)`, `scrollTextIntoView(text)`, `scrollDescriptionIntoView(text)` | [`mobile: scroll`](#scroll-until-an-element-is-visible) with the `-android predicate string`, `-android class chain`, `id`, `accessibility id` or `xpath` strategy |
 | `getChildByText(...)`, `getChildByDescription(...)`, `getChildByInstance(...)` | [Find the child inside the view](#find-a-child-of-the-view) |
 | `scrollForward()`, `scrollBackward()` | [`mobile: scrollGesture`](../reference/execute-methods.md#mobile-scrollgesture) |
 | `scrollToEnd(n)`, `flingToEnd(n)`, `scrollToBeginning(n)`, `flingToBeginning(n)` | [Scroll to the end or to the beginning](#scroll-to-the-end-or-to-the-beginning) |
@@ -43,29 +45,60 @@ The driver logs a warning, once per session, if it sees one. This guide shows wh
 | `setMaxSearchSwipes(n)` | `maxSwipes` of `mobile: scroll` |
 | `setSwipeDeadZonePercentage(p)` | Gestures on elements keep a 10% margin from the edges of the element. Use an element, or an area that is inset from the screen edges. |
 | ViewPager and carousels | [`mobile: swipeGesture`](#page-through-a-carousel) |
-| Plain `UiSelector` lookups | A regular locator, see below |
+| Plain `UiSelector` lookups | A [predicate string or class chain](#replacing-uiselector-lookups) locator, or a simple strategy |
 
 ### Replacing `UiSelector` lookups
 
-| `UiSelector` | XPath | Other strategies |
-|---|---|---|
-| `.text("A")` | `//*[@text='A']` | |
-| `.textContains("A")` | `//*[contains(lower-case(@text), 'a')]` (XPath 2) | |
-| `.textStartsWith("A")` | `//*[starts-with(lower-case(@text), 'a')]` (XPath 2) | |
-| `.textMatches("A.*")` | `//*[matches(@text, '^A.*$', 's')]` (XPath 2) | |
-| `.description("A")` | `//*[@content-desc='A']` | `accessibility id` |
-| `.resourceId("pkg:id/a")` | `//*[@resource-id='pkg:id/a']` | `id` |
-| `.className("android.widget.Button")` | `//android.widget.Button` | `class name` |
-| `.scrollable(true)` | `//*[@scrollable='true']` | |
-| `.clickable(true)`, `.checked(true)`, ... | `//*[@clickable='true']`, `//*[@checked='true']` | |
-| `.instance(n)` | `(<expression>)[n + 1]` | |
-| `.childSelector(...)` | A nested path, for example `//*[@resource-id='list']//*[@text='A']` | |
+Prefer the [`-android predicate string`](../guides/android-class-chain.md#predicate-string-strategy) and
+[`-android class chain`](../guides/android-class-chain.md) strategies to `xpath`. They are evaluated directly on
+the accessibility tree, without building the page source of the whole application. In the
+[measurements](../guides/android-class-chain.md#performance), a single element is found about as fast as with
+`UiSelector` and twice as fast as with XPath, and the lookups of several elements are faster than with both.
+They also work with `mobile: scroll`. Use `id`, `accessibility id` or `class name` if the
+element is identified by that attribute alone, and XPath only if the other strategies cannot express the
+condition, for example a step to the parent or a sibling.
 
-`UiSelector` is not case sensitive in the `...Contains` and `...StartsWith` methods, so the XPath above lower-cases the
-attribute and expects a lower-case literal. The `...Matches` methods must match the whole value, and `.` also matches
-line breaks, hence the anchors and the `s` flag. The `description...` methods behave the same way for `@content-desc`.
-The exact matches, `text()` and `description()`, are case sensitive. XPath 2 is the default, unless the
-[`enforceXPath1`](../reference/settings.md#enforcexpath1) setting is enabled.
+| `UiSelector` | Predicate string | Other strategies |
+|---|---|---|
+| `.text("A")` | `text == 'A'` | |
+| `.textContains("A")` | `text CONTAINS[c] 'A'` | |
+| `.textStartsWith("A")` | `text BEGINSWITH[c] 'A'` | |
+| `.textMatches("A.*")` | `text MATCHES '(?s)A.*'` | |
+| `.description("A")` | `content-desc == 'A'` | `accessibility id` |
+| `.resourceId("pkg:id/a")` | `resource-id == 'pkg:id/a'` | `id` |
+| `.className("android.widget.Button")` | `class == 'android.widget.Button'` | `class name` |
+| `.scrollable(true)` | `scrollable == true` | |
+| `.clickable(true)`, `.checked(true)`, ... | `clickable == true`, `checked == true` | |
+| several conditions | `clickable == true AND text CONTAINS[c] 'A'` | |
+| `.instance(n)` | ``**/*[`<predicate>`][n + 1]`` (class chain) | |
+| `.childSelector(...)` | ``**/*[`resource-id == 'list'`]/**/*[`text == 'A'`]`` (class chain) | |
+
+The `...Contains` and `...StartsWith` methods of `UiSelector` are not case sensitive, hence the `[c]` modifier,
+which does the same. The `...Matches` methods must match the whole value, and `.` also matches line breaks,
+hence the `(?s)` flag, the predicate operator `MATCHES` also has to match the whole value. The `description...`
+methods behave the same way for `content-desc`. The exact matches, `text()` and `description()`, are case sensitive.
+A predicate string cannot select by position or in relation to other elements, which is what the class chain
+syntax is for. Both are described in the [Class Chain Locator Strategy](../guides/android-class-chain.md) guide.
+
+The same lookups with `xpath`, for the cases that need it:
+
+| `UiSelector` | XPath |
+|---|---|
+| `.text("A")` | `//*[@text='A']` |
+| `.textContains("A")` | `//*[contains(lower-case(@text), 'a')]` (XPath 2) |
+| `.textStartsWith("A")` | `//*[starts-with(lower-case(@text), 'a')]` (XPath 2) |
+| `.textMatches("A.*")` | `//*[matches(@text, '^A.*$', 's')]` (XPath 2) |
+| `.description("A")` | `//*[@content-desc='A']` |
+| `.resourceId("pkg:id/a")` | `//*[@resource-id='pkg:id/a']` |
+| `.className("android.widget.Button")` | `//android.widget.Button` |
+| `.scrollable(true)` | `//*[@scrollable='true']` |
+| `.clickable(true)`, `.checked(true)`, ... | `//*[@clickable='true']`, `//*[@checked='true']` |
+| `.instance(n)` | `(<expression>)[n + 1]` |
+| `.childSelector(...)` | A nested path, for example `//*[@resource-id='list']//*[@text='A']` |
+
+The XPath above lower-cases the attribute and expects a lower-case literal for the `...Contains` and
+`...StartsWith` methods, and uses the anchors and the `s` flag for `...Matches`. XPath 2 is the default,
+unless the [`enforceXPath1`](../reference/settings.md#enforcexpath1) setting is enabled.
 
 ## Choosing the tool
 
@@ -89,31 +122,36 @@ It stops when the element is visible, when the end of the content is reached, or
 swipes (30 by default). If the element is not found, the command fails with "no such element".
 
 ```java
-/** Scrolls the first scrollable view until the element is visible. */
-static void scrollTo(AndroidDriver driver, String xpath) {
+/** Scrolls the first scrollable view until an element satisfying the predicate is visible. */
+static void scrollTo(AndroidDriver driver, String predicate) {
     driver.executeScript("mobile: scroll", Map.of(
-            "strategy", "xpath",
-            "selector", xpath));
+            "strategy", "-android predicate string",
+            "selector", predicate));
 }
 
 /** Scrolls the given view from its beginning, using at most 10 swipes. */
-static void scrollTo(AndroidDriver driver, WebElement view, String xpath) {
+static void scrollTo(AndroidDriver driver, WebElement view, String predicate) {
     driver.executeScript("mobile: scroll", Map.of(
             "elementId", ((AppiumWebElement) view).getId(),
-            "strategy", "xpath",
-            "selector", xpath,
+            "strategy", "-android predicate string",
+            "selector", predicate,
             "fromStart", true,
             "maxSwipes", 10));
 }
 ```
+
+For example, `scrollTo(driver, "text == 'Settings'")` replaces
+`scrollIntoView(new UiSelector().text("Settings"))`.
 
 - Without `elementId`, the first scrollable view on the screen is scrolled. Pass the view when
   there are several scrollable views, such as a drawer and a list, and prefer a view found by its
   resource id to `(//*[@scrollable='true'])[1]`.
 - The search goes down by default. It does not return to the beginning of the content unless
   `fromStart` is `true`, so use `fromStart` if the element might be above the current position.
-- The strategies `id`, `xpath`, `accessibility id`, `class name` and `-android uiautomator` are supported,
-  but `-android uiautomator` is deprecated.
+- The strategies `-android predicate string`, `-android class chain`, `id`, `xpath`, `accessibility id`
+  and `class name` are supported. `-android uiautomator` is supported too, but deprecated. Prefer the first two
+  to `xpath`, as described [above](#replacing-uiselector-lookups): the element is looked up after every swipe,
+  so the speed of the lookup adds up.
 
 !!! warning
 
@@ -127,11 +165,11 @@ strips. Other horizontal containers, for example a horizontal `RecyclerView`, ne
 
 ```java
 /** Scrolls a horizontal view that is not a HorizontalScrollView, for example a RecyclerView. */
-static void scrollRightTo(AndroidDriver driver, WebElement view, String xpath) {
+static void scrollRightTo(AndroidDriver driver, WebElement view, String predicate) {
     driver.executeScript("mobile: scroll", Map.of(
             "elementId", ((AppiumWebElement) view).getId(),
-            "strategy", "xpath",
-            "selector", xpath,
+            "strategy", "-android predicate string",
+            "selector", predicate,
             "direction", "right"));
 }
 ```

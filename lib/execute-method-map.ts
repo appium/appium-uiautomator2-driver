@@ -73,7 +73,7 @@ export const executeMethodMap = {
     command: 'mobileScroll',
     params: {
       required: ['strategy', 'selector'],
-      optional: ['elementId', 'maxSwipes'],
+      optional: ['elementId', 'maxSwipes', 'direction', 'fromStart'],
     },
   },
 

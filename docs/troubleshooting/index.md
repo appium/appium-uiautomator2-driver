@@ -239,7 +239,7 @@ The UiAutomator2 driver provides multiple options for automating touch gestures:
 
 - For simple gestures, like swipe, scroll, drag, double click, fling or pinch, use the supported
 [gesture execute methods](../reference/execute-methods.md#gestures)
-- Certain scrolling behaviors may also be automatable using [UiScrollable-based UiAutomator locators](../guides/uiautomator-locator-strategy.md)
+- Scrolling to an element can be automated with `mobile: scroll`, see [Migrating from UiScrollable and UiSelector](../guides/migrating-from-uiscrollable.md). The older [UiScrollable-based UiAutomator locators](../guides/uiautomator-locator-strategy.md) also work, but are going to be removed by Google
 - For more sophisticated gestures, consider using [W3C actions](https://w3c.github.io/webdriver/#actions)
 
 The deprecated JSONWP TouchActions API is no longer supported since driver version 3.0.0.

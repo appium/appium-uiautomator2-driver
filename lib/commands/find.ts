@@ -3,6 +3,7 @@ import type {FindElementOpts} from 'appium-android-driver';
 
 import {cssToNativeLocator} from '../css/index.js';
 import type {AndroidUiautomator2Driver} from '../driver.js';
+import {warnIfUiScrollableLocator} from '../utils/deprecation.js';
 
 // we override the xpath search for this first-visible-child selector, which
 // looks like /*[@firstVisible="true"]
@@ -48,6 +49,7 @@ export async function doFindElementOrEls(
       this.opts.appPackage,
     ));
   }
+  warnIfUiScrollableLocator(this, params.strategy, params.selector);
   return (await uiautomator2.jwproxy.command(`/element${params.multiple ? 's' : ''}`, 'POST', params)) as
     | AppiumElement
     | AppiumElement[];

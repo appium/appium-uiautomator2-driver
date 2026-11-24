@@ -59,6 +59,7 @@ nav:
           - guides/activity-startup.md
       - Driver Actions:
           - guides/uiautomator-locator-strategy.md
+          - guides/migrating-from-uiscrollable.md
           - guides/android-class-chain.md
           - guides/multiwindow.md
           - guides/unlock.md

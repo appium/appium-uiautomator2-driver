@@ -41,7 +41,7 @@ describe('Find - CSS', function () {
     const el = await driver.$('android.widget.TextView[clickable=true]:nth-child(1)');
     assert.strictEqual(await el.getText(), 'Accessibility');
   });
-  it('should find an element with recursive UiSelectors', async function () {
+  it('should find an element with nested selectors', async function () {
     const els = await driver.$$('*[focused=true] *[clickable=true]');
     assert.strictEqual(await els.length, 1);
   });

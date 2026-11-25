@@ -292,7 +292,7 @@ describe('driver.js', function () {
 
   describe('magic scrollable view xpath', function () {
     const driver = new AndroidUiautomator2Driver({} as any, false);
-    it('should trap and rewrite as uiautomator locator', async function () {
+    it('should trap and rewrite as predicate string locator', async function () {
       defaultStub(driver);
       driver.uiautomator2 = {jwproxy: {command: () => {}}} as any;
       const proxySpy = sandbox.stub(driver.uiautomator2.jwproxy, 'command');
@@ -308,8 +308,8 @@ describe('driver.js', function () {
         {
           context: 'foo',
           multiple: false,
-          strategy: '-android uiautomator',
-          selector: 'new UiSelector().scrollable(true)',
+          strategy: '-android predicate string',
+          selector: 'scrollable == true',
         },
       ]);
     });

@@ -2,14 +2,15 @@ import type {CssTransformer, NativeLocator, StrategyKey} from '@appium/css-locat
 import {errors} from 'appium/driver.js';
 import {util} from 'appium/support.js';
 
-import {UI_AUTOMATOR_EMITTER_KEY, UI_AUTOMATOR_STRATEGY} from './constants.js';
+import {ClassChainEmitter, needsClassChain, PredicateStringEmitter} from './class-chain-emitter.js';
+import {CLASS_CHAIN_EMITTER_KEY, CLASS_CHAIN_STRATEGY, PREDICATE_EMITTER_KEY, PREDICATE_STRATEGY} from './constants.js';
 import {ATTRIBUTE_SCHEMA} from './schema.js';
-import {UiAutomatorEmitter} from './ui-automator-emitter.js';
 
-export {UI_AUTOMATOR_STRATEGY} from './constants.js';
+export {CLASS_CHAIN_STRATEGY, PREDICATE_STRATEGY} from './constants.js';
 
 const emitters = {
-  [UI_AUTOMATOR_EMITTER_KEY]: new UiAutomatorEmitter(UI_AUTOMATOR_STRATEGY),
+  [CLASS_CHAIN_EMITTER_KEY]: new ClassChainEmitter(CLASS_CHAIN_STRATEGY),
+  [PREDICATE_EMITTER_KEY]: new PredicateStringEmitter(PREDICATE_STRATEGY),
 };
 
 const getTransformCss = util.memoize(async function loadTransformCss(): Promise<CssTransformer> {
@@ -17,8 +18,8 @@ const getTransformCss = util.memoize(async function loadTransformCss(): Promise<
   return mod.createCssTransformer({
     schema: ATTRIBUTE_SCHEMA,
     emitters,
-    resolveStrategy(): StrategyKey<typeof emitters> {
-      return UI_AUTOMATOR_EMITTER_KEY;
+    resolveStrategy(parsed): StrategyKey<typeof emitters> {
+      return needsClassChain(parsed) ? CLASS_CHAIN_EMITTER_KEY : PREDICATE_EMITTER_KEY;
     },
   });
 });

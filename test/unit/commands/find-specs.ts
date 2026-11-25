@@ -47,4 +47,23 @@ describe('Find', function () {
     await find('xpath', '//*[@text="UiScrollable"]');
     assert.equal(warnStub.callCount, 0);
   });
+
+  describe('without UiSelector', function () {
+    function lastParams() {
+      return (driver.uiautomator2.jwproxy.command as sinon.SinonStub).lastCall.args[2];
+    }
+
+    it('should convert a simple CSS selector to a predicate string', async function () {
+      await find('css selector', 'android.widget.Button[text="a"]');
+      assert.equal(lastParams().strategy, '-android predicate string');
+      assert.equal(lastParams().selector, "class == 'android.widget.Button' AND text == 'a'");
+    });
+
+    it('should convert a CSS selector to a class chain', async function () {
+      await find('css selector', '*[text="a"] > android.widget.Button');
+      assert.equal(lastParams().strategy, '-android class chain');
+      assert.equal(lastParams().selector, "**/*[`text == 'a'`]/android.widget.Button");
+      assert.equal(warnStub.callCount, 0);
+    });
+  });
 });

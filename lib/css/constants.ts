@@ -1,5 +1,11 @@
-/** Locator strategy name used for UiAutomator queries. */
-export const UI_AUTOMATOR_STRATEGY = '-android uiautomator';
+/** Locator strategy name used for class chain queries. */
+export const CLASS_CHAIN_STRATEGY = '-android class chain';
 
-/** Registry key for the UiAutomator CSS emitter. */
-export const UI_AUTOMATOR_EMITTER_KEY = 'uiautomator';
+/** Locator strategy name used for predicate string queries. */
+export const PREDICATE_STRATEGY = '-android predicate string';
+
+/** Registry key for the class chain CSS emitter. */
+export const CLASS_CHAIN_EMITTER_KEY = 'classChain';
+
+/** Registry key for the predicate string CSS emitter. */
+export const PREDICATE_EMITTER_KEY = 'predicate';

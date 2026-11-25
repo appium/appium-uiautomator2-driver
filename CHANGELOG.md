@@ -1,3 +1,9 @@
+## [10.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.3.0...v10.4.0) (2026-11-25)
+
+### Features
+
+* convert CSS selectors to class chain instead of UiSelector ([#1095](https://github.com/appium/appium-uiautomator2-driver/issues/1095)) ([ae41526](https://github.com/appium/appium-uiautomator2-driver/commit/ae41526d2a32af5f10d2f6acd0ab3a9756f9a8ee))
+
 ## [10.3.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.2.0...v10.3.0) (2026-11-24)
 
 ### Features

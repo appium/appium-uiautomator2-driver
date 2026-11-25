@@ -7,8 +7,9 @@ describe('css-converter.js', function () {
   describe('simple cases', function () {
     const predicateCases: Array<[string, string]> = [
       ['android.widget.TextView', "class == 'android.widget.TextView'"],
-      ['TextView', "class ENDSWITH '.TextView'"],
-      ['.TextView', "class ENDSWITH '.TextView'"],
+      ['TextView', "(class == 'TextView' OR class ENDSWITH '.TextView')"],
+      ['.TextView', "(class == 'TextView' OR class ENDSWITH '.TextView')"],
+      ['SpinnerItem', "(class == 'SpinnerItem' OR class ENDSWITH '.SpinnerItem')"],
       ['.widget.TextView', "(class == 'widget.TextView' OR class ENDSWITH '.widget.TextView')"],
       ['.android.widget.TextView', "(class == 'android.widget.TextView' OR class ENDSWITH '.android.widget.TextView')"],
       [
@@ -21,7 +22,10 @@ describe('css-converter.js', function () {
       ['*[checkable]', 'checkable == true'],
       ['*:checked', 'checked == true'],
       ['*[checked]', 'checked == true'],
-      ['TextView[description="Some description"]', "class ENDSWITH '.TextView' AND content-desc == 'Some description'"],
+      [
+        'TextView[description="Some description"]',
+        "(class == 'TextView' OR class ENDSWITH '.TextView') AND content-desc == 'Some description'",
+      ],
       ['*[description]', "content-desc != nil AND content-desc != ''"],
       ['*[resource-id]', "resource-id != nil AND resource-id != ''"],
       ['*[description=""]', "content-desc == ''"],
@@ -39,11 +43,13 @@ describe('css-converter.js', function () {
       ['*[description$="hello [ ^ $ . | ? * + ( ) world"]', "content-desc ENDSWITH 'hello [ ^ $ . | ? * + ( ) world'"],
       ['*[text="a\\\\b"]', "text == 'a\\\\b'"],
       ['*[text="a`b"]', "text == 'a`b'"],
-      ['TextView:iNdEx(4)', "class ENDSWITH '.TextView' AND index == 4"],
+      ['TextView:iNdEx(4)', "(class == 'TextView' OR class ENDSWITH '.TextView') AND index == 4"],
       ['*:long-clickable', 'long-clickable == true'],
       ['*[lOnG-cLiCkAbLe]', 'long-clickable == true'],
       ['*:nth-child(3)', 'index == 3'],
       ['*[clickable=true], *[clickable=false]', 'clickable == true'],
+      ['*[text~="Save As"]', 'FALSEPREDICATE'],
+      ['*[text~=""]', 'FALSEPREDICATE'],
       ['*[description~="word"]', "content-desc MATCHES '(?s)(.*\\\\s)?word(\\\\s.*)?'"],
     ];
     const classChainCases: Array<[string, string]> = [

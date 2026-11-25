@@ -95,9 +95,8 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
     if (!partialName) {
       return {type: '*', predicates: []};
     }
-    const suffix = `class ENDSWITH ${quote(`.${partialName}`)}`;
-    // A dotted name may be the full class name, which has no leading dot
-    const predicate = partialName.includes('.') ? `(class == ${quote(partialName)} OR ${suffix})` : suffix;
+    // The name may also be the whole class name, e.g. an unqualified one, which has no leading dot
+    const predicate = `(class == ${quote(partialName)} OR class ENDSWITH ${quote(`.${partialName}`)})`;
     return {type: '*', predicates: [predicate]};
   }
 
@@ -135,6 +134,10 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
       case '$=':
         return `${name} ENDSWITH ${quote(value)}`;
       case '~=':
+        // CSS words are whitespace-delimited, so an empty value or one with whitespace never matches
+        if (!value || /\s/.test(value)) {
+          return 'FALSEPREDICATE';
+        }
         return `${name} MATCHES ${quote(getWordMatcherRegex(value))}`;
       default:
         return `${name} == ${quote(value)}`;

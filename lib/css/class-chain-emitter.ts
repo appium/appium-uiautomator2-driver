@@ -95,7 +95,10 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
     if (!partialName) {
       return {type: '*', predicates: []};
     }
-    return {type: '*', predicates: [`class ENDSWITH ${quote(`.${partialName}`)}`]};
+    const suffix = `class ENDSWITH ${quote(`.${partialName}`)}`;
+    // A dotted name may be the full class name, which has no leading dot
+    const predicate = partialName.includes('.') ? `(class == ${quote(partialName)} OR ${suffix})` : suffix;
+    return {type: '*', predicates: [predicate]};
   }
 
   private formatPredicate(attr: ParsedAttribute, ctx?: ClassChainEmitterContext): string {
@@ -119,7 +122,8 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
     }
 
     let value = attr.value ?? '';
-    if (attr.name === 'resource-id') {
+    // Only an exact id is qualified, substring operators get the fragment as is
+    if (attr.name === 'resource-id' && (attr.operator === '=' || attr.operator === undefined)) {
       value = this.formatIdLocator(value, ctx?.appPackage);
     }
     const modifier = CASE_INSENSITIVE_ATTRS.has(attr.name) ? '[c]' : '';
@@ -166,5 +170,5 @@ function quote(value: string): string {
 }
 
 function getWordMatcherRegex(word: string): string {
-  return `(?s).*\\b(\\w*${util.escapeRegExp(word)}\\w*)\\b.*`;
+  return `(?s)(.*\\s)?${util.escapeRegExp(word)}(\\s.*)?`;
 }

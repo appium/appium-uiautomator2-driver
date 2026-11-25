@@ -9,7 +9,12 @@ describe('css-converter.js', function () {
       ['android.widget.TextView', "class == 'android.widget.TextView'"],
       ['TextView', "class ENDSWITH '.TextView'"],
       ['.TextView', "class ENDSWITH '.TextView'"],
-      ['.widget.TextView', "class ENDSWITH '.widget.TextView'"],
+      ['.widget.TextView', "(class == 'widget.TextView' OR class ENDSWITH '.widget.TextView')"],
+      ['.android.widget.TextView', "(class == 'android.widget.TextView' OR class ENDSWITH '.android.widget.TextView')"],
+      [
+        '.android.widget.TextView[text=foo]',
+        "(class == 'android.widget.TextView' OR class ENDSWITH '.android.widget.TextView') AND text == 'foo'",
+      ],
       ['*', 'TRUEPREDICATE'],
       ['*[checkable=true]', 'checkable == true'],
       ['*[checkable=false]', 'checkable == false'],
@@ -28,6 +33,9 @@ describe('css-converter.js', function () {
       ['#identifier[description=foo]', "resource-id == 'android:id/identifier' AND content-desc == 'foo'"],
       ['*[id=foo]', "resource-id == 'android:id/foo'"],
       ['*[id="com.example:id/foo"]', "resource-id == 'com.example:id/foo'"],
+      ['*[resource-id$=submit]', "resource-id ENDSWITH 'submit'"],
+      ['*[resource-id^=checkout]', "resource-id BEGINSWITH 'checkout'"],
+      ['*[resource-id*=out_sub]', "resource-id CONTAINS 'out_sub'"],
       ['*[description$="hello [ ^ $ . | ? * + ( ) world"]', "content-desc ENDSWITH 'hello [ ^ $ . | ? * + ( ) world'"],
       ['*[text="a\\\\b"]', "text == 'a\\\\b'"],
       ['*[text="a`b"]', "text == 'a`b'"],
@@ -36,7 +44,7 @@ describe('css-converter.js', function () {
       ['*[lOnG-cLiCkAbLe]', 'long-clickable == true'],
       ['*:nth-child(3)', 'index == 3'],
       ['*[clickable=true], *[clickable=false]', 'clickable == true'],
-      ['*[description~="word"]', "content-desc MATCHES '(?s).*\\\\b(\\\\w*word\\\\w*)\\\\b.*'"],
+      ['*[description~="word"]', "content-desc MATCHES '(?s)(.*\\\\s)?word(\\\\s.*)?'"],
     ];
     const classChainCases: Array<[string, string]> = [
       ['*:instance(3)', '**/*[4]'],

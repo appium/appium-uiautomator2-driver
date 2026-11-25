@@ -26,6 +26,9 @@ const STRING_ATTRS: Record<string, string> = {
 /** The old UiSelector methods matched these two attributes without respect to the case. */
 const CASE_INSENSITIVE_ATTRS = new Set(['description', 'text']);
 
+/** CSS whitespace only, unlike `\s` it does not include e.g. the non-breaking space. */
+const CSS_WHITESPACE = /[ \t\r\n\f]/;
+
 const ID_LOCATOR_PATTERN = /^[a-zA-Z_][a-zA-Z0-9._]*:id\/[\S]+$/;
 
 export interface ClassChainEmitterContext {
@@ -135,7 +138,7 @@ export class ClassChainEmitter implements StrategyEmitter<ClassChainEmitterConte
         return `${name} ENDSWITH ${quote(value)}`;
       case '~=':
         // CSS words are whitespace-delimited, so an empty value or one with whitespace never matches
-        if (!value || /\s/.test(value)) {
+        if (!value || CSS_WHITESPACE.test(value)) {
           return 'FALSEPREDICATE';
         }
         return `${name} MATCHES ${quote(getWordMatcherRegex(value))}`;
@@ -173,5 +176,5 @@ function quote(value: string): string {
 }
 
 function getWordMatcherRegex(word: string): string {
-  return `(?s)(.*\\s)?${util.escapeRegExp(word)}(\\s.*)?`;
+  return `(?s)(.*[ \\t\\r\\n\\f])?${util.escapeRegExp(word)}([ \\t\\r\\n\\f].*)?`;
 }

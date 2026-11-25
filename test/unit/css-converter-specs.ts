@@ -50,7 +50,14 @@ describe('css-converter.js', function () {
       ['*[clickable=true], *[clickable=false]', 'clickable == true'],
       ['*[text~="Save As"]', 'FALSEPREDICATE'],
       ['*[text~=""]', 'FALSEPREDICATE'],
-      ['*[description~="word"]', "content-desc MATCHES '(?s)(.*\\\\s)?word(\\\\s.*)?'"],
+      [
+        '*[text~="Save\u00a0As"]',
+        `text MATCHES '(?s)(.*[ \\\\t\\\\r\\\\n\\\\f])?Save\u00a0As([ \\\\t\\\\r\\\\n\\\\f].*)?'`,
+      ],
+      [
+        '*[description~="word"]',
+        "content-desc MATCHES '(?s)(.*[ \\\\t\\\\r\\\\n\\\\f])?word([ \\\\t\\\\r\\\\n\\\\f].*)?'",
+      ],
     ];
     const classChainCases: Array<[string, string]> = [
       ['*:instance(3)', '**/*[4]'],

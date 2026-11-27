@@ -1,6 +1,6 @@
 {
   "name": "appium-uiautomator2-driver",
-  "version": "10.4.0",
+  "version": "10.4.1",
   "description": "UiAutomator2 integration for Appium",
   "keywords": [
     "android",

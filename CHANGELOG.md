@@ -1,3 +1,9 @@
+## [10.4.1](https://github.com/appium/appium-uiautomator2-driver/compare/v10.4.0...v10.4.1) (2026-11-27)
+
+### Miscellaneous Chores
+
+* bump @appium/types to v3 ([#1097](https://github.com/appium/appium-uiautomator2-driver/issues/1097)) ([5eabba0](https://github.com/appium/appium-uiautomator2-driver/commit/5eabba036f4a02de429087cb7393d124f5e3fa67))
+
 ## [10.4.0](https://github.com/appium/appium-uiautomator2-driver/compare/v10.3.0...v10.4.0) (2026-11-25)
 
 ### Features
